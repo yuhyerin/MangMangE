@@ -1,7 +1,31 @@
 <template>
-  <div>
-    <LoginForm />
-    <RegisterForm />
+  <div style="display: flex; height: 100%; width: 100%">
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: rgb(244, 236, 225);
+      "
+    >
+      <div style="text-align: center">
+        <img
+          src="../assets/Image/cogi.gif"
+          alt="LoginBackImage"
+          style="width: 100px"
+        />
+        <LoginForm v-if="pageTrigger == false" @changeComponents="register" />
+        <RegisterForm v-else @changeComponents="register" />
+      </div>
+    </div>
+    <div style="width: 100%; height: 100vh">
+      <img
+        src="../assets/Image/backgroundImage.jpg"
+        alt="LoginBackImage"
+        style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7"
+      />
+    </div>
   </div>
 </template>
 
@@ -13,6 +37,16 @@ export default {
   components: {
     LoginForm,
     RegisterForm,
+  },
+  data() {
+    return {
+      pageTrigger: false,
+    };
+  },
+  methods: {
+    register(value) {
+      this.pageTrigger = value;
+    },
   },
 };
 </script>
