@@ -163,3 +163,21 @@ spring.jpa.hibernate.ddl-auto=update
 > validate: 변경된 스키마가 있다면 변경점 출력 후 애플리케이션 종료
 
 > 참고 : https://pravusid.kr/java/2018/10/10/spring-database-initialization.html
+
+
+
+## jwt secret key 사용
+
+1. application.properties에 속성 추가
+
+```
+jwt.secret=비밀키로 쓰고 싶은 단어
+```
+
+2. 사용
+
+```
+@Value("${jwt.secret}")
+private String secret;
+```
+
