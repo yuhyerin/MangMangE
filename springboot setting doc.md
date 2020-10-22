@@ -52,6 +52,16 @@ docker exec -i -t redis_boot redis-cli
 
 > 참고: https://velog.io/@max9106/Spring-Boot-Redis
 
+3. application.properties에 설정 추가
+
+```
+spring.redis.lettuce.pool.max-active=10
+spring.redis.lettuce.pool.max-idle=10
+spring.redis.lettuce.pool.min-idle=2
+spring.redis.port=6379
+spring.redis.host=127.0.0.1
+```
+
 
 
 ## lombok - springBoot 연동
