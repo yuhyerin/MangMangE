@@ -1,4 +1,5 @@
 package com.daeng.nyang.config;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,24 +16,20 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
 	@Bean
-	public Docket postsApi() {
+	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
-				.groupName("SSAFY_DaengNyang")
-				.apiInfo(apiInfo())
+				.groupName("댕청냥청")
+				.apiInfo(this.apiInfo())
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("com.daeng.nyang.controller"))
 				.paths(PathSelectors.any())
 				.build();
 	}
-
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("SSAFY_DaengNyang_Swagger")
-				.description("SSAFY HomePage")
-				.termsOfServiceUrl("https://edu.ssafy.com")
-				.license("SSAFY Project")
-				.licenseUrl("https://project.ssafy.com").version("1.0").build();
+	
+	private ApiInfo apiInfo(){
+		return new ApiInfoBuilder()
+			.title("제목은 댕청냥청")
+			.description("유기견 매칭 서비스")
+			.build();
 	}
-
 }
-
-
