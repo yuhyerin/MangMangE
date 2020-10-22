@@ -2,10 +2,13 @@ package com.daeng.nyang.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +26,7 @@ import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
 import com.daeng.nyang.service.user.JwtUserDetailService;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -33,16 +37,16 @@ public class AccountController {
 	private AccountRepo userRepo;
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
-	
+
 	@Autowired
-    private AuthenticationManager am;
+	private AuthenticationManager am;
 	@Autowired
-    private JwtUserDetailService userDetailService;
+	private JwtUserDetailService userDetailService;
 	@Autowired
-    private JwtTokenUtil jwtTokenUtil;
+	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
-    RedisTemplate<String, Object> redisTemplate;
-	
+	RedisTemplate<String, Object> redisTemplate;
+
 	@GetMapping("/")
 	public String home() {
 		return "home";
@@ -69,47 +73,77 @@ public class AccountController {
 		}
 		return map;
 	}
-	
-	@GetMapping(path="/user/signup")
+
+	@GetMapping(path = "/user/signup")
 	@ApiOperation("이메일유효성검사")
 	public void checkEmail(@RequestParam String email) {
-		System.out.println("email유효성 검사 : "+email);
+		System.out.println("email유효성 검사 : " + email);
 	}
-	
-	@PostMapping(path="/user/login")
+
+	@PostMapping(path = "/user/login")
 	@ApiOperation("로그인")
 	public Map<String, Object> login(@RequestBody Map<String, String> m) {
 		String user_id = m.get("user_id");
 		String user_password = m.get("user_password");
 		try {
 			am.authenticate(new UsernamePasswordAuthenticationToken(user_id, user_password));
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("authenticate error");
 			e.printStackTrace();
 		}
-		
+
 		UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
 		String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
 		String refreshToken = jwtTokenUtil.generateRefreshToken(user_id);
-		
-		Token retok = Token.builder().user_id(user_id).refreshToken(refreshToken).build();
-//        retok.setUsername(username);
-//        retok.setRefreshToken(refreshToken);
-		
-		 //generate Token and save in redis
+
+		Token retok = new Token();
+        retok.setUser_id(user_id);
+        retok.setRefreshToken(refreshToken);
+
+		// generate Token and save in redis
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-        vop.set(user_id, retok);
-        
-//        logger.info("generated access token: " + accessToken);
-//        logger.info("generated refresh token: " + refreshToken);
-        System.out.println("generated access token : "+accessToken);
-        System.out.println("generated refresh token : "+refreshToken);
-        
-        Map<String, Object> map = new HashMap<>();
-        map.put("accessToken", accessToken);
-        map.put("refreshToken", refreshToken);
-        return map;
+		vop.set(user_id, retok);
+
+		System.out.println("generated access token : " + accessToken);
+		System.out.println("generated refresh token : " + refreshToken);
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("accessToken", accessToken);
+		map.put("refreshToken", refreshToken);
+		return map;
 	}
 
-	
+	@PostMapping(path = "/user/logout")
+	@ApiOperation("로그아웃")
+	public ResponseEntity<?> logout(@RequestBody Map<String, String> m) {
+		String user_id = null;
+		String accessToken = m.get("accessToken");
+		System.out.println("accessToken : " + accessToken);
+		try {
+			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
+			System.out.println("user_id : " + user_id);
+		} catch (IllegalArgumentException e) {
+		} catch (ExpiredJwtException e) { // expire됐을 때
+			user_id = e.getClaims().getSubject();
+			System.out.println("error : " + user_id);
+		}
+
+		try {
+			ValueOperations<String, Object> vo = redisTemplate.opsForValue();
+			if (vo.get(user_id) != null) {
+				boolean flag = redisTemplate.delete(user_id);
+			}
+		} catch (IllegalArgumentException e) {
+			System.out.println("user does not exist");
+		}
+
+		// cache logout token for 10 minutes!
+//        logger.info(" logout ing : " + accessToken);
+//		redisTemplate.opsForValue().set(accessToken, true);
+//		redisTemplate.expire(accessToken, 10 * 6 * 1000, TimeUnit.MILLISECONDS);
+		
+
+		return new ResponseEntity(HttpStatus.OK);
+	}
+
 }
