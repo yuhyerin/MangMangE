@@ -28,6 +28,7 @@
             label="ID"
             :rules="ruleID"
             hide-details="auto"
+            v-model="id"
           ></v-text-field>
         </div>
         <div style="display: flex; justify-content: center; align-item: center">
@@ -37,6 +38,7 @@
           <v-text-field
             label="password"
             :rules="rulePW"
+            v-model="password"
             hide-details="auto"
             :append-icon="showpassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showpassword ? 'text' : 'password'"
@@ -46,7 +48,7 @@
       </v-col>
       <v-col align="align">
         <div style="display: flex; justify-content: space-around">
-          <v-btn color="rgb(1,118,72)" width="100px"
+          <v-btn color="rgb(1,118,72)" width="100px" @click="login"
             ><p style="color: white; padding-top: 14px">로그인</p></v-btn
           >
           <v-btn color="rgba(64,33,22)" width="100px" @click="moveToRegister"
@@ -59,11 +61,17 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+const baseURL = 'http://localhost:8080/';
+
 export default {
   data() {
     return {
       ruleID: [(value) => !!value || "ID를 입력해 주세요."],
       rulePW: [(value) => !!value || "비밀번호를 입력해 주세요."],
+      id:'',
+      password:'',
       showpassword: "",
     };
   },
@@ -71,6 +79,29 @@ export default {
     moveToRegister() {
       this.$emit("changeComponents", true);
     },
+    login(){
+      console.log(this.id)
+      console.log(this.password)
+      axios.post(baseURL+'user/login/',
+      {
+        "user_id" : this.id,
+        "user_password" : this.password
+      })
+      .then((res)=>{
+        console.log(res)
+        axios.post(baseURL+'animal/create/',{
+          "accessToken": res.data.accessToken
+        })
+        .then(()=>{
+          axios.post(baseURL+'user/logout/',{
+            "accessToken" : res.data.accessToken
+          })
+          .then((res)=>{
+            this.$router.push('/about')
+          })
+        })
+      })
+    }
   },
 };
 </script>

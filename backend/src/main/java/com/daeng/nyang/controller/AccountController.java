@@ -2,7 +2,6 @@ package com.daeng.nyang.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -51,6 +50,13 @@ public class AccountController {
 	public String home() {
 		return "home";
 	}
+	
+	@PostMapping(path="/animal/create")
+	@ApiOperation("동물저장")
+	public void createAnimal(Map<String, String> map){
+		System.out.println("animal/create 입장");
+		System.out.println(map.get("accessToken"));
+	}
 
 	@PostMapping(path = "/user/signup")
 	@ApiOperation("회원가입")
@@ -83,6 +89,7 @@ public class AccountController {
 	@PostMapping(path = "/user/login")
 	@ApiOperation("로그인")
 	public Map<String, Object> login(@RequestBody Map<String, String> m) {
+		System.out.println("login_controller");
 		String user_id = m.get("user_id");
 		String user_password = m.get("user_password");
 		try {
@@ -116,16 +123,14 @@ public class AccountController {
 	@PostMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
 	public ResponseEntity<?> logout(@RequestBody Map<String, String> m) {
+		System.out.println("/user/logout 입장");
 		String user_id = null;
 		String accessToken = m.get("accessToken");
-		System.out.println("accessToken : " + accessToken);
 		try {
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
-			System.out.println("user_id : " + user_id);
 		} catch (IllegalArgumentException e) {
 		} catch (ExpiredJwtException e) { // expire됐을 때
 			user_id = e.getClaims().getSubject();
-			System.out.println("error : " + user_id);
 		}
 
 		try {

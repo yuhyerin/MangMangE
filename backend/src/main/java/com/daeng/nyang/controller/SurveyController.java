@@ -35,6 +35,7 @@ public class SurveyController {
 	@PostMapping(path = "/survey/create")
 	@ApiOperation(value = "설문결과저장")
 	public ResponseEntity<HashMap<String, Object>> surveyCreate(@RequestBody Survey survey) {
+		System.out.println("survey_controller");
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			//설문 저장 로직 작성
