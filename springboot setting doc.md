@@ -191,3 +191,9 @@ jwt.secret=비밀키로 쓰고 싶은 단어
 private String secret;
 ```
 
+
+
+## spring security 참고
+
+https://m.blog.naver.com/kimnx9006/220638156019
+
