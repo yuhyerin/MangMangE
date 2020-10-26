@@ -51,14 +51,15 @@ public class AccountController {
 		return "home";
 	}
 	
-	@PostMapping(path="/animal/create")
+	@PostMapping(path="/admin/animal/create")
 	@ApiOperation("동물저장")
-	public void createAnimal(Map<String, String> map){
+	public void createAnimal(@RequestBody Map<String, String> m){
 		System.out.println("animal/create 입장");
-		System.out.println(map.get("accessToken"));
+		System.out.println(m.get("accessToken"));
 	}
+	
 
-	@PostMapping(path = "/user/signup")
+	@PostMapping(path = "/signup")
 	@ApiOperation("회원가입")
 	public Map<String, Object> signup(@RequestBody Account user) {
 		String user_id = user.getUser_id();
@@ -80,13 +81,13 @@ public class AccountController {
 		return map;
 	}
 
-	@GetMapping(path = "/user/signup")
+	@GetMapping(path = "/signup")
 	@ApiOperation("이메일유효성검사")
 	public void checkEmail(@RequestParam String email) {
 		System.out.println("email유효성 검사 : " + email);
 	}
 
-	@PostMapping(path = "/user/login")
+	@PostMapping(path = "/login")
 	@ApiOperation("로그인")
 	public Map<String, Object> login(@RequestBody Map<String, String> m) {
 		System.out.println("login_controller");
@@ -120,12 +121,12 @@ public class AccountController {
 		return map;
 	}
 
-	@PostMapping(path = "/user/logout")
+	@GetMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
-	public ResponseEntity<?> logout(@RequestBody Map<String, String> m) {
+	public ResponseEntity<?> logout(@RequestParam String accessToken) {
 		System.out.println("/user/logout 입장");
 		String user_id = null;
-		String accessToken = m.get("accessToken");
+//		String accessToken = m.get("accessToken");
 		try {
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
 		} catch (IllegalArgumentException e) {
