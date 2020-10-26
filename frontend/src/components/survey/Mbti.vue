@@ -16,7 +16,7 @@
       </v-row> -->
       <v-row style="padding:0px">
         <v-col v-for="(mbti, index) in mbtiList" :key="mbti.id" cols="3">
-          <v-btn @click="submitSurvey(mbtiList[index])">{{ mbti }}</v-btn>
+          <v-btn @click="selectedUserMbti(mbtiList[index])">{{ mbti }}</v-btn>
         </v-col>
       </v-row>
     </div>
@@ -38,10 +38,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['submitSurvey'])
-    // submitMbti(index) {
-    //   console.log("mbti is: ", this.mbtiList[index])
-    // }
+    ...mapMutations(['selectedUserMbti'])
   }
 }
 </script>

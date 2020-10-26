@@ -11,11 +11,14 @@
       <Question6 />
       <Question7 />
       <Question8 />
+      <button class="btn btn-primary" @click="submitSurvey({userMbti, survey})">제출</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 import Mbti from "../components/survey/Mbti";
 import Question1 from "../components/survey/Question1";
 import Question2 from "../components/survey/Question2";
@@ -25,6 +28,7 @@ import Question5 from "../components/survey/Question5";
 import Question6 from "../components/survey/Question6";
 import Question7 from "../components/survey/Question7";
 import Question8 from "../components/survey/Question8";
+
 
 export default {
   components: {
@@ -38,6 +42,10 @@ export default {
     Question7,
     Question8,
   },
+  methods: {
+    ...mapGetters(['userMbti', 'survey']),
+    ...mapActions(['submitSurvey'])
+  }
 }
 </script>
 
