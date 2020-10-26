@@ -89,17 +89,10 @@ export default {
       })
       .then((res)=>{
         console.log(res)
-        axios.post(baseURL+'animal/create/',{
-          "accessToken": res.data.accessToken
-        })
-        .then(()=>{
-          axios.post(baseURL+'user/logout/',{
-            "accessToken" : res.data.accessToken
-          })
-          .then((res)=>{
-            this.$router.push('/about')
-          })
-        })
+        // res.data.accessToken 이랑 res.data.refreshToken이 있음
+      })
+      .catch((err)=>{
+        // 없는 유저 아니면 서버 안 킨거
       })
     }
   },
