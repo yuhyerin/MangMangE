@@ -13,8 +13,7 @@ export default new Vuex.Store({
     // authToken: ,
     userMbti: '',
     dogMbti: '',
-    survey: [0, 0, 0, 0],
-    selected: 'false'
+    survey: [0, 0, 0, 0, 0, 0, 0, 0],
   },
 
   // state를 (가공해서) 가져올 함수들 === computed
@@ -26,12 +25,13 @@ export default new Vuex.Store({
   mutations: {
     selectedUserMbti(state, userMbti) {
       state.userMbti = userMbti
-      state.page += 1
+      state.page = state.survey.findIndex((idx) => idx === 0) + 2
     },
 
     selectedDogMbti(state, payload) {
-      state.survey[payload.idx] += payload.answer
-      state.page += 1
+      state.survey[payload.idx] = payload.answer
+      state.page = state.survey.findIndex((idx) => idx === 0) + 2
+      console.log(state.page)
       // if(state.page == 10) {
       //   router.push({ name: 'Stepper'})
       // }
@@ -43,14 +43,13 @@ export default new Vuex.Store({
 
     whatIsDogMbti(state) {
       state.survey[0] > 0 ? state.dogMbti += 'E' : state.dogMbti += 'Q';
-      state.survey[1] > 0 ? state.dogMbti += 'S' : state.dogMbti += 'I';
-      state.survey[2] > 0 ? state.dogMbti += 'W' : state.dogMbti += 'A';
-      state.survey[3] > 0 ? state.dogMbti += 'F' : state.dogMbti += 'C';
+      state.survey[1] + state.survey[4] + state.survey[7] > 0 ? state.dogMbti += 'S' : state.dogMbti += 'I';
+      state.survey[2] + state.survey[3] + state.survey[5] > 0 ? state.dogMbti += 'W' : state.dogMbti += 'A';
+      state.survey[6] > 0 ? state.dogMbti += 'F' : state.dogMbti += 'C';
     },
-
     goPage(state, pageNum) {
       state.page = pageNum
-      // state.survey[] = 0
+      state.survey[pageNum-2] = 0
     }
   },
 
@@ -59,7 +58,7 @@ export default new Vuex.Store({
     submitSurvey({ commit }, info) {
       commit('whatIsDogMbti', info.survey)
       axios.post(SERVER.URL + SERVER.submitSurvey)
-    }
+    },
   },
   modules: {
   }

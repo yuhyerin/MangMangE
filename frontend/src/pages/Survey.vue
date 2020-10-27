@@ -1,6 +1,6 @@
 <template>
   <div class="survey">
-    <v-container >
+    <v-container>
       <v-app id="inspire">
         <v-stepper v-model="page">
           <v-stepper-header>
@@ -9,6 +9,7 @@
               :complete="page > 1"
               step="1"
               color="rgb(1, 118, 72)"
+              style="cursor:pointer"
             >
             </v-stepper-step>
       
@@ -19,6 +20,7 @@
               :complete="page > 2"
               step="2"
               color="rgb(1, 118, 72)"
+              style="cursor:pointer"
             >
             </v-stepper-step>
       
@@ -29,6 +31,7 @@
               :complete="page > 3"
               step="3"
               color="rgb(1, 118, 72)"
+              style="cursor:pointer"
             >
             </v-stepper-step>
       
@@ -39,6 +42,7 @@
               :complete="page > 4"
               step="4"
               color="rgb(1, 118, 72)"
+              style="cursor:pointer"
             >
             </v-stepper-step>
       
@@ -49,6 +53,7 @@
               :complete="page > 5"
               step="5"
               color="rgb(1, 118, 72)"
+              style="cursor:pointer"
             >
             </v-stepper-step>
       
@@ -59,6 +64,7 @@
               :complete="page > 6"
               step="6"
               color="rgb(1, 118, 72)"
+              style="cursor:pointer"
             >
             </v-stepper-step>
       
@@ -69,6 +75,7 @@
               :complete="page > 7"
               step="7"
               color="rgb(1, 118, 72)"
+              style="cursor:pointer"
             >
             </v-stepper-step>
       
@@ -79,12 +86,13 @@
               :complete="page > 8"
               step="8"
               color="rgb(1, 118, 72)"
+              style="cursor:pointer"
             >
             </v-stepper-step>
       
             <v-divider></v-divider>
       
-            <v-stepper-step step="9" @click="goPage(9)" color="rgb(1, 118, 72)">
+            <v-stepper-step step="9" @click="goPage(9)" color="rgb(1, 118, 72)" style="cursor:pointer">
               <!-- Name of step 3 -->
             </v-stepper-step>
           </v-stepper-header>
