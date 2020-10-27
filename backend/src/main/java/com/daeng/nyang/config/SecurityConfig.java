@@ -40,11 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
 		and().authorizeRequests().
 			antMatchers("/newuser/**").permitAll().
-		and().authorizeRequests().
-			antMatchers("/admin/**").hasRole("ADMIN").
-		and().authorizeRequests().
-			antMatchers("/user/**").hasAnyRole("USER","ADMIN").
-		and().authorizeRequests().
+//		and().authorizeRequests().
+			antMatchers("/admin/**","/user/**").hasRole("ADMIN").
+//		and().authorizeRequests().
+			antMatchers("/user/**").hasRole("USER").
+//		and().authorizeRequests().
 			anyRequest(). // 어떤 요청이라도
 			authenticated(). // 인증된 사용자만이 접근 허용
 		and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
