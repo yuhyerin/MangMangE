@@ -10,7 +10,7 @@
           top: 5px;
         "
         @mouseover="setMoveTrigger"
-        @click="showConsole"
+        @click="setLiked"
       >
         <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
           mdi-heart-outline
@@ -30,7 +30,7 @@
           left: 170px;
           top: 5px;
         "
-        @click="showConsole"
+        @click="setLiked"
         @mouseover="setMoveTrigger"
         @mouseout="setMoveTrigger"
       >
@@ -55,15 +55,17 @@ export default {
     return {
       moveTrigger: true,
       likeTrigger: false,
+      animalID: 0,
     };
   },
   methods: {
     clicked() {
       if (this.moveTrigger == true) {
         console.log("페이지 이동!!");
+        this.$router.push("/animalDetail" + `/${this.animalID}`);
       }
     },
-    showConsole() {
+    setLiked() {
       if (this.moveTrigger == false) {
         console.log("즐겨찾기!!");
         this.likeTrigger = !this.likeTrigger;

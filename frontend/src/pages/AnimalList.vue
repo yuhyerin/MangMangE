@@ -38,7 +38,20 @@
             </v-icon>
           </div>
         </div>
-        <div style="text-align: center">필터</div>
+        <div style="text-align: center">
+          필터
+          <img
+            v-if="testTrigger == false"
+            src="../assets/Image/1wait.gif"
+            alt="멍멍"
+            @click="test"
+          />
+          <img
+            v-if="testTrigger == true"
+            src="../assets/Image/1pop.gif"
+            alt="멍멍"
+          />
+        </div>
       </div>
       <div
         style="
@@ -67,6 +80,7 @@ export default {
     return {
       trigger: 0,
       tmp: 0,
+      testTrigger: false,
     };
   },
   components: {
@@ -89,6 +103,12 @@ export default {
   methods: {
     setTrigger(num) {
       this.trigger = num;
+    },
+    test() {
+      this.testTrigger = true;
+      setTimeout(() => {
+        this.testTrigger = false;
+      }, 3300);
     },
   },
 };
