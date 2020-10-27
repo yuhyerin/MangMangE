@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		and().authorizeRequests().
 			antMatchers("/admin/**").hasRole("ADMIN").
 //		and().authorizeRequests().
-			antMatchers("/user/**").hasAnyRole("HI","ADMIN").
+			antMatchers("/user/**").hasAnyRole("HI","ADMIN","USER").
 //		and().authorizeRequests().
 			anyRequest(). // 어떤 요청이라도
 			authenticated(). // 인증된 사용자만이 접근 허용
