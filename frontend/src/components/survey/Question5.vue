@@ -1,7 +1,7 @@
 <template>
   <div class="question1">
     <v-row>
-      <h1>Q5. 반려동물과 어떤 관계를 원하시나요?</h1><hr>
+      <h1>Q6. 반려동물과 어떤 관계를 원하시나요?</h1><hr>
     </v-row>
     <div>이미지</div>
     <v-row>

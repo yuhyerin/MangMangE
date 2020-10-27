@@ -1,7 +1,7 @@
 <template>
   <div class="question1">
     <v-row>
-      <h1>Q8. 반려동물과 여가시간을 어떤식으로 보내고 싶으신가요?</h1><hr>
+      <h3>Q9. 반려동물과 여가시간을 어떤식으로 보내고 싶으신가요?</h3><hr>
     </v-row>
     <div>이미지</div>
     <v-row>

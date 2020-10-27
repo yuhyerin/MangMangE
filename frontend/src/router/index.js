@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../pages/Login.vue'
 import Survey from '../pages/Survey.vue'
+import Stepper from '../pages/Stepper.vue'
+import Step from '../pages/Step.vue'
 
 Vue.use(VueRouter)
 
@@ -24,6 +26,16 @@ const routes = [
     path: '/survey',
     name: 'Survey',
     component: Survey
+  },
+  {
+    path: '/stepper',
+    name: 'Stepper',
+    component: Stepper
+  },
+  {
+    path: '/step',
+    name: 'Step',
+    component: Step
   },
 ]
 

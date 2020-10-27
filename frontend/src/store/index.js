@@ -2,15 +2,19 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import SERVER from '@/api/url'
+import VueRouter from 'vue-router'
+import router from '@/router'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    page: 1,
     // authToken: ,
     userMbti: '',
     dogMbti: '',
     survey: [0, 0, 0, 0],
+    selected: 'false'
   },
 
   // state를 (가공해서) 가져올 함수들 === computed
@@ -22,10 +26,19 @@ export default new Vuex.Store({
   mutations: {
     selectedUserMbti(state, userMbti) {
       state.userMbti = userMbti
+      state.page += 1
     },
 
     selectedDogMbti(state, payload) {
       state.survey[payload.idx] += payload.answer
+      state.page += 1
+      // if(state.page == 10) {
+      //   router.push({ name: 'Stepper'})
+      // }
+      // else {
+      //   state.survey[payload.idx] += payload.answer
+      //   state.page += 1
+      // }
     },
 
     whatIsDogMbti(state) {
@@ -33,6 +46,11 @@ export default new Vuex.Store({
       state.survey[1] > 0 ? state.dogMbti += 'S' : state.dogMbti += 'I';
       state.survey[2] > 0 ? state.dogMbti += 'W' : state.dogMbti += 'A';
       state.survey[3] > 0 ? state.dogMbti += 'F' : state.dogMbti += 'C';
+    },
+
+    goPage(state, pageNum) {
+      state.page = pageNum
+      // state.survey[] = 0
     }
   },
 

@@ -1,7 +1,7 @@
 <template>
   <div class="question1">
     <v-row>
-      <h1>Q7. 내 반려동물은 미련한 곰? 눈치빠른 여우?</h1><hr>
+      <h1>Q8. 내 반려동물은 미련한 곰? 눈치빠른 여우?</h1><hr>
     </v-row>
     <div>이미지</div>
     <v-row>

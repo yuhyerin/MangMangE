@@ -1,7 +1,7 @@
 <template>
   <div class="question1">
     <v-row>
-      <h1>Q3. 반려동물이 낯선 사람을 보면 어떻게 행동하길 원하시나요?</h1><hr>
+      <h1>Q4. 반려동물이 낯선 사람을 보면 어떻게 행동하길 원하시나요?</h1><hr>
     </v-row>
     <div>이미지</div>
     <v-row>
