@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import Login from '../pages/Login.vue'
 import AnimalList from '../pages/AnimalList.vue'
 import AnimalDetail from '../pages/AnimalDetail.vue'
-import Mainpage from '../views/Mainpage.vue'
+import Mainpage from '../pages/Mainpage.vue'
+import Survey from '../pages/Survey.vue'
 
 Vue.use(VueRouter)
 
@@ -35,7 +36,12 @@ const routes = [
     path: '/mainpage',
     name: 'Mainpage',
     component: Mainpage
-  }
+  },
+  {
+    path: '/survey',
+    name: 'Survey',
+    component: Survey
+  },
 ]
 
 const router = new VueRouter({

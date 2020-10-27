@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="navigation">
+    <!-- <div class="navigation">
       <div class="row" style="height: 100%; padding: 0">
         <div class="nav-left col-lg-6 col-md-6 col-sm-6">
           <h1>
@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <router-view />
   </div>
 </template>
