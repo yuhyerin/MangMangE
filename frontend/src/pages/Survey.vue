@@ -96,35 +96,33 @@
               <!-- Name of step 3 -->
             </v-stepper-step>
           </v-stepper-header>
-
-
           <v-stepper-items>
             <v-stepper-content step="1">
               <Mbti />
             </v-stepper-content>
-      
+
             <v-stepper-content step="2">
               <Question1 />
             </v-stepper-content>
-      
+
             <v-stepper-content step="3">
               <Question2 />
               <!-- <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card> -->
+              class="mb-12"
+              color="grey lighten-1"
+              height="200px"
+            ></v-card> -->
 
               <!-- <v-btn
-                color="primary"
-                @click="e1 = 1"
-              >
-                Continue
-              </v-btn>
-      
-              <v-btn text>
-                Cancel
-              </v-btn> -->
+              color="primary"
+              @click="e1 = 1"
+            >
+              Continue
+            </v-btn>
+    
+            <v-btn text>
+              Cancel
+            </v-btn> -->
             </v-stepper-content>
 
             <v-stepper-content step="4">
@@ -151,8 +149,8 @@
               <Question8 />
             </v-stepper-content>
           </v-stepper-items>
-        </v-stepper>  
-    </v-app>
+        </v-stepper>
+      </v-app>
     </v-container>
   </div>
 </template>
@@ -169,7 +167,6 @@ import Question5 from "../components/survey/Question5";
 import Question6 from "../components/survey/Question6";
 import Question7 from "../components/survey/Question7";
 import Question8 from "../components/survey/Question8";
-
 
 export default {
   components: {
@@ -196,5 +193,4 @@ export default {
 /* .survey {
   background-color: rgb(244, 236, 225);
 } */
-
 </style>
