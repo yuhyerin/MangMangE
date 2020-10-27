@@ -12,7 +12,7 @@
         </div>
         <div class="third">
           <img class="img3" src="../assets/image/mainpage/section4-adopt.jpg">
-          <h2 class="third-word">입양 신청</h2>
+          <h2 class="third-word">입양 신청 목록</h2>
         </div>
       </div>
     </div>

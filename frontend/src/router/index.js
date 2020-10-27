@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Mainpage from '../views/Mainpage.vue'
+import Mainpage from '../pages/Mainpage.vue'
+import Adoption from '../pages/Adoption.vue'
 
 Vue.use(VueRouter)
 
@@ -9,6 +10,11 @@ const routes = [
     path: '/mainpage',
     name: 'Mainpage',
     component: Mainpage
+  },
+  {
+    path: '/adoption',
+    name: 'Adoption',
+    component: Adoption
   }
 ]
 
