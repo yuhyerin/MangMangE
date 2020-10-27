@@ -1,0 +1,124 @@
+<template>
+  <div
+    style="
+      border: 1px solid rgb(224, 222, 219);
+      border-radius: 10%;
+      background-color: rgb(224, 222, 219);
+      width: 30vw;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <v-col lg="10">
+      <v-col align="align">
+        <div style="display: flex; justify-content: center; align-item: center">
+          <v-icon large color="black"> mdi-paw-outline </v-icon>
+          <h1>로그인</h1>
+          <v-icon large color="black"> mdi-paw-outline </v-icon>
+        </div>
+      </v-col>
+      <v-col align="align">
+        <div style="display: flex; justify-content: center; align-item: center">
+          <v-icon large color="black" style="padding: 17px 10px 0 0">
+            mdi-paw-outline
+          </v-icon>
+          <v-text-field
+            label="ID"
+            :rules="ruleID"
+            hide-details="auto"
+            v-model="id"
+          ></v-text-field>
+        </div>
+        <div style="display: flex; justify-content: center; align-item: center">
+          <v-icon large color="black" style="padding: 17px 10px 0 0">
+            mdi-paw-outline
+          </v-icon>
+          <v-text-field
+            label="password"
+            :rules="rulePW"
+            v-model="password"
+            hide-details="auto"
+            :append-icon="showpassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showpassword ? 'text' : 'password'"
+            @click:append="showpassword = !showpassword"
+          ></v-text-field>
+        </div>
+      </v-col>
+      <v-col align="align">
+        <div style="display: flex; justify-content: space-around">
+          <v-btn color="rgb(1,118,72)" width="100px" @click="login"
+            ><p style="color: white; padding-top: 14px">로그인</p></v-btn
+          >
+          <v-btn color="rgba(64,33,22)" width="100px" @click="moveToRegister"
+            ><p style="color: white; padding-top: 14px">회원가입</p></v-btn
+          >
+        </div>
+      </v-col>
+    </v-col>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+const baseURL = 'http://localhost:8080/';
+
+export default {
+  data() {
+    return {
+      ruleID: [(value) => !!value || "ID를 입력해 주세요."],
+      rulePW: [(value) => !!value || "비밀번호를 입력해 주세요."],
+      id:'',
+      password:'',
+      showpassword: "",
+    };
+  },
+  methods: {
+    moveToRegister() {
+      this.$emit("changeComponents", true);
+    },
+    login(){
+      axios.post(baseURL+'newuser/login/',
+      {
+        "user_id" : this.id,
+        "user_password" : this.password
+      })
+      .then((res)=>{
+        console.log(res)
+        this.$cookies.set("Authorization", res.data.accessToken)
+        console.log( this.$cookies.get("Authorization"))
+      //   axios.post(baseURL+'admin/animal/create/',{
+      //     "accessToken" : res.data.accessToken
+      //   },
+      //   {
+      //     headers:{
+      //       "Authorization": res.data.accessToken
+      //     }
+      //   })
+      //   .then((res)=>{
+      //     console.log(this.$cookies.get("Authorization"))
+      //     axios.post(baseURL+'user/logout',
+      //   { "accessToken" : this.$cookies.get("Authorization") },
+      //   {
+      //       headers:{
+      //         "Authorization": this.$cookies.get("Authorization")
+      //       }
+      //   })
+      //   .then((res)=>{
+      //     console.log(res)
+      //   });
+      //   })
+      })
+      .catch((err)=>{
+        // 없는 유저 아니면 서버 안 킨거
+        console.log(err)
+      })
+    }
+  },
+};
+</script>
+
+<style scoped>
+</style>
