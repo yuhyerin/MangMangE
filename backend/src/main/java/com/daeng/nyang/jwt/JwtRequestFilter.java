@@ -53,9 +53,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			tmp.add(new SimpleGrantedAuthority(a));
 		}
 		UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("username"))).authorities(tmp)
-				.password("asd").build();
+				.password(String.valueOf(parseInfo.get("password"))).build();
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				userDetails, null, userDetails.getAuthorities());
+		System.out.println(userDetails.toString());
 		return usernamePasswordAuthenticationToken;
 	}
 
