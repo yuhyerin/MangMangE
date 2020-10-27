@@ -13,7 +13,7 @@ export default new Vuex.Store({
     // authToken: ,
     userMbti: '',
     dogMbti: '',
-    survey: [0, 0, 0, 0, 0, 0, 0, 0],
+    survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   },
 
   // state를 (가공해서) 가져올 함수들 === computed
@@ -25,39 +25,45 @@ export default new Vuex.Store({
   mutations: {
     selectedUserMbti(state, userMbti) {
       state.userMbti = userMbti
-      state.page = state.survey.findIndex((idx) => idx === 0) + 2
+      state.survey[0] = 1
+      state.page = state.survey.findIndex((idx) => idx === 0) + 1
     },
 
     selectedDogMbti(state, payload) {
       state.survey[payload.idx] = payload.answer
-      state.page = state.survey.findIndex((idx) => idx === 0) + 2
-      console.log(state.page)
-      // if(state.page == 10) {
-      //   router.push({ name: 'Stepper'})
-      // }
-      // else {
-      //   state.survey[payload.idx] += payload.answer
-      //   state.page += 1
-      // }
+      state.page = state.survey.findIndex((idx) => idx === 0) + 1
     },
 
-    whatIsDogMbti(state) {
-      state.survey[0] > 0 ? state.dogMbti += 'E' : state.dogMbti += 'Q';
-      state.survey[1] + state.survey[4] + state.survey[7] > 0 ? state.dogMbti += 'S' : state.dogMbti += 'I';
-      state.survey[2] + state.survey[3] + state.survey[5] > 0 ? state.dogMbti += 'W' : state.dogMbti += 'A';
-      state.survey[6] > 0 ? state.dogMbti += 'F' : state.dogMbti += 'C';
+    whatIsDogMbti(state, payload) {
+      state.survey[payload.idx] = payload.answer
+      state.survey[1] > 0 ? state.dogMbti += 'E' : state.dogMbti += 'Q';
+      state.survey[2] + state.survey[5] + state.survey[8] > 0 ? state.dogMbti += 'S' : state.dogMbti += 'I';
+      state.survey[3] + state.survey[4] + state.survey[6] > 0 ? state.dogMbti += 'W' : state.dogMbti += 'A';
+      state.survey[7] > 0 ? state.dogMbti += 'F' : state.dogMbti += 'C';
     },
+
     goPage(state, pageNum) {
-      state.page = pageNum
-      state.survey[pageNum-2] = 0
+      // (+) 다시 되돌아가는 것은 가능한데 이후로는 X, 체크안한 것의 맨 첫번째로는 이동 가능하도록
+      if (state.survey[pageNum-1] !== 0) {
+        state.page = pageNum
+      }
     }
   },
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
   actions: {
-    submitSurvey({ commit }, info) {
-      commit('whatIsDogMbti', info.survey)
-      axios.post(SERVER.URL + SERVER.submitSurvey)
+    submitSurvey({ state, commit }, payload) {
+      commit('whatIsDogMbti', payload)
+      // console.log(state.userMbti, state.dogMbti)
+      // axios.post(SERVER.URL + SERVER.submitSurvey, {
+      //   "MBTI": state.userMbti,
+      //   "answers": state.dogMbti,
+      // },
+      // {
+      //   headers: {
+      //     "jwt-auth-token": localStorage.getItem("token"),
+      //   }
+      // }) 
     },
   },
   modules: {

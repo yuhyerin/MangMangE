@@ -6,7 +6,7 @@
           <v-stepper-header>
             <v-stepper-step
               @click="goPage(1)"
-              :complete="page > 1"
+              :complete="survey[0] !== 0"
               step="1"
               color="rgb(1, 118, 72)"
               style="cursor:pointer"
@@ -17,7 +17,7 @@
       
             <v-stepper-step
               @click="goPage(2)"
-              :complete="page > 2"
+              :complete="survey[1] !== 0"
               step="2"
               color="rgb(1, 118, 72)"
               style="cursor:pointer"
@@ -28,7 +28,7 @@
 
             <v-stepper-step
               @click="goPage(3)"
-              :complete="page > 3"
+              :complete="survey[2] !== 0"
               step="3"
               color="rgb(1, 118, 72)"
               style="cursor:pointer"
@@ -39,7 +39,7 @@
 
             <v-stepper-step
               @click="goPage(4)"
-              :complete="page > 4"
+              :complete="survey[3] !== 0"
               step="4"
               color="rgb(1, 118, 72)"
               style="cursor:pointer"
@@ -50,7 +50,7 @@
 
             <v-stepper-step
               @click="goPage(5)"
-              :complete="page > 5"
+              :complete="survey[4] !== 0"
               step="5"
               color="rgb(1, 118, 72)"
               style="cursor:pointer"
@@ -61,7 +61,7 @@
 
             <v-stepper-step
               @click="goPage(6)"
-              :complete="page > 6"
+              :complete="survey[5] !== 0"
               step="6"
               color="rgb(1, 118, 72)"
               style="cursor:pointer"
@@ -72,7 +72,7 @@
 
             <v-stepper-step
               @click="goPage(7)"
-              :complete="page > 7"
+              :complete="survey[6] !== 0"
               step="7"
               color="rgb(1, 118, 72)"
               style="cursor:pointer"
@@ -83,7 +83,7 @@
 
             <v-stepper-step
               @click="goPage(8)"
-              :complete="page > 8"
+              :complete="survey[7] !== 0"
               step="8"
               color="rgb(1, 118, 72)"
               style="cursor:pointer"
@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 import Mbti from "../components/survey/Mbti";
 import Question1 from "../components/survey/Question1";
@@ -183,11 +183,11 @@ export default {
     Question7,
     Question8,
   },
-  computed: mapState(['page']),
+  computed: {
+    ...mapState(['page', 'survey'])
+  },
   methods: {
-    ...mapGetters(['userMbti', 'survey']),
     ...mapMutations(['goPage']),
-    ...mapActions(['submitSurvey'])
   }
 }
 </script>

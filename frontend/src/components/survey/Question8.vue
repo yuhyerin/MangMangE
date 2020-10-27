@@ -5,11 +5,11 @@
     </v-row>
     <div>이미지</div>
     <v-row>
-      <v-col @click="selectedDogMbti({idx: 7, answer: 1})" style="cursor:pointer">
+      <v-col @click="submitSurvey({idx: 8, answer: 1})" style="cursor:pointer">
         <h3>자주 놀아주고 싶다</h3>
         <div>이미지</div>
       </v-col>
-      <v-col @click="selectedDogMbti({idx: 7, answer: -1})" style="cursor:pointer">
+      <v-col @click="submitSurvey({idx: 8, answer: -1})" style="cursor:pointer">
         <h3>서로의 휴식시간은 필요하다</h3>
         <div>이미지</div>
       </v-col>
@@ -19,11 +19,12 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 
 export default {
   methods: {
-    ...mapMutations(['selectedDogMbti'])
+    ...mapMutations(['whatIsDogMbti']),
+    ...mapActions(['submitSurvey'])
   }
 }
 </script>

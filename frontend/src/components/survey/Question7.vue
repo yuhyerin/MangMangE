@@ -5,11 +5,11 @@
     </v-row>
     <div>이미지</div>
     <v-row>
-      <v-col @click="selectedDogMbti({idx: 6, answer: 1})" style="cursor:pointer">
+      <v-col @click="selectedDogMbti({idx: 7, answer: 1})" style="cursor:pointer">
         <h3>미련한 곰</h3>
         <div>이미지</div>
       </v-col>
-      <v-col @click="selectedDogMbti({idx: 6, answer: -1})" style="cursor:pointer">
+      <v-col @click="selectedDogMbti({idx: 7, answer: -1})" style="cursor:pointer">
         <h3>눈치빠른 여우</h3>
         <div>이미지</div>
       </v-col>

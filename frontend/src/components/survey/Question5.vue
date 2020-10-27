@@ -5,11 +5,11 @@
     </v-row>
     <div>이미지</div>
     <v-row>
-      <v-col @click="selectedDogMbti({idx: 4, answer: 1})" style="cursor:pointer">
+      <v-col @click="selectedDogMbti({idx: 5, answer: 1})" style="cursor:pointer">
         <h3>애인같이 서로 죽고 못사는 관계</h3>
         <div>이미지</div>
       </v-col>
-      <v-col @click="selectedDogMbti({idx: 4, answer: -1})" style="cursor:pointer">
+      <v-col @click="selectedDogMbti({idx: 5, answer: -1})" style="cursor:pointer">
         <h3>룸메이트 같은 적당히 독립적인 관계</h3>
         <div>이미지</div>
       </v-col>
