@@ -1,5 +1,6 @@
 package com.daeng.nyang.controller;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -46,22 +48,18 @@ public class AccountController {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 
-	@GetMapping("/")
-	public String home() {
-		return "home";
-	}
-	
 	@PostMapping(path="/admin/animal/create")
 	@ApiOperation("동물저장")
 	public void createAnimal(@RequestBody Map<String, String> m){
-		System.out.println("animal/create 입장");
+		System.out.println("/admin/animal/create 입장");
 		System.out.println(m.get("accessToken"));
 	}
 	
 
-	@PostMapping(path = "/signup")
+	@PostMapping(path = "/newuser/signup")
 	@ApiOperation("회원가입")
 	public Map<String, Object> signup(@RequestBody Account user) {
+		System.out.println("/signup 입장");
 		String user_id = user.getUser_id();
 		Map<String, Object> map = new HashMap<>();
 		if (userRepo.findByUserid(user_id) == null) {
@@ -81,19 +79,20 @@ public class AccountController {
 		return map;
 	}
 
-	@GetMapping(path = "/signup")
+	@GetMapping(path = "/newuser/signup")
 	@ApiOperation("이메일유효성검사")
 	public void checkEmail(@RequestParam String email) {
 		System.out.println("email유효성 검사 : " + email);
 	}
 
-	@PostMapping(path = "/login")
+	@PostMapping(path = "/newuser/login")
 	@ApiOperation("로그인")
 	public Map<String, Object> login(@RequestBody Map<String, String> m) {
 		System.out.println("login_controller");
 		String user_id = m.get("user_id");
 		String user_password = m.get("user_password");
 		try {
+			System.out.println("am.authenticate");
 			am.authenticate(new UsernamePasswordAuthenticationToken(user_id, user_password));
 		} catch (Exception e) {
 			System.out.println("authenticate error");
@@ -101,19 +100,22 @@ public class AccountController {
 		}
 
 		UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
+		System.out.println("Controller jwtTokenUtil generateAceesToken");
+		Collection<? extends GrantedAuthority> c = userDetails.getAuthorities();
+		System.out.println(c.toString());
 		String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+		System.out.println("Controller jwtTokenUtil generateAceesToken");
 		String refreshToken = jwtTokenUtil.generateRefreshToken(user_id);
 
 		Token retok = new Token();
         retok.setUser_id(user_id);
         retok.setRefreshToken(refreshToken);
-
 		// generate Token and save in redis
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		vop.set(user_id, retok);
 
-		System.out.println("generated access token : " + accessToken);
-		System.out.println("generated refresh token : " + refreshToken);
+//		System.out.println("generated access token : " + accessToken);
+//		System.out.println("generated refresh token : " + refreshToken);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("accessToken", accessToken);
@@ -121,21 +123,27 @@ public class AccountController {
 		return map;
 	}
 
-	@GetMapping(path = "/user/logout")
+	@PostMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
-	public ResponseEntity<?> logout(@RequestParam String accessToken) {
+	public ResponseEntity<?> logout(@RequestBody Map<String, String> m) {
 		System.out.println("/user/logout 입장");
 		String user_id = null;
-//		String accessToken = m.get("accessToken");
+		String accessToken = m.get("accessToken");
+		System.out.println("accessToken : "+accessToken);
 		try {
+			System.out.println("controller jwtTokenUtil.getUsernameFromToken");
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
+			System.out.println(user_id);
 		} catch (IllegalArgumentException e) {
+			System.out.println("IllegalArgumentException");
 		} catch (ExpiredJwtException e) { // expire됐을 때
+			System.out.println("ExpiredJwtException");
 			user_id = e.getClaims().getSubject();
 		}
 
 		try {
 			ValueOperations<String, Object> vo = redisTemplate.opsForValue();
+			System.out.println(user_id);
 			if (vo.get(user_id) != null) {
 				boolean flag = redisTemplate.delete(user_id);
 			}
@@ -148,7 +156,6 @@ public class AccountController {
 //		redisTemplate.opsForValue().set(accessToken, true);
 //		redisTemplate.expire(accessToken, 10 * 6 * 1000, TimeUnit.MILLISECONDS);
 		
-
 		return new ResponseEntity(HttpStatus.OK);
 	}
 

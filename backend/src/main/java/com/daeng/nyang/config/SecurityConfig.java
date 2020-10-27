@@ -29,42 +29,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    private UserDetailsService jwtUserDetailsService;
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-	
+
 	@Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
-		
-        http.
-                httpBasic().disable().
-                cors().disable().
-                csrf().disable().	// 요청위조 방지 비활성화
-                sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).	// 세션 사용 안함
-                and().
-                    authorizeRequests().
-                    // "user/login", "user/signup","animal/allread","animal/photo/read","/swagger-ui.html/**","user/logout/*"
-//                    antMatchers("/**").permitAll().	// 무조건 접근 허용
-//                and().
-//                    authorizeRequests().
-                    // "animal/create/**","animal/update/*","animal/delete/*","animal/photo/update/*","animal/photo/delete/*"
-                    antMatchers("/admin/**").hasRole("ADMIN").
-                and().
-                    authorizeRequests().
-                    //"animal/matchread/**","survey/**"
-                    antMatchers("/user/**").hasAnyRole("USER","ADMIN").// 둘 중 하나라도 권한 잇으면 접근 허용
-                and().
-                    authorizeRequests().
-                    antMatchers("/**").permitAll().
-                and().
-                    authorizeRequests().
-                    anyRequest().		// 어떤 요청이라도
-                    authenticated().	// 인증된 사용자만이 접근 허용
-                and().
-                    exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
-                and().
-                    addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-	
-	
+	protected void configure(HttpSecurity http) throws Exception {
+
+		http.
+		httpBasic().disable().	// 기본적으로 제공되는 loginForm() disable
+		cors().disable().
+		csrf().disable(). // 요청위조 방지 비활성화
+		sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
+		and().authorizeRequests().
+			antMatchers("/newuser/**").permitAll().
+		and().authorizeRequests().
+			antMatchers("/admin/**").hasRole("ADMIN").
+		and().authorizeRequests().
+			antMatchers("/user/**").hasAnyRole("USER","ADMIN").
+		and().authorizeRequests().
+			anyRequest(). // 어떤 요청이라도
+			authenticated(). // 인증된 사용자만이 접근 허용
+		and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
+		and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+	}
+
 //	@Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 //        // configure AuthenticationManager so that it knows from where to load
@@ -72,22 +58,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        // Use BCryptPasswordEncoder
 //        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 //    }
-	
-	
+
 	@Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-	
-	@Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-	
-	
 	@Override
-    public void configure(WebSecurity web) throws Exception {
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
 //		web.ignoring().antMatchers("/**");
-    }
+	}
 }
