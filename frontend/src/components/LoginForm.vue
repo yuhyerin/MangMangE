@@ -84,21 +84,11 @@ export default {
       {
         "user_id" : this.id,
         "user_password" : this.password
-      })
+      }
+      )
       .then((res)=>{
         console.log(res)
         this.$cookies.set("Authorization", res.data.accessToken)
-        console.log( this.$cookies.get("Authorization"))
-        // axios.post(baseURL+'admin/animal/create/',{
-        //   "accessToken" : this.$cookies.get("Authorization")
-        // },
-        // {
-        //   headers:{
-        //     "Authorization": this.$cookies.get("Authorization")
-        //   }
-        // })
-        // .then((res)=>{
-        //   console.log(this.$cookies.get("Authorization"))
           axios.post(baseURL+'user/logout',
         { "accessToken" : this.$cookies.get("Authorization") },
         {
@@ -110,7 +100,6 @@ export default {
           console.log(res)
         });
         })
-      // })
       .catch((err)=>{
         // 없는 유저 아니면 서버 안 킨거
         console.log(err)
