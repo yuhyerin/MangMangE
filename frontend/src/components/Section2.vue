@@ -57,8 +57,7 @@ export default {
   }
 
   .container.s2 {
-    height: 700px;
-    margin-bottom: 50px;
+    height: 754px;
     border-radius: 70px;
     background-color: rgb(244, 236, 225);
   }

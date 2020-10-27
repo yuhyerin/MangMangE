@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="col-lg-3">
-          <div style="height: 575px; margin-top: 28px; background-color: white;">
+          <div style="height: 95%; margin-top: 28px; background-color: white;">
             <p class="more-videos">
               <strong class="more-videos-strong">
                 

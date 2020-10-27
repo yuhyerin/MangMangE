@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div style="margin-top: 75px;">
     <full-page ref="fullpage" :options="options" id="fullpage">
-
       <Section1 />
 
       <Section2 />

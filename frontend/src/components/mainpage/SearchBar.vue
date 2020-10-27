@@ -14,7 +14,7 @@ export default {
       console.log(event)
       this.$emit('input-change', event.target.value)
     }
-  }
+  },
 }
 </script>
 
