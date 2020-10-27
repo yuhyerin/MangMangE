@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../pages/Login.vue'
 import AnimalList from '../pages/AnimalList.vue'
 import AnimalDetail from '../pages/AnimalDetail.vue'
+import Mainpage from '../views/Mainpage.vue'
 
 Vue.use(VueRouter)
 
@@ -30,6 +31,11 @@ const routes = [
     name: 'AnimalDetail',
     component: AnimalDetail
   },
+  {
+    path: '/mainpage',
+    name: 'Mainpage',
+    component: Mainpage
+  }
 ]
 
 const router = new VueRouter({
