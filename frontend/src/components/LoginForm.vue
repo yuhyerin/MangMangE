@@ -1,0 +1,79 @@
+<template>
+  <div
+    style="
+      border: 1px solid rgb(224, 222, 219);
+      border-radius: 10%;
+      background-color: rgb(224, 222, 219);
+      width: 30vw;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <v-col lg="10">
+      <v-col align="align">
+        <div style="display: flex; justify-content: center; align-item: center">
+          <v-icon large color="black"> mdi-paw-outline </v-icon>
+          <h1>로그인</h1>
+          <v-icon large color="black"> mdi-paw-outline </v-icon>
+        </div>
+      </v-col>
+      <v-col align="align">
+        <div style="display: flex; justify-content: center; align-item: center">
+          <v-icon large color="black" style="padding: 17px 10px 0 0">
+            mdi-paw-outline
+          </v-icon>
+          <v-text-field
+            label="ID"
+            :rules="ruleID"
+            hide-details="auto"
+          ></v-text-field>
+        </div>
+        <div style="display: flex; justify-content: center; align-item: center">
+          <v-icon large color="black" style="padding: 17px 10px 0 0">
+            mdi-paw-outline
+          </v-icon>
+          <v-text-field
+            label="password"
+            :rules="rulePW"
+            hide-details="auto"
+            :append-icon="showpassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showpassword ? 'text' : 'password'"
+            @click:append="showpassword = !showpassword"
+          ></v-text-field>
+        </div>
+      </v-col>
+      <v-col align="align">
+        <div style="display: flex; justify-content: space-around">
+          <v-btn color="rgb(1,118,72)" width="100px"
+            ><p style="color: white; padding-top: 14px">로그인</p></v-btn
+          >
+          <v-btn color="rgba(64,33,22)" width="100px" @click="moveToRegister"
+            ><p style="color: white; padding-top: 14px">회원가입</p></v-btn
+          >
+        </div>
+      </v-col>
+    </v-col>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      ruleID: [(value) => !!value || "ID를 입력해 주세요."],
+      rulePW: [(value) => !!value || "비밀번호를 입력해 주세요."],
+      showpassword: "",
+    };
+  },
+  methods: {
+    moveToRegister() {
+      this.$emit("changeComponents", true);
+    },
+  },
+};
+</script>
+
+<style scoped>
+</style>
