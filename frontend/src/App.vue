@@ -6,7 +6,7 @@
           <h1>
             <img
               class="footprint"
-              src="@/assets/image/nav/footprint.png"
+              src="./assets/image/nav/footprint.png"
             />댕줍냥줍
           </h1>
         </div>

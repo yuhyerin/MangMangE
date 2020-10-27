@@ -11,7 +11,7 @@
     >
       <div style="text-align: center">
         <img
-          src="../assets/Image/cogi.gif"
+          src="../assets/image/cogi.gif"
           alt="LoginBackImage"
           style="width: 100px"
         />
@@ -21,7 +21,7 @@
     </div>
     <div style="width: 100%; height: 100vh">
       <img
-        src="../assets/Image/backgroundImage.jpg"
+        src="../assets/image/backgroundImage.jpg"
         alt="LoginBackImage"
         style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7"
       />

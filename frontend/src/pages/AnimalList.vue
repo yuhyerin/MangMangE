@@ -42,13 +42,13 @@
           필터
           <img
             v-if="testTrigger == false"
-            src="../assets/Image/1wait.gif"
+            src="../assets/image/1wait.gif"
             alt="멍멍"
             @click="test"
           />
           <img
             v-if="testTrigger == true"
-            src="../assets/Image/1pop.gif"
+            src="../assets/image/1pop.gif"
             alt="멍멍"
           />
         </div>
