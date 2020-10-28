@@ -6,11 +6,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -19,12 +25,17 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.daeng.nyang.repo.AnimalApiRepo;
+
 @Service
 public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 
 	@Value("${SERVICE_KEY}")
 	private String SERVICE_KEY;
 
+	@Autowired
+	AnimalApiRepo animalApiRepo;
+	
 	@Override
 	public void insertAnimalData() {
 
@@ -63,12 +74,10 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 				conn.disconnect();
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("ServiceImpl에서 데이터 출력합니다.");
@@ -82,6 +91,25 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 		
 		int page = 1; //페이지 초기값 1
 		int totalcount = 0;
+		String[][] ptag = {{"활동적인", "에너지뿜뿜","활발한","민첩한"}, 			// [0] 활동성향 - E
+							{"차분한", "조용한","침착한","느긋한"}, 			// [1] 활동성향 - Q
+							{"충성심높은", "책임감있는", "온순한"}, 				// [2] 순종성향 - F
+							{"똑똑한", "경계심많은", "영리한", "총명한"}, 		// [3] 순종성향 - C
+							{"사교적인", "애착있는", "친근감넘치는","장난끼많은"}, 	// [4] 관계성향 - S
+							{"고집이센", "자립심강한", "냉담한"},				// [5] 관계성향 - I
+							{"진취적인", "적극적인", "호기심많은"},				// [6] 적응성향 - A
+							{"신중한","방어적인","낯가리는","수줍음많은"}			// [7] 적응성향 - W
+		};
+		Character[] personality = {'E','Q','F','C','S','I','A','W'};
+		Map<Character, String[]> map = new HashMap<Character, String[]>();
+		map.put('E', ptag[0]);
+		map.put('Q', ptag[1]);
+		map.put('F', ptag[2]);
+		map.put('C', ptag[3]);
+		map.put('S', ptag[4]);
+		map.put('I', ptag[5]);
+		map.put('A', ptag[6]);
+		map.put('W', ptag[7]);
 		
 		try {
 			while(true) {
@@ -91,7 +119,7 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 						+ "&endde=20200930" // 검색 종료날짜
 						+ "&upr_cd=6300000"  // 시도코드 ( 대전 : 6300000 )
 						+ "&upkind=417000" // 종류 ( 개 : 417000, 고양이 : 422400, 기타 : 429900 )
-//						+ "&state=protect" // 상태( 보호중 : protect, 공고중 : notice, 전체 : null(빈값) )
+						+ "&state=protect" // 상태( 보호중 : protect, 공고중 : notice, 전체 : null(빈값) )
 						+ "&pageNo="+page         // 페이지넘버
 						+ "&numOfRows=100" // 한페이지에 보여줄 데이터 갯수
 						+ "&ServiceKey=" + SERVICE_KEY;
@@ -111,31 +139,51 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 				totalcount+= nodeList.getLength();
 				for (int tmp = 0; tmp < nodeList.getLength(); tmp++) {
 					Node nNode = nodeList.item(tmp);
+					//mbti태그 등록
+					String mbti="";
+					for(int i=0; i<=6;i+=2) {
+						Random rand = new Random();
+						int random_p = rand.nextInt(2); // 0 or 1
+						int personal_idx = i+random_p;
+						mbti+=personality[personal_idx];
+						String[] tags = map.get(personality[personal_idx]);
+						int random_t = rand.nextInt(tags.length); // 0 or 1
+						String picktag = tags[random_t]; 
+						System.out.println("선택된 태그 : "+picktag);
+					}
+					System.out.println("mbti : "+mbti);
+					
 					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 						Element element = (Element) nNode;
+						SimpleDateFormat simpledate = new SimpleDateFormat("yyyy-MM-dd");
 						System.out.println("##########################");
-						System.out.println("desertionNo: " + getTagValue("desertionNo", element));
-//						System.out.println("happenDt: " + getTagValue("happenDt", element));
-//						System.out.println("happenPlace: " + getTagValue("happenPlace", element));
-//						System.out.println("kindCd: " + getTagValue("kindCd", element));
-//						System.out.println("colorCd: " + getTagValue("colorCd", element));
-//						System.out.println("age: " + getTagValue("age", element));
-//						System.out.println("weight: " + getTagValue("weight", element));
-//						System.out.println("noticeNo: " + getTagValue("noticeNo", element));
-//						System.out.println("noticeSdt: " + getTagValue("noticeSdt", element));
-//						System.out.println("noticeEdt: " + getTagValue("noticeEdt", element));
-//						System.out.println("popfile: " + getTagValue("popfile", element));
-//						System.out.println("processState: " + getTagValue("processState", element));
-//						System.out.println("sexCd: " + getTagValue("sexCd", element));
-//						System.out.println("neuterYn: " + getTagValue("neuterYn", element));
-//						System.out.println("specialMark: " + getTagValue("specialMark", element));
-//						System.out.println("careNm: " + getTagValue("careNm", element));
-//						System.out.println("careTel: " + getTagValue("careTel", element));
-//						System.out.println("careAddr: " + getTagValue("careAddr", element));
-//						System.out.println("orgNm: " + getTagValue("orgNm", element));
-//						System.out.println("chargeNm: " + getTagValue("chargeNm", element));
-//						System.out.println("officetel: " + getTagValue("officetel", element));
-//		                        System.out.println("noticeComment: "+getTagValue("noticeComment", element));
+						
+//						Long.parseLong(getTagValue("desertionNo", element)),
+//						simpledate.format(new Date(getTagValue("happenDt", element))), 
+						animalApiRepo.insertAnimalFromApi(
+								Long.parseLong(getTagValue("desertionNo", element)),
+								getTagValue("filename", element), 
+								getTagValue("happenDt", element),
+								getTagValue("happenPlace", element), 
+								getTagValue("kindCd", element), 
+								getTagValue("colorCd", element), 
+								getTagValue("age", element), 
+								getTagValue("weight", element), 
+								getTagValue("noticeNo", element), 
+								getTagValue("noticeSdt", element), 
+								getTagValue("noticeEdt", element), 
+								getTagValue("popfile", element), 
+								getTagValue("processState", element), 
+								getTagValue("sexCd", element), 
+								getTagValue("neuterYn", element), 
+								getTagValue("specialMark", element), 
+								getTagValue("careNm", element), 
+								getTagValue("careTel", element),
+								getTagValue("careAddr", element),
+								getTagValue("orgNm", element),
+								getTagValue("chargeNm", element),
+								getTagValue("officetel", element),
+								mbti);
 					} // end if
 				} // end for
 				page++;
