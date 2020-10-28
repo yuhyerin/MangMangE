@@ -43,8 +43,7 @@ export default new Vuex.Store({
     },
 
     goPage(state, pageNum) {
-      // (+) 다시 되돌아가는 것은 가능한데 이후로는 X, 체크안한 것의 맨 첫번째로는 이동 가능하도록
-      if (state.survey[pageNum-1] !== 0) {
+      if (state.survey[pageNum-1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
       }
     }
@@ -52,8 +51,8 @@ export default new Vuex.Store({
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
   actions: {
-    submitSurvey({ state, commit }, payload) {
-      commit('whatIsDogMbti', payload)
+    // submitSurvey({ state, commit }, payload) {
+    //   commit('whatIsDogMbti', payload)
       // console.log(state.userMbti, state.dogMbti)
       // axios.post(SERVER.URL + SERVER.submitSurvey, {
       //   "MBTI": state.userMbti,
@@ -64,7 +63,7 @@ export default new Vuex.Store({
       //     "jwt-auth-token": localStorage.getItem("token"),
       //   }
       // }) 
-    },
+    // },
   },
   modules: {
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="survey">
-    <v-container>
+    <div class="container">
       <v-app id="inspire">
         <v-stepper v-model="page">
           <v-stepper-header>
@@ -96,17 +96,17 @@
               <!-- Name of step 3 -->
             </v-stepper-step>
           </v-stepper-header>
-          <v-stepper-items>
+          <v-stepper-items style="display: flex; text-align:center; align-items:center;">
             <v-stepper-content step="1">
-              <Mbti />
-            </v-stepper-content>
-
-            <v-stepper-content step="2">
               <Question1 />
             </v-stepper-content>
 
-            <v-stepper-content step="3">
+            <v-stepper-content step="2">
               <Question2 />
+            </v-stepper-content>
+
+            <v-stepper-content step="3">
+              <Question3 />
               <!-- <v-card
               class="mb-12"
               color="grey lighten-1"
@@ -126,39 +126,38 @@
             </v-stepper-content>
 
             <v-stepper-content step="4">
-              <Question3 />
-            </v-stepper-content>
-
-            <v-stepper-content step="5">
               <Question4 />
             </v-stepper-content>
 
-            <v-stepper-content step="6">
+            <v-stepper-content step="5">
               <Question5 />
             </v-stepper-content>
 
-            <v-stepper-content step="7">
+            <v-stepper-content step="6">
               <Question6 />
             </v-stepper-content>
 
-            <v-stepper-content step="8">
+            <v-stepper-content step="7">
               <Question7 />
             </v-stepper-content>
 
-            <v-stepper-content step="9">
+            <v-stepper-content step="8">
               <Question8 />
+            </v-stepper-content>
+
+            <v-stepper-content step="9">
+              <Question9 />
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </v-app>
-    </v-container>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex';
 
-import Mbti from "../components/survey/Mbti";
 import Question1 from "../components/survey/Question1";
 import Question2 from "../components/survey/Question2";
 import Question3 from "../components/survey/Question3";
@@ -167,10 +166,10 @@ import Question5 from "../components/survey/Question5";
 import Question6 from "../components/survey/Question6";
 import Question7 from "../components/survey/Question7";
 import Question8 from "../components/survey/Question8";
+import Question9 from "../components/survey/Question9";
 
 export default {
   components: {
-    Mbti,
     Question1,
     Question2,
     Question3,
@@ -179,6 +178,7 @@ export default {
     Question6,
     Question7,
     Question8,
+    Question9,
   },
   computed: {
     ...mapState(['page', 'survey'])

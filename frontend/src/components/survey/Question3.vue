@@ -1,19 +1,19 @@
 <template>
-  <div class="question1">
-    <v-row>
-      <h1>Q4. 반려동물이 낯선 사람을 보면 어떻게 행동하길 원하시나요?</h1><hr>
-    </v-row>
-    <div>이미지</div>
-    <v-row>
-      <v-col @click="selectedDogMbti({idx: 3, answer: 1})" style="cursor:pointer">
-        <h3>지켜보는 타입</h3>
-        <div>이미지</div>
-      </v-col>
-      <v-col @click="selectedDogMbti({idx: 3, answer: -1})" style="cursor:pointer">
-        <h3>궁금해서 먼저 다가가는 타입</h3>
-        <div>이미지</div>
-      </v-col>
-    </v-row>
+  <div class="question">
+    <div class="question-header">
+      <h2>Q3. 반려동물과 어떤 관계를 원하시나요?</h2>
+      <img src="@/assets/survey/1.png" alt="">
+    </div>
+    <div class="question-answer" style="display: flex; justify-content: space-around; align-item: center">
+      <div class="selected-answer" @click="selectedDogMbti({idx: 2, answer: 1}); selectedAnswer(1)" style="cursor:pointer;">
+        <h3>애인같이 서로 죽고 못사는 관계</h3>
+        <img src="@/assets/survey/1-1.png" alt="">
+      </div>
+      <div class="selected-answer" @click="selectedDogMbti({idx: 2, answer: 1}); selectedAnswer(1)" style="cursor:pointer;">
+        <h3>룸메이트 같은 적당히 독립적인 관계</h3>
+        <img src="@/assets/survey/1-2.png" alt="">
+      </div>
+    </div>
   </div>
 
 </template>
