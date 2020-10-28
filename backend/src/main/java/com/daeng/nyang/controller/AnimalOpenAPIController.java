@@ -25,5 +25,13 @@ public class AnimalOpenAPIController {
 		animalService.parsingXmlData();
 		return "OK";
 	}
+	
+	@GetMapping("/apitest2")
+	@ApiOperation("테스트")
+	public String callApiHttp2() {
+		
+		System.out.println("테스트입니다!");
+		return "OK";
+	}
 
 }

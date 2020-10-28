@@ -27,31 +27,32 @@ public class JwtTokenUtil implements Serializable {
 	@Value("${jwt.secret}")
 	private String secret;
 	
-	//retrieve username from jwt token
+	/** 토큰으로부터 user_id를 얻음 */
     public String getUsernameFromToken(String token) {
     	System.out.println("JwtTokenUtil : getUsernameFromToken");
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    //retrieve expiration date from jwt token
+    /** 토큰의 만료시간을 반환  */ 
     public Date getExpirationDateFromToken(String token) {
     	System.out.println("JwtTokenUtil : getExpirationDateFromToken");
         return getClaimFromToken(token, Claims::getExpiration);
     }
     
+    /** 토큰으로부터 정보를 얻음 */
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
     	System.out.println("JwtTokenUtil : getClaimFromToken");
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
     
-    //for retrieveing any information from token we will need the secret key
+    /** Jwts parser를 사용해서 JWT토큰을 파싱하는 함수 */
     private Claims getAllClaimsFromToken(String token) {
-    	System.out.println("JwtTokenUtil : getAllClaimsFromToken");
+    	System.out.println("JwtTokenUtil - getAllClaimsFromToken()호출 : JWT파싱하는 함수");
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-
+    /** 토큰으로부터 정보를 파싱한다. */
     public Map<String, Object> getUserParseInfo(String token) {
     	System.out.println("JwtTokenUtil : getUserParseInfo");
         Claims parseInfo = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
@@ -61,26 +62,29 @@ public class JwtTokenUtil implements Serializable {
         return result;
     }
 
-    //check if the token has expired
+    /** 토큰이 만료되었는지 검사 */
     public Boolean isTokenExpired(String token) {
     	System.out.println("JwtTokenUtil : isTokenExpired");
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
-    //generate token for user
+    
+    /** AccessToken 생성. */
     public String generateAccessToken(UserDetails userDetails) {
     	System.out.println("JwtTokenUtil : generateAccessToken");
         Map<String, Object> claims = new HashMap<>();
-        List<String> li = new ArrayList<>();
-        for (GrantedAuthority a: userDetails.getAuthorities()) {
-            li.add(a.getAuthority());
-        }
-        claims.put("role",li);
+//        List<String> li = new ArrayList<>();
+//        for (GrantedAuthority a: userDetails.getAuthorities()) {
+//            li.add(a.getAuthority());
+//        }
+        System.out.println("ROLE: "+userDetails.getAuthorities());
+        claims.put("role",userDetails.getAuthorities());
         return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
+    /** RefreshToken 생성. */
     public String generateRefreshToken(String user_id) {
     	System.out.println("JwtTokenUtil : generateRefreshToken");
         return Jwts.builder().setSubject(user_id).setIssuedAt(new Date(System.currentTimeMillis()))

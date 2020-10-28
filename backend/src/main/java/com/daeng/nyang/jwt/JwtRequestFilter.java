@@ -25,7 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.daeng.nyang.service.user.JwtUserDetailService;
+import com.daeng.nyang.service.user.JwtUserDetailsService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -33,26 +33,31 @@ import io.jsonwebtoken.ExpiredJwtException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
-
-	@Autowired
-	JwtTokenUtil jtu;
-
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
-
 	@Autowired
-	private JwtUserDetailService jwtUserDetailService;
+	private JwtUserDetailsService jwtUserDetailService;
 
+	/** 프로젝트 실행시 제일 먼저 진입 */
+	@Bean
+	public FilterRegistrationBean JwtRequestFilterRegistration(JwtRequestFilter filter) {
+		System.out.println("첫번째 진입 : JwtRequestFilterRegistration /전달된 파라미터 명 :" + filter.toString());
+		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+		registration.setEnabled(false);
+		return registration;
+	}
+	
+	/** 인증 */
 	public Authentication getAuthentication(String token) {
 		System.out.println("getAuthentication : " + token);
-		Map<String, Object> parseInfo = jtu.getUserParseInfo(token);
-//        System.out.println("parseinfo: " + parseInfo);
-		List<String> rs = (List) parseInfo.get("role");
+		/** 토큰으로부터 유저 정보를 파싱한다. (user_id, role) */
+		Map<String, Object> parseInfo = jwtTokenUtil.getUserParseInfo(token);
+		List<String> roles = (List) parseInfo.get("role");
 		Collection<GrantedAuthority> tmp = new ArrayList<>();
-		for (String a : rs) {
+		for (String a : roles) {
 			tmp.add(new SimpleGrantedAuthority(a));
 		}
-		UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("username"))).authorities(tmp)
+		UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("user_id"))).authorities(tmp)
 				.password(String.valueOf(parseInfo.get("password"))).build();
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				userDetails, null, userDetails.getAuthorities());
@@ -60,50 +65,68 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		return usernamePasswordAuthenticationToken;
 	}
 
-	@Bean
-	public FilterRegistrationBean JwtRequestFilterRegistration(JwtRequestFilter filter) {
-		System.out.println("JwtRequestFilterRegistration : " + filter.toString());
-
-		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-		registration.setEnabled(false);
-		return registration;
-	}
-
+	
+	/** 요청하면 여기로 제일먼저 들어옴 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
-		System.out.println("doFilterInternal");
-		System.out.println("REQUEST : " + request.getHeader("Authorization"));
-		String requestTokenHeader = request.getHeader("Authorization");
-//		logger.info("tokenHeader: " + requestTokenHeader);
-		String userid = null;
-//		String jwtToken = null;
-
-		if (requestTokenHeader != null) {
+		
+		System.out.println("요청하면 여기로 제일먼저 들어옴 - JwtRequestFilter의 doFilterInternal()메소드 ");
+		String jwtToken = request.getHeader("Authorization");
+		String user_id = request.getParameter("user_id");
+		String user_password = request.getParameter("user_password");
+		
+		if (jwtToken != null) {// 토큰이 있으면
+			System.out.println("토큰이 있음");
 			try {
-				userid = jwtTokenUtil.getUsernameFromToken(requestTokenHeader);
+				// 일단 토큰에서 user_id 얻음.
+				user_id = jwtTokenUtil.getUsernameFromToken(jwtToken);
+				System.out.println("토큰에서 꺼낸 user_id : "+user_id);
+				
+				// id정보도 있고, 토큰이 만료되지 않았으면
+				if(user_id != null && !jwtTokenUtil.isTokenExpired(jwtToken)) {
+					System.out.println("id정보도 있고 토큰도 만료되지 않음.");
+					// DB에 접근하지 않고, 파싱한 정보로 유저 만들기.
+					Authentication authentication = getAuthentication(jwtToken);
+					// 만든 authentication 객체로 인증받기.
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+					
+				}else if(jwtTokenUtil.isTokenExpired(jwtToken)) {
+					System.out.println("토큰이 만료되었습니다.");
+					
+				}
+				
 			} catch (IllegalArgumentException e) {
 				System.out.println("trytry catchcatch");
 			}
+		}else {
+			System.out.println("토큰 자체가 존재하지 않습니다.");
+			UserDetails userDetails = jwtUserDetailService.loadUserByUsername(user_id);
+			jwtTokenUtil.generateAccessToken(userDetails);
 		}
-		if (userid == null) {
-			System.out.println("userid null");
-			logger.info("token maybe expired: username is null.");
-		}
-//		} else if (redisTemplate.opsForValue().get(jwtToken) != null) {
-			else if(redisTemplate.opsForValue().get(requestTokenHeader) != null) {
-//			System.out.println("redis null");
-			logger.warn("this token already logout!");
-		} else {
-			// DB access 대신에 파싱한 정보로 유저 만들기!
-			System.out.println("else authen");
-//			Authentication authen = getAuthentication(jwtToken);
-			Authentication authen = getAuthentication(requestTokenHeader);
-			System.out.println(authen.toString());
-			// 만든 authentication 객체로 매번 인증받기
-			SecurityContextHolder.getContext().setAuthentication(authen);
-			response.setHeader("username", userid);
-		}
+		
+		
+		
+		
+//		if (user_id == null) {
+//			System.out.println("userid null");
+//			logger.info("token maybe expired: username is null.");
+//		}
+////		} else if (redisTemplate.opsForValue().get(jwtToken) != null) {
+//			else if(redisTemplate.opsForValue().get(requestTokenHeader) != null) {
+////			System.out.println("redis null");
+//			logger.warn("this token already logout!");
+//		} else {
+//			// DB access 대신에 파싱한 정보로 유저 만들기!
+//			System.out.println("else authen");
+////			Authentication authen = getAuthentication(jwtToken);
+//			Authentication authen = getAuthentication(requestTokenHeader);
+//			System.out.println(authen.toString());
+//			// 만든 authentication 객체로 매번 인증받기
+//			SecurityContextHolder.getContext().setAuthentication(authen);
+//			response.setHeader("username", user_id);
+//		}
+		
 		chain.doFilter(request, response);
 	}
 }
