@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="247ee910-e738-4aaf-8e38-be2defb8cdb3" name="DogCat">
+        <fileTransfer accessType="SFTP" host="k3b306.p.ssafy.io" port="22" sshConfigId="684fbebe-e9f6-4ba7-9981-a98d27a419de" sshConfig="ubuntu@k3b306.p.ssafy.io:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

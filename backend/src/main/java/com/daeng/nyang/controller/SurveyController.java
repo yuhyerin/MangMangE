@@ -32,7 +32,7 @@ public class SurveyController {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 
-	@PostMapping(path = "/survey/create")
+	@PostMapping(path = "/user/survey/create")
 	@ApiOperation(value = "설문결과저장")
 	public ResponseEntity<HashMap<String, Object>> surveyCreate(@RequestBody Survey survey) {
 		System.out.println("survey_controller");
