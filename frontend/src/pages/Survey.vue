@@ -190,7 +190,7 @@ export default {
   },
   computed: mapState(["page"]),
   methods: {
-    ...mapGetters(["userMbti", "survey"]),
+    ...mapGetters(["userMbti", "survey", "getSurvey"]),
     ...mapMutations(["goPage"]),
     ...mapActions(["submitSurvey"]),
   },

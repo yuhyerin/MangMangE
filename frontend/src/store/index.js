@@ -14,11 +14,19 @@ export default new Vuex.Store({
     userMbti: '',
     dogMbti: '',
     survey: [0, 0, 0, 0, 0, 0, 0, 0],
+
+    pageCheck: 0
   },
 
   // state를 (가공해서) 가져올 함수들 === computed
   getters: {
     // config: state => ({ headers: {Auturization: }})
+    getSurvey: function (state) {
+      return state.survey
+    },
+    getPageCheck: function (state) {
+      return state.pageCheck
+    }
   },
 
   // state 변경하는 함수들, 동기적으로 동작, commit을 통해 실행
@@ -50,6 +58,10 @@ export default new Vuex.Store({
     goPage(state, pageNum) {
       state.page = pageNum
       state.survey[pageNum - 2] = 0
+    },
+
+    checkThisPage(state, payload) {
+      state.pageCheck = payload
     }
   },
 

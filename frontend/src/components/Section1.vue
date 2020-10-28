@@ -30,27 +30,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="row">
-        <div class="col-md-7 col-sm-7" style="margin-top: 100px"></div>
-        <div
-          class="col-md-4 col-sm-4"
-          style="
-            margin-top: 200px;
-            background-color: rgb(227, 227, 227);
-            height: 250px;
-          "
-        >
-          <h1 class="slogan">당신에게 맞는 반려동물을 찾아보세요</h1>
-          <div>
-            <p class="match-box">매칭하기</p>
-            <p class="all-animal">모든동물보기</p>
-          </div>
-          <div class="howitworks">
-            <a class="moveToSection2" href="#page2">How it works</a>
-          </div>
-        </div>
-        <div class="col-md-1 col-sm-1" style="margin-top: 100px"></div>
-      </div> -->
   </div>
 </template>
 
@@ -67,6 +46,7 @@ export default {
     url("../assets/image/mainpage/section1.jpg");
   background-size: cover;
   max-width: 100vw;
+  padding-top: 75px;
 }
 
 .slogan {

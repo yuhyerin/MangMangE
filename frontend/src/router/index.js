@@ -5,6 +5,7 @@ import AnimalList from '../pages/AnimalList.vue'
 import AnimalDetail from '../pages/AnimalDetail.vue'
 import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
+import Test from '../pages/Test.vue'
 
 Vue.use(VueRouter)
 
@@ -33,7 +34,7 @@ const routes = [
     component: AnimalDetail
   },
   {
-    path: '/mainpage',
+    path: '/',
     name: 'Mainpage',
     component: Mainpage
   },
@@ -41,6 +42,11 @@ const routes = [
     path: '/survey',
     name: 'Survey',
     component: Survey
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test
   },
 ]
 
