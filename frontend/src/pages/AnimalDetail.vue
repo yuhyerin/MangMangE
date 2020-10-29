@@ -85,7 +85,7 @@
           </div>
         </div>
       </v-container>
-    </v-content>
+    <!-- </v-content> -->
   </v-app>
 </template>
 
