@@ -1,5 +1,6 @@
 <template>
-  <div style="margin-top: 75px;">
+  <v-app>
+  <Header />
     <full-page ref="fullpage" :options="options" id="fullpage">
       <Section1 />
 
@@ -9,7 +10,7 @@
 
       <Section4 />
     </full-page>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -17,6 +18,7 @@ import Section1 from '../components/Section1.vue'
 import Section2 from '../components/Section2.vue'
 import Section3 from '../components/Section3.vue'
 import Section4 from '../components/Section4.vue'
+import Header from '../components/Header.vue'
 
 export default {
   name: 'Mainpage',
@@ -25,6 +27,7 @@ export default {
     Section2,
     Section3,
     Section4,
+    Header,
   },
   data() {
     return {
