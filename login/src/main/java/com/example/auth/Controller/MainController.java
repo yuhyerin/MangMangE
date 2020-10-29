@@ -62,6 +62,13 @@ public class MainController {
     	System.out.println("home");
     	return;
     }
+    
+    @PostMapping(path="/admin/animal/create")
+	@ApiOperation("동물저장")
+	public void createAnimal(@RequestBody Map<String, String> m){
+		System.out.println("/admin/animal/create 입장");
+		System.out.println(m.get("accessToken"));
+	}
 
     @Transactional
     @ApiOperation(value="유저삭제")
@@ -85,7 +92,7 @@ public class MainController {
     }
 
 
-    @PostMapping(path="/newuser/out")
+    @PostMapping(path="/user/out")
     @ApiOperation("로그아웃")
     public ResponseEntity<?> logout(@RequestBody Map<String, String> m) {
         String username = null;
@@ -137,24 +144,13 @@ public class MainController {
     }
     @ApiOperation(value="로그인", notes = "로그인해봅시다.")
     @PostMapping(path = "/newuser/login")
-    @ApiResponses(value = {
-            @ApiResponse(code = 400, message = "Invalid input:…"),
-            @ApiResponse(code = 401, message = "unAuthorized"),
-            @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 500, message = "sql error")
-            })  
-//    @ApiImplicitParams({
-//        @ApiImplicitParam(name = "username", value="유저네임", dataType = "String", paramType="query"),
-//        @ApiImplicitParam(name = "password", value="패스워드", dataType = "String", paramType="query")
-//    })
-//    @GetMapping(path="/newuser/login/{username}/{password}")
     public Map<String, Object> login(@RequestBody Map<String, String> m) throws Exception {
 //    public Map<String, Object> login(@PathVariable String username, @PathVariable String password){
-        final String username = m.get("username");
+        final String username = m.get("user_id");
         System.out.println("username : "+username);
 //        logger.info("test input username: " + username);
         try {
-            am.authenticate(new UsernamePasswordAuthenticationToken(username, m.get("password")));
+            am.authenticate(new UsernamePasswordAuthenticationToken(m.get("user_id"), m.get("user_password")));
         } catch (Exception e){
         	System.out.println("authenticate 에러랍니다.");
             throw e;

@@ -48,12 +48,12 @@ public class AccountController {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 
-	@PostMapping(path="/admin/animal/create")
-	@ApiOperation("동물저장")
-	public void createAnimal(@RequestBody Map<String, String> m){
-		System.out.println("/admin/animal/create 입장");
-		System.out.println(m.get("accessToken"));
-	}
+//	@PostMapping(path="/admin/animal/create")
+//	@ApiOperation("동물저장")
+//	public void createAnimal(@RequestBody Map<String, String> m){
+//		System.out.println("/admin/animal/create 입장");
+//		System.out.println(m.get("accessToken"));
+//	}
 	
 
 	@PostMapping(path = "/newuser/signup")
