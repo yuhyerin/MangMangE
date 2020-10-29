@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     back() {
-      this.$emit("changeComponents", false);
+      this.$emit("changeComponents", 0);
     },
     submit() {
       console.log(

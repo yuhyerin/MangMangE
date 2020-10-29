@@ -1,172 +1,170 @@
 <template>
-  <v-app>
-    <div class="survey">
-      <v-container>
-        <v-app id="inspire">
-          <v-stepper v-model="page">
-            <v-stepper-header>
-              <v-stepper-step
-                @click="goPage(1)"
-                :complete="page > 1"
-                step="1"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-              </v-stepper-step>
+  <div class="survey">
+    <div class="container">
+      <v-app id="inspire">
+        <v-stepper v-model="page">
+          <v-stepper-header>
+            <v-stepper-step
+              @click="goPage(1)"
+              :complete="survey[0] !== 0"
+              step="1"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+            </v-stepper-step>
 
-              <v-divider></v-divider>
+            <v-divider></v-divider>
 
-              <v-stepper-step
-                @click="goPage(2)"
-                :complete="page > 2"
-                step="2"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-              </v-stepper-step>
+            <v-stepper-step
+              @click="goPage(2)"
+              :complete="survey[1] !== 0"
+              step="2"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+            </v-stepper-step>
 
-              <v-divider></v-divider>
+            <v-divider></v-divider>
 
-              <v-stepper-step
-                @click="goPage(3)"
-                :complete="page > 3"
-                step="3"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-              </v-stepper-step>
+            <v-stepper-step
+              @click="goPage(3)"
+              :complete="survey[2] !== 0"
+              step="3"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+            </v-stepper-step>
 
-              <v-divider></v-divider>
+            <v-divider></v-divider>
 
-              <v-stepper-step
-                @click="goPage(4)"
-                :complete="page > 4"
-                step="4"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-              </v-stepper-step>
+            <v-stepper-step
+              @click="goPage(4)"
+              :complete="survey[3] !== 0"
+              step="4"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+            </v-stepper-step>
 
-              <v-divider></v-divider>
+            <v-divider></v-divider>
 
-              <v-stepper-step
-                @click="goPage(5)"
-                :complete="page > 5"
-                step="5"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-              </v-stepper-step>
+            <v-stepper-step
+              @click="goPage(5)"
+              :complete="survey[4] !== 0"
+              step="5"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+            </v-stepper-step>
 
-              <v-divider></v-divider>
+            <v-divider></v-divider>
 
-              <v-stepper-step
-                @click="goPage(6)"
-                :complete="page > 6"
-                step="6"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-              </v-stepper-step>
+            <v-stepper-step
+              @click="goPage(6)"
+              :complete="survey[5] !== 0"
+              step="6"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+            </v-stepper-step>
 
-              <v-divider></v-divider>
+            <v-divider></v-divider>
 
-              <v-stepper-step
-                @click="goPage(7)"
-                :complete="page > 7"
-                step="7"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-              </v-stepper-step>
+            <v-stepper-step
+              @click="goPage(7)"
+              :complete="survey[6] !== 0"
+              step="7"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+            </v-stepper-step>
 
-              <v-divider></v-divider>
+            <v-divider></v-divider>
 
-              <v-stepper-step
-                @click="goPage(8)"
-                :complete="page > 8"
-                step="8"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-              </v-stepper-step>
+            <v-stepper-step
+              @click="goPage(8)"
+              :complete="survey[7] !== 0"
+              step="8"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+            </v-stepper-step>
 
-              <v-divider></v-divider>
+            <v-divider></v-divider>
 
-              <v-stepper-step
-                step="9"
-                @click="goPage(9)"
-                color="rgb(1, 118, 72)"
-                style="cursor: pointer"
-              >
-                <!-- Name of step 3 -->
-              </v-stepper-step>
-            </v-stepper-header>
+            <v-stepper-step
+              step="9"
+              @click="goPage(9)"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
+              <!-- Name of step 3 -->
+            </v-stepper-step>
+          </v-stepper-header>
+          <v-stepper-items
+            style="display: flex; text-align: center; align-items: center"
+          >
+            <v-stepper-content step="1">
+              <Question1 />
+            </v-stepper-content>
 
-            <v-stepper-items>
-              <v-stepper-content step="1">
-                <Mbti />
-              </v-stepper-content>
+            <v-stepper-content step="2">
+              <Question2 />
+            </v-stepper-content>
 
-              <v-stepper-content step="2">
-                <Question1 />
-              </v-stepper-content>
+            <v-stepper-content step="3">
+              <Question3 />
+              <!-- <v-card
+              class="mb-12"
+              color="grey lighten-1"
+              height="200px"
+            ></v-card> -->
 
-              <v-stepper-content step="3">
-                <Question2 />
-                <!-- <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card> -->
+              <!-- <v-btn
+              color="primary"
+              @click="e1 = 1"
+            >
+              Continue
+            </v-btn>
+    
+            <v-btn text>
+              Cancel
+            </v-btn> -->
+            </v-stepper-content>
 
-                <!-- <v-btn
-                color="primary"
-                @click="e1 = 1"
-              >
-                Continue
-              </v-btn>
-      
-              <v-btn text>
-                Cancel
-              </v-btn> -->
-              </v-stepper-content>
+            <v-stepper-content step="4">
+              <Question4 />
+            </v-stepper-content>
 
-              <v-stepper-content step="4">
-                <Question3 />
-              </v-stepper-content>
+            <v-stepper-content step="5">
+              <Question5 />
+            </v-stepper-content>
 
-              <v-stepper-content step="5">
-                <Question4 />
-              </v-stepper-content>
+            <v-stepper-content step="6">
+              <Question6 />
+            </v-stepper-content>
 
-              <v-stepper-content step="6">
-                <Question5 />
-              </v-stepper-content>
+            <v-stepper-content step="7">
+              <Question7 />
+            </v-stepper-content>
 
-              <v-stepper-content step="7">
-                <Question6 />
-              </v-stepper-content>
+            <v-stepper-content step="8">
+              <Question8 />
+            </v-stepper-content>
 
-              <v-stepper-content step="8">
-                <Question7 />
-              </v-stepper-content>
-
-              <v-stepper-content step="9">
-                <Question8 />
-              </v-stepper-content>
-            </v-stepper-items>
-          </v-stepper>
-        </v-app>
-      </v-container>
+            <v-stepper-content step="9">
+              <Question9 />
+            </v-stepper-content>
+          </v-stepper-items>
+        </v-stepper>
+      </v-app>
     </div>
-  </v-app>
+  </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
-import Mbti from "../components/survey/Mbti";
 import Question1 from "../components/survey/Question1";
 import Question2 from "../components/survey/Question2";
 import Question3 from "../components/survey/Question3";
@@ -175,10 +173,10 @@ import Question5 from "../components/survey/Question5";
 import Question6 from "../components/survey/Question6";
 import Question7 from "../components/survey/Question7";
 import Question8 from "../components/survey/Question8";
+import Question9 from "../components/survey/Question9";
 
 export default {
   components: {
-    Mbti,
     Question1,
     Question2,
     Question3,
@@ -187,12 +185,13 @@ export default {
     Question6,
     Question7,
     Question8,
+    Question9,
   },
-  computed: mapState(["page"]),
+  computed: {
+    ...mapState(["page", "survey"]),
+  },
   methods: {
-    ...mapGetters(["userMbti", "survey", "getSurvey"]),
     ...mapMutations(["goPage"]),
-    ...mapActions(["submitSurvey"]),
   },
 };
 </script>

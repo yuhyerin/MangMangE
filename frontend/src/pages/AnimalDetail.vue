@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Header />
-      <v-container style="padding-top: 75px">
+      <v-container style="padding-top: 90px">
         <div
           style="
             height: 40vh;
@@ -15,27 +15,29 @@
               position: absolute;
               z-index: 1;
               right: 13%;
-              top: 20px;
+              top: 95px;
             "
             @click="setLiked"
           >
-            <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
+            <v-icon x-large v-if="likeTrigger == false" color="rgb(255,0,0)">
               mdi-heart-outline
             </v-icon>
-            <v-icon v-if="likeTrigger == true" color="rgb(255,0,0)">
+            <v-icon x-large v-if="likeTrigger == true" color="rgb(255,0,0)">
               mdi-heart
             </v-icon>
           </div>
           <div style="display: flex">
+            <div>
+              <v-icon color="black"> mdi-arrow-left </v-icon>
+            </div>
             <div
               style="
                 width: 30vw;
                 height: 35vh;
                 margin: 10px;
-                border: 1px solid black;
               "
+              :style="{ 'background-image': 'url(' + animalInfo.popfile + ')', 'background-size' : 'cover' }"
             >
-              사진구역
             </div>
             <div style="width: 70vw; height: 35vh; margin: 10px">
               <div style="height: 20%">제목</div>
@@ -89,6 +91,7 @@
 
 <script>
 import Header from "../components/Header.vue";
+import dump from "../assets/data/animal.json";
 
 export default {
   components: {
@@ -97,7 +100,15 @@ export default {
   data() {
     return {
       likeTrigger: false,
+      animalInfo: "",
     };
+  },
+  created() {
+    for (var i = 0; i < dump.animal.length; i++) {
+      if (dump.animal[i].desertion_no == this.$route.params.animalID) {
+        this.animalInfo = dump.animal[i];
+      }
+    }
   },
   methods: {
     setLiked() {
