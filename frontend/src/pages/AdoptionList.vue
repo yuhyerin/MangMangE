@@ -23,83 +23,13 @@
               <th style="width: 10%;">작성일</th>
             </tr>
           </thead>
-          <tbody class="adoption-tbody">
+          <tbody class="adoption-tbody" v-for="adopt in adopts" :key="adopt.adoptionNumbe">
             <tr>
-              <td>1</td>
-              <td>말티즈 입양하고 싶어요</td>
-              <td>김싸피</td>
-              <td>2020.10.29</td>
+              <td>{{ adopt.adoptionNumbe }}</td>
+              <td>{{ adopt.titl }}</td>
+              <td>{{ adopt.write }}</td>
+              <td>{{ adopt.adoptionDa }}</td>
             </tr>
-
-            <tr>
-              <td>2</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
-            <tr>
-              <td>3</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
-            <tr>
-              <td>5</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
-            <tr>
-              <td>6</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
-            <tr>
-              <td>7</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
-            <tr>
-              <td>8</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
-            <tr>
-              <td>9</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
-            <tr>
-              <td>10</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
-            <tr>
-              <td>11</td>
-              <td>이 아이를 입양하고 싶습니다</td>
-              <td>이싸피</td>
-              <td>2020.10.29</td>
-            </tr>
-
           </tbody>
         </table>
       </div>
@@ -112,10 +42,73 @@ export default {
   name: 'AdoptionList',
   data() {
     return {
-      adoptionNumber: "",
-      title: "",
-      writer: "",
-      adoptionDay: "",
+      adopts: [
+      {
+        adoptionNumbe: 11,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 10,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 9,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 8,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 7,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 6,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 5,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 4,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 3,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 2,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      },
+      {
+        adoptionNumbe: 1,
+        titl: "이 아이를 입양하고 싶습니다",
+        write: "김싸피",
+        adoptionDa: "201029",
+      }]
     }
   },
   components: {
