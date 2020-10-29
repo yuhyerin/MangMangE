@@ -48,12 +48,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		Map<String, Object> parseInfo = jtu.getUserParseInfo(token);
 //        System.out.println("parseinfo: " + parseInfo);
 		List<String> rs = (List) parseInfo.get("role");
+//		String rs = (String)parseInfo.get("role");
 		Collection<GrantedAuthority> tmp = new ArrayList<>();
+//		GrantedAuthority temp = new SimpleGrantedAuthority(rs);
 		for (String a : rs) {
 			tmp.add(new SimpleGrantedAuthority(a));
 		}
-		UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("username"))).authorities(tmp)
-				.password(String.valueOf(parseInfo.get("password"))).build();
+		UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("user_id"))).authorities(tmp)
+				.password(String.valueOf(parseInfo.get("user_password"))).build();
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				userDetails, null, userDetails.getAuthorities());
 		System.out.println(userDetails.toString());
@@ -75,24 +77,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		System.out.println("doFilterInternal");
 		System.out.println("REQUEST : " + request.getHeader("Authorization"));
 		String requestTokenHeader = request.getHeader("Authorization");
-//		logger.info("tokenHeader: " + requestTokenHeader);
 		String userid = null;
-//		String jwtToken = null;
 
 		if (requestTokenHeader != null) {
 			try {
 				userid = jwtTokenUtil.getUsernameFromToken(requestTokenHeader);
 			} catch (IllegalArgumentException e) {
-				System.out.println("trytry catchcatch");
 			}
 		}
 		if (userid == null) {
 			System.out.println("userid null");
 			logger.info("token maybe expired: username is null.");
-		}
-//		} else if (redisTemplate.opsForValue().get(jwtToken) != null) {
-			else if(redisTemplate.opsForValue().get(requestTokenHeader) != null) {
-//			System.out.println("redis null");
+		} else if (redisTemplate.opsForValue().get(requestTokenHeader) != null) {
 			logger.warn("this token already logout!");
 		} else {
 			// DB access 대신에 파싱한 정보로 유저 만들기!

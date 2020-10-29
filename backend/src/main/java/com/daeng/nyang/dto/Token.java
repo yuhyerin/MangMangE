@@ -9,10 +9,11 @@ import lombok.Data;
 
 @Data
 @RedisHash
-public class Token implements Serializable {
+@Builder
+public class Token {
 	
 	private static final long serialVersionUID = -7353484588260422449L;
-    private String user_id;
+//    private String user_id;
     private String refreshToken;
 
 }

@@ -41,6 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		csrf().disable(). // 요청위조 방지 비활성화
 		sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
 		and().authorizeRequests().
+			antMatchers("/newuser").anonymous().
+			antMatchers("/user").hasAnyRole("ADMIN","USER").
+			antMatchers("/admin").hasRole("ADMIN").
 			antMatchers("/**").permitAll().
 		and().authorizeRequests().
 			anyRequest(). // 어떤 요청이라도

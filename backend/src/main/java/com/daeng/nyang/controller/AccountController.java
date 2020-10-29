@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Account;
-import com.daeng.nyang.dto.Token;
+import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
 import com.daeng.nyang.service.user.JwtUserDetailService;
@@ -36,6 +37,11 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @CrossOrigin("*")
 public class AccountController {
+	
+	@Value("${JWT_ACCESS_TOKEN_VALIDITY}")
+	private String JWT_ACCESS_TOKEN_VALIDITY;
+	@Value("${JWT_REFRESH_TOKEN_VALIDITY}")
+	private String JWT_REFRESH_TOKEN_VALIDITY;
 
 	@Autowired
 	private AccountRepo userRepo;
@@ -51,13 +57,6 @@ public class AccountController {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 
-//	@PostMapping(path="/admin/animal/create")
-//	@ApiOperation("동물저장")
-//	public void createAnimal(@RequestBody Map<String, String> m){
-//		System.out.println("/admin/animal/create 입장");
-//		System.out.println(m.get("accessToken"));
-//	}
-	
 
 	@PostMapping(path = "/newuser/signup")
 	@ApiOperation("회원가입")
@@ -103,23 +102,20 @@ public class AccountController {
 		}
 
 		UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
-		System.out.println("Controller jwtTokenUtil generateAceesToken");
+		System.out.println("Controller jwtTokenUtil generateAccessToken");
 		Collection<? extends GrantedAuthority> c = userDetails.getAuthorities();
 		System.out.println(c.toString());
 		String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
-		System.out.println("Controller jwtTokenUtil generateAceesToken");
-		String refreshToken = jwtTokenUtil.generateRefreshToken(user_id);
+		System.out.println("Controller jwtTokenUtil generateAccessToken");
+		String refreshToken = jwtTokenUtil.generateRefreshToken();
 
-		Token retok = new Token();
-        retok.setUser_id(user_id);
-        retok.setRefreshToken(refreshToken);
 		// generate Token and save in redis
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-		vop.set(user_id, retok);
-//		vop.set(user_id, refreshToken);
-
-//		System.out.println("generated access token : " + accessToken);
-//		System.out.println("generated refresh token : " + refreshToken);
+		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
+		vop.set(user_id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY), TimeUnit.MILLISECONDS);
+		Account ac = Account.builder().user_id(user_id).build();
+		retok = TotToken.builder().account(ac).build();
+		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.MILLISECONDS);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("accessToken", accessToken);
@@ -147,12 +143,15 @@ public class AccountController {
 		}
 
 		try {
-			System.out.println("여기까지 되는데");
 			ValueOperations<String, Object> vo = redisTemplate.opsForValue();
-			System.out.println("여긴 안와");
 			System.out.println(user_id);
 			if (vo.get(user_id) != null) {
+				System.out.println(vo.get(user_id).toString());
 				redisTemplate.expire(user_id,1*1000, TimeUnit.MILLISECONDS);
+				if(vo.get(accessToken)!=null) {
+					System.out.println(vo.get(accessToken).toString());
+					redisTemplate.expire(accessToken,1*1000, TimeUnit.MILLISECONDS);
+				}
 			}
 		} catch (IllegalArgumentException e) {
 			System.out.println("user does not exist");
@@ -165,5 +164,51 @@ public class AccountController {
 		
 		return new ResponseEntity(HttpStatus.OK);
 	}
+	
+	@PostMapping(path="/user/refresh")
+	   @ApiOperation("access토큰이 만료되어서 갱신하고자, refresh토큰을 보냄.")
+	    public Map<String, Object>  requestForNewAccessToken(HttpServletRequest request) {
+	        String accessToken = null;
+	        String refreshToken = null;
+	        String refreshTokenFromDb = null;
+	        String user_id = null;
+	        Map<String, Object> response = new HashMap<>();
+	        try {
+	            accessToken = request.getHeader("Authorization");
+	            refreshToken = request.getHeader("refreshToken");
+	            try {
+	                user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
+	            } catch (IllegalArgumentException e) {
+
+	            } catch (ExpiredJwtException e) { //expire됐을 때
+	                user_id = e.getClaims().getSubject();
+	            }
+
+	            if (refreshToken != null) { //refresh를 같이 보냈으면.
+	                try {
+	                    ValueOperations<String, Object> vop = redisTemplate.opsForValue();
+	                    TotToken result = (TotToken) vop.get(user_id);	// 얘는 refreshToken
+	                    refreshTokenFromDb = result.getRefreshToken();
+	                } catch (IllegalArgumentException e) {
+	                }
+	                //둘이 일치하고 만료도 안됐으면 재발급 해주기.
+	                if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
+	                    final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
+	                    String new_accessToken =  jwtTokenUtil.generateAccessToken(userDetails);
+	                    response.put("success", true);
+	                    response.put("accessToken", new_accessToken);
+	                } else {
+	                   response.put("success", false);
+	                   response.put("msg", "refresh token is expired.");
+	                }
+	            } else { //refresh token이 없으면
+	               response.put("success", false);
+	               response.put("msg", "your refresh token does not exist.");
+	            }
+	        } catch (Exception e) {
+	            throw e;
+	        }
+	        return response;
+	    }
 
 }
