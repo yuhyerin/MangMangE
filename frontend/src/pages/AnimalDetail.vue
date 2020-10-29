@@ -45,27 +45,27 @@
                 <table>
                   <tr>
                     <td>종 / 품종</td>
-                    <td>2</td>
+                    <td>{{this.animalInfo.kind_cd}}</td>
                   </tr>
                   <tr>
                     <td>성별(중성화)</td>
-                    <td>2</td>
+                    <td>{{this.animalInfo.sex_cd == "M" ? "수컷" : "암컷"}}</td>
                   </tr>
                   <tr>
                     <td>나이</td>
-                    <td>2</td>
+                    <td>{{this.animalInfo.age}}</td>
                   </tr>
                   <tr>
                     <td>몸무게</td>
-                    <td>2</td>
+                    <td>{{this.animalInfo.weight}}</td>
                   </tr>
                   <tr>
                     <td>털색</td>
-                    <td>2</td>
+                    <td>{{this.animalInfo.color_cd}}</td>
                   </tr>
                   <tr>
                     <td>성격</td>
-                    <td>2</td>
+                    <td>{{this.animalInfo.mbti}}</td>
                   </tr>
                 </table>
               </div>

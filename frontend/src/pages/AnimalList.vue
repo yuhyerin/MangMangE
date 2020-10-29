@@ -103,8 +103,18 @@
                 :key="index"
                 :animalInfo="data"
               />
-              <AllAnimals v-if="trigger == 1" v-for="i in tmp" :key="i" />
-              <AllAnimals v-if="trigger == 2" v-for="i in tmp" :key="i" />
+              <AllAnimals
+                v-if="trigger == 1"
+                v-for="(data, index) in this.tmpArr"
+                :key="index"
+                :animalInfo="data"
+              />
+              <AllAnimals
+                v-if="trigger == 2"
+                v-for="(data, index) in this.tmpArr"
+                :key="index"
+                :animalInfo="data"
+              />
             </div>
           </div>
         </div>
