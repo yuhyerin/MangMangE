@@ -60,6 +60,7 @@ div.navigation {
 #app {
   font-family: "hoonwhitecatr";
 }
+
 img.footprint {
   height: 60px;
   width: 60px;

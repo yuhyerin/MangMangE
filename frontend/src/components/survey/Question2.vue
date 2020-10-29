@@ -18,15 +18,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 
 export default {
-  data() {
-    return {
-      selected: false,
-    }
-  },
-  computed: mapState(['survey']),
   methods: {
     ...mapMutations(['selectedDogMbti']),
   }

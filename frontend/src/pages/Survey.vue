@@ -1,7 +1,7 @@
 <template>
   <div class="survey">
     <div class="container">
-      <v-app id="inspire">
+      <v-app id="app">
         <v-stepper v-model="page">
           <v-stepper-header>
             <v-stepper-step

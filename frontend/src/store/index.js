@@ -51,9 +51,9 @@ export default new Vuex.Store({
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
   actions: {
-    // submitSurvey({ state, commit }, payload) {
-    //   commit('whatIsDogMbti', payload)
-      // console.log(state.userMbti, state.dogMbti)
+    submitSurvey({ state, commit }, payload) {
+      commit('whatIsDogMbti', payload)
+      console.log(state.userMbti, state.dogMbti)
       // axios.post(SERVER.URL + SERVER.submitSurvey, {
       //   "MBTI": state.userMbti,
       //   "answers": state.dogMbti,
@@ -63,7 +63,7 @@ export default new Vuex.Store({
       //     "jwt-auth-token": localStorage.getItem("token"),
       //   }
       // }) 
-    // },
+    },
   },
   modules: {
   }
