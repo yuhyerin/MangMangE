@@ -1,28 +1,35 @@
 package com.test.abc.dto;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@ToString @Getter @Setter
-@Builder
+@Data
+@Builder 
 @Entity
-@Table(name="Account")
 @AllArgsConstructor @NoArgsConstructor
 public class Account {
 	
-	@Id
-	private Long uid;
-	
+//	@Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long uid;
+    @Id
+	@Column(length=100)
 	private String user_id;
+	
+	@Column(nullable=false, length=50)
 	private String user_name;
+	
+	@Column(nullable=false, length=100)
 	private String user_password;
+	
+	private String role;
 
 }
