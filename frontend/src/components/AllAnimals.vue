@@ -1,6 +1,9 @@
 <template>
   <div class="flip">
-    <div class="front">
+    <div
+      class="front"
+      :style="{ 'background-image': 'url(' + animalInfo.popfile + ')' }"
+    >
       <div
         style="
           display: flex;
@@ -19,7 +22,8 @@
           mdi-heart
         </v-icon>
       </div>
-      <h1 class="text-shadow">앞면</h1>
+      <!-- <h1 class="text-shadow">{{ data.desertion_no }}</h1> -->
+      <!-- <img :src="data.filename"  alt="동물이미지" /> -->
     </div>
     <div class="back" @click="clicked">
       <div
@@ -41,28 +45,26 @@
           mdi-heart
         </v-icon>
       </div>
-      <h2>뒷면 제목</h2>
-      <p>뒷면1</p>
+      <h2>{{ animalInfo.kind_cd }}</h2>
+      <p>{{ animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}</p>
+      <p>{{ animalInfo.weight }} (추정)</p>
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: {
-    storeData: {},
-  },
+  props: ["animalInfo"],
   data() {
     return {
       moveTrigger: true,
       likeTrigger: false,
-      animalID: 0,
     };
   },
   methods: {
     clicked() {
       if (this.moveTrigger == true) {
         console.log("페이지 이동!!");
-        this.$router.push("/animalDetail" + `/${this.animalID}`);
+        this.$router.push("/animalDetail" + `/${this.animalInfo.desertion_no}`);
       }
     },
     setLiked() {

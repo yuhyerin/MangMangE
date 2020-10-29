@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import VueFullPage from 'vue-fullpage.js'
 import vuetify from './plugins/vuetify';
+import VueCookies from "vue-cookies";
+Vue.use(VueCookies);
 
 Vue.use(VueFullPage);
 

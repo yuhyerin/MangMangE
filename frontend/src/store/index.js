@@ -43,7 +43,7 @@ export default new Vuex.Store({
     },
 
     goPage(state, pageNum) {
-      if (state.survey[pageNum-1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
+      if (state.survey[pageNum - 1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
       }
     }

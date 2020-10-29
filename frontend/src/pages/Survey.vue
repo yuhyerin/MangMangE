@@ -9,21 +9,21 @@
               :complete="survey[0] !== 0"
               step="1"
               color="rgb(1, 118, 72)"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
             </v-stepper-step>
-      
+
             <v-divider></v-divider>
-      
+
             <v-stepper-step
               @click="goPage(2)"
               :complete="survey[1] !== 0"
               step="2"
               color="rgb(1, 118, 72)"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
             </v-stepper-step>
-      
+
             <v-divider></v-divider>
 
             <v-stepper-step
@@ -31,10 +31,10 @@
               :complete="survey[2] !== 0"
               step="3"
               color="rgb(1, 118, 72)"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
             </v-stepper-step>
-      
+
             <v-divider></v-divider>
 
             <v-stepper-step
@@ -42,10 +42,10 @@
               :complete="survey[3] !== 0"
               step="4"
               color="rgb(1, 118, 72)"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
             </v-stepper-step>
-      
+
             <v-divider></v-divider>
 
             <v-stepper-step
@@ -53,10 +53,10 @@
               :complete="survey[4] !== 0"
               step="5"
               color="rgb(1, 118, 72)"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
             </v-stepper-step>
-      
+
             <v-divider></v-divider>
 
             <v-stepper-step
@@ -64,10 +64,10 @@
               :complete="survey[5] !== 0"
               step="6"
               color="rgb(1, 118, 72)"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
             </v-stepper-step>
-      
+
             <v-divider></v-divider>
 
             <v-stepper-step
@@ -75,10 +75,10 @@
               :complete="survey[6] !== 0"
               step="7"
               color="rgb(1, 118, 72)"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
             </v-stepper-step>
-      
+
             <v-divider></v-divider>
 
             <v-stepper-step
@@ -86,17 +86,24 @@
               :complete="survey[7] !== 0"
               step="8"
               color="rgb(1, 118, 72)"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
             </v-stepper-step>
-      
+
             <v-divider></v-divider>
-      
-            <v-stepper-step step="9" @click="goPage(9)" color="rgb(1, 118, 72)" style="cursor:pointer">
+
+            <v-stepper-step
+              step="9"
+              @click="goPage(9)"
+              color="rgb(1, 118, 72)"
+              style="cursor: pointer"
+            >
               <!-- Name of step 3 -->
             </v-stepper-step>
           </v-stepper-header>
-          <v-stepper-items style="display: flex; text-align:center; align-items:center;">
+          <v-stepper-items
+            style="display: flex; text-align: center; align-items: center"
+          >
             <v-stepper-content step="1">
               <Question1 />
             </v-stepper-content>
@@ -156,7 +163,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations } from "vuex";
 
 import Question1 from "../components/survey/Question1";
 import Question2 from "../components/survey/Question2";
@@ -181,12 +188,12 @@ export default {
     Question9,
   },
   computed: {
-    ...mapState(['page', 'survey'])
+    ...mapState(["page", "survey"]),
   },
   methods: {
-    ...mapMutations(['goPage']),
-  }
-}
+    ...mapMutations(["goPage"]),
+  },
+};
 </script>
 
 <style scoped>
