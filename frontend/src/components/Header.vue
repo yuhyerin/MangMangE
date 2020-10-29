@@ -31,11 +31,11 @@
           font-size: 10px;
         "
       >
-        <v-btn x-small text color="black">
+        <v-btn x-small text color="black" @click="moveTo('/login')">
           <div>회원가입</div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
-        <v-btn x-small text>
+        <v-btn x-small text @click="moveTo('/login')">
           <div>로그인 / 로그아웃</div>
         </v-btn>
       </div>
@@ -59,6 +59,7 @@ export default {
     },
     moveTo(page) {
       this.$router.push(page);
+      console.log(this.$router);
     },
   },
 };
