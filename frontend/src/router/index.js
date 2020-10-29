@@ -27,7 +27,7 @@ const routes = [
     component: AnimalDetail
   },
   {
-    path: '/mainpage',
+    path: '/',
     name: 'Mainpage',
     component: Mainpage
   },

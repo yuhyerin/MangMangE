@@ -28,6 +28,7 @@
             label="ID"
             :rules="ruleID"
             hide-details="auto"
+            v-model="id"
           ></v-text-field>
         </div>
         <div style="display: flex; justify-content: center; align-item: center">
@@ -37,6 +38,7 @@
           <v-text-field
             label="password"
             :rules="rulePW"
+            v-model="password"
             hide-details="auto"
             :append-icon="showpassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showpassword ? 'text' : 'password'"
@@ -46,7 +48,7 @@
       </v-col>
       <v-col align="align">
         <div style="display: flex; justify-content: space-around">
-          <v-btn color="rgb(1,118,72)" width="100px"
+          <v-btn color="rgb(1,118,72)" width="100px" @click="login"
             ><p style="color: white; padding-top: 14px">로그인</p></v-btn
           >
           <v-btn color="rgba(64,33,22)" width="100px" @click="moveToRegister"
@@ -54,26 +56,90 @@
           >
         </div>
       </v-col>
+      <v-col align="align" style="font-size: 0.8em;">
+        <div style="display: flex; justify-content: center">
+          <p class="find-id" @click="moveToFindId" >아이디 찾기</p>
+          <p style="padding: 0px 5px;">/</p>
+          <p class="find-pw"  @click="moveToFindPw">비밀번호 찾기</p>
+        </div>
+      </v-col>
     </v-col>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
+const baseURL = 'http://localhost:8080/';
+
 export default {
   data() {
     return {
       ruleID: [(value) => !!value || "ID를 입력해 주세요."],
       rulePW: [(value) => !!value || "비밀번호를 입력해 주세요."],
+      id:'',
+      password:'',
       showpassword: "",
     };
   },
   methods: {
     moveToRegister() {
-      this.$emit("changeComponents", true);
+      this.$emit("changeComponents", 1);
     },
+    moveToFindId() {
+      this.$emit("changeComponents", 2);
+    },
+    moveToFindPw() {
+      this.$emit("changeComponents", 3);
+    },
+    login(){
+      axios.post(baseURL+'newuser/login/',
+      {
+        "user_id" : this.id,
+        "user_password" : this.password
+      })
+      .then((res)=>{
+        console.log(res)
+        this.$cookies.set("Authorization", res.data.accessToken)
+        console.log( this.$cookies.get("Authorization"))
+      //   axios.post(baseURL+'admin/animal/create/',{
+      //     "accessToken" : res.data.accessToken
+      //   },
+      //   {
+      //     headers:{
+      //       "Authorization": res.data.accessToken
+      //     }
+      //   })
+      //   .then((res)=>{
+      //     console.log(this.$cookies.get("Authorization"))
+      //     axios.post(baseURL+'user/logout',
+      //   { "accessToken" : this.$cookies.get("Authorization") },
+      //   {
+      //       headers:{
+      //         "Authorization": this.$cookies.get("Authorization")
+      //       }
+      //   })
+      //   .then((res)=>{
+      //     console.log(res)
+      //   });
+      //   })
+      })
+      .catch((err)=>{
+        // 없는 유저 아니면 서버 안 킨거
+        console.log(err)
+      })
+    }
   },
 };
 </script>
 
 <style scoped>
+.find-id:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+.find-pw:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
 </style>
