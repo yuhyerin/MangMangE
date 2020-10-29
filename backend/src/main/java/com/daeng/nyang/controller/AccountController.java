@@ -3,6 +3,9 @@ package com.daeng.nyang.controller;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -125,10 +128,11 @@ public class AccountController {
 
 	@PostMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
-	public ResponseEntity<?> logout(@RequestBody Map<String, String> m) {
+	public ResponseEntity<?> logout(HttpServletRequest request) {
 		System.out.println("/user/logout 입장");
 		String user_id = null;
-		String accessToken = m.get("accessToken");
+//		String accessToken = m.get("accessToken");
+		String accessToken= request.getHeader("Authorization");
 		System.out.println("accessToken : "+accessToken);
 		try {
 			System.out.println("controller jwtTokenUtil.getUsernameFromToken");
@@ -145,7 +149,7 @@ public class AccountController {
 			ValueOperations<String, Object> vo = redisTemplate.opsForValue();
 			System.out.println(user_id);
 			if (vo.get(user_id) != null) {
-				boolean flag = redisTemplate.delete(user_id);
+				redisTemplate.expire(user_id,1*1000, TimeUnit.MILLISECONDS);
 			}
 		} catch (IllegalArgumentException e) {
 			System.out.println("user does not exist");
