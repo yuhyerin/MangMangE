@@ -1,17 +1,5 @@
 ### lombok annotation
 
-#### @Data
-
-@ToString
-
-@EqualsAndHashCode
-
-@Getter
-
-@Setter 
-
-@RequiredArgsConstructor
-
 #### @NonNull
 
 : @Setter와 함께 쓰며 null값이 들어오면 <u>NullPointerException</u> 처리
@@ -52,7 +40,7 @@ lombok.nonNull.exceptionType = IllegalArgumentException
 
 #### @Data
 
-: @ToString, @EqualsAndHashCode, @Getter, @Setter, @RequiredArgsConstructor
+: @ToString, @EqualsAndHashCode, @Getter, @Setter, @RequiredArgsConstructor를 모두 포함하는 어노테이션
 
 #### @Value
 

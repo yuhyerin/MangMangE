@@ -33,7 +33,6 @@ public class JwtUserDetailService implements UserDetailsService {
             roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         } else {
             roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-            roles.add(new SimpleGrantedAuthority("ROLE_HI"));
         }
         return new User(user.getUser_id(), user.getUser_password(), roles);
 	}

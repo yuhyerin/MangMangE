@@ -54,15 +54,20 @@ export default new Vuex.Store({
     submitSurvey({ state, commit }, payload) {
       commit('whatIsDogMbti', payload)
       console.log(state.userMbti, state.dogMbti)
+      router.push({ name: 'Login' })
       // axios.post(SERVER.URL + SERVER.submitSurvey, {
       //   "MBTI": state.userMbti,
       //   "answers": state.dogMbti,
+      //   // "token": localStorage.getItem("token"),
+        
       // },
       // {
       //   headers: {
       //     "jwt-auth-token": localStorage.getItem("token"),
+      //      Authorization: `Token ${this.$cookies.get("auth-token")}`
       //   }
-      // }) 
+      // }
+      // ) 
     },
   },
   modules: {
