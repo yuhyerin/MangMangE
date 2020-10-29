@@ -10,7 +10,7 @@
     >
       <div
         class="selected-answer"
-        @click="selectedDogMbti({ idx: 8, answer: 1 })"
+        @click="submitSurvey({ idx: 8, answer: 1 })"
         style="cursor: pointer"
       >
         <h3>자주 놀아주고 싶다</h3>
@@ -18,7 +18,7 @@
       </div>
       <div
         class="selected-answer"
-        @click="selectedDogMbti({ idx: 8, answer: -1 })"
+        @click="submitSurvey({ idx: 8, answer: -1 })"
         style="border: solid black; cursor: pointer"
       >
         <h3>서로의 휴식시간은 필요하다</h3>
@@ -29,11 +29,10 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   methods: {
-    ...mapMutations(["whatIsDogMbti"]),
     ...mapActions(["submitSurvey"]),
   },
 };

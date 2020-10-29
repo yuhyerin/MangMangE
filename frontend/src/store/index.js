@@ -28,7 +28,7 @@ export default new Vuex.Store({
       state.survey[0] = 1
       state.page = state.survey.findIndex((idx) => idx === 0) + 1
     },
-
+    // survey 마지막 0 바뀌면 자동 제출로 수정
     selectedDogMbti(state, payload) {
       state.survey[payload.idx] = payload.answer
       state.page = state.survey.findIndex((idx) => idx === 0) + 1
@@ -51,19 +51,19 @@ export default new Vuex.Store({
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
   actions: {
-    // submitSurvey({ state, commit }, payload) {
-    //   commit('whatIsDogMbti', payload)
-    // console.log(state.userMbti, state.dogMbti)
-    // axios.post(SERVER.URL + SERVER.submitSurvey, {
-    //   "MBTI": state.userMbti,
-    //   "answers": state.dogMbti,
-    // },
-    // {
-    //   headers: {
-    //     "jwt-auth-token": localStorage.getItem("token"),
-    //   }
-    // }) 
-    // },
+    submitSurvey({ state, commit }, payload) {
+      commit('whatIsDogMbti', payload)
+      console.log(state.userMbti, state.dogMbti)
+      // axios.post(SERVER.URL + SERVER.submitSurvey, {
+      //   "MBTI": state.userMbti,
+      //   "answers": state.dogMbti,
+      // },
+      // {
+      //   headers: {
+      //     "jwt-auth-token": localStorage.getItem("token"),
+      //   }
+      // }) 
+    },
   },
   modules: {
   }
