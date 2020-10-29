@@ -116,6 +116,7 @@ public class AccountController {
 		// generate Token and save in redis
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		vop.set(user_id, retok);
+//		vop.set(user_id, refreshToken);
 
 //		System.out.println("generated access token : " + accessToken);
 //		System.out.println("generated refresh token : " + refreshToken);
@@ -146,7 +147,9 @@ public class AccountController {
 		}
 
 		try {
+			System.out.println("여기까지 되는데");
 			ValueOperations<String, Object> vo = redisTemplate.opsForValue();
+			System.out.println("여긴 안와");
 			System.out.println(user_id);
 			if (vo.get(user_id) != null) {
 				redisTemplate.expire(user_id,1*1000, TimeUnit.MILLISECONDS);
