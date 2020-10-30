@@ -31,11 +31,11 @@
           font-size: 10px;
         "
       >
-        <v-btn x-small text color="black" @click="moveTo">
+        <v-btn x-small text color="black" @click="register">
           <div>회원가입</div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
-        <v-btn x-small text @click="moveTo">
+        <v-btn x-small text @click="moveToLogin">
           <div v-if="isUser == false">로그인</div>
           <div v-else>로그아웃</div>
         </v-btn>
@@ -78,22 +78,23 @@ export default {
     moveToMain() {
       location.href = "/";
     },
-    moveTo(page) {
-      if (this.isUser) {
-        // axios로 accessToken 주기
-        this.logout();
+    register() {
+      this.$router.push("/login");
+    },
+    moveToLogin() {
+      if (this.isUser == false) {
+        this.$router.push("/login");
       } else {
-        if (page == "") {
-          this.$router.push("/login");
-        } else {
-          this.$router.push(page);
-        }
+        this.logout();
       }
+    },
+    moveTo(page) {
+      this.$router.push(page);
     },
     logout() {
       axios
         .post(
-          SERVER.URL + "user/logout/",
+          SERVER.URL + "/user/logout/",
           {
             accessToken: this.$cookies.get("accessToken"),
           },
