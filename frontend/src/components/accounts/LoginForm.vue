@@ -71,8 +71,6 @@
 import axios from "axios";
 import SERVER from "@/api/url";
 
-const baseURL = "http://localhost:8080/";
-
 export default {
   data() {
     return {
@@ -130,7 +128,7 @@ export default {
 
     login() {
       axios
-        .post(SERVER.URL + "newuser/login/", {
+        .post(SERVER.URL + "/newuser/login/", {
           user_id: this.id,
           user_password: this.password,
         })

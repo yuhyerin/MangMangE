@@ -151,13 +151,13 @@ export default {
   },
   watch: {
     trigger(newValue, oldValue) {
-      if (newValue == 1) {
+      if (newValue == 0) {
         this.tmp = 10;
         console.log("All Animals");
         axios.get(SERVER.URL + "newuser/animal/allread").then((res) => {
-          console.log(res.data);
+          console.log(res.data.animalList);
         });
-      } else if (newValue == 2) {
+      } else if (newValue == 1) {
         this.tmp = 4;
         console.log("matched Animals");
       } else {
@@ -176,7 +176,6 @@ export default {
     ...mapMutations(["checkThisPage"]),
     setTrigger(num) {
       this.trigger = num;
-      console.log(this.allDatas.animal);
     },
     test() {
       this.testTrigger = true;
