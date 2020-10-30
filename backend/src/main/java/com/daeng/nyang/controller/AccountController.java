@@ -3,6 +3,7 @@ package com.daeng.nyang.controller;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -112,7 +113,7 @@ public class AccountController {
         retok.setRefreshToken(refreshToken);
 		// generate Token and save in redis
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-		vop.set(user_id, retok);
+		vop.set(user_id, retok, 24*3600*1000, TimeUnit.MILLISECONDS);
 
 //		System.out.println("generated access token : " + accessToken);
 //		System.out.println("generated refresh token : " + refreshToken);
