@@ -16,19 +16,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Survey {
-	
+public class AnimalLike {
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 얘가 auto_increment
-    private Long no;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 얘가 auto_increment
+	private Long no;
+
 	@Column
 	private String user_id;
-	
-	@Column
-	private String mbti; // user mbti
 
 	@Column
-	private String answer; // dog mbti
-
+	private String desertion_no;
 }

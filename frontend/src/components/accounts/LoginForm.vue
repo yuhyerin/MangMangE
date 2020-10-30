@@ -56,6 +56,13 @@
           >
         </div>
       </v-col>
+      <v-col align="align" style="font-size: 0.8em;">
+        <div style="display: flex; justify-content: center">
+          <p class="find-id" @click="moveToFindId" >아이디 찾기</p>
+          <p style="padding: 0px 5px;">/</p>
+          <p class="find-pw"  @click="moveToFindPw">비밀번호 찾기</p>
+        </div>
+      </v-col>
     </v-col>
   </div>
 </template>
@@ -77,7 +84,13 @@ export default {
   },
   methods: {
     moveToRegister() {
-      this.$emit("changeComponents", true);
+      this.$emit("changeComponents", 1);
+    },
+    moveToFindId() {
+      this.$emit("changeComponents", 2);
+    },
+    moveToFindPw() {
+      this.$emit("changeComponents", 3);
     },
     login(){
       axios.post(baseURL+'newuser/login/',
@@ -110,4 +123,12 @@ export default {
 </script>
 
 <style scoped>
+.find-id:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+.find-pw:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
 </style>
