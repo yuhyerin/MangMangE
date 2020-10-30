@@ -77,7 +77,7 @@
                   align-items: center;
                 "
               >
-                <v-btn width="95%" height="70%" color="rgb(1,118,72)">
+                <v-btn width="95%" height="70%" color="rgb(1,118,72)" @click="moveTo('/adoption')">
                   <div style="color: white">입양하기</div>
                 </v-btn>
               </div>
@@ -114,6 +114,9 @@ export default {
     setLiked() {
       console.log("즐겨찾기!!");
       this.likeTrigger = !this.likeTrigger;
+    },
+    moveTo(page) {
+      this.$router.push(page + `/${this.animalInfo.desertion_no}`);
     },
   },
 };
