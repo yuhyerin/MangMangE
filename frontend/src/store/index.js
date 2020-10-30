@@ -53,22 +53,28 @@ export default new Vuex.Store({
   actions: {
     submitSurvey({ state, commit }, payload) {
       commit('whatIsDogMbti', payload)
-      console.log(state.userMbti, state.dogMbti)
-      router.push({ name: 'Animals' })
-      // axios.post(SERVER.URL + SERVER.submitSurvey, {
-      //   "MBTI": state.userMbti,
-      //   "answers": state.dogMbti,
-      //   // "token": localStorage.getItem("token"),
-        
-      // },
-      // {
-      //   headers: {
-      //     "jwt-auth-token": localStorage.getItem("token"),
-      //      Authorization: `Token ${this.$cookies.get("auth-token")}`
-      //   }
-      // }
-      // ) 
+      console.log('설문조사 결과:', state.userMbti, state.dogMbti)
+      axios
+        .post(SERVER.URL + SERVER.submitSurvey, 
+          {
+          "MBTI": state.userMbti,
+          "answers": state.dogMbti, 
+          },
+          {
+            headers: {
+              Authorization: `Token ${this.$cookies.get("auth-token")}`
+            }
+          }
+        )
+        .then(res => {
+          console.log('잘갔나?', res)
+        })
+        .catch(err => {
+          console.log('못감ㅜ', err)
+        }) 
+      // router.push({ name: 'Animals' })
     },
+    
   },
   modules: {
   }
