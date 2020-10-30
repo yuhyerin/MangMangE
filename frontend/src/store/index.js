@@ -4,6 +4,7 @@ import axios from 'axios'
 import SERVER from '@/api/url'
 import VueRouter from 'vue-router'
 import router from '@/router'
+// import { $cookies } from 'vue/types/umd'
 
 Vue.use(Vuex)
 
@@ -53,16 +54,19 @@ export default new Vuex.Store({
   actions: {
     submitSurvey({ state, commit }, payload) {
       commit('whatIsDogMbti', payload)
+      // console.log('gdgd')
+      console.log("쿠키", $cookies.get("accessToken"))
       console.log('설문조사 결과:', state.userMbti, state.dogMbti)
+      // SERVER.URL + SERVER.ROUTES.submitSurvey,
       axios
-        .post(SERVER.URL + SERVER.submitSurvey, 
-          {
+        .post("http://localhost:8080/user/survey/create",
+        {
           "MBTI": state.userMbti,
           "answers": state.dogMbti, 
-          },
+        },
           {
             headers: {
-              Authorization: `Token ${this.$cookies.get("auth-token")}`
+              Authorization: $cookies.get("accessToken")
             }
           }
         )
@@ -70,6 +74,7 @@ export default new Vuex.Store({
           console.log('잘갔나?', res)
         })
         .catch(err => {
+          console.log($cookies.get("accessToken"))
           console.log('못감ㅜ', err)
         }) 
       // router.push({ name: 'Animals' })

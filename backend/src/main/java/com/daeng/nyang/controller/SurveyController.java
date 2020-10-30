@@ -40,6 +40,8 @@ public class SurveyController {
 			HttpServletRequest request) {
 		System.out.println("설문결과 저장 컨트롤러 진입");
 		String token = request.getHeader("Authorization");
+		System.out.println(token);
+		System.out.println(survey.toString());
 		if (token == null) {
 			return null;
 		} else if (jwtTokenUtil.isTokenExpired(token)) {
