@@ -96,10 +96,25 @@ export default {
       this.$emit("changeComponents", 3);
     },
     logout(){
+      // axios.get(baseURL+'user/animal/surveyread/',{
+      //   headers:{
+      //     "Authorization" : this.$cookies.get("accessToken")
+      //   }
+      // })
+      // .then((res)=>{
+      //   console.log(res)
+      // })
+      // .catch((err)=>{
+      //   console.log(err)
+      // })
       axios.post(baseURL+'user/logout/',{
           headers:{
-            "Authorization" : this.$cookies.get("accessToken")
+            "Authorization" : this.$cookies.get("accessToken"),
+            "content-type" : "application/json"
           }
+      },
+      {
+        "accessToken" : this.$cookies.get("accessToken")
       })
       .then((res)=>{
         console.log(res)

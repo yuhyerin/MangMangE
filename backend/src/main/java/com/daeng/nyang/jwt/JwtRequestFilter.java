@@ -83,17 +83,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			try {
 				userid = jwtTokenUtil.getUsernameFromToken(requestTokenHeader);
 			} catch (IllegalArgumentException e) {
+				System.out.println("IllegalArgumentException in doFilterInternal");
 			}
 		}
 		if (userid == null) {
 			System.out.println("userid null");
-			logger.info("token maybe expired: username is null.");
 		} else if (redisTemplate.opsForValue().get(requestTokenHeader) != null) {
-			logger.warn("this token already logout!");
+			System.out.println("redis ACCESS TOKEN timeout");
 		} else {
 			// DB access 대신에 파싱한 정보로 유저 만들기!
-			System.out.println("else authen");
-//			Authentication authen = getAuthentication(jwtToken);
 			Authentication authen = getAuthentication(requestTokenHeader);
 			System.out.println(authen.toString());
 			// 만든 authentication 객체로 매번 인증받기

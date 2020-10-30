@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 
 import com.daeng.nyang.jwt.JwtAuthenticationEntryPoint;
 import com.daeng.nyang.jwt.JwtRequestFilter;
@@ -44,12 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			antMatchers("/newuser/login","/newuser/signup").anonymous().
 			antMatchers("/user").hasAnyRole("ADMIN","USER").
 			antMatchers("/admin").hasRole("ADMIN").
-			antMatchers("/**").permitAll().
+			antMatchers("/newuser/**", "/**").permitAll().
 		and().authorizeRequests().
 			anyRequest(). // 어떤 요청이라도
 			authenticated(). // 인증된 사용자만이 접근 허용
 		and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
-		and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//		and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		and().addFilterBefore(jwtRequestFilter, WebAsyncManagerIntegrationFilter.class);
 		
 		
 	}
