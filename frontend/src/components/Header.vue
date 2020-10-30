@@ -53,6 +53,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import SERVER from "@/api/url";
+
 export default {
   data() {
     return {
@@ -78,12 +81,34 @@ export default {
     moveTo() {
       if (this.isUser) {
         // axios로 accessToken 주기
-        this.$cookies.remove("accessToken");
-        this.$cookies.remove("refreshToken");
+        this.logout();
         location.href = "/";
       } else {
         this.$router.push("/login");
       }
+    },
+    logout() {
+      axios
+        .post(
+          SERVER.URL + "user/logout/",
+          {
+            accessToken: this.$cookies.get("accessToken"),
+          },
+          {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+              "content-type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          this.$cookies.remove("accessToken");
+          this.$cookies.remove("refreshToken");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
