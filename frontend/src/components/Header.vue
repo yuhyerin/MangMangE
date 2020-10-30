@@ -59,7 +59,6 @@ export default {
     },
     moveTo(page) {
       this.$router.push(page);
-      console.log(this.$router);
     },
   },
 };
