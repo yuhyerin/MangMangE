@@ -43,7 +43,7 @@
         <v-btn text @click="moveTo('/animals')">
           <div>동물 보기</div>
         </v-btn>
-        <v-btn text>
+        <v-btn text @click="moveTo('/videos')">
           <div>동영상 게시판</div>
         </v-btn>
       </div>

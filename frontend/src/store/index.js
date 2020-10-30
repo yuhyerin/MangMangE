@@ -28,7 +28,7 @@ export default new Vuex.Store({
       state.survey[0] = 1
       state.page = state.survey.findIndex((idx) => idx === 0) + 1
     },
-    // survey 마지막 0 바뀌면 자동 제출로 수정
+
     selectedDogMbti(state, payload) {
       state.survey[payload.idx] = payload.answer
       state.page = state.survey.findIndex((idx) => idx === 0) + 1
@@ -54,7 +54,7 @@ export default new Vuex.Store({
     submitSurvey({ state, commit }, payload) {
       commit('whatIsDogMbti', payload)
       console.log(state.userMbti, state.dogMbti)
-      router.push({ name: 'Login' })
+      router.push({ name: 'Animals' })
       // axios.post(SERVER.URL + SERVER.submitSurvey, {
       //   "MBTI": state.userMbti,
       //   "answers": state.dogMbti,
