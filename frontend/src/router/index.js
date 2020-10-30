@@ -32,7 +32,7 @@ const routes = [
     component: Mainpage
   },
   {
-    path: '/adoption',
+    path: '/adoption/:animalID',
     name: 'Adoption',
     component: Adoption
   },

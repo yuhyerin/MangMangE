@@ -124,14 +124,14 @@ public class AccountController {
 	
 	@PostMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
-	public ResponseEntity<?> logout(HttpServletRequest request, @RequestBody String accessToken) {
+	public ResponseEntity<?> logout(HttpServletRequest request) {
 		
 		System.out.println("/user/logout 입장");
 		String user_id = null;
 //		String accessToken = m.get("accessToken");
-//		String accessToken= request.getHeader("Authorization");
+		String accessToken= request.getHeader("Authorization");
 		System.out.println("reqeust : "+request.getHeader("Authorization"));
-		System.out.println("accessToken : "+accessToken);
+		System.out.println(accessToken);
 		try {
 			System.out.println("controller jwtTokenUtil.getUsernameFromToken");
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
