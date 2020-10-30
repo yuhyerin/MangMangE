@@ -86,9 +86,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				System.out.println("IllegalArgumentException in doFilterInternal");
 			}
 		}
+		System.out.println(redisTemplate.opsForValue().get(requestTokenHeader));
 		if (userid == null) {
 			System.out.println("userid null");
-		} else if (redisTemplate.opsForValue().get(requestTokenHeader) != null) {
+		} else if (redisTemplate.opsForValue().get(requestTokenHeader) == null) {
 			System.out.println("redis ACCESS TOKEN timeout");
 		} else {
 			// DB access 대신에 파싱한 정보로 유저 만들기!

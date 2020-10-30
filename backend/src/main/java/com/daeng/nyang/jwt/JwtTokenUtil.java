@@ -33,7 +33,9 @@ public class JwtTokenUtil implements Serializable {
 	//retrieve username from jwt token
     public String getUsernameFromToken(String token) {
     	System.out.println("JwtTokenUtil : getUsernameFromToken");
-        return getClaimFromToken(token, Claims::getSubject);
+    	String result = getClaimFromToken(token, Claims::getSubject);
+    	System.out.println("getUsernameFromToken : "+result);
+        return result;
     }
 
     //retrieve expiration date from jwt token
@@ -45,7 +47,7 @@ public class JwtTokenUtil implements Serializable {
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
     	System.out.println("JwtTokenUtil : getClaimFromToken");
         final Claims claims = getAllClaimsFromToken(token);
-//        System.out.println(claims.toString());
+        System.out.println(claims.toString());
         return claimsResolver.apply(claims);
     }
     
