@@ -18,26 +18,27 @@ import com.test.abc.service.AccountService;
 @RestController
 @CrossOrigin("*")
 public class AccountController {
-	
+
 	@Autowired
 	private AccountService accountService;
 
-	
 	@GetMapping("/home")
 	public void test() {
 		System.out.println("test");
 	}
-	
+
 	@PostMapping("/signup")
-	public Map<String, Object> signup(@RequestBody Account account){
+	public Map<String, Object> signup(@RequestBody Account account) {
 		System.out.println(account.toString());
 		Map<String, Object> result = accountService.signup(account);
 		System.out.println(result.toString());
 		return result;
 	}
-	
-	@PostMapping("/login")
-	public ResponseEntity<TokenResponse> login(@RequestParam String id, @RequestParam String password){
+
+	@GetMapping("/login")
+	public ResponseEntity<TokenResponse> login(@RequestParam String id, @RequestParam String password) {
+		System.out.println(id);
+		System.out.println(password);
 		String token = accountService.login(id, password);
 		System.out.println(token);
 		// bearer type의 토큰 생성 : Oauth2.0 표준

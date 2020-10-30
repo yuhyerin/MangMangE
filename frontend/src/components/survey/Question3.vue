@@ -1,5 +1,5 @@
 <template>
-  <div class="question">
+  <div class="question" style="height: 100%">
     <div class="question-header">
       <h2>Q3. 반려동물과 어떤 관계를 원하시나요?</h2>
       <img src="@/assets/survey/1.png" alt="" />

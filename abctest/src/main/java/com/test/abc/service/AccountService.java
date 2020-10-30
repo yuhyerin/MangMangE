@@ -16,24 +16,26 @@ import com.test.abc.repo.AccountRepo;
 
 @Service
 public class AccountService {
-	
+
 	@Autowired
 	private AccountRepo accountRepo;
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	@Autowired
-    RedisTemplate<String, Object> redisTemplate;
-	
+	RedisTemplate<String, Object> redisTemplate;
+
 	JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
-	
-	public Map<String, Object> signup(Account account){
-		System.out.println("SERVICE : "+account.toString());
+	public static final long JWT_ACCESS_TOKEN_VALIDITY = 10 * 60; // 10분
+	public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60 * 7; // 일주일
+
+	public Map<String, Object> signup(Account account) {
+		System.out.println("SERVICE : " + account.toString());
 		Map<String, Object> result = null;
 		try {
 			Account temp = accountRepo.findAccountByUserId(account.getUser_id());
-			if(temp==null) {
-				if("admin".equals(account.getUser_id()))
+			if (temp == null) {
+				if ("admin".equals(account.getUser_id()))
 					account.setRole("ROLE_ADMIN");
 				else
 					account.setRole("ROLE_USER");
@@ -43,11 +45,11 @@ public class AccountService {
 				result = new HashMap<String, Object>();
 				result.put("success", HttpStatus.OK);
 			}
-		} catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			System.out.println("NULL POINT");
-			if("admin".equals(account.getUser_id()))
+			if ("admin".equals(account.getUser_id()))
 				account.setRole("ROLE_ADMIN");
-			else 
+			else
 				account.setRole("ROLE_USER");
 			System.out.println(account.toString());
 			String ePassword = passwordEncoder.encode(account.getUser_password());
@@ -60,24 +62,23 @@ public class AccountService {
 		}
 		return result;
 	}
-	
-	public String login(String id, String password){
+
+	public String login(String id, String password) {
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-		System.out.println("SERVICE : "+id+"\n"+password);
+		System.out.println("SERVICE : " + id + "\n" + password);
 		Map<String, Object> result = null;
 		String token = null;
 		String refreshToken = null;
 		Account temp = accountRepo.findAccountByUserId(id);
-		if(temp!=null) {
-			if(passwordEncoder.matches(password, temp.getUser_password())) {
+		if (temp != null) {
+			if (passwordEncoder.matches(password, temp.getUser_password())) {
 				token = jwtTokenProvider.createToken(id);
-				refreshToken = jwtTokenProvider.createRefreshToken(id);	//refreshtoken은 redis에 저장
-				vop.set(id, refreshToken);
+				refreshToken = jwtTokenProvider.createRefreshToken(); // refreshtoken은 redis에 저장
+				vop.set(token, id, JWT_ACCESS_TOKEN_VALIDITY);
+				vop.set(id, refreshToken, JWT_REFRESH_TOKEN_VALIDITY);
 			}
 		}
 		return token;
 	}
-
-	
 
 }

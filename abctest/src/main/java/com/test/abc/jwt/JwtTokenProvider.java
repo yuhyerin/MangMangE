@@ -30,8 +30,8 @@ public class JwtTokenProvider implements Serializable {
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
-    public String createRefreshToken(String subject) {
-        return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+    public String createRefreshToken() {
+        return Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
