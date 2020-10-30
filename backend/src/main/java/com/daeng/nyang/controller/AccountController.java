@@ -112,10 +112,10 @@ public class AccountController {
 		// generate Token and save in redis
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
-		vop.set(user_id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY), TimeUnit.MILLISECONDS);
+		vop.set(user_id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY)*1000, TimeUnit.MILLISECONDS);
 		Account ac = Account.builder().user_id(user_id).build();
 		retok = TotToken.builder().account(ac).build();
-		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.MILLISECONDS);
+		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY)*1000, TimeUnit.MILLISECONDS);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("accessToken", accessToken);
