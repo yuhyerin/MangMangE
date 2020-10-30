@@ -31,12 +31,13 @@
           font-size: 10px;
         "
       >
-        <v-btn x-small text color="black" @click="moveTo('/login')">
+        <v-btn x-small text color="black" @click="moveTo">
           <div>회원가입</div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
-        <v-btn x-small text @click="moveTo('/login')">
-          <div>로그인 / 로그아웃</div>
+        <v-btn x-small text @click="moveTo">
+          <div v-if="isUser == false">로그인</div>
+          <div v-else>로그아웃</div>
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
@@ -53,12 +54,36 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isUser: this.$cookies.get("accessToken") == null ? false : true,
+    };
+  },
+  watch: {
+    isUser(newVal, oldVal) {
+      console.log(newVal, oldVal);
+    },
+  },
+  created() {
+    if (this.$cookies.get("accessToken") == null) {
+      this.isUser = false;
+    } else {
+      this.isUser = true;
+    }
+  },
   methods: {
     moveToMain() {
       location.href = "/";
     },
-    moveTo(page) {
-      this.$router.push(page);
+    moveTo() {
+      if (this.isUser) {
+        // axios로 accessToken 주기
+        this.$cookies.remove("accessToken");
+        this.$cookies.remove("refreshToken");
+        location.href = "/";
+      } else {
+        this.$router.push("/login");
+      }
     },
   },
 };
