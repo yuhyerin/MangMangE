@@ -36,9 +36,17 @@ public class AccountController {
 		return result;
 	}
 	
+<<<<<<< HEAD
 	@PostMapping("/login")
 	public ResponseEntity<TokenResponse> login(@RequestParam String id, @RequestParam String password){
 		String token = accountService.login(id, password);
+=======
+	@GetMapping("/login")
+	public ResponseEntity<TokenResponse> login(@RequestParam String id, @RequestParam String password){
+		System.out.println(id);
+		System.out.println(password);
+		String token = accountService.login(id,password);
+>>>>>>> 0d6b9e53ee5c962574d19942adae93c798e1746f
 		System.out.println(token);
 		// bearer type의 토큰 생성 : Oauth2.0 표준
 		ResponseEntity<TokenResponse> result = ResponseEntity.ok().body(new TokenResponse(token, "bearer"));

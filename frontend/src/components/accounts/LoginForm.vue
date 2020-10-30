@@ -56,11 +56,11 @@
           >
         </div>
       </v-col>
-      <v-col align="align" style="font-size: 0.8em;">
+      <v-col align="align" style="font-size: 0.8em">
         <div style="display: flex; justify-content: center">
-          <p class="find-id" @click="moveToFindId" >아이디 찾기</p>
-          <p style="padding: 0px 5px;">/</p>
-          <p class="find-pw"  @click="moveToFindPw">비밀번호 찾기</p>
+          <p class="find-id" @click="moveToFindId">아이디 찾기</p>
+          <p style="padding: 0px 5px">/</p>
+          <p class="find-pw" @click="moveToFindPw">비밀번호 찾기</p>
         </div>
       </v-col>
     </v-col>
@@ -68,17 +68,18 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import SERVER from "@/api/url";
 
-const baseURL = 'http://localhost:8080/';
+const baseURL = "http://localhost:8080/";
 
 export default {
   data() {
     return {
       ruleID: [(value) => !!value || "ID를 입력해 주세요."],
       rulePW: [(value) => !!value || "비밀번호를 입력해 주세요."],
-      id:'',
-      password:'',
+      id: "",
+      password: "",
       showpassword: "",
     };
   },
@@ -92,32 +93,71 @@ export default {
     moveToFindPw() {
       this.$emit("changeComponents", 3);
     },
-    login(){
-      axios.post(baseURL+'newuser/login/',
-      {
-        "user_id" : this.id,
-        "user_password" : this.password
-      }
-      )
-      .then((res)=>{
-        console.log(res)
-        this.$cookies.set("Authorization", res.data.accessToken)
-          axios.post(baseURL+'user/logout',
-        { "accessToken" : this.$cookies.get("Authorization") },
-        {
-            headers:{
-              "Authorization": this.$cookies.get("Authorization")
-            }
+    // logout() {
+    // axios.get(baseURL+'user/animal/surveyread/',{
+    //   headers:{
+    //     "Authorization" : this.$cookies.get("accessToken")
+    //   }
+    // })
+    // .then((res)=>{
+    //   console.log(res)
+    // })
+    // .catch((err)=>{
+    //   console.log(err)
+    // })
+    //   axios
+    //     .post(
+    //       SERVER.URL + "user/logout/",
+    //       {
+    //         headers: {
+    //           Authorization: this.$cookies.get("accessToken"),
+    //           "content-type": "application/json",
+    //         },
+    //       },
+    //       {
+    //         accessToken: this.$cookies.get("accessToken"),
+    //       }
+    //     )
+    //     .then((res) => {
+    //       console.log(res);
+    //       this.$cookies.remove("accessToken");
+    //       this.$cookies.remove("refreshToken");
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
+
+    login() {
+      axios
+        .post(SERVER.URL + "newuser/login/", {
+          user_id: this.id,
+          user_password: this.password,
         })
-        .then((res)=>{
-          console.log(res)
+        .then((res) => {
+          console.log(res);
+          this.$cookies.set("accessToken", res.data.accessToken);
+          this.$cookies.set("refreshToken", res.data.accessToken);
+          this.$router.push("/");
+          // res.data.accessToken
+          // res.data.refreshToken
+          // this.$cookies.set("Authorization", res.data.accessToken)
+          //   axios.post(baseURL+'user/logout',
+          // { "accessToken" : this.$cookies.get("Authorization") },
+          // {
+          //     headers:{
+          //       "Authorization": this.$cookies.get("Authorization")
+          //     }
+          // })
+          // .then((res)=>{
+          //   console.log(res)
+          // });
+        })
+        .catch((err) => {
+          // 없는 유저 아니면 서버 안 킨거
+          console.log(err);
         });
-        })
-      .catch((err)=>{
-        // 없는 유저 아니면 서버 안 킨거
-        console.log(err)
-      })
-    }
+    },
   },
 };
 </script>

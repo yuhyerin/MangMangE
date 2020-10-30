@@ -129,6 +129,9 @@ import Header from "../components/Header.vue";
 import { mapGetters, mapMutations } from "vuex";
 import data from "../assets/data/animal.json";
 
+import SERVER from "@/api/url";
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -151,6 +154,9 @@ export default {
       if (newValue == 1) {
         this.tmp = 10;
         console.log("All Animals");
+        axios.get(SERVER.URL + "newuser/animal/allread").then((res) => {
+          console.log(res.data);
+        });
       } else if (newValue == 2) {
         this.tmp = 4;
         console.log("matched Animals");

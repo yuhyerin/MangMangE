@@ -36,8 +36,8 @@ public class SurveyController {
 
 	@PostMapping(path = "/user/survey/create")
 	@ApiOperation(value = "설문결과저장")
-	public ResponseEntity<HashMap<String, Object>> surveyCreate(HttpServletRequest request,
-			@RequestBody Survey survey) {
+	public ResponseEntity<HashMap<String, Object>> surveyCreate(@RequestBody Survey survey,
+			HttpServletRequest request) {
 		System.out.println("설문결과 저장 컨트롤러 진입");
 		String token = request.getHeader("Authorization");
 		if (token == null) {

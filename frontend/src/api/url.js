@@ -1,7 +1,7 @@
 export default {
-  URL: 'http://localhost:3000',
+  URL: 'http://localhost:8080/',
   ROUTES: {
-    submitSurvey: '/survey/create',
+    submitSurvey: 'user/survey/create',
     // updateSurvey: '/survey/update',
   }
 }
