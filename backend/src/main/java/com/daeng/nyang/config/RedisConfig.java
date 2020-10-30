@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import com.daeng.nyang.dto.Token;
+import com.daeng.nyang.dto.TotToken;
 
 @Configuration
 public class RedisConfig {
@@ -25,7 +25,9 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
 
         //객체를 json 형태로 깨지지 않고 받기 위한 직렬화 작업
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Token.class));
+//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Token.class));
+//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Account.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(TotToken.class));
         return redisTemplate;
     }
 

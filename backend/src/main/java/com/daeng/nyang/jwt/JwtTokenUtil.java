@@ -22,7 +22,7 @@ public class JwtTokenUtil implements Serializable {
 
 	private static final long serialVersionUID = -2550185165626007488L;
 	public static final long JWT_ACCESS_TOKEN_VALIDITY = 10 * 60; // 10분
-	public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60 * 7; // 일주일
+	public static final long JWT_REFRESH_TOKEN_VALIDITY = 12 * 60 * 60; // 12시간
 	
 	@Value("${jwt.secret}")
 	private String secret;
@@ -42,6 +42,7 @@ public class JwtTokenUtil implements Serializable {
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
     	System.out.println("JwtTokenUtil : getClaimFromToken");
         final Claims claims = getAllClaimsFromToken(token);
+        System.out.println(claims.toString());
         return claimsResolver.apply(claims);
     }
     
@@ -55,9 +56,11 @@ public class JwtTokenUtil implements Serializable {
     public Map<String, Object> getUserParseInfo(String token) {
     	System.out.println("JwtTokenUtil : getUserParseInfo");
         Claims parseInfo = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        System.out.println(parseInfo.toString());
         Map<String, Object> result = new HashMap<>();
         result.put("user_id", parseInfo.getSubject());
         result.put("role", parseInfo.get("role", List.class));
+        result.put("user_password", parseInfo.get("user_password"));
         return result;
     }
 
@@ -81,9 +84,9 @@ public class JwtTokenUtil implements Serializable {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public String generateRefreshToken(String user_id) {
+    public String generateRefreshToken() {
     	System.out.println("JwtTokenUtil : generateRefreshToken");
-        return Jwts.builder().setSubject(user_id).setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
