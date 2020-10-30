@@ -4,6 +4,7 @@ import axios from 'axios'
 import SERVER from '@/api/url'
 import VueRouter from 'vue-router'
 import router from '@/router'
+// import { $cookies } from 'vue/types/umd'
 
 Vue.use(Vuex)
 
@@ -28,7 +29,7 @@ export default new Vuex.Store({
       state.survey[0] = 1
       state.page = state.survey.findIndex((idx) => idx === 0) + 1
     },
-    // survey 마지막 0 바뀌면 자동 제출로 수정
+
     selectedDogMbti(state, payload) {
       state.survey[payload.idx] = payload.answer
       state.page = state.survey.findIndex((idx) => idx === 0) + 1
@@ -53,17 +54,31 @@ export default new Vuex.Store({
   actions: {
     submitSurvey({ state, commit }, payload) {
       commit('whatIsDogMbti', payload)
-      console.log(state.userMbti, state.dogMbti)
-      // axios.post(SERVER.URL + SERVER.submitSurvey, {
-      //   "MBTI": state.userMbti,
-      //   "answers": state.dogMbti,
-      // },
-      // {
-      //   headers: {
-      //     "jwt-auth-token": localStorage.getItem("token"),
-      //   }
-      // }) 
+      // console.log('gdgd')
+      console.log("쿠키", $cookies.get("accessToken"))
+      console.log('설문조사 결과:', state.userMbti, state.dogMbti)
+      // SERVER.URL + SERVER.ROUTES.submitSurvey,
+      axios
+        .post("http://localhost:8084/user/survey/create",
+          {
+            headers: {
+              Authorization: $cookies.get("accessToken")
+            }
+          },
+          {
+            "MBTI": state.userMbti,
+            "answers": state.dogMbti,
+          }
+        )
+        .then(res => {
+          console.log('잘갔나?', res)
+        })
+        .catch(err => {
+          console.log('못감ㅜ', err)
+        })
+      // router.push({ name: 'Animals' })
     },
+
   },
   modules: {
   }
