@@ -62,7 +62,7 @@
                 <label>성명</label>
               </div>
               <div class="col-10">
-                <input style="border: 1px solid black;">
+                <input style="border: 1px solid black;" v-model="personName">
               </div>
             </div>
             <div class="row adopter-information-number">
@@ -70,7 +70,7 @@
                 <label>연락처</label>
               </div>
               <div class="col-8">
-                <input style="border: 1px solid black;"/>
+                <input style="border: 1px solid black;" v-model="personNumber"/>
               </div>
               <div class="col-2">
                 <input style="border: 1px solid black; background: black; color: white;" type="button" value="문자인증">
@@ -81,7 +81,7 @@
                 <label>이메일</label>
               </div>
               <div class="col-10">
-                <input style="border: 1px solid black;">
+                <input style="border: 1px solid black;" v-model="personEmail">
               </div>
             </div>
             <div class="row adopter-information-gender">
@@ -93,7 +93,7 @@
                   <label for="female">여성</label>
                 </div>
                 <div>
-                  <input type="radio" name="gender" id="female" style="width: 20px;"/>
+                  <input type="radio" name="gender" id="female" style="width: 20px;" @click="changePersonGender(0)"/>
                 </div>
               </div>
               <div class="col-2" style="display: flex;">
@@ -101,7 +101,7 @@
                   <label for="male">남성</label>
                 </div>
                 <div>
-                  <input type="radio" name="gender" id="male" style="width: 20px;"/>
+                  <input type="radio" name="gender" id="male" style="width: 20px;" @click="changePersonGender(1)"/>
                 </div>
               </div>
             </div>
@@ -111,7 +111,7 @@
               </div>
               <div class="col-10">
                 <!-- <input style="border: 1px solid black;"> -->
-                <datepicker :language="ko" :format="format" style="border: 1px solid black;" v-model="birthdayPick"></datepicker>
+                <datepicker :language="ko" :format="format" style="border: 1px solid black;" v-model="personBirthday"></datepicker>
               </div>
             </div>
             </div>
@@ -120,7 +120,7 @@
                 <label>주소</label>
               </div>
               <div class="col-10">
-                <input style="border: 1px solid black;" @click="findAddress()" v-model="address">
+                <input style="border: 1px solid black;" @click="findAddress()" v-model="personAddress">
               </div>
             </div>
             <div class="row adopter-information-personal">
@@ -147,7 +147,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="checkbox" style="width: 20px;"/>
+                  <input type="checkbox" style="width: 20px;" @click="changePersonCheck()"/>
                 </div>
               </div>
             </div>
@@ -174,14 +174,42 @@ export default {
   },
   data() {
     return {
-      address: "",
+      serialNumber: "",
+      dogName: "",
+      dogBreed: "",
+      dogGender: "",
+      personName: "",
+      personNumber: "",
+      personEmail: "",
+      personGender: 2,
+      personBirthday: "",
+      personAddress: "",
+      personCheck: 0,
       format: "yyyy년 MMMM dd일",
       en: en,
       ko: ko,
-      birthdayPick: "",
+      
     }
   },
   methods: {
+    changePersonGender(num) {
+      if (num === 0) {
+        this.personGender = 0
+      } else {
+        this.personGender = 1
+      }
+    },
+
+    changePersonCheck() {
+      if (this.personCheck === 0) {
+        this.personCheck = 1
+        console.log(this.personCheck)
+      } else {
+        this.personCheck = 0
+        console.log(this.personCheck)
+      }
+    },
+
     findAddress() {
       new daum.Postcode({
         oncomplete: (data) => {
@@ -197,17 +225,17 @@ export default {
                 extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
             }
             fullAddr += extraAddr !== "" ? " (" + extraAddr + ")" : "";
-            this.address = fullAddr;
+            this.personAddress = fullAddr;
           } else {
-            this.address = fullAddr;
+            this.personAddress = fullAddr;
           }
         },
       }).open();
     },
   },
   watch: {
-    birthdayPick() {
-      console.log(this.birthdayPick)
+    personBirthday() {
+      console.log(this.personBirthday)
     }
   },
 }
