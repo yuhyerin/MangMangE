@@ -25,7 +25,7 @@
                 <label>일련번호</label>
               </div>
               <div class="col-10">
-                <p class="serial-p" style="border: 1px solid black;">???</p>
+                <p class="serial-p" style="border: 1px solid black;">{{ dogSerial }}</p>
               </div>
             </div>
             <div class="row dog-information-name">
@@ -33,7 +33,7 @@
                 <label>이름</label>
               </div>
               <div class="col-10">
-                <p class="name-p" style="border: 1px solid black;">???</p>
+                <p class="name-p" style="border: 1px solid black;">{{ dogName }}</p>
               </div>
             </div>
             <div class="row dog-information-breed">
@@ -41,7 +41,7 @@
                 <label>종류</label>
               </div>
               <div class="col-10">
-                <p class="breed-p" style="border: 1px solid black;">???</p>
+                <p class="breed-p" style="border: 1px solid black;">{{ dogBreed }}</p>
               </div>
             </div>
             <div class="row dog-information-gender">
@@ -49,7 +49,7 @@
                 <label>성별</label>
               </div>
               <div class="col-10">
-                <p class="gender-p" style="border: 1px solid black;">???</p>
+                <p class="gender-p" style="border: 1px solid black;">{{ dogGender }}</p>
               </div>
             </div>
           </div>
@@ -174,7 +174,8 @@ export default {
   },
   data() {
     return {
-      serialNumber: "",
+      dogInfo: [],
+      dogSerial: "",
       dogName: "",
       dogBreed: "",
       dogGender: "",
@@ -237,6 +238,50 @@ export default {
       console.log(this.personBirthday)
     }
   },
+  created: {
+    getAnimalData() {
+      axios
+        .post(
+          baseURL + "",
+          {
+            animalId: this.$route.params.animalId
+          },
+          {
+            headers: {
+              Authorization: this.$cookies.get("accessToken")
+            }
+          }
+        )
+        .then((res) => {
+          if (res.data.accessToken) {
+            doginfo = res.data
+          } else {
+            axios
+              .post(
+                baseURL + "",
+                {
+                  
+                },
+                {
+                  headers: {
+                    "Authorization": this.$cookies.get("accessToken"),
+                    // "key뭔지모름": this.$cookies.get("refreshToken")
+                  }
+                }
+              )
+              .then((res) => {
+                doginfo = res.data
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  }
 }
 </script>
 
