@@ -167,7 +167,7 @@ import { en, ko } from 'vuejs-datepicker/dist/locale/'
 import axios from 'axios'
 
 export default {
-  name: 'Adoption',
+  name: "Adoption",
   components: {
     Header,
     Datepicker
@@ -188,7 +188,6 @@ export default {
       format: "yyyy년 MMMM dd일",
       en: en,
       ko: ko,
-      
     }
   },
   methods: {
@@ -242,29 +241,29 @@ export default {
 </script>
 
 <style>
-  div.application {
-    margin: 0 auto;
-  }
+div.application {
+  margin: 0 auto;
+}
 
-  hr.dog-information-startline {
-    border-top: 1px solid black;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+hr.dog-information-startline {
+  border-top: 1px solid black;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
-  h2.application-title {
-    text-align: center;
-    margin-bottom: 10px;
-  }
+h2.application-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
   div.selfcheck {
     background: rgb(244, 236, 225);
     padding: 12px 12px 5px 12px;
   }
 
-  h3.selfcheckstart {
-    text-align: center;
-  }
+h3.selfcheckstart {
+  text-align: center;
+}
 
   ul.selfchecklist {
     list-style-position: inside;
@@ -277,10 +276,10 @@ export default {
     padding: 12px 12px 1px 12px;
   }
 
-  button.check-number {
-    background: black;
-    color: white;
-  }
+button.check-number {
+  background: black;
+  color: white;
+}
 
   div.adopter-information-personal-allow{
     margin-top: 10px;
@@ -296,24 +295,24 @@ export default {
     padding: 12px 12px 5px 12px;
   }
 
-  hr.dog-information-endline {
-    border-top: 1px solid black;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+hr.dog-information-endline {
+  border-top: 1px solid black;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
   p.serial-p, p.name-p, p.breed-p, p.gender-p {
     margin-bottom: 0;
   }
 
-  input {
-    width: 100%;
-  }
+input {
+  width: 100%;
+}
 
-  button.apply-button {
-    background: green;
-    color: white;
-    width: 30%;
-    border: 10px solid green;
-  }
+button.apply-button {
+  background: green;
+  color: white;
+  width: 30%;
+  border: 10px solid green;
+}
 </style>
