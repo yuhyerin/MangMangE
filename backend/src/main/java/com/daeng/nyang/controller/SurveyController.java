@@ -24,7 +24,7 @@ import com.daeng.nyang.service.survey.SurveyService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("*") 
 public class SurveyController {
 	private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
 	@Autowired
@@ -33,7 +33,7 @@ public class SurveyController {
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
- 
+   
 	@PostMapping(path = "/user/survey/create")
 	@ApiOperation(value = "설문결과저장")
 	public ResponseEntity<HashMap<String, Object>> surveyCreate(HttpServletRequest request,
