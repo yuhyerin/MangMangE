@@ -54,6 +54,9 @@
           <v-btn color="rgba(64,33,22)" width="100px" @click="moveToRegister"
             ><p style="color: white; padding-top: 14px">회원가입</p></v-btn
           >
+          <v-btn color="rgb(1,118,72)" width="100px" @click="logout"
+            ><p style="color: white; padding-top: 14px">로그아웃</p></v-btn
+          >
         </div>
       </v-col>
       <v-col align="align" style="font-size: 0.8em;">
@@ -92,6 +95,21 @@ export default {
     moveToFindPw() {
       this.$emit("changeComponents", 3);
     },
+    logout(){
+      axios.post(baseURL+'user/logout/',{
+          headers:{
+            "Authorization" : this.$cookies.get("accessToken")
+          }
+      })
+      .then((res)=>{
+        console.log(res)
+        this.$cookies.remove("accessToken")
+        this.$cookies.remove("refreshToken")
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    },
     login(){
       axios.post(baseURL+'newuser/login/', {
         "user_id" : this.id,
@@ -99,6 +117,9 @@ export default {
       })
       .then((res)=>{
         console.log(res)
+        this.$cookies.set("accessToken",res.data.accessToken)
+        this.$cookies.set("refreshToken",res.data.accessToken)
+        this.$router.push("/")
         // res.data.accessToken
         // res.data.refreshToken
         // this.$cookies.set("Authorization", res.data.accessToken)
