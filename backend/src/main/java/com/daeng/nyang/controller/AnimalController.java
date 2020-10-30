@@ -44,6 +44,7 @@ public class AnimalController {
 	public ResponseEntity<HashMap<String, Object>> allread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 모든 동물 리스트 반환
 		// 비회원
+		
 		if(request.getHeader("Authorization")==null) {
 			try {
 				HashMap<String, Object> map = new HashMap<>();
@@ -78,9 +79,16 @@ public class AnimalController {
 	
 	@GetMapping(path = "user/animal/surveyread")
 	@ApiOperation(value = "설문기록여부확인")
-	public ResponseEntity<HashMap<String, Object>> surveyread(@RequestParam String token) {
+	public ResponseEntity<HashMap<String, Object>> surveyread(HttpServletRequest request){
+			//@RequestParam String token) {
 		// 프론트에서 토큰을 받아오면 설문기록여부 반환
-
+		System.out.println("CONTROLLER");
+		String token = request.getHeader("Authorization");
+		if(token==null) {
+			return null;
+		} else if(jwtTokenUtil.isTokenExpired(token)) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 		// 토큰으로 유저 아이디 받아오는 구문
 		String user_id = null; // 일단 null 값
 		user_id = jwtTokenUtil.getUsernameFromToken(token); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.

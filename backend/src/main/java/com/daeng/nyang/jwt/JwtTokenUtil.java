@@ -21,8 +21,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenUtil implements Serializable {
 
 	private static final long serialVersionUID = -2550185165626007488L;
-	public static final long JWT_ACCESS_TOKEN_VALIDITY = 10 * 60; // 10분
-	public static final long JWT_REFRESH_TOKEN_VALIDITY = 12 * 60 * 60; // 12시간
+	
+	@Value("${JWT_ACCESS_TOKEN_VALIDITY}")
+	private String JWT_ACCESS_TOKEN_VALIDITY;
+	@Value("${JWT_REFRESH_TOKEN_VALIDITY}")
+	private String JWT_REFRESH_TOKEN_VALIDITY;
 	
 	@Value("${jwt.secret}")
 	private String secret;
@@ -42,7 +45,7 @@ public class JwtTokenUtil implements Serializable {
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
     	System.out.println("JwtTokenUtil : getClaimFromToken");
         final Claims claims = getAllClaimsFromToken(token);
-        System.out.println(claims.toString());
+//        System.out.println(claims.toString());
         return claimsResolver.apply(claims);
     }
     
@@ -80,14 +83,14 @@ public class JwtTokenUtil implements Serializable {
         }
         claims.put("role",li);
         return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     public String generateRefreshToken() {
     	System.out.println("JwtTokenUtil : generateRefreshToken");
         return Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
     //while creating the token -
