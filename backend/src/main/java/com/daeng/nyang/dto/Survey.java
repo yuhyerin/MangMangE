@@ -22,6 +22,7 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 얘가 auto_increment
     private Long no;
 	
+	
 	@Column
 	private String user_id;
 	
