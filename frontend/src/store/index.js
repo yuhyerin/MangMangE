@@ -11,15 +11,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     page: 1,
-    // authToken: ,
     userMbti: '',
     dogMbti: '',
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    eventListener: 0,
   },
 
   // state를 (가공해서) 가져올 함수들 === computed
   getters: {
-    // config: state => ({ headers: {Auturization: }})
   },
 
   // state 변경하는 함수들, 동기적으로 동작, commit을 통해 실행
@@ -47,19 +46,16 @@ export default new Vuex.Store({
       if (state.survey[pageNum - 1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
       }
-    }
+    },
   },
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
   actions: {
     submitSurvey({ state, commit }, payload) {
       commit('whatIsDogMbti', payload)
-      // console.log('gdgd')
-      console.log("쿠키", $cookies.get("accessToken"))
       console.log('설문조사 결과:', state.userMbti, state.dogMbti)
-      // SERVER.URL + SERVER.ROUTES.submitSurvey,
       axios
-        .post("http://localhost:8080/user/survey/create",
+        .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
         {
           "MBTI": state.userMbti,
           "answers": state.dogMbti, 
@@ -71,13 +67,13 @@ export default new Vuex.Store({
           }
         )
         .then(res => {
-          console.log('잘갔나?', res)
+          console.log('userMbit & dogMbti = ', res.data)
+          state.eventListener = 1
+          router.push({ name: 'Animals'})
         })
         .catch(err => {
-          console.log($cookies.get("accessToken"))
-          console.log('못감ㅜ', err)
+          console.log('MBTI XXX', err)
         }) 
-      // router.push({ name: 'Animals' })
     },
     
   },

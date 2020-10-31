@@ -167,6 +167,7 @@ export default {
     },
   },
   created() {
+    console.log(this.$store.state.eventListener)
     for (var i = 0; i < data.animal.length; i++) {
       this.tmpArr.push(data.animal[i]);
     }
