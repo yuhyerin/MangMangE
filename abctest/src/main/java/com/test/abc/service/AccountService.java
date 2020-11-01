@@ -26,8 +26,11 @@ public class AccountService {
     RedisTemplate<String, Object> redisTemplate;
 	
 	JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+<<<<<<< HEAD
+=======
 	public static final long JWT_ACCESS_TOKEN_VALIDITY = 10 * 60; // 10분
 	public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60 * 7; // 일주일
+>>>>>>> 0d6b9e53ee5c962574d19942adae93c798e1746f
 	
 	public Map<String, Object> signup(Account account){
 		System.out.println("SERVICE : "+account.toString());
@@ -73,9 +76,14 @@ public class AccountService {
 		if(temp!=null) {
 			if(passwordEncoder.matches(password, temp.getUser_password())) {
 				token = jwtTokenProvider.createToken(id);
+<<<<<<< HEAD
+				refreshToken = jwtTokenProvider.createRefreshToken(id);	//refreshtoken은 redis에 저장
+				vop.set(id, refreshToken);
+=======
 				refreshToken = jwtTokenProvider.createRefreshToken();	//refreshtoken은 redis에 저장
 				vop.set(token, id, JWT_ACCESS_TOKEN_VALIDITY);
 				vop.set(id, refreshToken, JWT_REFRESH_TOKEN_VALIDITY);
+>>>>>>> 0d6b9e53ee5c962574d19942adae93c798e1746f
 			}
 		}
 		return token;

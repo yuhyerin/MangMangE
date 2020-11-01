@@ -59,21 +59,22 @@ export default new Vuex.Store({
       console.log('설문조사 결과:', state.userMbti, state.dogMbti)
       // SERVER.URL + SERVER.ROUTES.submitSurvey,
       axios
-        .post("http://localhost:8084/user/survey/create",
+        .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
+          {
+            "MBTI": state.userMbti,
+            "answers": state.dogMbti,
+          },
           {
             headers: {
               Authorization: $cookies.get("accessToken")
             }
-          },
-          {
-            "MBTI": state.userMbti,
-            "answers": state.dogMbti,
           }
         )
         .then(res => {
           console.log('잘갔나?', res)
         })
         .catch(err => {
+          console.log($cookies.get("accessToken"))
           console.log('못감ㅜ', err)
         })
       // router.push({ name: 'Animals' })

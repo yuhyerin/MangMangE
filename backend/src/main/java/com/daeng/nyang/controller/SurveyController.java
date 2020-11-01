@@ -58,13 +58,13 @@ public class SurveyController {
 				System.out.println("user_id : " + user_id);
 
 				// no.2
-//         Map<String, Object> now_user = new HashMap<>();
-//         now_user = jwtTokenUtil.getUserParseInfo(now_user_token);
-//         String user_id2 = (String) now_user.get("user_id");
-//         System.out.println("user_id2 : " + user_id2);
+//			Map<String, Object> now_user = new HashMap<>();
+//			now_user = jwtTokenUtil.getUserParseInfo(now_user_token);
+//			String user_id2 = (String) now_user.get("user_id");
+//			System.out.println("user_id2 : " + user_id2);
 
 				survey.setUser_id(user_id); // 여기에 토큰으로 받아온 유저 아이디를 대신 넣는다. no.1
-//         survey.setUser_id(user_id2); // 여기에 토큰으로 받아온 유저 아이디를 대신 넣는다. no.2
+//			survey.setUser_id(user_id2); // 여기에 토큰으로 받아온 유저 아이디를 대신 넣는다. no.2
 				Survey saveSurvey = surveyService.join(survey);
 				map.put("message", "설문결과 저장 성공");
 				map.put("saveSurvey", saveSurvey);
