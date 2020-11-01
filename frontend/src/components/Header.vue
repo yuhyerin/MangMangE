@@ -78,13 +78,18 @@ export default {
     moveToMain() {
       location.href = "/";
     },
-    moveTo(page) {
-      if (this.isUser) {
-        // axios로 accessToken 주기
-        this.logout();
+    register() {
+      this.$router.push("/login");
+    },
+    moveToLogin() {
+      if (this.isUser == false) {
+        this.$router.push("/login");
       } else {
-          this.$router.push("/login");
+        this.logout();
       }
+    },
+    moveTo(page) {
+      this.$router.push(page);
     },
     logout() {
       axios

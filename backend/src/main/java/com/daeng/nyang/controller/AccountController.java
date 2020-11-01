@@ -26,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Account;
+import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
+import com.daeng.nyang.service.user.AccountService;
 import com.daeng.nyang.service.user.JwtUserDetailService;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -56,6 +58,9 @@ public class AccountController {
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
+	
+	@Autowired
+	private AccountService accountService;
 
 
 	@PostMapping(path = "/newuser/signup")
@@ -213,5 +218,29 @@ public class AccountController {
 	        }
 	        return response;
 	    }
+	
+	@GetMapping(path="/user/adopt/create")
+	public ResponseEntity<HashMap<String, Object>> checkPhone(@RequestParam String phone){
+		return null;
+	}
+	
+	@PostMapping(path="/user/adopt/create")
+	public ResponseEntity<HashMap<String, Object>> createAdopt(HttpServletRequest request, 
+			@RequestBody Apply apply){
+		System.out.println("/user/adopt/create 입장");
+		String accessToken = request.getHeader("Authorization");
+		if(accessToken==null) {
+			return null;
+		} else if(jwtTokenUtil.isTokenExpired(accessToken)) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		// 토큰으로 유저 아이디 받아오는 구문
+		String user_id = null; // 일단 null 값
+		user_id = jwtTokenUtil.getUsernameFromToken(accessToken); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
+		System.out.println("user_id : " + user_id); // 확인
+		System.out.println(apply.toString());
+		ResponseEntity<HashMap<String, Object>> result = accountService.createApply(user_id, apply);
+		return result;
+	}
 
 }
