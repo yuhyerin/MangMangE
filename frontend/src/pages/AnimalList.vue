@@ -96,14 +96,16 @@
               align-text: center;
             "
           >
-            <div style="display: flex; flex-wrap: wrap; justify-content: left">
+            <div
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
               <AllAnimals
                 v-if="trigger == 0"
-                v-for="(data, index) in this.tmpArr"
+                v-for="(data, index) in this.allDatas"
                 :key="index"
                 :animalInfo="data"
               />
-              <AllAnimals
+              <!-- <AllAnimals
                 v-if="trigger == 1"
                 v-for="(data, index) in this.tmpArr"
                 :key="index"
@@ -114,7 +116,7 @@
                 v-for="(data, index) in this.tmpArr"
                 :key="index"
                 :animalInfo="data"
-              />
+              /> -->
             </div>
           </div>
         </div>
@@ -154,7 +156,8 @@ export default {
       if (newValue == 0) {
         this.tmp = 10;
         console.log("All Animals");
-        axios.get(SERVER.URL + "newuser/animal/allread").then((res) => {
+        axios.get(SERVER.URL + "/newuser/animal/allread").then((res) => {
+          this.allDatas = res.data.animalList;
           console.log(res.data.animalList);
         });
       } else if (newValue == 1) {
@@ -166,11 +169,13 @@ export default {
       }
     },
   },
+
   created() {
-    for (var i = 0; i < data.animal.length; i++) {
-      this.tmpArr.push(data.animal[i]);
-    }
+    axios.get(SERVER.URL + "/newuser/animal/allread").then((res) => {
+      this.allDatas = res.data.animalList;
+    });
   },
+
   methods: {
     ...mapGetters(["getPageCheck"]),
     ...mapMutations(["checkThisPage"]),
@@ -183,6 +188,7 @@ export default {
         this.testTrigger = false;
       }, 3300);
     },
+
     changeValue() {
       this.tmpArr.length = 0;
       for (var i = 0; i < data.animal.length; i++) {

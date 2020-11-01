@@ -221,7 +221,11 @@ public class AccountController {
 	
 	@GetMapping(path="/user/adopt/create")
 	public ResponseEntity<HashMap<String, Object>> checkPhone(@RequestParam String phone){
-		return null;
+		int rand = (int) (Math.random() * 899999) + 100000;	// 랜덤넘버 6자리
+		
+		ResponseEntity<HashMap<String, Object>> result = accountService.checkPhone(phone, rand);
+		System.out.println(result.toString());
+		return result;
 	}
 	
 	@PostMapping(path="/user/adopt/create")

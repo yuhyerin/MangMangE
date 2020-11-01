@@ -91,7 +91,7 @@ lombok.jar 실행
 	<artifactId>lombok</artifactId>
 	<version>1.18.16</version>
 	<scope>provided</scope>
-<dependency>
+</dependency>
 ```
 
 > version은 설치된 lombok.jar의 버전

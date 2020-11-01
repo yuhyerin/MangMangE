@@ -84,7 +84,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				System.out.println("IllegalArgumentException in doFilterInternal");
 			}
 		}
-
 		if (userid == null) {
 			System.out.println("userid null");
 		} else if (redisTemplate.opsForValue().get(requestTokenHeader) == null) {

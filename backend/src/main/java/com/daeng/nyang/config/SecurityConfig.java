@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.daeng.nyang.jwt.JwtAuthenticationEntryPoint;
 import com.daeng.nyang.jwt.JwtRequestFilter;
@@ -33,24 +33,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-//		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-		
 		http.
 		httpBasic().disable().	// 기본적으로 제공되는 loginForm() disable
 		cors().disable().
 		csrf().disable(). // 요청위조 방지 비활성화
+		formLogin().disable().
 		sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
 		and().authorizeRequests().
 			antMatchers("/newuser/login","/newuser/signup").anonymous().
-			antMatchers("/user").hasAnyRole("ADMIN","USER").
+//			antMatchers("/user/logout",).hasAnyRole("ADMIN","USER").
 			antMatchers("/admin").hasRole("ADMIN").
 			antMatchers("/newuser/**", "/**").permitAll().
 		and().authorizeRequests().
 			anyRequest(). // 어떤 요청이라도
 			authenticated(). // 인증된 사용자만이 접근 허용
 		and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
-//		and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-		and().addFilterBefore(jwtRequestFilter, WebAsyncManagerIntegrationFilter.class);
+		and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//		and().addFilterBefore(jwtRequestFilter, WebAsyncManagerIntegrationFilter.class);
 		
 		
 	}

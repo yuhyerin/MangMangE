@@ -1,6 +1,6 @@
 package com.daeng.nyang.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,15 +29,15 @@ public class Apply {
 
 	@Column
 	private long Ani_num;	// FK
-	@ManyToOne(optional=false) @JoinColumn(name="user_id", insertable=false, updatable=false)
-	private Account account;	// FK
-	
+//	@ManyToOne(optional=false) @JoinColumn(name="user_id", insertable=false, updatable=false)
+//	private Account account;	// FK
+	private String user_id;
 	private String user_name;
 	private String user_phone;
 	private String title;
 	private String content;
 	
 	@Column @CreationTimestamp
-	private LocalDateTime createDateTime;
+	private Date createDateTime;
 
 }

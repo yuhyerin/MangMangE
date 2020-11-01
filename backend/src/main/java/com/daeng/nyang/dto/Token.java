@@ -1,7 +1,5 @@
 package com.daeng.nyang.dto;
 
-import java.io.Serializable;
-
 import org.springframework.data.redis.core.RedisHash;
 
 import lombok.Builder;

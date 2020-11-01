@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -113,7 +114,7 @@ public class AnimalController {
 		}
 	}
 	
-	@GetMapping(path = "user/animal/matchlist")
+	@PostMapping(path = "user/animal/matchlist")
 	@ApiOperation(value = "매칭된동물리스트")
 	public ResponseEntity<HashMap<String, Object>> matchlist(@RequestParam String token) {
 		// 프론트에서 토큰을 받아오면 매칭된 동물 리스트 반환
