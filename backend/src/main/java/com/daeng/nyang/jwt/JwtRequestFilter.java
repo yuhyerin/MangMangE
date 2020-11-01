@@ -32,8 +32,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
-	@Autowired
-	JwtTokenUtil jtu;
+//	@Autowired
+//	JwtTokenUtil jtu;
 
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	public Authentication getAuthentication(String token) {
 		System.out.println("getAuthentication : " + token);
-		Map<String, Object> parseInfo = jtu.getUserParseInfo(token);
+		Map<String, Object> parseInfo = jwtTokenUtil.getUserParseInfo(token);
 //        System.out.println("parseinfo: " + parseInfo);
 		List<String> rs = (List) parseInfo.get("role");
 //		String rs = (String)parseInfo.get("role");

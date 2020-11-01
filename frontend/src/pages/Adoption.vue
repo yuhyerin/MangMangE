@@ -73,16 +73,23 @@
             <div class="col-2">
               <label>연락처</label>
             </div>
-            <div class="col-8">
-              <input style="border: 1px solid black" />
+            <div class="col-2">
+              <input style="border: 1px solid black" v-model="firstNum"/>
+            </div>
+            <div class="col-4">
+              <input style="border: 1px solid black" v-model="middleNum" />
+            </div>
+            <div class="col-4">
+              <input style="border: 1px solid black" v-model="lastNum"/>
             </div>
             <div class="col-2">
               <input
+                v-model="phoneNum"
                 style="border: 1px solid black; background: black; color: white"
-                type="button"
-                value="문자인증"
+                type="text"
+                placeholder="휴대폰번호"
               />
-              <!-- <button class="check-number">문자인증</button> -->
+              <button class="check-number" @click="test">문자인증</button>
             </div>
           </div>
           <div class="row adopter-information-email">
@@ -196,6 +203,9 @@
 
 <script>
 // import Header from '../components/Header.vue'
+import axios from 'axios'
+import SERVER from '@/api/url'
+
 export default {
   name: "Adoption",
   components: {
@@ -204,6 +214,10 @@ export default {
   data() {
     return {
       address: "",
+      phoneNum: "",
+      firstNum: "",
+      middleNum: "",
+      lastNum: ""
     };
   },
   methods: {
@@ -234,6 +248,20 @@ export default {
         },
       }).open();
     },
+    test() {
+      console.log("FE input Form : ", this.firstNum + "-" + this.middleNum + "-" + this.lastNum)
+      axios.get(SERVER.URL + '/user/adopt/create', {
+          params: {
+            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+          }
+        })
+      .then((res) => {
+        console.log("then res : ",res.data)
+      })
+      .catch((err) => {
+        console.log("catch err : ",err)
+      })
+    }
   },
 };
 </script>
