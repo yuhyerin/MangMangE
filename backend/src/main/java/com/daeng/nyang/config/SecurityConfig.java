@@ -20,14 +20,12 @@ import com.daeng.nyang.jwt.JwtRequestFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
     private JwtRequestFilter jwtRequestFilter;
-//    @Autowired
-//    private UserDetailsService jwtUserDetailsService;
-    @Autowired
+
+	@Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	@Override
@@ -44,7 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			antMatchers("/newuser/login","/newuser/signup").anonymous().
 			antMatchers("/user").hasAnyRole("ADMIN","USER").
 			antMatchers("/admin").hasRole("ADMIN").
-			antMatchers("/newuser/**").permitAll().
+//			antMatchers("/newuser/**").permitAll().
+			antMatchers("/newuser").permitAll().
 		and().authorizeRequests().
 			anyRequest(). // 어떤 요청이라도
 			authenticated(). // 인증된 사용자만이 접근 허용
@@ -73,5 +72,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
+		
 	}
 }
