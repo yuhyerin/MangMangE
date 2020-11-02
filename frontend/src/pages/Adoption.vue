@@ -138,12 +138,12 @@
               </div>
             </div>
             <div class="adopter-information-personal-allow">
-              <h5>댕줍멍줍은 법률에서 정하는 경우를 제외하고는 귀하의 동의 없이 개인정보를 제 3자에게 제공하지 않습니다.</h5>
-              <h5>문의: 010-0000-0000</h5>
+              <p style="margin-bottom: 0px;">댕줍멍줍은 법률에서 정하는 경우를 제외하고는 귀하의 동의 없이 개인정보를 제 3자에게 제공하지 않습니다.</p>
+              <p style="margin-bottom: 0px;">문의: 010-0000-0000</p>
               <div style="display: flex">
                 <div>
                   <label>
-                    <h5>개인정보 이용에 동의합니다.</h5>
+                    <p style="margin-bottom: 0px;">개인정보 이용에 동의합니다.</p>
                   </label>
                 </div>
                 <div>
