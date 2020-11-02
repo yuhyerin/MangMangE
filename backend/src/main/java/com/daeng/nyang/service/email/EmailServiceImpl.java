@@ -1,7 +1,6 @@
 package com.daeng.nyang.service.email;
 
 import java.util.Random;
-import java.util.StringTokenizer;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -10,13 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.daeng.nyang.repo.AccountRepo;
-import com.daeng.nyang.service.changepassword.ChangePasswordService;
 
 @Service
 public class EmailServiceImpl implements EmailService{
 
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
+	
 	@Autowired
 	private JavaMailSender mailSender;
 	
@@ -76,7 +77,7 @@ public class EmailServiceImpl implements EmailService{
 			e.printStackTrace();
 		}
 		
-		return temp_password;
+		return bcryptEncoder.encode(temp_password);
 	}
 	
 	private String generateAuthNumber() {
