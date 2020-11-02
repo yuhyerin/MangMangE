@@ -39,9 +39,9 @@ public class SurveyController {
 	public ResponseEntity<HashMap<String, Object>> surveyCreate(@RequestBody Survey survey,
 			HttpServletRequest request) {
 		System.out.println("설문결과 저장 컨트롤러 진입");
-		String token = request.getHeader("Authorization");
-		System.out.println(token);
-		System.out.println(survey.toString());
+		String token = request.getHeader("Authorization"); // 토큰받기
+		System.out.println(token); // 받은 토큰 출력, 확인
+		System.out.println(survey.toString()); // 받은 survey값 출력, 확인
 		if (token == null) {
 			return null;
 		} else if (jwtTokenUtil.isTokenExpired(token)) {

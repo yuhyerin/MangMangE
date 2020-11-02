@@ -144,7 +144,7 @@ public class AccountService {
 		params.put("to", phone); // 수신전화번호
 		params.put("from", "01092128410"); // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
 		params.put("type", "SMS");
-		params.put("text", "[댕청냥청] 인증번호는" + "[" + number + "]" + "입니다.");
+		params.put("text", "[마.리.댕] 인증번호는" + "[" + number + "]" + "입니다.");
 		params.put("app_version", "test app 1.2"); // application name and version
 		System.out.println(params.toString());
 		try {

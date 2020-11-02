@@ -32,7 +32,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
    @Autowired
    private JwtTokenUtil jwtTokenUtil;
 
-
 //   @Autowired
 //   JwtTokenUtil jtu;
 
