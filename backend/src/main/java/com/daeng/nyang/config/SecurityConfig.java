@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		formLogin().disable().
 		sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
 		and().authorizeRequests().
-			antMatchers("/newuser/login","/newuser/signup").anonymous().
+			antMatchers("/newuser/**").anonymous().
 			antMatchers("/user").hasAnyRole("ADMIN","USER").
 			antMatchers("/admin").hasRole("ADMIN").
 //			antMatchers("/newuser/**").permitAll().
