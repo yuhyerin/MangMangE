@@ -32,9 +32,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
-//	@Autowired
-//	JwtTokenUtil jtu;
-
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 
@@ -73,9 +70,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 		System.out.println("doFilterInternal");
-		System.out.println(request.toString());
 		System.out.println("REQUEST : " + request.getHeader("Authorization"));
-		System.out.println("REQUEST : " + request.getHeader("refreshToken"));
 		String requestTokenHeader = request.getHeader("Authorization");
 		String userid = null;
 

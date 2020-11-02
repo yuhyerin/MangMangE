@@ -148,7 +148,7 @@ public class AccountController {
 		String user_id = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			accessToken = request.getHeader("Authorization");
+			accessToken = request.getHeader("accessToken");
 			refreshToken = request.getHeader("refreshToken");
 			System.out.println("accessToken : " + accessToken);
 			System.out.println("refreshToken : " + refreshToken);

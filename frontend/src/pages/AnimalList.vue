@@ -158,9 +158,7 @@ export default {
         console.log("All Animals");
         axios.get(SERVER.URL + "/newuser/animal/allread",{
           headers: {
-                 "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-     "Access-Control-Allow-Credentials": true // Required for cookies, authorization headers
-            ,Authorization: this.$cookies.get('accessToken')
+            Authorization: this.$cookies.get('accessToken')
           }
         }).then((res) => {
           this.allDatas = res.data.animalList;
