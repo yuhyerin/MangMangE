@@ -122,14 +122,16 @@ export default {
                 {},
                 {
                   headers: {
-                    // Authorization: this.$cookies.get("accessToken"),
                     accessToken: this.$cookies.get("accessToken"),
-                    refreshToken: this.$cookies.get("refreshToken")
+                    refreshToken: this.$cookies.get("refreshToken"),
                   },
                 }
               )
               .then((res) => {
                 console.log(res);
+                if(res.data.success)
+                  this.$cookies.set("accessToken", res.data.accessToken)
+                console.log(this.$cookies.get("accessToken"))
               })
               .catch((err) => {
                 console.log(err);
