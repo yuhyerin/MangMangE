@@ -65,6 +65,7 @@ export default {
   data() {
     return {
       ruleID: [(value) => !!value || "ID를 입력해 주세요."],
+
       ruleEmail: [(value) => !!value || "이메일을 입력해 주세요."],
       id: "",
       email: "",
