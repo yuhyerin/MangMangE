@@ -20,7 +20,7 @@ public class AnimalLike {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 얘가 auto_increment
-	private Long no;
+	private int no;
 
 	@Column
 	private String user_id;

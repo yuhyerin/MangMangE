@@ -14,8 +14,17 @@ public class SurveyService {
 	
 	// 설문저장
 	public Survey join(Survey survey) {
-        System.out.println("Survey Create Service");
-        return surveyRepo.save(survey);
+		System.out.println("Survey Create Service");
+        Survey newSurvey = new Survey();
+        if(findSurveyByUserid(survey.getUser_id()) == null) {
+        	return surveyRepo.save(survey);
+        } else {
+        	newSurvey = findSurveyByUserid(survey.getUser_id());
+            newSurvey.setUser_id(survey.getUser_id());
+            newSurvey.setMbti(survey.getMbti());
+            newSurvey.setAnswer(survey.getAnswer());
+            return surveyRepo.save(newSurvey);
+        }
     }
 	
 	// 유저 아이디를 통해 설문정보 가져오기.

@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 import com.daeng.nyang.jwt.JwtAuthenticationEntryPoint;
 import com.daeng.nyang.jwt.JwtRequestFilter;
@@ -20,41 +21,38 @@ import com.daeng.nyang.jwt.JwtRequestFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	@Autowired
+   
+   @Autowired
     private JwtRequestFilter jwtRequestFilter;
-//    @Autowired
-//    private UserDetailsService jwtUserDetailsService;
-    @Autowired
+
+   @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		
-		http.
-		httpBasic().disable().	// 기본적으로 제공되는 loginForm() disable
-		cors().disable().
-		csrf().disable(). // 요청위조 방지 비활성화
-		formLogin().disable().
-		sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
-		and().authorizeRequests().
-			antMatchers("/newuser/login","/newuser/signup").anonymous().
-//			antMatchers("/user/logout",).hasAnyRole("ADMIN","USER").
-			antMatchers("/admin").hasRole("ADMIN").
-			antMatchers("/newuser/**", "/**").permitAll().
-		and().authorizeRequests().
-			anyRequest(). // 어떤 요청이라도
-			authenticated(). // 인증된 사용자만이 접근 허용
-		and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
-		and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//		and().addFilterBefore(jwtRequestFilter, WebAsyncManagerIntegrationFilter.class);
-		
-		
-	}
+   @Override
+   protected void configure(HttpSecurity http) throws Exception {
+      
+      http.
+         addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).
+         httpBasic().disable().   // 기본적으로 제공되는 loginForm() disable
+         cors().and().
+         csrf().disable(). // 요청위조 방지 비활성화
+         formLogin().disable().
+         sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
+         and().authorizeRequests().
+            requestMatchers(CorsUtils::isPreFlightRequest).permitAll().
+            antMatchers("/newuser/login","/newuser/signup","/newuser/refresh/**").anonymous().
+            antMatchers("/user").hasAnyRole("ADMIN","USER").
+            antMatchers("/admin").hasRole("ADMIN").
+            antMatchers("/newuser/**").permitAll().
+         and().authorizeRequests().
+            anyRequest(). // 어떤 요청이라도
+            authenticated(). // 인증된 사용자만이 접근 허용
+         and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
+      
+   }
 
-//	@Autowired
+//   @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 //        // configure AuthenticationManager so that it knows from where to load
 //        // user for matching credentials
@@ -62,19 +60,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 //    }
 
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
+   @Bean
+   @Override
+   public AuthenticationManager authenticationManagerBean() throws Exception {
+      return super.authenticationManagerBean();
+   }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+   @Bean
+   public PasswordEncoder passwordEncoder() {
+      return new BCryptPasswordEncoder();
+   }
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-//		web.ignoring().antMatchers("/**");
-	}
+   @Override
+   public void configure(WebSecurity web) throws Exception {
+      
+   }
 }

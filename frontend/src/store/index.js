@@ -61,8 +61,8 @@ export default new Vuex.Store({
       axios
         .post("http://localhost:8080/user/survey/create",
         {
-          "MBTI": state.userMbti,
-          "answers": state.dogMbti, 
+          "mbti": state.userMbti,
+          "answer": state.dogMbti, 
         },
           {
             headers: {
@@ -72,7 +72,7 @@ export default new Vuex.Store({
         )
         .then(res => {
           console.log('잘갔나?', res)
-        })
+        }) 
         .catch(err => {
           console.log($cookies.get("accessToken"))
           console.log('못감ㅜ', err)
