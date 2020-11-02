@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
+import com.daeng.nyang.service.email.EmailService;
+import com.daeng.nyang.service.signup.SignupService;
 import com.daeng.nyang.service.user.AccountService;
 import com.daeng.nyang.service.user.JwtUserDetailService;
 
@@ -44,6 +47,12 @@ public class AccountController {
 
    @Autowired
    private AccountService accountService;
+   
+   @Autowired
+   private SignupService signupService;
+   
+   @Autowired
+   private EmailService emailService;
    
    @Autowired
    private JwtTokenUtil jwtTokenUtil;
@@ -73,10 +82,29 @@ public class AccountController {
    }
 
    @GetMapping(path = "/newuser/signup")
-   @ApiOperation("이메일유효성검사")
-   public void checkEmail(@RequestParam String email) {
-      System.out.println("email유효성 검사 : " + email);
-   }
+	@ApiOperation("이메일 유효성 검사")
+	public ResponseEntity<?> checkEmail(@RequestParam String email) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		boolean isAvailabe = signupService.checkEmail(email); // 사용가능한 email
+		if (isAvailabe) { // 사용가능하면
+			String auth_number = emailService.sendAuthEmail(email);// 인증번호
+			String hash_number = BCrypt.hashpw(auth_number, "daeng"); // hash처리
+			resultMap.put("origin_hash", hash_number);
+		} else {
+			resultMap.put("origin_hash", null);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+	}
+
+	@GetMapping(path = "/newuser/signup/hashcheck")
+	@ApiOperation("인증번호 유효성검사")
+	public ResponseEntity<?> checkAuthNumber(@RequestParam String auth_number) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		String hash_number = BCrypt.hashpw(auth_number, "daeng");
+		resultMap.put("my_hash", hash_number);
+		return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+	}
+
 
    @PostMapping(path = "/newuser/login")
    @ApiOperation("로그인")
