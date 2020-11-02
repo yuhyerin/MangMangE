@@ -32,24 +32,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		http.	
-		addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).
-		httpBasic().disable().	// 기본적으로 제공되는 loginForm() disable
-		cors().
-		and().
-		csrf().disable(). // 요청위조 방지 비활성화
-		formLogin().disable().
-		sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
-		and().authorizeRequests().
-		requestMatchers(CorsUtils::isPreFlightRequest).permitAll().
-			antMatchers("/newuser/login","/newuser/signup").anonymous().
-			antMatchers("/user").hasAnyRole("ADMIN","USER").
-			antMatchers("/admin").hasRole("ADMIN").
-			antMatchers("/newuser/**").permitAll().
-		and().authorizeRequests().
-			anyRequest(). // 어떤 요청이라도
-			authenticated(). // 인증된 사용자만이 접근 허용
-		and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
+		http.
+	      addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).
+	      httpBasic().disable().   // 기본적으로 제공되는 loginForm() disable
+	      cors().and().
+	      csrf().disable(). // 요청위조 방지 비활성화
+	      formLogin().disable().
+	      sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS). // 세션 사용 안함
+	      and().authorizeRequests().
+	         requestMatchers(CorsUtils::isPreFlightRequest).permitAll().
+	         antMatchers("/newuser/login","/newuser/signup").anonymous().
+	         antMatchers("/user").hasAnyRole("ADMIN","USER").
+	         antMatchers("/admin").hasRole("ADMIN").
+	         antMatchers("/newuser/**").permitAll().
+	      and().authorizeRequests().
+	         anyRequest(). // 어떤 요청이라도
+	         authenticated(). // 인증된 사용자만이 접근 허용
+	      and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
 		
 	}
 
