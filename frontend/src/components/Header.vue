@@ -41,6 +41,9 @@
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
+        <v-btn text @click="test">
+          <div>버어튼</div>
+        </v-btn>
         <v-btn text @click="moveTo('/animals')">
           <div>동물 보기</div>
         </v-btn>
@@ -97,6 +100,20 @@ export default {
     },
     moveTo(page) {
       this.$router.push(page);
+    },
+    test() {
+      axios
+        .get(SERVER.URL + "/admin", {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log("err : ", err.response.status);
+        });
     },
     logout() {
       axios
