@@ -15,6 +15,7 @@ export default new Vuex.Store({
     userMbti: '',
     dogMbti: '',
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    address: '',
   },
 
   // state를 (가공해서) 가져올 함수들 === computed
@@ -47,6 +48,11 @@ export default new Vuex.Store({
       if (state.survey[pageNum - 1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
       }
+    },
+
+    findPersonAddress(state, address) {
+      state.address = address
+      console.log(state.address)
     }
   },
 

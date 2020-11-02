@@ -22,7 +22,7 @@
           <div class="dog-information">
             <div class="row dog-information-serial">
               <div class="col-2">
-                <label>일련번호</label>
+                <label>1. 일련번호</label>
               </div>
               <div class="col-10">
                 <p class="serial-p" style="border: 1px solid black;">{{ dogSerial }}</p>
@@ -30,7 +30,7 @@
             </div>
             <div class="row dog-information-name">
               <div class="col-2">
-                <label>이름</label>
+                <label>2. 이름</label>
               </div>
               <div class="col-10">
                 <p class="name-p" style="border: 1px solid black;">{{ dogName }}</p>
@@ -38,7 +38,7 @@
             </div>
             <div class="row dog-information-breed">
               <div class="col-2">
-                <label>종류</label>
+                <label>3. 종류</label>
               </div>
               <div class="col-10">
                 <p class="breed-p" style="border: 1px solid black;">{{ dogBreed }}</p>
@@ -46,7 +46,7 @@
             </div>
             <div class="row dog-information-gender">
               <div class="col-2">
-                <label>성별</label>
+                <label>4. 성별</label>
               </div>
               <div class="col-10">
                 <p class="gender-p" style="border: 1px solid black;">{{ dogGender }}</p>
@@ -59,95 +59,84 @@
         <div class="adopter-information">
           <div class="row adopter-information-name">
             <div class="col-2">
-              <label>성명</label>
+              <label>1. 성명</label>
             </div>
             <div class="col-10">
-              <input style="border: 1px solid black" />
+              <input style="border: 1px solid black" v-model="personName"/>
+              <label class="personNameLabel" v-if="checkPersonName === 0" style="color: red; font-size: small;">성명은 입력해주세요</label>
             </div>
           </div>
           <div class="row adopter-information-number">
             <div class="col-2">
-              <label>연락처</label>
+              <label>2. 휴대폰</label>
             </div>
             <div class="col-2">
-              <input style="border: 1px solid black" v-model="firstNum"/>
-            </div>
-            <div class="col-4">
-              <input style="border: 1px solid black" v-model="middleNum" />
-            </div>
-            <div class="col-4">
-              <input style="border: 1px solid black" v-model="lastNum"/>
+              <input style="border: 1px solid black" v-model="firstNum" placeholder="010"/>
             </div>
             <div class="col-2">
-              <input
-                v-model="phoneNum"
-                style="border: 1px solid black; background: black; color: white"
-                type="text"
-                placeholder="휴대폰번호"
-              />
-              <button class="check-number" @click="test">문자인증</button>
+              <input style="border: 1px solid black" v-model="middleNum" placeholder="1234"/>
             </div>
-            <!-- <div class="row adopter-information-number">
-              <div class="col-2">
-                <label>연락처</label>
-              </div>
-              <div class="col-8">
-                <input style="border: 1px solid black;" v-model="personNumber"/>
-              </div>
-              <div class="col-2">
-                <input style="border: 1px solid black; background: black; color: white;" type="button" value="문자인증">
-              </div>
-            </div> -->
+            <div class="col-2">
+              <input style="border: 1px solid black" v-model="lastNum" placeholder="5678"/>
+            </div>
+            <div class="col-4">
+              <input class="check-number" @click="test" style="border: 1px solid black; background: black; color: white;" type="button" value="문자인증">
+            </div>
+          </div>
             <div class="row adopter-information-email">
               <div class="col-2">
-                <label>이메일</label>
+                <label>3. 이메일</label>
               </div>
               <div class="col-10">
-                <input style="border: 1px solid black;" v-model="personEmail">
+                <input style="border: 1px solid black;" v-model="personEmail" placeholder="naver@naver.com">
+                <label v-if="checkPersonEmail === 0" style="color: red; font-size: small;">이메일을 확인해주세요</label>
               </div>
             </div>
             <div class="row adopter-information-gender">
               <div class="col-2">
-                <label>성별</label>
+                <label>4. 성별</label>
               </div>
-              <div class="col-2" style="display: flex;">
+              <div class="col-3" style="display: flex;">
                 <div>
                   <label for="female">여성</label>
                 </div>
                 <div>
-                  <input type="radio" name="gender" id="female" style="width: 20px;" @click="changePersonGender(0)"/>
+                  <input type="radio" name="gender" id="female" style="width: 20px;" value="1" v-model="personGender" />
                 </div>
               </div>
-              <div class="col-2" style="display: flex;">
+              <div class="col-3" style="display: flex;">
                 <div>
                   <label for="male">남성</label>
                 </div>
                 <div>
-                  <input type="radio" name="gender" id="male" style="width: 20px;" @click="changePersonGender(1)"/>
+                  <input type="radio" name="gender" id="male" style="width: 20px;" value="2" v-model="personGender" />
+                  <label v-if="checkPersonGender === 0" style="color: red; font-size: small;">성별 체크해주세요</label>
                 </div>
               </div>
             </div>
             <div class="row adopter-information-birthday">
               <div class="col-2">
-                <label>생년월일</label>
+                <label>5. 생년월일</label>
               </div>
               <div class="col-10">
                 <!-- <input style="border: 1px solid black;"> -->
                 <datepicker :language="ko" :format="format" style="border: 1px solid black;" v-model="personBirthday"></datepicker>
+                <label v-if="checkPersonBirthday === 0" style="color: red; font-size: small;">생년월일을 입력해주세요</label>
               </div>
             </div>
             </div>
             <div class="row adopter-information-address">
               <div class="col-2">
-                <label>주소</label>
+                <label>6. 주소</label>
               </div>
               <div class="col-10">
                 <input style="border: 1px solid black;" @click="findAddress()" v-model="personAddress">
+                <label v-if="checkPersonAddress === 0" style="color: red; font-size: small;">주소를 입력해주세요</label>
               </div>
             </div>
             <div class="row adopter-information-personal">
               <div class="col-12">
-                <label>개인정보 이용에 대한 동의</label>
+                <label>7. 개인정보 이용에 대한 동의</label>
               </div>
             </div>
             <div class="adopter-information-personal-list">
@@ -160,21 +149,22 @@
               </div>
             </div>
             <div class="adopter-information-personal-allow">
-              <p style="margin-bottom: 0px;">댕줍멍줍은 법률에서 정하는 경우를 제외하고는 귀하의 동의 없이 개인정보를 제 3자에게 제공하지 않습니다.</p>
+              <p style="margin-bottom: 0px;">법률에서 정하는 경우를 제외하고 귀하의 동의 없이 개인정보를 제 3자에게 제공하지 않습니다.</p>
               <p style="margin-bottom: 0px;">문의: 010-0000-0000</p>
               <div style="display: flex">
                 <div>
-                  <label>
-                    <p style="margin-bottom: 0px;">개인정보 이용에 동의합니다.</p>
-                  </label>
+                  <input type="checkbox" style="width: 20px;" v-model="personCheck"/>
                 </div>
                 <div>
-                  <input type="checkbox" style="width: 20px;" @click="changePersonCheck()"/>
+                  <label>
+                    <p style="margin-bottom: 0px;">개인정보 이용에 동의합니다.</p>
+                    <label v-if="checkPersonCheck === 0" style="color: red; font-size: small;">개인정보 이용 동의에 체크해주세요</label>
+                  </label>
                 </div>
               </div>
             </div>
             <div class="apply-finish" style="display: flex; justify-content: center;">
-              <button class="apply-button">신청</button>
+              <button class="apply-button" @click="adoptionCheck()">신청</button>
             </div>
         </div>
       </div>
@@ -183,10 +173,10 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 import Header from '../components/Header.vue'
 import Datepicker from 'vuejs-datepicker';
 import { en, ko } from 'vuejs-datepicker/dist/locale/'
-import axios from 'axios'
 import axios from 'axios'
 import SERVER from '@/api/url'
 
@@ -204,38 +194,37 @@ export default {
       dogBreed: "",
       dogGender: "",
       personName: "",
-      personNumber: "",
       personEmail: "",
-      personGender: 2,
+      personGender: 0,
       personBirthday: "",
       personAddress: "",
-      personCheck: 0,
+      personCheck: false,
+      firstNum: "",
+      middleNum: "",
+      lastNum: "",
       format: "yyyy년 MMMM dd일",
       en: en,
       ko: ko,
-      address: "",
-      phoneNum: "",
-      firstNum: "",
-      middleNum: "",
-      lastNum: ""
+      checkPersonName: 1,
+      checkPersonEmail: 1,
+      checkPersonGender: 1,
+      checkPersonBirthday: 1,
+      checkPersonAddress: 1,
+      checkPersonCheck: 1,
     };
   },
-  methods: {
-    changePersonGender(num) {
-      if (num === 0) {
-        this.personGender = 0
-      } else {
-        this.personGender = 1
-      }
-    },
 
+  computed: {
+    ...mapState(["address"])
+  },
+
+  methods: {
+    ...mapMutations(["findPersonAddress"]),
     changePersonCheck() {
       if (this.personCheck === 0) {
         this.personCheck = 1
-        console.log(this.personCheck)
       } else {
         this.personCheck = 0
-        console.log(this.personCheck)
       }
     },
 
@@ -254,13 +243,16 @@ export default {
                 extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
             }
             fullAddr += extraAddr !== "" ? " (" + extraAddr + ")" : "";
-            this.personAddress = fullAddr;
+            this.findPersonAddress(fullAddr);
+            this.personAddress = this.address
           } else {
+            this.findPersonAddress(fullAddr);
             this.personAddress = fullAddr;
           }
         },
       }).open();
-    },
+    },  
+
     test() {
       console.log("FE input Form : ", this.firstNum + "-" + this.middleNum + "-" + this.lastNum)
       axios.get(SERVER.URL + '/user/adopt/create', {
@@ -274,57 +266,210 @@ export default {
       .catch((err) => {
         console.log("catch err : ",err)
       })
+    },
+    
+    adoptionCheck() {
+      console.log(this.personAddress)
+
+      if (this.personName.length === 0) {
+        this.checkPersonName = 0
+      } else {
+        this.checkPersonName = 1
+      }
+
+      if (this.personEmail.length > 0) {
+         var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+          if (this.personEmail.match(regExp) != null) {
+            this.checkPersonEmail = 1
+          }
+          else {
+            this.checkPersonEmail = 0
+          }
+      } else {
+          this.checkPersonEmail = 0
+      }
+
+      if (this.personGender === 0 ) {
+        this.checkPersonGender = 0
+      } else {
+        this.checkPersonGender = 1
+      }
+      
+      if (this.personBirthday.length === 0) {
+        this.checkPersonBirthday = 0
+      }
+
+      if (this.personAddress.length === 0) {
+        this.checkPersonAddress = 0
+      }
+
+      if (this.personAddress.length === 0) {
+        this.checkPersonAddress = 0
+      } else {
+        this.checkPersonAddress = 1
+      }
+
+      if (this.personCheck === false) {
+        this.checkPersonCheck = 0
+      } else {
+        this.checkPersonCheck = 1
+      }
+
+      if (this.checkPersonName === 1 && 
+      this.checkPersonEmail === 1 && 
+      this.checkPersonGender === 1 && 
+      this.checkPersonBirthday === 1 && 
+      this.checkPersonAddress === 1 &&
+      this.checkPersonCheck === 1) {
+        this.adoptionApply()
+      }
+    },
+
+    adoptionApply() {
+      axios.post(SERVER.URL + '', {
+        params: {
+          personName: this.personName,
+          personEmail: this.personEmail,
+          personGender: this.personGender,
+          personBirthday: this.personBirthday,
+          personAddress: this.personAddress,
+          personCheck: this.personCheck,
+          phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+        },
+        headers: {
+          Authorization: this.$cookies.get("accessToken")
+        }
+      })
+      .then((res) => {
+        if (res.data.accessToken) {
+          doginfo = res.data
+        } else {
+          axios
+            .post(
+              baseURL + "",
+              {
+                
+              },
+              {
+                headers: {
+                  "Authorization": this.$cookies.get("accessToken"),
+                  // "key뭔지모름": this.$cookies.get("refreshToken")
+                }
+              }
+            )
+            .then((res) => {
+              doginfo = res.data
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     }
   },
   watch: {
+    personName() {
+      if (this.personName.length === 0) {
+        this.checkPersonName = 0
+      } else {
+        this.checkPersonName = 1
+      }
+    },
+
+    personEmail() {
+      if (this.personEmail.length > 0) {
+         var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+          if (this.personEmail.match(regExp) != null) {
+            this.checkPersonEmail = 1
+          }
+          else {
+            this.checkPersonEmail = 0
+          }
+      } else {
+          this.checkPersonEmail = 0
+      }
+    },
+
+    personGender() {
+      if (this.personGender === 0 ) {
+        this.checkPersonGender = 0
+      } else {
+        this.checkPersonGender = 1
+      }
+    },
+
     personBirthday() {
-      console.log(this.personBirthday)
+      if (this.personBirthday.length === 0) {
+        this.checkPersonBirthday = 0
+      } else {
+        this.checkPersonBirthday = 1
+      }
+
+    },
+
+    personAddress() {
+      if (this.personAddress.length === 0) {
+        this.checkPersonAddress = 0
+      } else {
+        this.checkPersonAddress = 1
+      }
+    },
+
+    personCheck() {
+      if (this.personCheck === false) {
+        this.checkPersonCheck = 0
+      } else {
+        this.checkPersonCheck = 1
+      }
     }
   },
-  created: {
-    getAnimalData() {
-      axios
-        .post(
-          baseURL + "",
-          {
-            animalId: this.$route.params.animalId
-          },
-          {
-            headers: {
-              Authorization: this.$cookies.get("accessToken")
-            }
-          }
-        )
-        .then((res) => {
-          if (res.data.accessToken) {
-            doginfo = res.data
-          } else {
-            axios
-              .post(
-                baseURL + "",
-                {
+  // created: {
+  //   getAnimalData() {
+  //     axios
+  //       .post(
+  //         baseURL + "",
+  //         {
+  //           animalId: this.$route.params.animalId
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: this.$cookies.get("accessToken")
+  //           }
+  //         }
+  //       )
+  //       .then((res) => {
+  //         if (res.data.accessToken) {
+  //           doginfo = res.data
+  //         } else {
+  //           axios
+  //             .post(
+  //               baseURL + "",
+  //               {
                   
-                },
-                {
-                  headers: {
-                    "Authorization": this.$cookies.get("accessToken"),
-                    // "key뭔지모름": this.$cookies.get("refreshToken")
-                  }
-                }
-              )
-              .then((res) => {
-                doginfo = res.data
-              })
-              .catch((err) => {
-                console.log(err)
-              })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }
+  //               },
+  //               {
+  //                 headers: {
+  //                   "Authorization": this.$cookies.get("accessToken"),
+  //                   // "key뭔지모름": this.$cookies.get("refreshToken")
+  //                 }
+  //               }
+  //             )
+  //             .then((res) => {
+  //               doginfo = res.data
+  //             })
+  //             .catch((err) => {
+  //               console.log(err)
+  //             })
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err)
+  //       })
+  //   }
+  // }
 }
 </script>
 

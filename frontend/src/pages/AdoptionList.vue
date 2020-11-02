@@ -6,15 +6,15 @@
         <h2><strong>입양신청목록</strong></h2>
         <div class="adoption-search">
           <v-text-field
-          v-model="searchWord"
-          @keyup.enter="searchAdoptList()"
-          @click="searchAdoptList()"
-          append-icon="mdi-magnify"
-          label="검색"
+            v-model="searchWord"
+            @keyup.enter="searchAdoptList()"
+            @click="searchAdoptList()"
+            append-icon="mdi-magnify"
+            label="검색"
         ></v-text-field>
         </div>
       </div>
-      <b-table hover head-variant='light' :items="items" :fields="fields" :per-page="perPage" :currentPage="currentPage"></b-table>
+      <b-table hover head-variant='dark' :items="items" :fields="fields" :per-page="perPage" :currentPage="currentPage"></b-table>
       <b-pagination
         pills
         v-model="currentPage"
