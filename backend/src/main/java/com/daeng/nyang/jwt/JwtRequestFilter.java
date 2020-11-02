@@ -27,15 +27,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.daeng.nyang.service.user.JwtUserDetailService;
 
-import io.jsonwebtoken.ExpiredJwtException;
-
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
-	@Autowired
-	JwtTokenUtil jtu;
+//	@Autowired
+//	JwtTokenUtil jtu;
 
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
@@ -45,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	public Authentication getAuthentication(String token) {
 		System.out.println("getAuthentication : " + token);
-		Map<String, Object> parseInfo = jtu.getUserParseInfo(token);
+		Map<String, Object> parseInfo = jwtTokenUtil.getUserParseInfo(token);
 //        System.out.println("parseinfo: " + parseInfo);
 		List<String> rs = (List) parseInfo.get("role");
 //		String rs = (String)parseInfo.get("role");
@@ -85,10 +83,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			} catch (IllegalArgumentException e) {
 				System.out.println("IllegalArgumentException in doFilterInternal");
 			}
-		} 
-		
-//		System.out.println(redisTemplate.opsForValue().get(requestTokenHeader));
-		
+		}
 		if (userid == null) {
 			System.out.println("userid null");
 		} else if (redisTemplate.opsForValue().get(requestTokenHeader) == null) {

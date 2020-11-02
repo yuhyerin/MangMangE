@@ -7,6 +7,8 @@ import AnimalDetail from '../pages/AnimalDetail.vue'
 import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
+import VideoList from '../pages/VideoList.vue'
+import UploadVideo from '../pages/UploadVideo.vue'
 
 Vue.use(VueRouter)
 
@@ -45,7 +47,17 @@ const routes = [
     path: '/adoptionlist',
     name: 'AdoptionList',
     component: AdoptionList,
-  }
+  },
+  {
+    path: '/videos',
+    name: 'Videos',
+    component: VideoList,
+  },
+  {
+    path: '/upload',
+    name: 'UploadVideo',
+    component: UploadVideo,
+  },
 ]
 
 const router = new VueRouter({

@@ -55,17 +55,39 @@
           </div>
           <hr class="dog-information-endline">
 
-          <h3>입양희망자 정보</h3>
-          <div class="adopter-information">
-            <div class="row adopter-information-name">
-              <div class="col-2">
-                <label>성명</label>
-              </div>
-              <div class="col-10">
-                <input style="border: 1px solid black;" v-model="personName">
-              </div>
+        <h3>입양희망자 정보</h3>
+        <div class="adopter-information">
+          <div class="row adopter-information-name">
+            <div class="col-2">
+              <label>성명</label>
             </div>
-            <div class="row adopter-information-number">
+            <div class="col-10">
+              <input style="border: 1px solid black" />
+            </div>
+          </div>
+          <div class="row adopter-information-number">
+            <div class="col-2">
+              <label>연락처</label>
+            </div>
+            <div class="col-2">
+              <input style="border: 1px solid black" v-model="firstNum"/>
+            </div>
+            <div class="col-4">
+              <input style="border: 1px solid black" v-model="middleNum" />
+            </div>
+            <div class="col-4">
+              <input style="border: 1px solid black" v-model="lastNum"/>
+            </div>
+            <div class="col-2">
+              <input
+                v-model="phoneNum"
+                style="border: 1px solid black; background: black; color: white"
+                type="text"
+                placeholder="휴대폰번호"
+              />
+              <button class="check-number" @click="test">문자인증</button>
+            </div>
+            <!-- <div class="row adopter-information-number">
               <div class="col-2">
                 <label>연락처</label>
               </div>
@@ -75,7 +97,7 @@
               <div class="col-2">
                 <input style="border: 1px solid black; background: black; color: white;" type="button" value="문자인증">
               </div>
-            </div>
+            </div> -->
             <div class="row adopter-information-email">
               <div class="col-2">
                 <label>이메일</label>
@@ -165,6 +187,8 @@ import Header from '../components/Header.vue'
 import Datepicker from 'vuejs-datepicker';
 import { en, ko } from 'vuejs-datepicker/dist/locale/'
 import axios from 'axios'
+import axios from 'axios'
+import SERVER from '@/api/url'
 
 export default {
   name: "Adoption",
@@ -189,7 +213,12 @@ export default {
       format: "yyyy년 MMMM dd일",
       en: en,
       ko: ko,
-    }
+      address: "",
+      phoneNum: "",
+      firstNum: "",
+      middleNum: "",
+      lastNum: ""
+    };
   },
   methods: {
     changePersonGender(num) {
@@ -232,6 +261,20 @@ export default {
         },
       }).open();
     },
+    test() {
+      console.log("FE input Form : ", this.firstNum + "-" + this.middleNum + "-" + this.lastNum)
+      axios.get(SERVER.URL + '/user/adopt/create', {
+          params: {
+            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+          }
+        })
+      .then((res) => {
+        console.log("then res : ",res.data)
+      })
+      .catch((err) => {
+        console.log("catch err : ",err)
+      })
+    }
   },
   watch: {
     personBirthday() {

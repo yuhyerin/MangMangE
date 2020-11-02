@@ -1,7 +1,7 @@
 <template>
   <div class="question">
     <div class="question-header">
-      <h2>Q6. 반려동물과 어떤 관계를 원하시나요?</h2>
+      <h2>Q6. 내 반려동물은 어떤 성향이길 원하나요?</h2>
       <img src="@/assets/survey/1.png" alt="" />
     </div>
     <div
@@ -13,7 +13,7 @@
         @click="selectedDogMbti({ idx: 5, answer: 1 })"
         style="cursor: pointer"
       >
-        <h3>애인같이 서로 죽고 못사는 관계</h3>
+        <h3>누군가와 함께있는걸 좋아하는 경향</h3>
         <img src="@/assets/survey/1-1.png" alt="" />
       </div>
       <div
@@ -21,7 +21,7 @@
         @click="selectedDogMbti({ idx: 5, answer: -1 })"
         style="border: solid black; cursor: pointer"
       >
-        <h3>룸메이트 같은 적당히 독립적인 관계</h3>
+        <h3>혼자서도 사색을 즐기는 경향</h3>
         <img src="@/assets/survey/1-2.png" alt="" />
       </div>
     </div>

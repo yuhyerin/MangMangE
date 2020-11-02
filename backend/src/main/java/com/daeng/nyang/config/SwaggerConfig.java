@@ -28,7 +28,7 @@ public class SwaggerConfig {
 	
 	private ApiInfo apiInfo(){
 		return new ApiInfoBuilder()
-			.title("제목은 댕청냥청")
+			.title("댕청냥청API")
 			.description("유기견 매칭 서비스")
 			.build();
 	}

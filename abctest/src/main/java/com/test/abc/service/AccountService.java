@@ -2,8 +2,10 @@ package com.test.abc.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -11,7 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.test.abc.dto.Account;
+import com.test.abc.dto.Role;
 import com.test.abc.jwt.JwtTokenProvider;
+import com.test.abc.jwt.TokenResponse;
 import com.test.abc.repo.AccountRepo;
 
 @Service
@@ -26,8 +30,11 @@ public class AccountService {
     RedisTemplate<String, Object> redisTemplate;
 	
 	JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
-	public static final long JWT_ACCESS_TOKEN_VALIDITY = 10 * 60; // 10분
-	public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60 * 7; // 일주일
+	
+//	@Value("${jwt.JWT_ACCESS_TOKEN_VALIDITY}")
+	public String JWT_ACCESS_TOKEN_VALIDITY="600";
+//	@Value("${jwt.JWT_REFRESH_TOKEN_VALIDITY}")
+	public String JWT_REFRESH_TOKEN_VALIDITY="3600";
 	
 	public Map<String, Object> signup(Account account){
 		System.out.println("SERVICE : "+account.toString());
@@ -36,9 +43,9 @@ public class AccountService {
 			Account temp = accountRepo.findAccountByUserId(account.getUser_id());
 			if(temp==null) {
 				if("admin".equals(account.getUser_id()))
-					account.setRole("ROLE_ADMIN");
+					account.setRole(Role.ADMIN);
 				else
-					account.setRole("ROLE_USER");
+					account.setRole(Role.MEMBER);
 				System.out.println(account.toString());
 				account.setUser_password(passwordEncoder.encode(account.getUser_password()));
 				accountRepo.save(account);
@@ -48,9 +55,9 @@ public class AccountService {
 		} catch(NullPointerException e) {
 			System.out.println("NULL POINT");
 			if("admin".equals(account.getUser_id()))
-				account.setRole("ROLE_ADMIN");
+				account.setRole(Role.ADMIN);
 			else 
-				account.setRole("ROLE_USER");
+				account.setRole(Role.MEMBER);
 			System.out.println(account.toString());
 			String ePassword = passwordEncoder.encode(account.getUser_password());
 			System.out.println(ePassword);
@@ -63,24 +70,26 @@ public class AccountService {
 		return result;
 	}
 	
-	public String login(String id, String password){
+	public HashMap<String, Object> login(String id, String password){
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		System.out.println("SERVICE : "+id+"\n"+password);
-		Map<String, Object> result = null;
+		HashMap<String, Object> result = null;
 		String token = null;
 		String refreshToken = null;
 		Account temp = accountRepo.findAccountByUserId(id);
 		if(temp!=null) {
 			if(passwordEncoder.matches(password, temp.getUser_password())) {
+				result = new HashMap<String, Object>();
 				token = jwtTokenProvider.createToken(id);
 				refreshToken = jwtTokenProvider.createRefreshToken();	//refreshtoken은 redis에 저장
-				vop.set(token, id, JWT_ACCESS_TOKEN_VALIDITY);
-				vop.set(id, refreshToken, JWT_REFRESH_TOKEN_VALIDITY);
+				vop.set(token, temp, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
+				vop.set(id, refreshToken, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY), TimeUnit.SECONDS);
+				result.put("accessToken", TokenResponse.builder().token(token).tokenType("bearer").build());
+				result.put("refreshToken", TokenResponse.builder().token(refreshToken).tokenType("bearer").build());
 			}
 		}
-		return token;
+		return result;
 	}
-
 	
 
 }
