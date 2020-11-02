@@ -3,19 +3,14 @@ package com.daeng.nyang.controller;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,13 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Account;
 import com.daeng.nyang.dto.Apply;
-import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
-import com.daeng.nyang.repo.AccountRepo;
 import com.daeng.nyang.service.email.EmailService;
 import com.daeng.nyang.service.signup.SignupService;
 import com.daeng.nyang.service.user.AccountService;
-import com.daeng.nyang.service.user.JwtUserDetailService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
@@ -44,7 +36,12 @@ public class AccountController {
    private String JWT_ACCESS_TOKEN_VALIDITY;
    @Value("${JWT_REFRESH_TOKEN_VALIDITY}")
    private String JWT_REFRESH_TOKEN_VALIDITY;
+   
+   @Value("${jwt.secret}")
+   private String SALT_VALUE;
 
+   private static String salt = BCrypt.gensalt();
+   
    @Autowired
    private AccountService accountService;
    
@@ -82,28 +79,35 @@ public class AccountController {
    }
 
    @GetMapping(path = "/newuser/signup")
-	@ApiOperation("이메일 유효성 검사")
-	public ResponseEntity<?> checkEmail(@RequestParam String email) {
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		boolean isAvailabe = signupService.checkEmail(email); // 사용가능한 email
-		if (isAvailabe) { // 사용가능하면
-			String auth_number = emailService.sendAuthEmail(email);// 인증번호
-			String hash_number = BCrypt.hashpw(auth_number, "daeng"); // hash처리
-			resultMap.put("origin_hash", hash_number);
-		} else {
-			resultMap.put("origin_hash", null);
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(resultMap);
-	}
+   @ApiOperation("이메일 유효성 검사")
+   public ResponseEntity<?> checkEmail(@RequestParam String email) {
+      Map<String, Object> resultMap = new HashMap<String, Object>();
+      boolean isAvailabe = signupService.checkEmail(email); // 사용가능한 email
+      if (isAvailabe) { // 사용가능하면
+         String auth_number = emailService.sendAuthEmail(email);// 인증번호
+         System.out.println(auth_number);
+//         String hash_number = BCrypt.hashpw(auth_number, SALT_VALUE); // hash처리
+         String hash_number = BCrypt.hashpw(auth_number, salt);
+//         BCrypt.checkpw(plaintext, hashed);
+         resultMap.put("origin_hash", hash_number);
+      } else {
+         resultMap.put("origin_hash", null);
+      }
+      return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+   }
 
-	@GetMapping(path = "/newuser/signup/hashcheck")
-	@ApiOperation("인증번호 유효성검사")
-	public ResponseEntity<?> checkAuthNumber(@RequestParam String auth_number) {
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		String hash_number = BCrypt.hashpw(auth_number, "daeng");
-		resultMap.put("my_hash", hash_number);
-		return ResponseEntity.status(HttpStatus.OK).body(resultMap);
-	}
+   @GetMapping(path = "/newuser/signup/hashcheck")
+   @ApiOperation("인증번호 유효성검사")
+   public ResponseEntity<?> checkAuthNumber(@RequestParam String auth_number, @RequestParam String hash_number) {
+      Map<String, Object> resultMap = new HashMap<String, Object>();
+      boolean result = BCrypt.checkpw(auth_number, hash_number);
+      if(result) {
+         resultMap.put("result", result);
+      }else {
+         resultMap.put("result", result);
+      }
+      return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+   }
 
 
    @PostMapping(path = "/newuser/login")
