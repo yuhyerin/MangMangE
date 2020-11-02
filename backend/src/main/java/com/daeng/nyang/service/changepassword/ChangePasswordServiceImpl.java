@@ -14,7 +14,7 @@ public class ChangePasswordServiceImpl implements ChangePasswordService{
 	@Override
 	public void updatePassword(String user_id, String temp_password) {
 		
-		accountRepo.updateUserPasswordWithUserid(user_id);
+		accountRepo.updateUserPasswordWithUserid(user_id,temp_password);
 	}
 	
 	
