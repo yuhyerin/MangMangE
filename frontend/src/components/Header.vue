@@ -114,26 +114,26 @@ export default {
         })
         .catch((err) => {
           console.log("err : ", err.response.status);
-          // if (err.response.status == 401) {
-          //   //accessToken만료
-          //   axios
-          //     .post(
-          //       SERVER.URL + "/newuser/refresh",
-          //       {},
-          //       {
-          //         headers: {
-          //           Authorization: this.$cookies.get("accessToken"),
-          //           refreshToken: this.$cookies.get("refreshToken"),
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       console.log(res);
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //     });
-          // }
+          if (err.response.status == 401) {
+            //accessToken만료
+            axios
+              .post(
+                SERVER.URL + "/newuser/refresh",
+                {},
+                {
+                  headers: {
+                    accessToken: this.$cookies.get("accessToken"),
+                    refreshToken: this.$cookies.get("refreshToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
         });
     },
     logout() {

@@ -26,20 +26,20 @@ import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
 import com.daeng.nyang.repo.ApplyRepo;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 @Service
 public class AccountService {
-	
-	
+
 	@Autowired
 	private AccountRepo accountRepo;
 	@Autowired
 	private ApplyRepo applyRepo;
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
@@ -48,19 +48,22 @@ public class AccountService {
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
-	
+
+	@Autowired
+	private JwtUserDetailService userDetailService;
+
 	@Value("${JWT_ACCESS_TOKEN_VALIDITY}")
 	private String JWT_ACCESS_TOKEN_VALIDITY;
 	@Value("${JWT_REFRESH_TOKEN_VALIDITY}")
 	private String JWT_REFRESH_TOKEN_VALIDITY;
-	
+
 	@Value("${apiKey}")
 	private String apiKey;
 	@Value("${apiSecret}")
 	private String apiSecret;
-	
+
 	// 회원가입
-	public HashMap<String, Object> signup(Account account){
+	public HashMap<String, Object> signup(Account account) {
 		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<>();
 		String user_id = account.getUser_id();
@@ -83,9 +86,9 @@ public class AccountService {
 		System.out.println("SERVICE END");
 		return map;
 	}
-	
+
 	// 로그인
-	public HashMap<String, Object> login(String id, String pwd){
+	public HashMap<String, Object> login(String id, String pwd) {
 		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -104,23 +107,23 @@ public class AccountService {
 		System.out.println(c.toString());
 		String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
 		String refreshToken = jwtTokenUtil.generateRefreshToken();
-		System.out.println("ACK : "+accessToken);
-		System.out.println("REF : "+refreshToken);
+		System.out.println("ACK : " + accessToken);
+		System.out.println("REF : " + refreshToken);
 		// generate Token and save in redis
-		
+
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
-		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY)*1000, TimeUnit.MILLISECONDS);
+		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		Account ac = Account.builder().user_id(id).build();
 		retok = TotToken.builder().account(ac).build();
-		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY)*1000, TimeUnit.MILLISECONDS);
+		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		map.put("success", true);
 		map.put("accessToken", accessToken);
 		map.put("refreshToken", refreshToken);
 		return map;
 	}
-	
-	public ResponseEntity<HashMap<String, Object>> createApply(String user_id, Apply apply){
+
+	public ResponseEntity<HashMap<String, Object>> createApply(String user_id, Apply apply) {
 		System.out.println("accountService 입장");
 		System.out.println(apply.toString());
 		apply.setUser_id(user_id);
@@ -130,41 +133,85 @@ public class AccountService {
 		map.put("success", true);
 		return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 	}
-	
-	public ResponseEntity<HashMap<String, Object>> checkPhone(String phone, int number){
+
+	public ResponseEntity<HashMap<String, Object>> checkPhone(String phone, int number) {
 		HashMap<String, Object> map = new HashMap<>();
-		System.out.println("apiKey : "+apiKey);
-		System.out.println("apiSecret : "+apiSecret);
+		System.out.println("apiKey : " + apiKey);
+		System.out.println("apiSecret : " + apiSecret);
 		Message coolSMS = new Message(apiKey, apiSecret);
-		
+
 		HashMap<String, String> params = new HashMap<String, String>();
-        params.put("to", phone);    // 수신전화번호
-        params.put("from", "01092128410");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
-        params.put("type", "SMS");
-        params.put("text", "[댕청냥청] 인증번호는" + "["+number+"]" + "입니다.");
-        params.put("app_version", "test app 1.2"); // application name and version
-        System.out.println(params.toString());
-        try {
-            JSONObject obj = (JSONObject) coolSMS.send(params);
-            long result = (long)obj.get("success_count");
-            System.out.println(result);
-            if(result==1) {
-            	map.put("success", true);
-            	map.put("number", number);
-            } else {
-            	map = null;
-            }
-            System.out.println(obj.toString());
-        } catch (CoolsmsException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCode());
-            map = null;
-        }
-        if(map==null)
-        	return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.BAD_REQUEST);
-        else
-        	return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-        	
+		params.put("to", phone); // 수신전화번호
+		params.put("from", "01092128410"); // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+		params.put("type", "SMS");
+		params.put("text", "[댕청냥청] 인증번호는" + "[" + number + "]" + "입니다.");
+		params.put("app_version", "test app 1.2"); // application name and version
+		System.out.println(params.toString());
+		try {
+			JSONObject obj = (JSONObject) coolSMS.send(params);
+			long result = (long) obj.get("success_count");
+			System.out.println(result);
+			if (result == 1) {
+				map.put("success", true);
+				map.put("number", number);
+			} else {
+				map = null;
+			}
+			System.out.println(obj.toString());
+		} catch (CoolsmsException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getCode());
+			map = null;
+		}
+		if (map == null)
+			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.BAD_REQUEST);
+		else
+			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+
+	}
+
+	public Map<String, Object> refreshToken(String accessToken, String refreshToken){
+		Map<String, Object> response = new HashMap<>();
+		String user_id=null, refreshTokenFromDb=null;
+			System.out.println("accessToken : " + accessToken);
+			System.out.println("refreshToken : " + refreshToken);
+
+			try {
+				user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
+				System.out.println(user_id);
+			} catch (IllegalArgumentException e) {
+				System.out.println("IllegalArgumentException");
+			} catch (ExpiredJwtException e) { // expire됐을 때
+				user_id = e.getClaims().getSubject();
+			}
+
+			if (refreshToken != null) { // refresh를 같이 보냈으면.
+				try {
+					ValueOperations<String, Object> vop = redisTemplate.opsForValue();
+					TotToken result = (TotToken) vop.get(user_id); // 얘는 refreshToken
+					refreshTokenFromDb = result.getRefreshToken();
+					System.out.println("refreshTokenFromDB : " + refreshTokenFromDb);
+				} catch (IllegalArgumentException e) {
+				}
+				// 둘이 일치하고 만료도 안됐으면 재발급 해주기.
+				if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
+					final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
+					String new_accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+					ValueOperations<String, Object> vop = redisTemplate.opsForValue();
+					Account ac = Account.builder().user_id(user_id).build();
+					TotToken token = TotToken.builder().account(ac).build();
+					vop.set(accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY)*1000, TimeUnit.MILLISECONDS);
+					response.put("success", true);
+					response.put("accessToken", new_accessToken);
+				} else {
+					response.put("success", false);
+					response.put("msg", "refresh token is expired.");
+				}
+			} else { // refresh token이 없으면
+				response.put("success", false);
+				response.put("msg", "your refresh token does not exist.");
+			}
+		return response;
 	}
 
 }

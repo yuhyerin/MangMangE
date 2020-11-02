@@ -135,7 +135,7 @@ export default {
         .then((res) => {
           console.log(res);
           this.$cookies.set("accessToken", res.data.accessToken);
-          this.$cookies.set("refreshToken", res.data.accessToken);
+          this.$cookies.set("refreshToken", res.data.refreshToken);
           this.$router.push("/");
           // res.data.accessToken
           // res.data.refreshToken
