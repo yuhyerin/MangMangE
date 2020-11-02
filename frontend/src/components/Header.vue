@@ -129,6 +129,7 @@ export default {
               )
               .then((res) => {
                 console.log(res);
+                this.$cookies.set("accessToken", res.data.accessToken);
               })
               .catch((err) => {
                 console.log(err);

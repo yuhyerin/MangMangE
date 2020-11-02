@@ -146,6 +146,7 @@ public class AccountController {
 //		String user_id = null;
 		Map<String, Object> response = new HashMap<>();
 		response = accountService.refreshToken(accessToken, refreshToken);
+		System.out.println("controller End");
 		return response;
 	}
 

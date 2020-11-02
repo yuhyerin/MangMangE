@@ -170,47 +170,53 @@ public class AccountService {
 
 	}
 
-	public Map<String, Object> refreshToken(String accessToken, String refreshToken){
+	public Map<String, Object> refreshToken(String accessToken, String refreshToken) {
+		System.out.println("service Start");
 		Map<String, Object> response = new HashMap<>();
-		String user_id=null, refreshTokenFromDb=null;
-			System.out.println("accessToken : " + accessToken);
-			System.out.println("refreshToken : " + refreshToken);
+		String user_id = null, refreshTokenFromDb = null;
+		System.out.println("accessToken : " + accessToken);
+		System.out.println("refreshToken : " + refreshToken);
 
+		
+		try {
+			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
+			System.out.println(user_id);
+		} catch (IllegalArgumentException e) {
+			System.out.println("IllegalArgumentException");
+		} catch (ExpiredJwtException e) { // expire됐을 때
+			user_id = e.getClaims().getSubject();
+		}
+
+		if (refreshToken != null) { // refresh를 같이 보냈으면.
 			try {
-				user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
-				System.out.println(user_id);
+				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
+				TotToken result = (TotToken) vop.get(user_id); // 얘는 refreshToken
+				refreshTokenFromDb = result.getRefreshToken();
+				System.out.println("refreshTokenFromDB : " + refreshTokenFromDb);
 			} catch (IllegalArgumentException e) {
-				System.out.println("IllegalArgumentException");
-			} catch (ExpiredJwtException e) { // expire됐을 때
-				user_id = e.getClaims().getSubject();
 			}
-
-			if (refreshToken != null) { // refresh를 같이 보냈으면.
-				try {
-					ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-					TotToken result = (TotToken) vop.get(user_id); // 얘는 refreshToken
-					refreshTokenFromDb = result.getRefreshToken();
-					System.out.println("refreshTokenFromDB : " + refreshTokenFromDb);
-				} catch (IllegalArgumentException e) {
-				}
-				// 둘이 일치하고 만료도 안됐으면 재발급 해주기.
-				if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
-					final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
-					String new_accessToken = jwtTokenUtil.generateAccessToken(userDetails);
-					ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-					Account ac = Account.builder().user_id(user_id).build();
-					TotToken token = TotToken.builder().account(ac).build();
-					vop.set(accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY)*1000, TimeUnit.MILLISECONDS);
-					response.put("success", true);
-					response.put("accessToken", new_accessToken);
-				} else {
-					response.put("success", false);
-					response.put("msg", "refresh token is expired.");
-				}
-			} else { // refresh token이 없으면
+			// 둘이 일치하고 만료도 안됐으면 재발급 해주기.
+			if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
+				final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
+				String new_accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
+				Account ac = Account.builder().user_id(user_id).build();
+				TotToken token = TotToken.builder().account(ac).build();
+				vop.set(new_accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
+				response.put("success", true);
+				response.put("accessToken", new_accessToken);
+				System.out.println("new_accessToken : " + new_accessToken);
+				
+			} else {
 				response.put("success", false);
-				response.put("msg", "your refresh token does not exist.");
+				response.put("msg", "refresh token is expired.");
 			}
+		} else { // refresh token이 없으면
+			response.put("success", false);
+			response.put("msg", "your refresh token does not exist.");
+		}
+		
+		System.out.println("service End");
 		return response;
 	}
 
