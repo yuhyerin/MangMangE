@@ -100,8 +100,8 @@
             <!-- Name of step 3 -->
           </v-stepper-step>
         </v-stepper-header>
-        <v-stepper-items
-          style="display: flex; text-align: center; align-items: center"
+        <v-stepper-items class="survey-items"
+          style="display: flex; text-align: center; "
         >
           <v-stepper-content step="1">
             <Question1 />
@@ -113,12 +113,6 @@
 
           <v-stepper-content
             step="3"
-            style="
-              height: 85vh;
-              transform-origin: center top 0px;
-              background-color: rgb(244, 236, 225);
-              border-radius: 50px;
-            "
           >
             <Question3 />
           </v-stepper-content>
@@ -187,7 +181,10 @@ export default {
 </script>
 
 <style scoped>
-/* .survey {
+.survey-items {
+  height: 85vh;
+  transform-origin: center top 0px;
   background-color: rgb(244, 236, 225);
-} */
+  border-radius: 50px;
+}
 </style>

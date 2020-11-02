@@ -54,6 +54,7 @@
 
 <script>
 import axios from "axios";
+import { mapMutations, mapState } from "vuex";
 import SERVER from "@/api/url";
 
 export default {
@@ -67,6 +68,9 @@ export default {
       console.log(newVal, oldVal);
     },
   },
+  computed: {
+    ...mapState(["eventListener"]),
+  },
   created() {
     if (this.$cookies.get("accessToken") == null) {
       this.isUser = false;
@@ -75,14 +79,17 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["setEventListener"]),
     moveToMain() {
       location.href = "/";
     },
     register() {
+      this.setEventListener(3);
       this.$router.push("/login");
     },
     moveToLogin() {
       if (this.isUser == false) {
+        this.setEventListener(4);
         this.$router.push("/login");
       } else {
         this.logout();
