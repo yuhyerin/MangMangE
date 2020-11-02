@@ -41,6 +41,9 @@
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
+                <v-btn text @click="moveToAdmin">
+          <div>버어튼</div>
+        </v-btn>
         <v-btn text @click="moveTo('/animals')">
           <div>동물 보기</div>
         </v-btn>
@@ -90,6 +93,27 @@ export default {
     },
     moveTo(page) {
       this.$router.push(page);
+    },
+    moveToAdmin() {
+      axios
+        .post(
+          SERVER.URL + "/admin",
+          {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+              "content-type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          this.$cookies.remove("accessToken");
+          this.$cookies.remove("refreshToken");
+          location.href = "/";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     logout() {
       axios
