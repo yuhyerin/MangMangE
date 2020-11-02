@@ -54,11 +54,11 @@ public class FindUserIdAndPasswordController {
 		String user_email = User.get("user_email");
 		Account account = findUserIdService.findUserByUserIdAndEmail(user_id, user_email);
 		if(account==null) {
-			resultMap.put("result", null);
+			resultMap.put("result", "fail");
 			return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
 		}
-		// 임시 비번 전송
-		findUserPasswordService.sendTempPasswordbyEmail(user_email);
+		// 임시 비번 전송 & 변경
+		findUserPasswordService.sendTempPasswordbyEmail(user_id, user_email);
 		resultMap.put("result", "success");
 		return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
 

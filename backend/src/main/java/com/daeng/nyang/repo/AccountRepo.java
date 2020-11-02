@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.daeng.nyang.dto.Account;
 
-public interface AccountRepo extends CrudRepository<Account, Integer> {
+public interface AccountRepo extends CrudRepository<Account, Long> {
 	
 	@Query(value="select * from account where user_id=:user_id", nativeQuery = true)
 	Account findByUserid(String user_id);
@@ -15,4 +15,11 @@ public interface AccountRepo extends CrudRepository<Account, Integer> {
 	
 	@Query(value="select * from account where user_id=:user_id and user_email = :user_email", nativeQuery = true)
 	Account findUserByUserIdAndUserEmail(String user_id, String user_email);
+
+	@Query(value="select * from account where user_email=:email", nativeQuery = true)
+	Account findUserByEmail(String email);
+	
+	@Query(value="update account set user_password where user_id=:user_id",nativeQuery=true)
+	void updateUserPasswordWithUserid(String user_id);
+
 }

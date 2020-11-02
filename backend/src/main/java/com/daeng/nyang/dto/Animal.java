@@ -22,7 +22,7 @@ public class Animal {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 얘가 auto_increment
-	private Long desertionNo;
+	private Long desertion_no;
 
 	@Column(name = "filename")
 	private String filename;
@@ -33,17 +33,20 @@ public class Animal {
 	@Column(name = "happen_place")
 	private String happen_place;
 
-	@Column(name = "kind_cd")
-	private String kind_cd;
+	@Column(name = "kind_p")
+	private String kind_p;
+	
+	@Column(name = "kind_c")
+	private String kind_c;
 
 	@Column(name = "color_cd")
 	private String color_cd;
 
 	@Column(name = "age")
-	private String age;
+	private int age;
 
 	@Column(name = "weight")
-	private String weight;
+	private float weight;
 
 	@Column(name = "notice_no")
 	private String notice_no;

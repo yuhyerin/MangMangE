@@ -13,7 +13,10 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Account;
 import com.daeng.nyang.dto.Apply;
+import com.daeng.nyang.dto.Token;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
+import com.daeng.nyang.service.email.EmailService;
+import com.daeng.nyang.service.signup.SignupService;
 import com.daeng.nyang.service.user.AccountService;
 import com.daeng.nyang.service.user.JwtUserDetailService;
 
@@ -46,14 +52,20 @@ public class AccountController {
 	private AccountService accountService;
 
 	@Autowired
+	private SignupService signupService;
+	@Autowired
+	private EmailService emailService;
+	@Autowired
 	private AccountRepo userRepo;
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
 
 	@Autowired
-	private AuthenticationManager am;
+	private AuthenticationManager authenticationManager;
+	
 	@Autowired
-	private JwtUserDetailService userDetailService;
+	private JwtUserDetailService jwtuserDetailsService;
+
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
@@ -81,12 +93,31 @@ public class AccountController {
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.OK);
 		else
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.ACCEPTED);
+
 	}
 
 	@GetMapping(path = "/newuser/signup")
-	@ApiOperation("이메일유효성검사")
-	public void checkEmail(@RequestParam String email) {
-		System.out.println("email유효성 검사 : " + email);
+	@ApiOperation("이메일 유효성 검사")
+	public ResponseEntity<?> checkEmail(@RequestParam String email) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		boolean isAvailabe = signupService.checkEmail(email); // 사용가능한 email
+		if (isAvailabe) { // 사용가능하면
+			String auth_number = emailService.sendAuthEmail(email);// 인증번호
+			String hash_number = BCrypt.hashpw(auth_number, "daeng"); // hash처리
+			resultMap.put("origin_hash", hash_number);
+		} else {
+			resultMap.put("origin_hash", null);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+	}
+
+	@GetMapping(path = "/newuser/signup/hashcheck")
+	@ApiOperation("인증번호 유효성검사")
+	public ResponseEntity<?> checkAuthNumber(@RequestParam String auth_number) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		String hash_number = BCrypt.hashpw(auth_number, "daeng");
+		resultMap.put("my_hash", hash_number);
+		return ResponseEntity.status(HttpStatus.OK).body(resultMap);
 	}
 
 	@PostMapping(path = "/newuser/login")
@@ -114,6 +145,7 @@ public class AccountController {
 		String accessToken= request.getHeader("Authorization");
 		System.out.println("reqeust : "+request.getHeader("Authorization"));
 		System.out.println(accessToken);
+
 		try {
 			System.out.println("controller jwtTokenUtil.getUsernameFromToken");
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
@@ -130,23 +162,21 @@ public class AccountController {
 			System.out.println(user_id);
 			if (vo.get(user_id) != null) {
 				System.out.println(vo.get(user_id).toString());
+
 				redisTemplate.expire(user_id,1*1000, TimeUnit.MILLISECONDS);
 				if(vo.get(accessToken)!=null) {
 					System.out.println(vo.get(accessToken).toString());
 					redisTemplate.expire(accessToken,1*1000, TimeUnit.MILLISECONDS);
+
 				}
 			}
 		} catch (IllegalArgumentException e) {
 			System.out.println("user does not exist");
 		}
 
-		// cache logout token for 10 minutes!
-//        logger.info(" logout ing : " + accessToken);
-//		redisTemplate.opsForValue().set(accessToken, true);
-//		redisTemplate.expire(accessToken, 10 * 6 * 1000, TimeUnit.MILLISECONDS);
-		
 		return new ResponseEntity(HttpStatus.OK);
-	}
+	}// end logout
+
 	
 	@PostMapping(path="/user/refresh")
 	   @ApiOperation("access토큰이 만료되어서 갱신하고자, refresh토큰을 보냄.")
@@ -176,7 +206,7 @@ public class AccountController {
 	                }
 	                //둘이 일치하고 만료도 안됐으면 재발급 해주기.
 	                if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
-	                    final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
+	                    final UserDetails userDetails = jwtuserDetailsService.loadUserByUsername(user_id);
 	                    String new_accessToken =  jwtTokenUtil.generateAccessToken(userDetails);
 	                    response.put("success", true);
 	                    response.put("accessToken", new_accessToken);

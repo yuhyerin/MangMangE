@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.daeng.nyang.repo.AnimalApiRepo;
+import com.daeng.nyang.repo.PtagRepo;
 
 @Service
 public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
@@ -35,6 +36,9 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 
 	@Autowired
 	AnimalApiRepo animalApiRepo;
+	
+	@Autowired
+	PtagRepo ptagRepo;
 	
 	@Override
 	public void insertAnimalData() {
@@ -150,7 +154,11 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 						int random_t = rand.nextInt(tags.length); // 0 or 1
 						String picktag = tags[random_t]; 
 						System.out.println("선택된 태그 : "+picktag);
-					}
+						Long desertion_no = Long.parseLong(getTagValue("desertionNo", (Element)nNode));
+						/** 성격태그 테이블에도 추가 */
+						ptagRepo.insertPtag(desertion_no,picktag);
+						
+					}//end for
 					System.out.println("mbti : "+mbti);
 					
 					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -160,15 +168,30 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 						
 //						Long.parseLong(getTagValue("desertionNo", element)),
 //						simpledate.format(new Date(getTagValue("happenDt", element))), 
+						// 품종
+						String kind = getTagValue("kindCd", element);
+						int idx = kind.indexOf("]");
+						String kind_p = kind.substring(idx-1,idx);
+						String kind_c = kind.substring(idx+1,kind.length()).trim();
+						// 나이 
+						String agestr = getTagValue("age", element);
+						int aidx = agestr.indexOf("(");
+						int age = Integer.parseInt(agestr.substring(0, aidx));
+						// 몸무게 
+						String weightstr = getTagValue("weight", element);
+						int widx = weightstr.indexOf("(");
+						float weight = Float.parseFloat(weightstr.substring(0,widx).trim());
+						System.out.println(kind_p+" "+kind_c+" "+age+" "+weight);
 						animalApiRepo.insertAnimalFromApi(
 								Long.parseLong(getTagValue("desertionNo", element)),
 								getTagValue("filename", element), 
 								getTagValue("happenDt", element),
 								getTagValue("happenPlace", element), 
-								getTagValue("kindCd", element), 
+								kind_p,
+								kind_c,
 								getTagValue("colorCd", element), 
-								getTagValue("age", element), 
-								getTagValue("weight", element), 
+								age, 
+								weight, 
 								getTagValue("noticeNo", element), 
 								getTagValue("noticeSdt", element), 
 								getTagValue("noticeEdt", element), 
