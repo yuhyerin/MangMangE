@@ -129,9 +129,13 @@ export default {
               )
               .then((res) => {
                 console.log(res);
+<<<<<<< HEAD
                 if(res.data.success)
                   this.$cookies.set("accessToken", res.data.accessToken)
                 console.log(this.$cookies.get("accessToken"))
+=======
+                this.$cookies.set("accessToken", res.data.accessToken);
+>>>>>>> c464e8fc82850c942245cdb10cd823bb7112102d
               })
               .catch((err) => {
                 console.log(err);
