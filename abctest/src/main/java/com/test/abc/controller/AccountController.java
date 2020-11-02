@@ -1,8 +1,10 @@
 package com.test.abc.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.abc.dto.Account;
-import com.test.abc.jwt.TokenResponse;
 import com.test.abc.service.AccountService;
 
 @RestController
@@ -36,21 +37,18 @@ public class AccountController {
 		return result;
 	}
 	
-<<<<<<< HEAD
 	@PostMapping("/login")
-	public ResponseEntity<TokenResponse> login(@RequestParam String id, @RequestParam String password){
-		String token = accountService.login(id, password);
-=======
-	@GetMapping("/login")
-	public ResponseEntity<TokenResponse> login(@RequestParam String id, @RequestParam String password){
-		System.out.println(id);
-		System.out.println(password);
-		String token = accountService.login(id,password);
->>>>>>> 0d6b9e53ee5c962574d19942adae93c798e1746f
-		System.out.println(token);
+	public ResponseEntity<HashMap<String, Object>> login(@RequestParam String id, @RequestParam String password){
+		HashMap<String, Object> tokens = accountService.login(id, password);
+		System.out.println(tokens.toString());
 		// bearer type의 토큰 생성 : Oauth2.0 표준
-		ResponseEntity<TokenResponse> result = ResponseEntity.ok().body(new TokenResponse(token, "bearer"));
-		System.out.println(result.getBody().toString());
+		ResponseEntity<HashMap<String, Object>> result;
+		if(tokens==null) {
+			result = new ResponseEntity<HashMap<String, Object>>(tokens, HttpStatus.NOT_FOUND);
+		} else {
+			result = new ResponseEntity<HashMap<String, Object>>(tokens, HttpStatus.OK);
+		}
+		System.out.println(result.toString());
 		return result;
 	}
 

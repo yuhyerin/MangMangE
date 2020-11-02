@@ -2,8 +2,8 @@ package com.test.abc.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -30,6 +30,7 @@ public class Account {
 	@Column(nullable=false, length=100)
 	private String user_password;
 	
-	private String role;
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
 }

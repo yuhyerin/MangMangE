@@ -5,40 +5,43 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
+@Configuration
 public class JwtTokenProvider implements Serializable {
 	
 	private static final long serialVersionUID = -2550185165626007488L;
-	public static final long JWT_ACCESS_TOKEN_VALIDITY = 10 * 60; // 10분
-	public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60 * 7; // 일주일
+//	@Value("${jwt.JWT_ACCESS_TOKEN_VALIDITY}")
+	private String JWT_ACCESS_TOKEN_VALIDITY = "600"; 
+//	@Value("${jwt.JWT_REFRESH_TOKEN_VALIDITY}")
+	private String JWT_REFRESH_TOKEN_VALIDITY = "3600"; 
 	
 //	@Value("${jwt.secret}")
-	private static final String secretKey = "daengnyang";
+	private String secretKey = "daengnyang";
 	
 	public String createToken(String subject) {
+		System.out.println(JWT_ACCESS_TOKEN_VALIDITY);
+		System.out.println(JWT_REFRESH_TOKEN_VALIDITY);
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder().
         		setClaims(claims).
         		setSubject(subject).
         		setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
-<<<<<<< HEAD
-    public String createRefreshToken(String subject) {
-        return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-=======
     public String createRefreshToken() {
-        return Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
->>>>>>> 0d6b9e53ee5c962574d19942adae93c798e1746f
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
+        return Jwts.builder().
+        		setIssuedAt(new Date(System.currentTimeMillis())).
+        		setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000)).
+        		signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
 }

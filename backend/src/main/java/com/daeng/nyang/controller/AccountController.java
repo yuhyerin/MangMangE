@@ -1,6 +1,5 @@
 package com.daeng.nyang.controller;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -14,8 +13,6 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Account;
+import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
+import com.daeng.nyang.service.user.AccountService;
 import com.daeng.nyang.service.user.JwtUserDetailService;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -44,6 +43,9 @@ public class AccountController {
 	private String JWT_REFRESH_TOKEN_VALIDITY;
 
 	@Autowired
+	private AccountService accountService;
+
+	@Autowired
 	private AccountRepo userRepo;
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
@@ -56,29 +58,29 @@ public class AccountController {
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
+	
+	@GetMapping(path="/admin")
+	@ApiOperation("관리자계정")
+	public void admin(HttpServletRequest req){
+		System.out.println("CONTROLLER START");
+		System.out.println(req.getHeader("Authorization"));
+	}
+	
 
 
 	@PostMapping(path = "/newuser/signup")
 	@ApiOperation("회원가입")
-	public Map<String, Object> signup(@RequestBody Account user) {
-		System.out.println("/signup 입장");
-		String user_id = user.getUser_id();
-		Map<String, Object> map = new HashMap<>();
-		if (userRepo.findByUserid(user_id) == null) {
-			if ("admin".equals(user_id)) {
-				user.setRole("ROLE_ADMIN");
-			} else {
-				user.setRole("ROLE_USER");
-			}
-			user.setUser_password(bcryptEncoder.encode(user.getUser_password()));
-			map.put("success", true);
-			System.out.println(user.toString());
-			userRepo.save(user);
-		} else {
-			map.put("success", false);
-			map.put("message", "duplicated user_id");
-		}
-		return map;
+	public ResponseEntity<HashMap<String, Object>> signup(@RequestBody Account account) {
+		System.out.println("CONTROLLER START");
+		
+		HashMap<String, Object> result = new HashMap<>();
+		result = accountService.signup(account);
+		System.out.println(result.toString());
+		System.out.println("CONTROLLER END");
+		if((boolean)result.get("success"))
+			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping(path = "/newuser/signup")
@@ -89,38 +91,16 @@ public class AccountController {
 
 	@PostMapping(path = "/newuser/login")
 	@ApiOperation("로그인")
-	public Map<String, Object> login(@RequestBody Map<String, String> m) {
-		System.out.println("login_controller");
+	public ResponseEntity<HashMap<String, Object>> login(@RequestBody Map<String, String> m) {
+		System.out.println("CONTROLLER START");
 		String user_id = m.get("user_id");
 		String user_password = m.get("user_password");
-		try {
-			System.out.println("am.authenticate");
-			am.authenticate(new UsernamePasswordAuthenticationToken(user_id, user_password));
-		} catch (Exception e) {
-			System.out.println("authenticate error");
-			e.printStackTrace();
-		}
-
-		UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
-		System.out.println("Controller jwtTokenUtil generateAccessToken");
-		Collection<? extends GrantedAuthority> c = userDetails.getAuthorities();
-		System.out.println(c.toString());
-		String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
-		System.out.println("Controller jwtTokenUtil generateAccessToken");
-		String refreshToken = jwtTokenUtil.generateRefreshToken();
-
-		// generate Token and save in redis
-		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
-		vop.set(user_id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY)*1000, TimeUnit.MILLISECONDS);
-		Account ac = Account.builder().user_id(user_id).build();
-		retok = TotToken.builder().account(ac).build();
-		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY)*1000, TimeUnit.MILLISECONDS);
-
-		Map<String, Object> map = new HashMap<>();
-		map.put("accessToken", accessToken);
-		map.put("refreshToken", refreshToken);
-		return map;
+		System.out.println(user_id+" "+user_password);
+		HashMap<String, Object> result = accountService.login(user_id, user_password);
+		if((boolean)result.get("success"))
+			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.UNAUTHORIZED);
 	}
 	
 	
@@ -213,5 +193,33 @@ public class AccountController {
 	        }
 	        return response;
 	    }
+	
+	@GetMapping(path="/user/adopt/create")
+	public ResponseEntity<HashMap<String, Object>> checkPhone(@RequestParam String phone){
+		int rand = (int) (Math.random() * 899999) + 100000;	// 랜덤넘버 6자리
+		
+		ResponseEntity<HashMap<String, Object>> result = accountService.checkPhone(phone, rand);
+		System.out.println(result.toString());
+		return result;
+	}
+	
+	@PostMapping(path="/user/adopt/create")
+	public ResponseEntity<HashMap<String, Object>> createAdopt(HttpServletRequest request, 
+			@RequestBody Apply apply){
+		System.out.println("/user/adopt/create 입장");
+		String accessToken = request.getHeader("Authorization");
+		if(accessToken==null) {
+			return null;
+		} else if(jwtTokenUtil.isTokenExpired(accessToken)) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		// 토큰으로 유저 아이디 받아오는 구문
+		String user_id = null; // 일단 null 값
+		user_id = jwtTokenUtil.getUsernameFromToken(accessToken); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
+		System.out.println("user_id : " + user_id); // 확인
+		System.out.println(apply.toString());
+		ResponseEntity<HashMap<String, Object>> result = accountService.createApply(user_id, apply);
+		return result;
+	}
 
 }

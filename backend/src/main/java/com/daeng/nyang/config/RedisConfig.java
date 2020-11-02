@@ -25,8 +25,6 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
 
         //객체를 json 형태로 깨지지 않고 받기 위한 직렬화 작업
-//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Token.class));
-//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Account.class));
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(TotToken.class));
         return redisTemplate;
     }
