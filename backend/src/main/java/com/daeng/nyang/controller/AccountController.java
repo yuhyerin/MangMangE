@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @CrossOrigin("*")
 public class AccountController {
-	
+
 	@Value("${JWT_ACCESS_TOKEN_VALIDITY}")
 	private String JWT_ACCESS_TOKEN_VALIDITY;
 	@Value("${JWT_REFRESH_TOKEN_VALIDITY}")
@@ -70,26 +70,24 @@ public class AccountController {
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
-	
-	@GetMapping(path="/admin")
+
+	@GetMapping(path = "/admin")
 	@ApiOperation("관리자계정")
-	public void admin(HttpServletRequest req){
+	public void admin(HttpServletRequest req) {
 		System.out.println("CONTROLLER START");
 		System.out.println(req.getHeader("Authorization"));
 	}
-	
-
 
 	@PostMapping(path = "/newuser/signup")
 	@ApiOperation("회원가입")
 	public ResponseEntity<HashMap<String, Object>> signup(@RequestBody Account account) {
 		System.out.println("CONTROLLER START");
-		
+
 		HashMap<String, Object> result = new HashMap<>();
 		result = accountService.signup(account);
 		System.out.println(result.toString());
 		System.out.println("CONTROLLER END");
-		if((boolean)result.get("success"))
+		if ((boolean) result.get("success"))
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.OK);
 		else
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.ACCEPTED);
@@ -126,24 +124,23 @@ public class AccountController {
 		System.out.println("CONTROLLER START");
 		String user_id = m.get("user_id");
 		String user_password = m.get("user_password");
-		System.out.println(user_id+" "+user_password);
+		System.out.println(user_id + " " + user_password);
 		HashMap<String, Object> result = accountService.login(user_id, user_password);
-		if((boolean)result.get("success"))
+		if ((boolean) result.get("success"))
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.OK);
 		else
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.UNAUTHORIZED);
 	}
-	
-	
+
 	@PostMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
 	public ResponseEntity<?> logout(HttpServletRequest request) {
-		
+
 		System.out.println("/user/logout 입장");
 		String user_id = null;
 //		String accessToken = m.get("accessToken");
-		String accessToken= request.getHeader("Authorization");
-		System.out.println("reqeust : "+request.getHeader("Authorization"));
+		String accessToken = request.getHeader("Authorization");
+		System.out.println("reqeust : " + request.getHeader("Authorization"));
 		System.out.println(accessToken);
 
 		try {
@@ -173,6 +170,7 @@ public class AccountController {
 		} catch (IllegalArgumentException e) {
 			System.out.println("user does not exist");
 		}
+
 
 		return new ResponseEntity(HttpStatus.OK);
 	}// end logout
@@ -227,20 +225,18 @@ public class AccountController {
 	@GetMapping(path="/user/adopt/create")
 	public ResponseEntity<HashMap<String, Object>> checkPhone(@RequestParam String phone){
 		int rand = (int) (Math.random() * 899999) + 100000;	// 랜덤넘버 6자리
-		
 		ResponseEntity<HashMap<String, Object>> result = accountService.checkPhone(phone, rand);
 		System.out.println(result.toString());
 		return result;
 	}
-	
-	@PostMapping(path="/user/adopt/create")
-	public ResponseEntity<HashMap<String, Object>> createAdopt(HttpServletRequest request, 
-			@RequestBody Apply apply){
+
+	@PostMapping(path = "/user/adopt/create")
+	public ResponseEntity<HashMap<String, Object>> createAdopt(HttpServletRequest request, @RequestBody Apply apply) {
 		System.out.println("/user/adopt/create 입장");
 		String accessToken = request.getHeader("Authorization");
-		if(accessToken==null) {
+		if (accessToken == null) {
 			return null;
-		} else if(jwtTokenUtil.isTokenExpired(accessToken)) {
+		} else if (jwtTokenUtil.isTokenExpired(accessToken)) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		// 토큰으로 유저 아이디 받아오는 구문

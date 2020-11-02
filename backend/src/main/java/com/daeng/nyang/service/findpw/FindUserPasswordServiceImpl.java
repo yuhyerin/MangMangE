@@ -15,8 +15,6 @@ public class FindUserPasswordServiceImpl implements FindUserPasswordService{
 	@Autowired
 	private ChangePasswordService changePasswordService;
 	
-	@Autowired
-	
 	@Override
 	public void sendTempPasswordbyEmail(String user_id, String user_email) {
 		

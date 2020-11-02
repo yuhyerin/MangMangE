@@ -42,6 +42,7 @@ import FindIdForm from "../components/accounts/FindIdForm";
 import FindPwForm from "../components/accounts/FindPwForm";
 import FindIdSubmit from "../components/accounts/FindIdSubmit";
 import FindPwSubmit from "../components/accounts/FindPwSubmit";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -56,6 +57,16 @@ export default {
     return {
       pageTrigger: 0,
     };
+  },
+  computed: {
+    ...mapState(["eventListener"]),
+  },
+  created() {
+    if (this.eventListener == 3) {
+      this.pageTrigger = 1;
+    } else if (this.eventListener) {
+      this.pageTrigger = 0;
+    }
   },
   methods: {
     register(value) {

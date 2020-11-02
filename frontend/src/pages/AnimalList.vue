@@ -154,9 +154,13 @@ export default {
   watch: {
     trigger(newValue, oldValue) {
       if (newValue == 0) {
-        this.tmp = 10;
+        this.tmp = 10;  
         console.log("All Animals");
-        axios.get(SERVER.URL + "/newuser/animal/allread").then((res) => {
+        axios.get(SERVER.URL + "/newuser/animal/allread",{
+          headers: {
+            Authorization: this.$cookies.get('accessToken')
+          }
+        }).then((res) => {
           this.allDatas = res.data.animalList;
           console.log(res.data.animalList);
         });

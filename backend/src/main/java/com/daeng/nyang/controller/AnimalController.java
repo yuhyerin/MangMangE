@@ -45,7 +45,7 @@ public class AnimalController {
 	public ResponseEntity<HashMap<String, Object>> allread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 모든 동물 리스트 반환
 		// 비회원
-		
+		System.out.println(request.getHeader("Authorization"));
 		if(request.getHeader("Authorization")==null) {
 			try {
 				HashMap<String, Object> map = new HashMap<>();

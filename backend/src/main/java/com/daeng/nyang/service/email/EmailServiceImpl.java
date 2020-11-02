@@ -20,12 +20,6 @@ public class EmailServiceImpl implements EmailService{
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	@Autowired
-	private ChangePasswordService changePasswordService;
-	
-	@Autowired
-	private AccountRepo accountRepo;
-	
 	@Value("${AUTH_SERVICE_EMAIL}")
 	private String AUTH_SERVICE_EMAIL;
 	
