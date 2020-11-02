@@ -59,7 +59,7 @@ public class AccountController {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 	
-	@GetMapping(path="/admin")
+	@PostMapping(path="/admin")
 	@ApiOperation("관리자계정")
 	public void admin(HttpServletRequest req){
 		System.out.println("CONTROLLER START");
@@ -148,9 +148,10 @@ public class AccountController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 	
-	@PostMapping(path="/user/refresh")
+	@PostMapping(path="/newuser/refresh")
 	   @ApiOperation("access토큰이 만료되어서 갱신하고자, refresh토큰을 보냄.")
 	    public Map<String, Object>  requestForNewAccessToken(HttpServletRequest request) {
+		System.out.println("CONTROLLER START");
 	        String accessToken = null;
 	        String refreshToken = null;
 	        String refreshTokenFromDb = null;
@@ -159,10 +160,14 @@ public class AccountController {
 	        try {
 	            accessToken = request.getHeader("Authorization");
 	            refreshToken = request.getHeader("refreshToken");
+	            System.out.println("accessToken : "+ accessToken);
+	            System.out.println("refreshToken : "+ refreshToken);
+	            
 	            try {
 	                user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
+	                System.out.println(user_id);
 	            } catch (IllegalArgumentException e) {
-
+	            	System.out.println("IllegalArgumentException");
 	            } catch (ExpiredJwtException e) { //expire됐을 때
 	                user_id = e.getClaims().getSubject();
 	            }
@@ -172,6 +177,7 @@ public class AccountController {
 	                    ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 	                    TotToken result = (TotToken) vop.get(user_id);	// 얘는 refreshToken
 	                    refreshTokenFromDb = result.getRefreshToken();
+	                    System.out.println("refreshTokenFromDB : "+refreshTokenFromDb);
 	                } catch (IllegalArgumentException e) {
 	                }
 	                //둘이 일치하고 만료도 안됐으면 재발급 해주기.
