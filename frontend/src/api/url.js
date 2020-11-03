@@ -8,7 +8,7 @@ export default {
   },
 
   // Token 만료시 갱신 함수 -> SERVER.RefreshToken(err) 로 사용 가능
-  RefreshToken: function (err, afterFunction) {
+  RefreshToken: function (err) {
     if (err.response.status == 401) {
       //accessToken만료
       axios
@@ -26,7 +26,6 @@ export default {
           console.log(res);
           if (res.data.success) {
             $cookies.set("accessToken", res.data.accessToken);
-            afterFunction()
           }
         })
         .catch((err) => {

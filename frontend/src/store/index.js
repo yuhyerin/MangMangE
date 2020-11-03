@@ -16,6 +16,7 @@ export default new Vuex.Store({
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     findUserId: '',
 
+    // 1: survey to animalList, 2: main to animalList
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
     eventListener: 0,
   },
@@ -68,8 +69,8 @@ export default new Vuex.Store({
       axios
         .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
           {
-            "MBTI": state.userMbti,
-            "answers": state.dogMbti,
+            "mbti": state.userMbti,
+            "answer": state.dogMbti,
           },
           {
             headers: {

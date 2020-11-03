@@ -99,6 +99,9 @@ export default {
       }
     },
     moveTo(page) {
+      if (page == "/animals") {
+        this.setEventListener(2);
+      }
       this.$router.push(page);
     },
     test() {
