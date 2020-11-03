@@ -114,29 +114,7 @@ export default {
         })
         .catch((err) => {
           console.log("err : ", err.response.status);
-          if (err.response.status == 401) {
-            //accessToken만료
-            axios
-              .post(
-                SERVER.URL + "/newuser/refresh",
-                {},
-                {
-                  headers: {
-                    accessToken: this.$cookies.get("accessToken"),
-                    refreshToken: this.$cookies.get("refreshToken"),
-                  },
-                }
-              )
-              .then((res) => {
-                console.log(res);
-                if (res.data.success)
-                  this.$cookies.set("accessToken", res.data.accessToken);
-                console.log(this.$cookies.get("accessToken"));
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
+          SERVER.RefreshToken(err);
         });
     },
     logout() {
@@ -161,6 +139,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          SERVER.RefreshToken(err);
         });
     },
   },

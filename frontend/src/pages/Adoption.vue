@@ -74,13 +74,13 @@
               <label>연락처</label>
             </div>
             <div class="col-2">
-              <input style="border: 1px solid black" v-model="firstNum"/>
+              <input style="border: 1px solid black" v-model="firstNum" />
             </div>
             <div class="col-4">
               <input style="border: 1px solid black" v-model="middleNum" />
             </div>
             <div class="col-4">
-              <input style="border: 1px solid black" v-model="lastNum"/>
+              <input style="border: 1px solid black" v-model="lastNum" />
             </div>
             <div class="col-2">
               <input
@@ -203,8 +203,8 @@
 
 <script>
 // import Header from '../components/Header.vue'
-import axios from 'axios'
-import SERVER from '@/api/url'
+import axios from "axios";
+import SERVER from "@/api/url";
 
 export default {
   name: "Adoption",
@@ -217,7 +217,7 @@ export default {
       phoneNum: "",
       firstNum: "",
       middleNum: "",
-      lastNum: ""
+      lastNum: "",
     };
   },
   methods: {
@@ -249,19 +249,24 @@ export default {
       }).open();
     },
     test() {
-      console.log("FE input Form : ", this.firstNum + "-" + this.middleNum + "-" + this.lastNum)
-      axios.get(SERVER.URL + '/user/adopt/create', {
+      console.log(
+        "FE input Form : ",
+        this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+      );
+      axios
+        .get(SERVER.URL + "/user/adopt/create", {
           params: {
-            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
-          }
+            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+          },
         })
-      .then((res) => {
-        console.log("then res : ",res.data)
-      })
-      .catch((err) => {
-        console.log("catch err : ",err)
-      })
-    }
+        .then((res) => {
+          console.log("then res : ", res.data);
+        })
+        .catch((err) => {
+          console.log("catch err : ", err);
+          SERVER.RefreshToken(err);
+        });
+    },
   },
 };
 </script>
