@@ -20,6 +20,7 @@
               width="100%"
               height="500"
               data="//www.youtube.com/embed/OR90YT2BtH0"
+              allowFullScreen="true"
             ></object>
           </div>
           <div style="width: 30vw">

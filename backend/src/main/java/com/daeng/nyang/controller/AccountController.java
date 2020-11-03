@@ -192,7 +192,7 @@ public class AccountController {
    }
 
    @PostMapping(path = "/user/adopt/create")
-   public ResponseEntity<HashMap<String, Object>> createAdopt(HttpServletRequest request, @RequestBody Apply apply) {
+   public ResponseEntity<HashMap<String, Object>> createAdopt(@RequestBody Apply apply,HttpServletRequest request) {
       System.out.println("CONTROLLER START");
       String accessToken = request.getHeader("Authorization");
       // 토큰으로 유저 아이디 받아오는 구문
