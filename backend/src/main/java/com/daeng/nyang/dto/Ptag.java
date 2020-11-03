@@ -16,15 +16,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalLike {
-
+public class Ptag {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // 얘가 auto_increment
-	private int no;
-
-	@Column
-	private String user_id;
-
-	@Column
-	private String desertion_no;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long uid;
+	
+	@Column(name = "desertion_no")
+	private Long desertion_no;
+	
+	@Column(name = "tagname")
+	private String tagname;
+	
 }

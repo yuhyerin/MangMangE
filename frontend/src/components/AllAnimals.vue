@@ -13,6 +13,7 @@
           top: 5px;
         "
         @mouseover="setMoveTrigger"
+        @mouseout="setMoveTrigger"
         @click="setLiked"
       >
         <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
@@ -63,8 +64,8 @@ export default {
   methods: {
     clicked() {
       if (this.moveTrigger == true) {
-        console.log("페이지 이동!!");
-        this.$router.push("/animalDetail" + `/${this.animalInfo.desertion_no}`);
+        console.log("페이지 이동!!", this.animalInfo);
+        this.$router.push("/animalDetail" + `/${this.animalInfo.desertionNo}`);
       }
     },
     setLiked() {

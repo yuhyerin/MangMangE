@@ -72,7 +72,16 @@
             :rules="ruleEmail"
             hide-details="auto"
           ></v-text-field>
-          <v-btn style="margin: 20px 0 0 15px">인증</v-btn>
+        </div>
+        <div style="display: flex; justify-content: center; align-item: center">
+          <v-btn style="margin: 20px 0 0 15px" @click="emailSubmit">인증</v-btn>
+          <v-text-field
+            v-model="checkNum"
+            label="이메일"
+            :rules="ruleEmail"
+            hide-details="auto"
+          ></v-text-field>
+          <v-btn style="margin: 20px 0 0 15px" @click="emailCheck">인증</v-btn>
         </div>
         <div style="display: flex; justify-content: center; align-item: center">
           <v-icon color="black" style="padding: 17px 10px 0 0">
@@ -98,6 +107,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import SERVER from "@/api/url";
+
 export default {
   data() {
     return {
@@ -113,6 +125,10 @@ export default {
       password: "",
       passwordCheck: "",
       email: "",
+
+      origin_hash: "",
+      checkNum: "",
+
       name: "",
       showpassword: "",
       showpasswordCheck: "",
@@ -121,6 +137,38 @@ export default {
   methods: {
     back() {
       this.$emit("changeComponents", 0);
+    },
+
+    emailSubmit() {
+      axios
+        .get(SERVER.URL + "/newuser/signup", {
+          params: {
+            email: this.email,
+          },
+        })
+        .then((res) => {
+          console.log("then res : ", res.data.origin_hash);
+          this.origin_hash = res.data.origin_hash;
+        })
+        .catch((err) => {
+          console.log("catch err : ", err);
+        });
+    },
+
+    emailCheck() {
+      axios
+        .get(SERVER.URL + "/newuser/signup/hashcheck", {
+          params: {
+            auth_number: this.checkNum,
+            hash_number: this.origin_hash,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log("catch err : ", err);
+        });
     },
     submit() {
       console.log(

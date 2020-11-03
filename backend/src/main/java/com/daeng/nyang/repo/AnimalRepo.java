@@ -1,14 +1,14 @@
 package com.daeng.nyang.repo;
 
-import javax.transaction.Transactional;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.daeng.nyang.dto.Account;
 import com.daeng.nyang.dto.Animal;
 
 @Repository
@@ -27,8 +27,5 @@ public interface AnimalRepo extends JpaRepository<Animal, String>{
 	
 //	@Query(value="select * from animal a where (a.mbti like %:first%) and (a.mbti like %:second%) and (a.mbti like %:third%) and (a.mbti like %:fourth%)", nativeQuery = true)
 //	List<Animal>  findAnimalMbtiByMbti(@Param("first")String first, @Param("second") String second, @Param("third") String third, @Param("fourth") String fourth);
-	
-	
-	
 	
 }

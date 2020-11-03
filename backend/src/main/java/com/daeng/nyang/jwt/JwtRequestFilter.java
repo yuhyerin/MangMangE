@@ -29,73 +29,74 @@ import com.daeng.nyang.service.user.JwtUserDetailService;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+   @Autowired
+   private JwtTokenUtil jwtTokenUtil;
 
-//	@Autowired
-//	JwtTokenUtil jtu;
+//   @Autowired
+//   JwtTokenUtil jtu;
 
-	@Autowired
-	RedisTemplate<String, Object> redisTemplate;
+   @Autowired
+   RedisTemplate<String, Object> redisTemplate;
 
-	@Autowired
-	private JwtUserDetailService jwtUserDetailService;
+   @Autowired
+   private JwtUserDetailService jwtUserDetailService;
 
-	public Authentication getAuthentication(String token) {
-		System.out.println("getAuthentication : " + token);
-		Map<String, Object> parseInfo = jwtTokenUtil.getUserParseInfo(token);
+   public Authentication getAuthentication(String token) {
+      System.out.println("getAuthentication : " + token);
+      Map<String, Object> parseInfo = jwtTokenUtil.getUserParseInfo(token);
 //        System.out.println("parseinfo: " + parseInfo);
-		List<String> rs = (List) parseInfo.get("role");
-//		String rs = (String)parseInfo.get("role");
-		Collection<GrantedAuthority> tmp = new ArrayList<>();
-//		GrantedAuthority temp = new SimpleGrantedAuthority(rs);
-		for (String a : rs) {
-			tmp.add(new SimpleGrantedAuthority(a));
-		}
-		UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("user_id"))).authorities(tmp)
-				.password(String.valueOf(parseInfo.get("user_password"))).build();
-		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-				userDetails, null, userDetails.getAuthorities());
-		System.out.println(userDetails.toString());
-		return usernamePasswordAuthenticationToken;
-	}
+      List<String> rs = (List) parseInfo.get("role");
+//      String rs = (String)parseInfo.get("role");
+      Collection<GrantedAuthority> tmp = new ArrayList<>();
+//      GrantedAuthority temp = new SimpleGrantedAuthority(rs);
+      for (String a : rs) {
+         tmp.add(new SimpleGrantedAuthority(a));
+      }
+      UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("user_id"))).authorities(tmp)
+            .password(String.valueOf(parseInfo.get("user_password"))).build();
+      UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+            userDetails, null, userDetails.getAuthorities());
+      System.out.println(userDetails.toString());
+      return usernamePasswordAuthenticationToken;
+   }
 
-	@Bean
-	public FilterRegistrationBean JwtRequestFilterRegistration(JwtRequestFilter filter) {
-		System.out.println("JwtRequestFilterRegistration : " + filter.toString());
+   @Bean
+   public FilterRegistrationBean JwtRequestFilterRegistration(JwtRequestFilter filter) {
+      System.out.println("JwtRequestFilterRegistration : " + filter.toString());
 
-		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-		registration.setEnabled(false);
-		return registration;
-	}
+      FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+      registration.setEnabled(false);
+      return registration;
+   }
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws ServletException, IOException {
-		System.out.println("doFilterInternal");
-		System.out.println("REQUEST : " + request.getHeader("Authorization"));
-		String requestTokenHeader = request.getHeader("Authorization");
-		String userid = null;
+   @Override
+   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+         throws ServletException, IOException {
+      System.out.println("doFilterInternal");
+      System.out.println("REQUEST : " + request.getHeader("Authorization"));
+      String requestTokenHeader = request.getHeader("Authorization");
+      String userid = null;
 
-		if (requestTokenHeader != null) {
-			try {
-				userid = jwtTokenUtil.getUsernameFromToken(requestTokenHeader);
-			} catch (IllegalArgumentException e) {
-				System.out.println("IllegalArgumentException in doFilterInternal");
-			}
-		}
-		if (userid == null) {
-			System.out.println("userid null");
-		} else if (redisTemplate.opsForValue().get(requestTokenHeader) == null) {
-			System.out.println("redis ACCESS TOKEN timeout");
-		} else {
-			// DB access 대신에 파싱한 정보로 유저 만들기!
-			Authentication authen = getAuthentication(requestTokenHeader);
-			System.out.println(authen.toString());
-			// 만든 authentication 객체로 매번 인증받기
-			SecurityContextHolder.getContext().setAuthentication(authen);
-			response.setHeader("username", userid);
-		}
-		chain.doFilter(request, response);
-	}
+      if (requestTokenHeader != null) {
+         try {
+            userid = jwtTokenUtil.getUsernameFromToken(requestTokenHeader);
+         } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException in doFilterInternal");
+         }
+      }
+      if (userid == null) {
+         System.out.println("userid null");
+      } else if (redisTemplate.opsForValue().get(requestTokenHeader) == null) {
+         System.out.println("redis ACCESS TOKEN timeout");
+      } else {
+         // DB access 대신에 파싱한 정보로 유저 만들기!
+         Authentication authen = getAuthentication(requestTokenHeader);
+         System.out.println(authen.toString());
+         // 만든 authentication 객체로 매번 인증받기
+         SecurityContextHolder.getContext().setAuthentication(authen);
+         response.setHeader("username", userid);
+      }
+      chain.doFilter(request, response);
+   }
+
 }

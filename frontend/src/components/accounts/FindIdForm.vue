@@ -61,6 +61,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import SERVER from "@/api/url";
+
 export default {
   data() {
     return {
@@ -76,16 +79,27 @@ export default {
       this.$emit("changeComponents", 0);
     },
     submit() {
-      this.$emit("changeComponents", 4)
-      console.log(
-        this.name,
-        this.email
-      );
+      axios
+        .post(
+          SERVER.URL + "/newuser/findid",
+          {
+            user_name: this.name,
+            user_email: this.email,
+          },
+          {}
+        )
+        .then((res) => {
+          //user_id == null의 경우 없는 회원
+          console.log(res.data);
+          this.$emit("changeComponents", 4);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
 </script>
 
 <style scoped>
-
 </style>

@@ -28,6 +28,7 @@
             mdi-paw-outline
           </v-icon>
           <v-text-field
+            v-model="id"
             label="ID"
             :rules="ruleID"
             hide-details="auto"
@@ -57,10 +58,14 @@
 </template>
 
 <script>
+import axios from "axios";
+import SERVER from "@/api/url";
+
 export default {
   data() {
     return {
       ruleID: [(value) => !!value || "ID를 입력해 주세요."],
+
       ruleEmail: [(value) => !!value || "이메일을 입력해 주세요."],
       id: "",
       email: "",
@@ -71,11 +76,18 @@ export default {
       this.$emit("changeComponents", 0);
     },
     submit() {
-      this.$emit("changeComponents", 5);
-      console.log(
-        this.id,
-        this.email,
-      );
+      axios
+        .post(SERVER.URL + "/newuser/findpw", {
+          user_id: this.id,
+          user_email: this.email,
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.$emit("changeComponents", 5);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
