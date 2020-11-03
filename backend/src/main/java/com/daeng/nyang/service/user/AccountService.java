@@ -70,7 +70,7 @@ public class AccountService {
 		String user_id = account.getUser_id();
 		if (accountRepo.findByUserid(user_id) == null) {
 			map = new HashMap<>();
-			if ("admin".equals(user_id)) {
+			if (user_id.contains("admin")) {
 				account.setRole("ROLE_ADMIN");
 			} else {
 				account.setRole("ROLE_USER");
@@ -134,7 +134,7 @@ public class AccountService {
 		System.out.println(apply.toString());
 		Apply app = applyRepo.save(apply);
 		HashMap<String, Object> map = new HashMap<>();
-		if(app==null)
+		if (app == null)
 			map.put("success", false);
 		else
 			map.put("success", true);
@@ -229,12 +229,16 @@ public class AccountService {
 		return map;
 	}
 
-	public ResponseEntity<HashMap<String, Object>> readAdopt(long uid, String user_id) {
+	public HashMap<String, Object> readAdopt(long uid, String user_id) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		Apply apply = applyRepo.selectByuid(uid);
-		map.put("apply", apply);
-		map.put("user_id", user_id);
-		return new ResponseEntity<>(map, HttpStatus.OK);
+		if (apply == null)
+			return null;
+		else {
+			map.put("apply", apply);
+			map.put("user_id", user_id);
+			return map;
+		}
 	}
 
 }
