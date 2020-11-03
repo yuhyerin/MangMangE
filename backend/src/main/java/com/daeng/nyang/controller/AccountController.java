@@ -67,9 +67,9 @@ public class AccountController {
    @ApiOperation("회원가입")
    public ResponseEntity<HashMap<String, Object>> signup(@RequestBody Account account) {
       System.out.println("CONTROLLER START");
-
+      System.out.println(account.toString());
       HashMap<String, Object> result = new HashMap<>();
-      result = accountService.signup(account);
+//      result = accountService.signup(account);
       System.out.println(result.toString());
       System.out.println("CONTROLLER END");
       if ((boolean) result.get("success"))
@@ -193,13 +193,8 @@ public class AccountController {
 
    @PostMapping(path = "/user/adopt/create")
    public ResponseEntity<HashMap<String, Object>> createAdopt(HttpServletRequest request, @RequestBody Apply apply) {
-      System.out.println("/user/adopt/create 입장");
+      System.out.println("CONTROLLER START");
       String accessToken = request.getHeader("Authorization");
-      if (accessToken == null) {
-         return null;
-      } else if (jwtTokenUtil.isTokenExpired(accessToken)) {
-         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-      }
       // 토큰으로 유저 아이디 받아오는 구문
       String user_id = null; // 일단 null 값
       user_id = jwtTokenUtil.getUsernameFromToken(accessToken); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
@@ -207,6 +202,28 @@ public class AccountController {
       System.out.println(apply.toString());
       ResponseEntity<HashMap<String, Object>> result = accountService.createApply(user_id, apply);
       return result;
+   }
+   
+   @GetMapping(path="/user/adopt/read")
+   public ResponseEntity<HashMap<String, Object>> readAdopt(HttpServletRequest request){
+	   String accessToken = request.getHeader("Authorization");
+	   String user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
+	   HashMap<String, Object> map = accountService.readAdopt();
+	   map.put("user_id", user_id);
+	   System.out.println(map.toString());
+	   System.out.println("CONTROLLER END");
+	   return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+   }
+   
+   @PostMapping(path="/user/adopt/read")
+   public ResponseEntity<HashMap<String, Object>> readone(HttpServletRequest request, @RequestBody long uid){
+	   System.out.println("CONTROLLER START");
+	   String accessToken = request.getHeader("Authorization");
+	   String user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
+	   ResponseEntity<HashMap<String, Object>> result = accountService.readAdopt(uid, user_id);
+	   System.out.println(result.toString());
+	   System.out.println("CONTROLLER END");
+	   return result;
    }
 
 }
