@@ -14,14 +14,14 @@
     <v-col lg="10">
       <v-col align="align">
         <!--가입한 회원이면 ~~ / 가입하지 않은 회원이면 ~~-->
-        <h1>아이디는 111이에요</h1>
+        <h1>아이디는 {{ this.user_id }}입니다.</h1>
       </v-col>
       <v-col align="align">
         <!--가입한 회원이면 로그인 화면으로-->
         <div style="display: flex; justify-content: space-around">
           <v-btn color="rgb(1,118,72)" width="100px" @click="submit"
             ><p style="color: white; padding-top: 14px">확인</p></v-btn
-          > 
+          >
           <!--가입하지 않은 회원이면-->
           <!-- <v-btn color="rgba(64,33,22)" width="100px" @click="moveToRegister"
             ><p style="color: white; padding-top: 14px">회원가입</p></v-btn
@@ -30,9 +30,9 @@
       </v-col>
 
       <!--가입한 회원만-->
-      <v-col align="align" style="font-size: 0.8em;">
+      <v-col align="align" style="font-size: 0.8em">
         <div style="display: flex; justify-content: center">
-          <p style="padding-right:5px;">혹시 비밀번호를 잊으셨나요?</p>
+          <p style="padding-right: 5px">혹시 비밀번호를 잊으셨나요?</p>
           <p class="find-pw" @click="moveToFindPw"><u>비밀번호 찾기</u></p>
         </div>
       </v-col>
@@ -41,7 +41,21 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
+  data() {
+    return {
+      user_id: "",
+    };
+  },
+
+  computed: {
+    ...mapState(["findUserId"]),
+  },
+  created() {
+    this.user_id = this.findUserId;
+  },
+
   methods: {
     submit() {
       this.$emit("changeComponents", 0);
@@ -52,8 +66,8 @@ export default {
     moveToRegister() {
       this.$emit("changeComponents", 1);
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

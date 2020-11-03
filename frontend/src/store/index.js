@@ -14,6 +14,7 @@ export default new Vuex.Store({
     userMbti: '',
     dogMbti: '',
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    findUserId: '',
 
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
     eventListener: 0,
@@ -52,6 +53,10 @@ export default new Vuex.Store({
 
     setEventListener(state, payload) {
       state.eventListener = payload
+    },
+
+    setFindUserId(state, payload) {
+      state.findUserId = payload
     }
   },
 
