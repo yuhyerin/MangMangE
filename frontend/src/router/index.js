@@ -9,6 +9,7 @@ import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
 import VideoList from '../pages/VideoList.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
+import AdoptionReview from '../pages/AdoptionReview.vue'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ const routes = [
     path: '/upload',
     name: 'UploadVideo',
     component: UploadVideo,
+  },
+  {
+    path: '/adoptionreview',
+    name: 'AdoptionReview',
+    component: AdoptionReview,
   },
 ]
 
