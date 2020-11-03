@@ -63,6 +63,7 @@
 <script>
 import axios from "axios";
 import SERVER from "@/api/url";
+import { mapMutations } from "vuex";
 
 export default {
   data() {
@@ -74,28 +75,36 @@ export default {
       name: "",
     };
   },
+
   methods: {
+    ...mapMutations(["setFindUserId"]),
     back() {
       this.$emit("changeComponents", 0);
     },
     submit() {
-      axios
-        .post(
-          SERVER.URL + "/newuser/findid",
-          {
-            user_name: this.name,
-            user_email: this.email,
-          },
-          {}
-        )
-        .then((res) => {
-          //user_id == null의 경우 없는 회원
-          console.log(res.data);
-          this.$emit("changeComponents", 4);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (this.email == "") {
+        alert("이름을 입력해 주세요");
+      } else if (this.name == "") {
+        alert("이메일을 입력해 주세요.");
+      } else {
+        axios
+          .post(
+            SERVER.URL + "/newuser/findid",
+            {
+              user_name: this.name,
+              user_email: this.email,
+            },
+            {}
+          )
+          .then((res) => {
+            //user_id == null의 경우 없는 회원
+            this.setFindUserId(res.data.user_id);
+            this.$emit("changeComponents", 4);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
 };
