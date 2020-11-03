@@ -69,6 +69,7 @@ public class AccountController {
       System.out.println("CONTROLLER START");
 
       HashMap<String, Object> result = new HashMap<>();
+      System.out.println(account.toString());
       result = accountService.signup(account);
       System.out.println(result.toString());
       System.out.println("CONTROLLER END");
