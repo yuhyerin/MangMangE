@@ -305,17 +305,19 @@ export default {
     },
 
     adoptionApply() {
-      axios.post(SERVER.URL + '',
+      console.log('adoptionAPPLY')
+      console.log(this.personName,' ',this.firstNum,'-',this.middleNum,'-',this.lastNum,' ',this.personEmail,' ',this.personTitle)
+      axios.post(SERVER.URL + '/user/adopt/create',
         {  
-          personTitle: this.personTitle,
-          personName: this.personName,
-          personPhone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
-          personEmail: this.personEmail,
+          ani_num: 0,
+          user_name: this.personName,
+          user_phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+          user_email: this.personEmail,
+          title: this.personTitle,
         },
         {
           headers: {
-            Authorization: this.$cookies.get("accessToken"),
-            refreshToken: this.$cookies.get("refreshToken")
+            Authorization: this.$cookies.get("accessToken")
           }
         }
       )

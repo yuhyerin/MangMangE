@@ -2,6 +2,7 @@ package com.daeng.nyang.service.user;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -92,8 +93,11 @@ public class AccountService {
 		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
+			System.out.println("id : " + id + "\t password : " + pwd);
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, pwd));
+			System.out.println("TRY END");
 		} catch (Exception e) {
+			e.printStackTrace();
 			map.put("success", false);
 			map.put("message", "authenticate ERROR");
 			System.out.println("authenticate error");
@@ -177,7 +181,6 @@ public class AccountService {
 		System.out.println("accessToken : " + accessToken);
 		System.out.println("refreshToken : " + refreshToken);
 
-		
 		try {
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
 			System.out.println(user_id);
@@ -206,7 +209,7 @@ public class AccountService {
 				response.put("success", true);
 				response.put("accessToken", new_accessToken);
 				System.out.println("new_accessToken : " + new_accessToken);
-				
+
 			} else {
 				response.put("success", false);
 				response.put("msg", "refresh token is expired.");
@@ -215,9 +218,24 @@ public class AccountService {
 			response.put("success", false);
 			response.put("msg", "your refresh token does not exist.");
 		}
-		
+
 		System.out.println("service End");
 		return response;
+	}
+
+	public HashMap<String, Object> readAdopt() {
+		List<Apply> list = applyRepo.selectList();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		return map;
+	}
+
+	public ResponseEntity<HashMap<String, Object>> readAdopt(long uid, String user_id) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		Apply apply = applyRepo.selectByuid(uid);
+		map.put("apply", apply);
+		map.put("user_id", user_id);
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
 }
