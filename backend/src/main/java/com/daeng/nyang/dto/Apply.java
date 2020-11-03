@@ -27,7 +27,7 @@ public class Apply {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long uid;
 
-	private long Ani_num;	// FK
+	private long ani_num;	// FK
 //	@ManyToOne(optional=false) @JoinColumn(name="user_id", insertable=false, updatable=false)
 //	private Account account;	// FK
 	private String user_id;

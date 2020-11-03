@@ -1,5 +1,6 @@
 package com.daeng.nyang.service.user;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -224,9 +225,20 @@ public class AccountService {
 	}
 
 	public HashMap<String, Object> readAdopt() {
-		List<Apply> list = applyRepo.selectList();
+//		List<Apply> list = applyRepo.selectList();
+		List<Apply> list = applyRepo.findAll();
+		List<Apply> result = new ArrayList<Apply>();
+		for(int i=0;i<list.size();i++) {
+			Apply app = list.get(i);
+			Apply temp = Apply.builder().
+					uid(app.getUid()).
+					regtime(app.getRegtime()).
+					title(app.getTitle()).
+					user_id(app.getUser_id()).build();
+			result.add(temp);
+		}
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list);
+		map.put("list", result);
 		return map;
 	}
 

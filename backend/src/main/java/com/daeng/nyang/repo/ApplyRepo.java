@@ -11,7 +11,7 @@ import com.daeng.nyang.dto.Apply;
 @Repository
 public interface ApplyRepo extends JpaRepository<Apply, String>{
 
-	@Query(value="select uid, user_id, title, regtime", nativeQuery=true)
+	@Query(value="select uid, user_id, title, regtime from apply", nativeQuery=true)
 	List<Apply> selectList();
 	
 	@Query(value="select * from apply where uid=:uid", nativeQuery=true)

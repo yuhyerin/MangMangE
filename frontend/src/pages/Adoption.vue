@@ -70,7 +70,7 @@
             </div>
             <div class="col-10">
               <input style="border: 1px solid black" v-model="personName"/>
-              <label class="personNameLabel" v-if="checkPersonName === 0" style="color: red; font-size: small;">성명은 입력해주세요</label>
+              <label class="personNameLabel" v-if="checkPersonName === 0" style="color: red; font-size: small;">성명을 입력해주세요</label>
             </div>
           </div>
           <div class="row adopter-information-number">
