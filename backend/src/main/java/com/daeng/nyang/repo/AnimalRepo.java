@@ -28,4 +28,6 @@ public interface AnimalRepo extends JpaRepository<Animal, String>{
 //	@Query(value="select * from animal a where (a.mbti like %:first%) and (a.mbti like %:second%) and (a.mbti like %:third%) and (a.mbti like %:fourth%)", nativeQuery = true)
 //	List<Animal>  findAnimalMbtiByMbti(@Param("first")String first, @Param("second") String second, @Param("third") String third, @Param("fourth") String fourth);
 	
+	@Query(value="select * from animal a where a.desertion_no=:desertion_no", nativeQuery = true)
+	Animal findAnimalByDesertionNo(Long desertion_no);
 }

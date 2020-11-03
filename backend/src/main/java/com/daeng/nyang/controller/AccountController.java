@@ -56,20 +56,13 @@ public class AccountController {
    @Autowired
    RedisTemplate<String, Object> redisTemplate;
 
-   @GetMapping(path = "/admin")
-   @ApiOperation("관리자계정")
-   public void admin(HttpServletRequest req) {
-      System.out.println("CONTROLLER START");
-      System.out.println(req.getHeader("Authorization"));
-   }
-
    @PostMapping(path = "/newuser/signup")
    @ApiOperation("회원가입")
    public ResponseEntity<HashMap<String, Object>> signup(@RequestBody Account account) {
       System.out.println("CONTROLLER START");
       System.out.println(account.toString());
-      HashMap<String, Object> result = new HashMap<>();
-//      result = accountService.signup(account);
+      HashMap<String, Object> result;
+      result = accountService.signup(account);
       System.out.println(result.toString());
       System.out.println("CONTROLLER END");
       if ((boolean) result.get("success"))
@@ -90,10 +83,11 @@ public class AccountController {
          String hash_number = BCrypt.hashpw(auth_number, salt);
 //         BCrypt.checkpw(plaintext, hashed);
          resultMap.put("origin_hash", hash_number);
+         return ResponseEntity.status(HttpStatus.OK).body(resultMap);
       } else {
          resultMap.put("origin_hash", null);
+         return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultMap);
       }
-      return ResponseEntity.status(HttpStatus.OK).body(resultMap);
    }
 
    @GetMapping(path = "/newuser/signup/hashcheck")
@@ -103,10 +97,11 @@ public class AccountController {
       boolean result = BCrypt.checkpw(auth_number, hash_number);
       if(result) {
          resultMap.put("result", result);
+         return ResponseEntity.status(HttpStatus.OK).body(resultMap);
       }else {
          resultMap.put("result", result);
       }
-      return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+      return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultMap);
    }
 
 
@@ -128,7 +123,7 @@ public class AccountController {
    @ApiOperation("로그아웃")
    public ResponseEntity<?> logout(HttpServletRequest request) {
 
-      System.out.println("/user/logout 입장");
+      System.out.println("CONTROLLER START");
       String user_id = null;
 //      String accessToken = m.get("accessToken");
       String accessToken = request.getHeader("Authorization");
@@ -159,49 +154,51 @@ public class AccountController {
       } catch (IllegalArgumentException e) {
          System.out.println("user does not exist");
       }
-
-      // cache logout token for 10 minutes!
-//        logger.info(" logout ing : " + accessToken);
-//      redisTemplate.opsForValue().set(accessToken, true);
-//      redisTemplate.expire(accessToken, 10 * 6 * 1000, TimeUnit.MILLISECONDS);
-
       return new ResponseEntity(HttpStatus.OK);
    }
 
    @PostMapping(path = "/newuser/refresh")
    @ApiOperation("access토큰이 만료되어서 갱신하고자, refresh토큰을 보냄.")
-   public Map<String, Object> requestForNewAccessToken(HttpServletRequest request) {
+   public ResponseEntity<HashMap<String, Object>> requestForNewAccessToken(HttpServletRequest request) {
       System.out.println("CONTROLLER START");
       String accessToken = request.getHeader("accessToken");
       String refreshToken = request.getHeader("refreshToken");
-//      String refreshTokenFromDb = null;
-//      String user_id = null;
-      Map<String, Object> response = new HashMap<>();
+      HashMap<String, Object> response;
       response = accountService.refreshToken(accessToken, refreshToken);
-      System.out.println("controller End");
-      return response;
+      System.out.println("CONTROLLER END");
+      if((boolean)response.get("success"))
+    	  return new ResponseEntity<>(response, HttpStatus.OK);
+      else
+      return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
    }
 
    @GetMapping(path = "/user/adopt/create")
+   @ApiOperation("문자인증")
    public ResponseEntity<HashMap<String, Object>> checkPhone(@RequestParam String phone) {
       int rand = (int) (Math.random() * 899999) + 100000; // 랜덤넘버 6자리
 
-      ResponseEntity<HashMap<String, Object>> result = accountService.checkPhone(phone, rand);
+      HashMap<String, Object> result = accountService.checkPhone(phone, rand);
       System.out.println(result.toString());
-      return result;
+      if (result == null)
+			return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		else
+			return new ResponseEntity<>(result, HttpStatus.OK);
    }
 
-   @PostMapping(path = "/user/adopt/create")
+   @PostMapping(path = "/user/adopt/create") // 
+   @ApiOperation("입양신청서 저장")
    public ResponseEntity<HashMap<String, Object>> createAdopt(@RequestBody Apply apply,HttpServletRequest request) {
       System.out.println("CONTROLLER START");
       String accessToken = request.getHeader("Authorization");
-      // 토큰으로 유저 아이디 받아오는 구문
-      String user_id = null; // 일단 null 값
-      user_id = jwtTokenUtil.getUsernameFromToken(accessToken); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
+      String user_id = null;
+      user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
       System.out.println("user_id : " + user_id); // 확인
       System.out.println(apply.toString());
-      ResponseEntity<HashMap<String, Object>> result = accountService.createApply(user_id, apply);
-      return result;
+      HashMap<String, Object> result = accountService.createApply(user_id, apply);
+      if((boolean)result.get("success"))
+    	  return new ResponseEntity<>(result, HttpStatus.OK);
+      else
+    	  return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
    }
    
    @GetMapping(path="/user/adopt/read")
