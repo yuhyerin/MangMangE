@@ -7,15 +7,18 @@ import org.springframework.stereotype.Service;
 
 import com.daeng.nyang.dto.Animal;
 import com.daeng.nyang.dto.AnimalLike;
-import com.daeng.nyang.dto.Survey;
-import com.daeng.nyang.repo.AnimalRepo;
 import com.daeng.nyang.repo.AnimalLikeRepo;
+import com.daeng.nyang.repo.AnimalRepo;
+import com.daeng.nyang.repo.PtagRepo;
 
 @Service
 public class AnimalService {
 
 	@Autowired
 	private AnimalRepo animalRepo;
+	
+	@Autowired
+	private PtagRepo ptagRepo;
 
 	@Autowired
 	private AnimalLikeRepo animalLikeRepo;
@@ -59,4 +62,22 @@ public class AnimalService {
         System.out.println("Delete AnimalLike Service");
         animalLikeRepo.deleteAnimalLike(user_id, desertion_no);
     }
+	
+	public Animal animalDetail(Long desertion_no) {
+		System.out.println("SERVICE START");
+		Animal animal = animalRepo.findAnimalByDesertionNo(desertion_no);
+		System.out.println(animal.toString());
+		/**
+		 * 제목	종 / 품종	성별(중성화)	나이	몸무게	털색	성격
+		 */
+		return animal;
+	}
+	
+	public List<String> animalPersonality(Long desertion_no){
+		System.out.println("SERVICE START");
+		List<String> personality = ptagRepo.findTagNameByDesertionNo(desertion_no);
+		System.out.println(personality.toString());
+		System.out.println("SERVICE END");
+		return personality;
+	}
 }

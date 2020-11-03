@@ -71,7 +71,7 @@ public class AccountService {
 		String user_id = account.getUser_id();
 		if (accountRepo.findByUserid(user_id) == null) {
 			map = new HashMap<>();
-			if ("admin".equals(user_id)) {
+			if (user_id.contains("admin")) {
 				account.setRole("ROLE_ADMIN");
 			} else {
 				account.setRole("ROLE_USER");
@@ -128,18 +128,21 @@ public class AccountService {
 		return map;
 	}
 
-	public ResponseEntity<HashMap<String, Object>> createApply(String user_id, Apply apply) {
+	public HashMap<String, Object> createApply(String user_id, Apply apply) {
 		System.out.println("accountService 입장");
 		System.out.println(apply.toString());
 		apply.setUser_id(user_id);
 		System.out.println(apply.toString());
-		applyRepo.save(apply);
+		Apply app = applyRepo.save(apply);
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("success", true);
-		return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+		if (app == null)
+			map.put("success", false);
+		else
+			map.put("success", true);
+		return map;
 	}
 
-	public ResponseEntity<HashMap<String, Object>> checkPhone(String phone, int number) {
+	public HashMap<String, Object> checkPhone(String phone, int number) {
 		HashMap<String, Object> map = new HashMap<>();
 		System.out.println("apiKey : " + apiKey);
 		System.out.println("apiSecret : " + apiSecret);
@@ -168,16 +171,12 @@ public class AccountService {
 			System.out.println(e.getCode());
 			map = null;
 		}
-		if (map == null)
-			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.BAD_REQUEST);
-		else
-			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-
+		return map;
 	}
 
-	public Map<String, Object> refreshToken(String accessToken, String refreshToken) {
+	public HashMap<String, Object> refreshToken(String accessToken, String refreshToken) {
 		System.out.println("service Start");
-		Map<String, Object> response = new HashMap<>();
+		HashMap<String, Object> response = new HashMap<>();
 		String user_id = null, refreshTokenFromDb = null;
 		System.out.println("accessToken : " + accessToken);
 		System.out.println("refreshToken : " + refreshToken);
@@ -242,12 +241,16 @@ public class AccountService {
 		return map;
 	}
 
-	public ResponseEntity<HashMap<String, Object>> readAdopt(long uid, String user_id) {
+	public HashMap<String, Object> readAdopt(long uid, String user_id) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		Apply apply = applyRepo.selectByuid(uid);
-		map.put("apply", apply);
-		map.put("user_id", user_id);
-		return new ResponseEntity<>(map, HttpStatus.OK);
+		if (apply == null)
+			return null;
+		else {
+			map.put("apply", apply);
+			map.put("user_id", user_id);
+			return map;
+		}
 	}
 
 }

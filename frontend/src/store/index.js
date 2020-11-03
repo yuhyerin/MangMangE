@@ -15,7 +15,9 @@ export default new Vuex.Store({
     dogMbti: '',
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     address: '',
+    findUserId: '',
 
+    // 1: survey to animalList, 2: main to animalList
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
     eventListener: 0,
   },
@@ -58,6 +60,10 @@ export default new Vuex.Store({
     
     setEventListener(state, payload) {
       state.eventListener = payload
+    },
+
+    setFindUserId(state, payload) {
+      state.findUserId = payload
     }
   },
 
@@ -69,8 +75,8 @@ export default new Vuex.Store({
       axios
         .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
           {
-            "MBTI": state.userMbti,
-            "answers": state.dogMbti,
+            "mbti": state.userMbti,
+            "answer": state.dogMbti,
           },
           {
             headers: {
@@ -85,6 +91,7 @@ export default new Vuex.Store({
         })
         .catch(err => {
           console.log('MBTI XXX', err)
+          SERVER.RefreshToken(err);
         })
     },
 

@@ -76,18 +76,28 @@ export default {
       this.$emit("changeComponents", 0);
     },
     submit() {
-      axios
-        .post(SERVER.URL + "/newuser/findpw", {
-          user_id: this.id,
-          user_email: this.email,
-        })
-        .then((res) => {
-          console.log(res.data);
-          this.$emit("changeComponents", 5);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (this.id == "") {
+        alert("아이디를 입력해 주세요.");
+      } else if (this.email == "") {
+        alert("이메일을 입력해 주세요.");
+      } else {
+        axios
+          .post(SERVER.URL + "/newuser/findpw", {
+            user_id: this.id,
+            user_email: this.email,
+          })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.result == "fail") {
+              alert("가입된 내역이 없습니다.");
+            } else {
+              this.$emit("changeComponents", 5);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
 };

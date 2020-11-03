@@ -128,7 +128,7 @@
 <script>
 import AllAnimals from "../components/AllAnimals.vue";
 import Header from "../components/Header.vue";
-import { mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 import data from "../assets/data/animal.json";
 
 import SERVER from "@/api/url";
@@ -137,12 +137,12 @@ import axios from "axios";
 export default {
   data() {
     return {
-      trigger: 0,
+      trigger: "",
       tmp: 0,
       testTrigger: false,
       allDatas: data,
       matchedDatas: "",
-      likedDatas: [],
+      likedDatas: "",
       checked: ["F", "M"],
       tmpArr: [],
     };
@@ -154,16 +154,17 @@ export default {
   watch: {
     trigger(newValue, oldValue) {
       if (newValue == 0) {
-        this.tmp = 10;  
         console.log("All Animals");
-        axios.get(SERVER.URL + "/newuser/animal/allread",{
-          headers: {
-            Authorization: this.$cookies.get('accessToken')
-          }
-        }).then((res) => {
-          this.allDatas = res.data.animalList;
-          console.log(res.data.animalList);
-        });
+        // axios
+        //   .get(SERVER.URL + "/newuser/animal/allread", {
+        //     headers: {
+        //       Authorization: this.$cookies.get("accessToken"),
+        //     },
+        //   })
+        //   .then((res) => {
+        //     this.allDatas = res.data.animalList;
+        //     console.log(res.data.animalList);
+        //   });
       } else if (newValue == 1) {
         this.tmp = 4;
         console.log("matched Animals");
@@ -174,10 +175,24 @@ export default {
     },
   },
 
-  created() {
-    axios.get(SERVER.URL + "/newuser/animal/allread").then((res) => {
-      this.allDatas = res.data.animalList;
+  computed: {
+    ...mapState(["eventListener"]),
+  },
+
+  async created() {
+    var data = null;
+
+    await axios.get(SERVER.URL + "/newuser/animal/allread").then((res) => {
+      data = res.data.animalList;
     });
+
+    this.allDatas = data;
+
+    if (this.eventListener == 1) {
+      this.trigger = 1;
+    } else if (this.eventListener == 2) {
+      this.tirgger = 0;
+    }
   },
 
   methods: {
