@@ -48,7 +48,7 @@ export default {
         },
         {
           key: 'writer',
-          label: '글쓴이'
+          label: '아이디'
         },
         {
           key: 'adoptionDay',

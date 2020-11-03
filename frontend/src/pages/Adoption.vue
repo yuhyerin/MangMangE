@@ -59,7 +59,14 @@
         <div class="adopter-information">
           <div class="row adopter-information-name">
             <div class="col-2">
-              <label>1. 성명</label>
+              <label>1. 제목</label>
+            </div>
+            <div class="col-10">
+              <input style="border: 1px solid black" v-model="personTitle"/>
+              <label class="personTitle" v-if="checkPersonTitle === 0" style="color: red; font-size: small;">제목을 입력해주세요</label>
+            </div>
+            <div class="col-2">
+              <label>2. 성명</label>
             </div>
             <div class="col-10">
               <input style="border: 1px solid black" v-model="personName"/>
@@ -68,7 +75,7 @@
           </div>
           <div class="row adopter-information-number">
             <div class="col-2">
-              <label>2. 휴대폰</label>
+              <label>3. 휴대폰</label>
             </div>
             <div class="col-2">
               <input style="border: 1px solid black" v-model="firstNum" placeholder="010"/>
@@ -80,63 +87,27 @@
               <input style="border: 1px solid black" v-model="lastNum" placeholder="5678"/>
             </div>
             <div class="col-4">
-              <input class="check-number" @click="test" style="border: 1px solid black; background: black; color: white;" type="button" value="문자인증">
+              <input v-if="pressedAuthenticationBtn === 0" class="check-number" @click="phoneAuthentication" style="border: 1px solid black; background: black; color: white;" type="button" value="문자인증">
+              <div class="flex">
+                <input v-if="pressedAuthenticationBtn === 1" placeholder="인증번호를 입력해주세요" style="border: 1px solid black;" v-model="personNumberAuthenticationInput"/>
+                <label style="color: blue;" v-if="personNumberAuthenticationFinish">인증완료</label>
+                <label style="color: red;" v-if="personNumberAuthenticationWrong">틀렸습니다</label>
+              </div>
             </div>
           </div>
             <div class="row adopter-information-email">
               <div class="col-2">
-                <label>3. 이메일</label>
+                <label>4. 이메일</label>
               </div>
               <div class="col-10">
                 <input style="border: 1px solid black;" v-model="personEmail" placeholder="naver@naver.com">
                 <label v-if="checkPersonEmail === 0" style="color: red; font-size: small;">이메일을 확인해주세요</label>
               </div>
             </div>
-            <div class="row adopter-information-gender">
-              <div class="col-2">
-                <label>4. 성별</label>
-              </div>
-              <div class="col-3" style="display: flex;">
-                <div>
-                  <label for="female">여성</label>
-                </div>
-                <div>
-                  <input type="radio" name="gender" id="female" style="width: 20px;" value="1" v-model="personGender" />
-                </div>
-              </div>
-              <div class="col-3" style="display: flex;">
-                <div>
-                  <label for="male">남성</label>
-                </div>
-                <div>
-                  <input type="radio" name="gender" id="male" style="width: 20px;" value="2" v-model="personGender" />
-                  <label v-if="checkPersonGender === 0" style="color: red; font-size: small;">성별 체크해주세요</label>
-                </div>
-              </div>
-            </div>
-            <div class="row adopter-information-birthday">
-              <div class="col-2">
-                <label>5. 생년월일</label>
-              </div>
-              <div class="col-10">
-                <!-- <input style="border: 1px solid black;"> -->
-                <datepicker :language="ko" :format="format" style="border: 1px solid black;" v-model="personBirthday"></datepicker>
-                <label v-if="checkPersonBirthday === 0" style="color: red; font-size: small;">생년월일을 입력해주세요</label>
-              </div>
-            </div>
-            </div>
-            <div class="row adopter-information-address">
-              <div class="col-2">
-                <label>6. 주소</label>
-              </div>
-              <div class="col-10">
-                <input style="border: 1px solid black;" @click="findAddress()" v-model="personAddress">
-                <label v-if="checkPersonAddress === 0" style="color: red; font-size: small;">주소를 입력해주세요</label>
-              </div>
             </div>
             <div class="row adopter-information-personal">
               <div class="col-12">
-                <label>7. 개인정보 이용에 대한 동의</label>
+                <label>5. 개인정보 이용에 대한 동의</label>
               </div>
             </div>
             <div class="adopter-information-personal-list">
@@ -193,23 +164,25 @@ export default {
       dogName: "",
       dogBreed: "",
       dogGender: "",
+
+      personTitle: "",
       personName: "",
       personEmail: "",
-      personGender: 0,
-      personBirthday: "",
-      personAddress: "",
       personCheck: false,
       firstNum: "",
       middleNum: "",
       lastNum: "",
+      pressedAuthenticationBtn: 0,
+      personNumberAuthentication: 0,
+      personNumberAuthenticationInput: "",
+      personNumberAuthenticationFinish: 0,
+      personNumberAuthenticationWrong: 0,
       format: "yyyy년 MMMM dd일",
       en: en,
       ko: ko,
+      checkPersonTitle: 1,
       checkPersonName: 1,
       checkPersonEmail: 1,
-      checkPersonGender: 1,
-      checkPersonBirthday: 1,
-      checkPersonAddress: 1,
       checkPersonCheck: 1,
     };
   },
@@ -253,23 +226,77 @@ export default {
       }).open();
     },  
 
-    test() {
+    phoneAuthentication() {
       console.log("FE input Form : ", this.firstNum + "-" + this.middleNum + "-" + this.lastNum)
+
       axios.get(SERVER.URL + '/user/adopt/create', {
           params: {
-            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+              phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+          },
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+            refreshToken: this.$cookies.get("refreshToken")
           }
         })
-      .then((res) => {
-        console.log("then res : ",res.data)
-      })
-      .catch((err) => {
-        console.log("catch err : ",err)
-      })
+        .then((res) => {
+          console.log("then res : ",res.data)
+          this.pressedAuthenticationBtn = 1
+          this.personNumberAuthentication = res.data.number
+          console.log(this.personNumberAuthentication)
+        })
+        .catch((err) => {
+          console.log("catch err : ",err)
+          if (err.response.status == 401) {
+            axios
+              .post(
+                SERVER.URL + "/newuser/refresh",
+                {},
+                {
+                  headers: {
+                    accessToken: this.$cookies.get("accessToken"),
+                    refreshToken: this.$cookies.get("refreshToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res.data)
+                if (res.data.success) {
+                  this.$cookies.set("accessToken", res.data.accessToken)
+                  console.log(this.$cookies.get("accessToken"))
+
+                  axios.get(SERVER.URL + '/user/adopt/create', {
+                      params: {
+                          phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+                      },
+                      headers: {
+                        Authorization: this.$cookies.get("accessToken"),
+                        refreshToken: this.$cookies.get("refreshToken")
+                      }
+                    })
+                    .then((res) => {
+                      console.log("then res : ",res.data)
+                      this.pressedAuthenticationBtn = 1
+                      this.personNumberAuthentication = res.data.number
+                    })
+                    .catch((err) => {
+                      console.log("catch err : ",err)
+                })
+              }
+              })
+              .catch((err) => {
+                console.log(err);
+              })
+          }
+        })
     },
     
     adoptionCheck() {
       console.log(this.personAddress)
+      if (this.personTitle.length === 0) {
+        this.checkPersonTitle = 0
+      } else {
+        this.checkPersonTitle = 1
+      }
 
       if (this.personName.length === 0) {
         this.checkPersonName = 0
@@ -289,26 +316,6 @@ export default {
           this.checkPersonEmail = 0
       }
 
-      if (this.personGender === 0 ) {
-        this.checkPersonGender = 0
-      } else {
-        this.checkPersonGender = 1
-      }
-      
-      if (this.personBirthday.length === 0) {
-        this.checkPersonBirthday = 0
-      }
-
-      if (this.personAddress.length === 0) {
-        this.checkPersonAddress = 0
-      }
-
-      if (this.personAddress.length === 0) {
-        this.checkPersonAddress = 0
-      } else {
-        this.checkPersonAddress = 1
-      }
-
       if (this.personCheck === false) {
         this.checkPersonCheck = 0
       } else {
@@ -316,61 +323,68 @@ export default {
       }
 
       if (this.checkPersonName === 1 && 
-      this.checkPersonEmail === 1 && 
-      this.checkPersonGender === 1 && 
-      this.checkPersonBirthday === 1 && 
-      this.checkPersonAddress === 1 &&
+      this.checkPersonEmail === 1 &&
       this.checkPersonCheck === 1) {
         this.adoptionApply()
       }
     },
 
     adoptionApply() {
-      axios.post(SERVER.URL + '', {
-        params: {
+      axios.post(SERVER.URL + '',
+        {  
+          personTitle: this.personTitle,
           personName: this.personName,
+          personPhone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
           personEmail: this.personEmail,
-          personGender: this.personGender,
-          personBirthday: this.personBirthday,
-          personAddress: this.personAddress,
-          personCheck: this.personCheck,
-          phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
         },
-        headers: {
-          Authorization: this.$cookies.get("accessToken")
+        {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+            refreshToken: this.$cookies.get("refreshToken")
+          }
         }
-      })
+      )
       .then((res) => {
-        if (res.data.accessToken) {
-          doginfo = res.data
-        } else {
-          axios
-            .post(
-              baseURL + "",
-              {
-                
-              },
-              {
-                headers: {
-                  "Authorization": this.$cookies.get("accessToken"),
-                  // "key뭔지모름": this.$cookies.get("refreshToken")
-                }
-              }
-            )
-            .then((res) => {
-              doginfo = res.data
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        }
+        console.log("then res : ",res.data)
       })
       .catch((err) => {
-        console.log(err)
-      })
+          console.log("catch err : ",err)
+          if (err.response.status == 401) {
+            //accessToken만료
+            axios
+              .post(
+                SERVER.URL + "/newuser/refresh",
+                {},
+                {
+                  headers: {
+                    accessToken: this.$cookies.get("accessToken"),
+                    refreshToken: this.$cookies.get("refreshToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+                if (res.data.success) {
+                  this.$cookies.set("accessToken", res.data.accessToken);
+                  console.log(this.$cookies.get("accessToken"));
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              })
+          }
+        })
     }
   },
   watch: {
+    personTitle() {
+      if (this.personTitle.length === 0) {
+        this.checkPersonTitle = 0
+      } else {
+        this.checkPersonTitle = 1
+      }
+    },
+    
     personName() {
       if (this.personName.length === 0) {
         this.checkPersonName = 0
@@ -424,52 +438,25 @@ export default {
       } else {
         this.checkPersonCheck = 1
       }
+    },
+
+    personNumberAuthenticationInput() {
+      console.log(this.personNumberAuthenticationInput)
+      console.log(this.personNumberAuthentication)
+      if (this.personNumberAuthenticationInput == this.personNumberAuthentication) {
+        console.log('인증 완료')
+        this.personNumberAuthenticationFinish = 1
+      }
+
+      if (this.personNumberAuthenticationInput.length === 6) {
+        if (this.personNumberAuthenticationInput != this.personNumberAuthentication) {
+          this.personNumberAuthenticationWrong = 1
+        } else {
+          this.personNumberAuthenticationWrong = 0
+        }
+      }
     }
   },
-  // created: {
-  //   getAnimalData() {
-  //     axios
-  //       .post(
-  //         baseURL + "",
-  //         {
-  //           animalId: this.$route.params.animalId
-  //         },
-  //         {
-  //           headers: {
-  //             Authorization: this.$cookies.get("accessToken")
-  //           }
-  //         }
-  //       )
-  //       .then((res) => {
-  //         if (res.data.accessToken) {
-  //           doginfo = res.data
-  //         } else {
-  //           axios
-  //             .post(
-  //               baseURL + "",
-  //               {
-                  
-  //               },
-  //               {
-  //                 headers: {
-  //                   "Authorization": this.$cookies.get("accessToken"),
-  //                   // "key뭔지모름": this.$cookies.get("refreshToken")
-  //                 }
-  //               }
-  //             )
-  //             .then((res) => {
-  //               doginfo = res.data
-  //             })
-  //             .catch((err) => {
-  //               console.log(err)
-  //             })
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err)
-  //       })
-  //   }
-  // }
 }
 </script>
 
