@@ -30,6 +30,8 @@
 
 <script>
 import Header from "../components/Header.vue";
+import axios from "axios"
+
 export default {
   name: "AdoptionList",
   data() {
@@ -133,7 +135,7 @@ export default {
     }
   },
   created: {
-   
+    
   },
   computed: {
     rows() {

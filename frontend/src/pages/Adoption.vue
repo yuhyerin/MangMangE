@@ -201,31 +201,6 @@ export default {
       }
     },
 
-    findAddress() {
-      new daum.Postcode({
-        oncomplete: (data) => {
-          var fullAddr = data.address;
-          var extraAddr = "";
-
-          if (data.addressType === "R") {
-            if (data.bname !== "") {
-              extraAddr += data.bname;
-            }
-            if (data.buildingName !== "") {
-              extraAddr +=
-                extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
-            }
-            fullAddr += extraAddr !== "" ? " (" + extraAddr + ")" : "";
-            this.findPersonAddress(fullAddr);
-            this.personAddress = this.address
-          } else {
-            this.findPersonAddress(fullAddr);
-            this.personAddress = fullAddr;
-          }
-        },
-      }).open();
-    },  
-
     phoneAuthentication() {
       console.log("FE input Form : ", this.firstNum + "-" + this.middleNum + "-" + this.lastNum)
 
@@ -441,8 +416,6 @@ export default {
     },
 
     personNumberAuthenticationInput() {
-      console.log(this.personNumberAuthenticationInput)
-      console.log(this.personNumberAuthentication)
       if (this.personNumberAuthenticationInput == this.personNumberAuthentication) {
         console.log('인증 완료')
         this.personNumberAuthenticationFinish = 1
@@ -461,29 +434,29 @@ export default {
 </script>
 
 <style>
-div.application {
-  margin: 0 auto;
-}
-
-hr.dog-information-startline {
-  border-top: 1px solid black;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-h2.application-title {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-  div.selfcheck {
-    background: rgb(244, 236, 225);
-    padding: 12px 12px 5px 12px;
+  div.application {
+    margin: 0 auto;
   }
 
-h3.selfcheckstart {
-  text-align: center;
-}
+  hr.dog-information-startline {
+    border-top: 1px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  h2.application-title {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  div.selfcheck {
+      background: rgb(244, 236, 225);
+      padding: 12px 12px 5px 12px;
+    }
+
+  h3.selfcheckstart {
+    text-align: center;
+  }
 
   ul.selfchecklist {
     list-style-position: inside;
@@ -496,10 +469,10 @@ h3.selfcheckstart {
     padding: 12px 12px 1px 12px;
   }
 
-button.check-number {
-  background: black;
-  color: white;
-}
+  button.check-number {
+    background: black;
+    color: white;
+  }
 
   div.adopter-information-personal-allow{
     margin-top: 10px;
@@ -515,24 +488,24 @@ button.check-number {
     padding: 12px 12px 5px 12px;
   }
 
-hr.dog-information-endline {
-  border-top: 1px solid black;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+  hr.dog-information-endline {
+    border-top: 1px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
   p.serial-p, p.name-p, p.breed-p, p.gender-p {
     margin-bottom: 0;
   }
 
-input {
-  width: 100%;
-}
+  input {
+    width: 100%;
+  }
 
-button.apply-button {
-  background: green;
-  color: white;
-  width: 30%;
-  border: 10px solid green;
-}
+  button.apply-button {
+    background: green;
+    color: white;
+    width: 30%;
+    border: 10px solid green;
+  }
 </style>
