@@ -88,23 +88,24 @@ export default {
     border-collapse: collapse;
   }
 
-  table th {
+  /* table th {
     font-size: 1.2rem;
-  }
+  } */
 
   table tr {
     height: 2rem;
     text-align: center;
-    border-bottom: 1px solid #505050;
+    border-bottom: 0.5px solid darkgray;
+    /* border-bottom: 0.5px solid #505050; */
   }
 
   table tr:first-of-type {
-    border-top: 2px solid #404040;
+    border-top: 0.5px solid pink;
   }
 
   table tr td {
     padding: 1rem 0;
-    font-size: 1.1rem;
+    /* font-size: 1.1rem; */
   }
 
   .btn-cover {

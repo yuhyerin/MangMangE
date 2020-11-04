@@ -1,12 +1,12 @@
 <template>
   <div>
     <Header />
-    <div class="container" style="height: 700px; margin-top: 65px;">
+    <div class="container" style="height: 710px; margin-top: 65px;">
       <div class="row">
-        <div class="application col-lg-8 col-md-8 col-sm-8">
-          <h2 class="application-title">입양신청서</h2>
+        <div class="application col-lg-10 col-md-10 col-sm-10">
+          <h4 class="application-title">입양신청서</h4>
           <div class="selfcheck">
-            <h3 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h3>
+            <h5 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h5>
             <ul class="selfchecklist">
               <li>입양에 필요한 비용을 감당하실 수 있나요?</li>
               <li>정기적인 검진에 따른 비용을 감당하실 수 있나요?</li>
@@ -18,14 +18,14 @@
             </ul>
           </div>
           <hr class="dog-information-startline">
-          <h3>유기동물 정보</h3>
+          <h5>유기동물 정보</h5>
           <div class="dog-information">
             <div class="row dog-information-serial">
               <div class="col-2">
                 <label>1. 일련번호</label>
               </div>
               <div class="col-10">
-                <p class="serial-p" style="border: 1px solid black;">{{ dogSerial }}</p>
+                <p class="serial-p" style="border: 0.5px solid #bbb;">{{ dogSerial }}</p>
               </div>
             </div>
             <div class="row dog-information-name">
@@ -33,7 +33,7 @@
                 <label>2. 이름</label>
               </div>
               <div class="col-10">
-                <p class="name-p" style="border: 1px solid black;">{{ dogName }}</p>
+                <p class="name-p" style="border: 0.5px solid #bbb;">{{ dogName }}</p>
               </div>
             </div>
             <div class="row dog-information-breed">
@@ -41,7 +41,7 @@
                 <label>3. 종류</label>
               </div>
               <div class="col-10">
-                <p class="breed-p" style="border: 1px solid black;">{{ dogBreed }}</p>
+                <p class="breed-p" style="border: 0.5px solid #bbb;">{{ dogBreed }}</p>
               </div>
             </div>
             <div class="row dog-information-gender">
@@ -49,27 +49,27 @@
                 <label>4. 성별</label>
               </div>
               <div class="col-10">
-                <p class="gender-p" style="border: 1px solid black;">{{ dogGender }}</p>
+                <p class="gender-p" style="border: 0.5px solid #bbb;">{{ dogGender }}</p>
               </div>
             </div>
           </div>
           <hr class="dog-information-endline">
 
-        <h3>입양희망자 정보</h3>
+        <h5>입양희망자 정보</h5>
         <div class="adopter-information">
           <div class="row adopter-information-name">
             <div class="col-2">
               <label>1. 제목</label>
             </div>
             <div class="col-10">
-              <input style="border: 1px solid black" v-model="personTitle"/>
+              <input style="border: 0.5px solid #bbb;" v-model="personTitle"/>
               <label class="personTitle" v-if="checkPersonTitle === 0" style="color: red; font-size: small;">제목을 입력해주세요</label>
             </div>
             <div class="col-2">
               <label>2. 성명</label>
             </div>
             <div class="col-10">
-              <input style="border: 1px solid black" v-model="personName"/>
+              <input style="border: 0.5px solid #bbb;" v-model="personName"/>
               <label class="personNameLabel" v-if="checkPersonName === 0" style="color: red; font-size: small;">성명을 입력해주세요</label>
             </div>
           </div>
@@ -78,18 +78,18 @@
               <label>3. 휴대폰</label>
             </div>
             <div class="col-2">
-              <input style="border: 1px solid black" v-model="firstNum" placeholder="010"/>
+              <input style="border: 0.5px solid #bbb;" v-model="firstNum" placeholder="ex> 010"/>
             </div>
             <div class="col-2">
-              <input style="border: 1px solid black" v-model="middleNum" placeholder="1234"/>
+              <input style="border: 0.5px solid #bbb;" v-model="middleNum" placeholder="1234"/>
             </div>
             <div class="col-2">
-              <input style="border: 1px solid black" v-model="lastNum" placeholder="5678"/>
+              <input style="border: 0.5px solid #bbb;" v-model="lastNum" placeholder="5678"/>
             </div>
             <div class="col-4">
-              <input v-if="pressedAuthenticationBtn === 0" class="check-number" @click="phoneAuthentication" style="border: 1px solid black; background: black; color: white;" type="button" value="문자인증">
+              <input v-if="pressedAuthenticationBtn === 0" class="check-number" @click="phoneAuthentication" style="border: 0.5px solid #bbb; background: gray; color: white;" type="button" value="문자인증">
               <div class="flex">
-                <input v-if="pressedAuthenticationBtn === 1" placeholder="인증번호를 입력해주세요" style="border: 1px solid black;" v-model="personNumberAuthenticationInput"/>
+                <input v-if="pressedAuthenticationBtn === 1" placeholder="인증번호를 입력해주세요" style="border: 0.5px solid #bbb;" v-model="personNumberAuthenticationInput"/>
                 <label style="color: blue;" v-if="personNumberAuthenticationFinish">인증완료</label>
                 <label style="color: red;" v-if="personNumberAuthenticationWrong">틀렸습니다</label>
               </div>
@@ -100,7 +100,7 @@
                 <label>4. 이메일</label>
               </div>
               <div class="col-10">
-                <input style="border: 1px solid black;" v-model="personEmail" placeholder="naver@naver.com">
+                <input style="border: 0.5px solid #bbb;" v-model="personEmail" placeholder="ex> naver@naver.com">
                 <label v-if="checkPersonEmail === 0" style="color: red; font-size: small;">이메일을 확인해주세요</label>
               </div>
             </div>
@@ -120,8 +120,8 @@
               </div>
             </div>
             <div class="adopter-information-personal-allow">
-              <p style="margin-bottom: 0px;">법률에서 정하는 경우를 제외하고 귀하의 동의 없이 개인정보를 제 3자에게 제공하지 않습니다.</p>
-              <p style="margin-bottom: 0px;">문의: 010-0000-0000</p>
+              <p style="margin-bottom: 3px;">법률에서 정하는 경우를 제외하고 귀하의 동의 없이 개인정보를 제 3자에게 제공하지 않습니다.</p>
+              <p style="margin-bottom: 3px;">문의: 010-0000-0000</p>
               <div style="display: flex">
                 <div>
                   <input type="checkbox" style="width: 20px;" v-model="personCheck"/>
@@ -177,9 +177,7 @@ export default {
       personNumberAuthenticationInput: "",
       personNumberAuthenticationFinish: 0,
       personNumberAuthenticationWrong: 0,
-      format: "yyyy년 MMMM dd일",
-      en: en,
-      ko: ko,
+
       checkPersonTitle: 1,
       checkPersonName: 1,
       checkPersonEmail: 1,
@@ -307,6 +305,7 @@ export default {
     adoptionApply() {
       console.log('adoptionAPPLY')
       console.log(this.personName,' ',this.firstNum,'-',this.middleNum,'-',this.lastNum,' ',this.personEmail,' ',this.personTitle)
+
       axios.post(SERVER.URL + '/user/adopt/create',
         {  
           ani_num: 0,
@@ -432,6 +431,48 @@ export default {
       }
     }
   },
+  created() {
+    axios.get(SERVER.URL + 'animal/detail',
+      {
+        desertion_no: 430364201900777
+      },
+      {
+        headers: {
+          Authorization: this.$cookies.get("accessToken")
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        })
+      .catch((err) => {
+        if (err.response.status == 401) {
+          //accessToken만료
+          axios
+            .post(
+              SERVER.URL + "/newuser/refresh",
+              {},
+              {
+                headers: {
+                  accessToken: this.$cookies.get("accessToken"),
+                  refreshToken: this.$cookies.get("refreshToken"),
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+              if (res.data.success) {
+                this.$cookies.set("accessToken", res.data.accessToken);
+                console.log(this.$cookies.get("accessToken"));
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+          }
+        }
+      )
+
+  },
 }
 </script>
 
@@ -441,12 +482,12 @@ export default {
   }
 
   hr.dog-information-startline {
-    border-top: 1px solid black;
+    border-top: 1px solid #eee;
     margin-top: 10px;
     margin-bottom: 10px;
   }
 
-  h2.application-title {
+  .application-title {
     text-align: center;
     margin-bottom: 10px;
   }
@@ -456,7 +497,7 @@ export default {
       padding: 12px 12px 5px 12px;
     }
 
-  h3.selfcheckstart {
+  .selfcheckstart {
     text-align: center;
   }
 
@@ -468,6 +509,7 @@ export default {
 
   div.list {
     background: rgb(244, 236, 225);
+    /* background: #d9edf7; */
     padding: 12px 12px 1px 12px;
   }
 
@@ -491,7 +533,8 @@ export default {
   }
 
   hr.dog-information-endline {
-    border-top: 1px solid black;
+    /* border-top: 0.5px solid gray; */
+    border-top: 1px solid #eee;
     margin-top: 10px;
     margin-bottom: 10px;
   }
