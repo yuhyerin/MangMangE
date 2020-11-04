@@ -432,19 +432,24 @@ export default {
     }
   },
   created() {
-    axios.get(SERVER.URL + 'animal/detail',
+    console.log('여기')
+    axios.get(SERVER.URL + '/newuser/animal/detail',
       {
-        desertion_no: 430364201900777
-      },
-      {
-        headers: {
-          Authorization: this.$cookies.get("accessToken")
+        params: {
+          desertion_no: 430364201900777
         }
-      })
+      },
+      // {
+      //   headers: {
+      //     Authorization: this.$cookies.get("accessToken")
+      //   }
+      // }
+      )
       .then((res) => {
-        console.log(res)
+        console.log(res.data)
         })
       .catch((err) => {
+        console.log(err.response)
         if (err.response.status == 401) {
           //accessToken만료
           axios
