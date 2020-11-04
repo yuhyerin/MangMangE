@@ -3,7 +3,9 @@ package com.daeng.nyang.controller;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Account;
 import com.daeng.nyang.dto.Apply;
+import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.email.EmailService;
 import com.daeng.nyang.service.signup.SignupService;
@@ -56,13 +59,22 @@ public class AccountController {
    @Autowired
    RedisTemplate<String, Object> redisTemplate;
 
-   @GetMapping(path = "/admin")
-   @ApiOperation("관리자계정")
-   public void admin(HttpServletRequest req) {
-      System.out.println("CONTROLLER START");
-      System.out.println(req.getHeader("Authorization"));
-   }
 
+   @GetMapping(path="/user/user_id")
+   @ApiOperation("사용자조회")
+   public ResponseEntity<HashMap<String, Object>> checkJWT(HttpServletRequest request){
+	   System.out.println("CONTROLLER START");
+	   String accessToken = request.getHeader("Authorization");
+	   System.out.println(accessToken);
+//	   String user_id = jwtTokenUtil.getUsernameFromToken(request.getHeader("Authorization"));
+	   TotToken token = (TotToken) redisTemplate.opsForValue().get(accessToken);
+	   HashMap<String, Object> map = new HashMap<String, Object>();
+	   String user_id = token.getAccount().getUser_id();
+	   System.out.println(user_id);
+	   map.put("user_id", user_id);
+	   return new ResponseEntity<>(map, HttpStatus.OK);
+   }
+   
    @PostMapping(path = "/newuser/signup")
    @ApiOperation("회원가입")
    public ResponseEntity<HashMap<String, Object>> signup(@RequestBody Account account) {

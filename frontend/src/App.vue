@@ -32,7 +32,7 @@ div.navigation {
 }
 </style>-->
 <style>
-@import "./assets/css/minireset.min.css";
+/* @import "./assets/css/minireset.min.css"; */
 @import "./assets/css/fonts.css";
 
 #app {
