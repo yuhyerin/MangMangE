@@ -9,6 +9,7 @@ import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
 import VideoList from '../pages/VideoList.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
+import Streaming from '../pages/StreamingHR.vue'
 
 Vue.use(VueRouter)
 
@@ -58,6 +59,11 @@ const routes = [
     name: 'UploadVideo',
     component: UploadVideo,
   },
+  {
+    path: '/streaming',
+    name: 'Streaming',
+    component: Streaming
+  }
 ]
 
 const router = new VueRouter({

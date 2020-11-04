@@ -146,6 +146,13 @@
     		<artifactId>javax.mail-api</artifactId>
     		<version>1.6.0</version>
 		</dependency>
+		
+		<!-- websocket for streaming -->
+		<dependency>
+			<groupId> javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+		</dependency>
 
 	</dependencies>
 
