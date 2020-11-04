@@ -1,32 +1,25 @@
 <template>
-  <div>
-    <v-row>
-      <v-col>
-        <video src="@/assets/videos/video1.mp4" type="video/mp4" controls></video>
-      </v-col>
-      <v-col style="padding: 15px">
-        <v-row>
-          <div style="font-size:30px; padding-bottom:5px;">동영상 타이틀</div>
-        </v-row>
-        <v-row>
-          <div style="padding-left: 5px; line-height:150%">왼쪽에 있는 동영상은 2차 프로젝트 UCC 애니메이션입니다. 
-            <br>밑에 있는 것들도 마찬가지입니다.
-            <br>모두 다 같은 동영상
-            <br>스트리밍 동영상 자리
-          </div>
-        </v-row>
-      </v-col>
+  <div v-infinite-scroll="loadMore"
+    infinite-scroll-disabled="loading"
+    infinite-scroll-distance="6">
+    <v-row style="display: flex; justify-content: center;">
+    <div class="search">
+      <input type="text" class="searchTerm" placeholder="검색어를 입력하세요.">
+      <button type="submit" @click="searchButton" class="searchButton">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
     </v-row>
     <hr>
-    <v-row>
-      <v-col v-for="video in videos" :key="video.id">
+    <v-row v-for="video in videos" :key="video">
+      <v-col v-for="n in 3" :key="n" style="padding-bottom: 30px;">
         <vue-plyr>
           <video poster="poster.png">
             <source :src="require(`@/assets/videos/${video.video}.mp4`)" type="video/mp4">
             <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
           </video>  
         </vue-plyr>
-        <div style="text-align:center">동영상 제목{{video.id}}</div>
+        <div style="text-align:center;">동영상 제목{{video.id}}</div>
       </v-col>
     </v-row>
   </div>
@@ -72,5 +65,51 @@ export default {
 </script>
 
 <style scoped>
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
+.search {
+  width: 40%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid rgb(1, 118, 72);
+  border-right: none;
+  padding: 5px;
+  height: 36px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+  background-color: white;
+  font-size: 13px;
+}
+
+.searchTerm:focus{
+  color:black;
+}
+
+.searchButton {
+  width: 40px;
+  height: 36px;
+  border: 1px solid rgb(1, 118, 72);
+  background:rgb(1, 118, 72);
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/*Resize the wrap to see the search bar change!*/
+/* .wrap{
+  width: 30%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+} */
 </style>

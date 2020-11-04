@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-     pageTrigger: 0,
+     pageTrigger: 2,
     }
   },
   methods: {
