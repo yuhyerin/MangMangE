@@ -23,11 +23,11 @@ export default {
   created () {
     axios.get('http://sample.bmaster.kro.kr/contacts')
     .then(response => {
-      console.log(response);
+      console.log(response.data);
       this.pageArray = response.data.contacts;
     })
     .catch(err => {
-      console.log(err);
+      console.log(err.response);
     });
   }
 }

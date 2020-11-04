@@ -12,7 +12,7 @@ public interface PtagRepo extends JpaRepository<Ptag, String> {
 	@Query(value = "insert into ptag(desertion_no,tagname) values(:desertion_no, :tagname)", nativeQuery = true)
 	void insertPtag(Long desertion_no, String tagname);
 
-	@Query(value = "select tagname from Ptag p where p.desertion_no=:desertion_no", nativeQuery = true)
+	@Query(value = "select tagname from ptag p where p.desertion_no=:desertion_no", nativeQuery = true)
 	List<String> findTagNameByDesertionNo(Long desertion_no);
 
 }

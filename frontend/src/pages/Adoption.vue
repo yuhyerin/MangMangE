@@ -19,6 +19,7 @@
           </div>
           <hr class="dog-information-startline">
           <h5>유기동물 정보</h5>
+          <div class="flex">
           <div class="dog-information">
             <div class="row dog-information-serial">
               <div class="col-2">
@@ -28,12 +29,12 @@
                 <p class="serial-p" style="border: 0.5px solid #bbb;">{{ dogSerial }}</p>
               </div>
             </div>
-            <div class="row dog-information-name">
+            <div class="row dog-information-age">
               <div class="col-2">
-                <label>2. 이름</label>
+                <label>2. 추정나이</label>
               </div>
               <div class="col-10">
-                <p class="name-p" style="border: 0.5px solid #bbb;">{{ dogName }}</p>
+                <p class="age-p" style="border: 0.5px solid #bbb;">{{ dogAge }}</p>
               </div>
             </div>
             <div class="row dog-information-breed">
@@ -52,6 +53,15 @@
                 <p class="gender-p" style="border: 0.5px solid #bbb;">{{ dogGender }}</p>
               </div>
             </div>
+            <div class="row dog-information-fur">
+              <div class="col-2">
+                <label>5. 털색</label>
+              </div>
+              <div class="col-10">
+                <p class="fur-p" style="border: 0.5px solid #bbb;">{{ dogFur }}</p>
+              </div>
+            </div>
+          </div>
           </div>
           <hr class="dog-information-endline">
 
@@ -79,6 +89,7 @@
             </div>
             <div class="col-2">
               <input style="border: 0.5px solid #bbb;" v-model="firstNum" placeholder="ex> 010"/>
+              <label style="color: red; font-size: small;" v-if="personNumberAuthenticationNotFinish">인증을 완료해주세요</label>
             </div>
             <div class="col-2">
               <input style="border: 0.5px solid #bbb;" v-model="middleNum" placeholder="1234"/>
@@ -88,10 +99,10 @@
             </div>
             <div class="col-4">
               <input v-if="pressedAuthenticationBtn === 0" class="check-number" @click="phoneAuthentication" style="border: 0.5px solid #bbb; background: gray; color: white;" type="button" value="문자인증">
-              <div class="flex">
+              <div class="person-authentication-check">
                 <input v-if="pressedAuthenticationBtn === 1" placeholder="인증번호를 입력해주세요" style="border: 0.5px solid #bbb;" v-model="personNumberAuthenticationInput"/>
-                <label style="color: blue;" v-if="personNumberAuthenticationFinish">인증완료</label>
-                <label style="color: red;" v-if="personNumberAuthenticationWrong">틀렸습니다</label>
+                <label style="color: blue; font-size: small;" v-if="personNumberAuthenticationFinish">인증완료</label>
+                <label style="color: red; font-size: small;" v-if="personNumberAuthenticationWrong">틀렸습니다</label>
               </div>
             </div>
           </div>
@@ -161,9 +172,10 @@ export default {
     return {
       dogInfo: [],
       dogSerial: "",
-      dogName: "",
+      dogAge: "",
       dogBreed: "",
       dogGender: "",
+      dogFur: "",
 
       personTitle: "",
       personName: "",
@@ -177,6 +189,7 @@ export default {
       personNumberAuthenticationInput: "",
       personNumberAuthenticationFinish: 0,
       personNumberAuthenticationWrong: 0,
+      personNumberAuthenticationNotFinish: 0,
 
       checkPersonTitle: 1,
       checkPersonName: 1,
@@ -215,7 +228,6 @@ export default {
           console.log("then res : ",res.data)
           this.pressedAuthenticationBtn = 1
           this.personNumberAuthentication = res.data.number
-          console.log(this.personNumberAuthentication)
         })
         .catch((err) => {
           console.log("catch err : ",err)
@@ -264,7 +276,6 @@ export default {
     },
     
     adoptionCheck() {
-      console.log(this.personAddress)
       if (this.personTitle.length === 0) {
         this.checkPersonTitle = 0
       } else {
@@ -275,6 +286,12 @@ export default {
         this.checkPersonName = 0
       } else {
         this.checkPersonName = 1
+      }
+
+      if (this.personNumberAuthenticationFinish !== 1) {
+        this.personNumberAuthenticationNotFinish = 1
+      } else {
+        this.personNumberAuthenticationNotFinish = 0
       }
 
       if (this.personEmail.length > 0) {
@@ -295,7 +312,11 @@ export default {
         this.checkPersonCheck = 1
       }
 
-      if (this.checkPersonName === 1 && 
+      if (this.checkPersonTitle === 1 &&
+      this.checkPersonName === 1 && 
+      // 여기에 추후에 전화번호 인증 여부도 조건에 추가해야 한다!
+      // 지금은 문자 포인트 문제로 빼놓음
+      // this.personNumberAuthenticationFinish === 1 &&
       this.checkPersonEmail === 1 &&
       this.checkPersonCheck === 1) {
         this.adoptionApply()
@@ -308,7 +329,7 @@ export default {
 
       axios.post(SERVER.URL + '/user/adopt/create',
         {  
-          ani_num: 0,
+          ani_num: this.dogSerial,
           user_name: this.personName,
           user_phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
           user_email: this.personEmail,
@@ -322,6 +343,7 @@ export default {
       )
       .then((res) => {
         console.log("then res : ",res.data)
+        this.$router.push('/adoptionlist')
       })
       .catch((err) => {
           console.log("catch err : ",err)
@@ -366,6 +388,21 @@ export default {
         this.checkPersonName = 0
       } else {
         this.checkPersonName = 1
+      }
+    },
+
+    personNumberAuthenticationInput() {
+      if (this.personNumberAuthenticationInput == this.personNumberAuthentication) {
+        console.log('인증 완료')
+        this.personNumberAuthenticationFinish = 1
+      }
+
+      if (this.personNumberAuthenticationInput.length === 6) {
+        if (this.personNumberAuthenticationInput != this.personNumberAuthentication) {
+          this.personNumberAuthenticationWrong = 1
+        } else {
+          this.personNumberAuthenticationWrong = 0
+        }
       }
     },
 
@@ -416,27 +453,13 @@ export default {
       }
     },
 
-    personNumberAuthenticationInput() {
-      if (this.personNumberAuthenticationInput == this.personNumberAuthentication) {
-        console.log('인증 완료')
-        this.personNumberAuthenticationFinish = 1
-      }
-
-      if (this.personNumberAuthenticationInput.length === 6) {
-        if (this.personNumberAuthenticationInput != this.personNumberAuthentication) {
-          this.personNumberAuthenticationWrong = 1
-        } else {
-          this.personNumberAuthenticationWrong = 0
-        }
-      }
-    }
   },
   created() {
     console.log('여기')
     axios.get(SERVER.URL + '/newuser/animal/detail',
       {
         params: {
-          desertion_no: 430364201900777
+          desertion_no: 430364202000067
         }
       },
       // {
@@ -447,7 +470,16 @@ export default {
       )
       .then((res) => {
         console.log(res.data)
-        })
+        this.dogSerial = res.data.animal.desertion_no
+        this.dogAge = 2020 - res.data.animal.age + '살'
+        this.dogBreed = res.data.animal.kind_p + '(' + res.data.animal.kind_c + ')'
+        if (res.data.animal.sex_cd == 'M') {
+          this.dogGender = "남"
+        } else {
+          this.dogGender = "여"
+        }
+        this.dogFur = res.data.animal.color_cd
+      })
       .catch((err) => {
         console.log(err.response)
         if (err.response.status == 401) {
@@ -498,9 +530,9 @@ export default {
   }
 
   div.selfcheck {
-      background: rgb(244, 236, 225);
-      padding: 12px 12px 5px 12px;
-    }
+    background: rgb(244, 236, 225);
+    padding: 12px 12px 5px 12px;
+  }
 
   .selfcheckstart {
     text-align: center;

@@ -10,6 +10,8 @@ import AdoptionList from '../pages/AdoptionList.vue'
 import VideoList from '../pages/VideoList.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
+import SimplePagination from '../pages/SimplePagination.vue'
+import CardTest from '../pages/CardTest.vue'
 
 Vue.use(VueRouter)
 
@@ -64,6 +66,16 @@ const routes = [
     name: 'AdoptionReview',
     component: AdoptionReview,
   },
+  {
+    path: '/simplepagination',
+    name: 'SimplePagination',
+    component: SimplePagination,
+  },
+  {
+    path: '/cardtest',
+    name: 'CardTest',
+    component: CardTest,
+  }
 ]
 
 const router = new VueRouter({

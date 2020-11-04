@@ -1,6 +1,36 @@
 <template>
   <div>
-    <table>
+    <v-card
+      v-for="p in paginatedData"
+      :key="p.no"
+      style="margin-bottom: 10px;"
+    >
+      <v-card-title>
+        <strong>{{ p.title }}</strong>
+      </v-card-title>
+
+      <v-card-subtitle>
+        <strong>{{ p.user_id }}</strong>
+      </v-card-subtitle>
+
+      <v-card-actions>
+        <v-btn
+          class="ma-2"
+          outlined
+          style="background: green; color: white;"
+        >
+          <strong>{{ p.uid }}</strong>
+        </v-btn>
+        <v-btn
+          class="ma-2"
+          outlined
+          style="color: green;"
+        >
+          <strong>{{ p.regtime.slice(0, 10) }}</strong>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    <!-- <table>
       <thead>
         <tr style="background: pink;">
           <th style="width: 20%;">NO</th>
@@ -17,15 +47,37 @@
           <td>{{ p.regtime.slice(0, 10) }}</td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
     <div class="btn-cover">
-      <button :disabled="pageNum === 0" @click="prevPage" class="page-btn">
+      <v-btn
+        class="mx-2"
+        style="background: black; color: white;"
+        fab
+        :disabled="pageNum === 0" 
+        @click="prevPage" 
+      >
+        <v-icon dark>
+          mdi-arrow-left
+        </v-icon>
+      </v-btn>
+      <!-- <button style="border: 1px solid black;" :disabled="pageNum === 0" @click="prevPage" class="page-btn" >
         이전
-      </button>
-      <span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} 페이지</span>
-      <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="page-btn">
+      </button> -->
+      <span class="page-count"><strong>{{ pageNum + 1 }} / {{ pageCount }} 페이지</strong></span>
+      <v-btn
+        class="mx-2"
+        style="background: black; color: white;"
+        fab
+        :disabled="pageNum >= pageCount - 1"
+        @click="nextPage" 
+      >
+        <v-icon dark>
+          mdi-arrow-right
+        </v-icon>
+      </v-btn>
+      <!-- <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="page-btn">
         다음
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -46,7 +98,7 @@ export default {
     pageSize: {
       type: Number,
       required: false,
-      default: 10
+      default: 5
     }
   },
   methods: {
