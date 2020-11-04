@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.daeng.nyang.dto.AnimalLike;
+import com.google.common.base.Optional;
 
 @Repository
 public interface AnimalLikeRepo extends JpaRepository<AnimalLike, Integer> {
@@ -14,8 +15,16 @@ public interface AnimalLikeRepo extends JpaRepository<AnimalLike, Integer> {
 	List<AnimalLike> findAnimalLikeByUserid(String user_id);
 	
 	@Query(value="select * from animal_like a where a.user_id=:user_id and a.desertion_no=:desertion_no order by desertion_no asc", nativeQuery = true)
-	AnimalLike findAnimalLike(String user_id, String desertion_no);
+	AnimalLike findAnimalLike(String user_id, Long desertion_no);
 	
 	@Query(value="delete from animal_like where (user_id=:user_id) and (desertion_no=:desertion_no)", nativeQuery = true)
 	void deleteAnimalLike(String user_id, String desertion_no);
+	
+	@Query(value="select desertion_no from animal_like a where a.user_id=:user_id", nativeQuery=true)
+	List<Long> findDesertionNoByUserId(String user_id);
+	
+	
+	
+	@Query(value="select * from animal_like a where a.user_id=:user_id and a.desertion_no=:desertion_no", nativeQuery = true)
+	Optional<AnimalLike> findAnimalLikeByUserIdAndDesertionNo(String user_id, Long desertion_no);
 }

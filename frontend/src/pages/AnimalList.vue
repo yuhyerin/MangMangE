@@ -176,6 +176,17 @@ export default {
           });
       } else {
         console.log("like animals");
+        axios.get(SERVER.URL+'/user/animal/like',{
+          headers:{
+            Authorization: this.$cookies.get("accessToken")
+          }
+        })
+        .then((res)=>{
+          console.log(res.data.likeList)
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
       }
     },
   },

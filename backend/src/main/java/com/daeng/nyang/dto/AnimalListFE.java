@@ -13,7 +13,21 @@ import lombok.ToString;
 @AllArgsConstructor
 public class AnimalListFE {
 	
-	private Animal animal;
+	private Long desertion_no;
+	private String kind_c;
+	private String color_cd;
+	private int age;
+	private float weight;
+	private String popfile;
+	private String process_state;
+	private Character sex_cd;
+	private Character neuter_yn;
+	private String special_mark;
+	private String charge_nm;
+	private String officetel;
+	private String mbti;
+
+	private String[] personality;
 	private boolean like;
 	
 
