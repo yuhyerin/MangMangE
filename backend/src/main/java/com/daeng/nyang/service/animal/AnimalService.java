@@ -153,14 +153,49 @@ public class AnimalService {
 		animalLikeRepo.deleteAnimalLike(user_id, desertion_no);
 	}
 
-	public Animal animalDetail(Long desertion_no) {
+	public AnimalListFE animalDetail(Long desertion_no) {
 		System.out.println("SERVICE START");
 		Animal animal = animalRepo.findAnimalByDesertionNo(desertion_no);
-		System.out.println(animal.toString());
-		/**
-		 * 제목 종 / 품종 성별(중성화) 나이 몸무게 털색 성격
-		 */
-		return animal;
+		String[] personality = animalPersonality(desertion_no);
+		AnimalListFE result = AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
+				kind_c(animal.getKind_c()). // 하위 품종
+				color_cd(animal.getColor_cd()). // 털색
+				age(animal.getAge()). // 출생년도(int(4))
+				weight(animal.getWeight()). // 체중
+				popfile(animal.getPopfile()). // 이미지
+				process_state(animal.getProcess_state()). // 입양상태
+				sex_cd(animal.getSex_cd()). // 성별
+				neuter_yn(animal.getNeuter_yn()). // 중성화여부
+				special_mark(animal.getSpecial_mark()). // 특징
+				charge_nm(animal.getCharge_nm()). // 담당자 이름
+				officetel(animal.getOfficetel()). // 담당자 연락처
+				mbti(animal.getMbti()). // 동물 mbti
+				personality(personality). // 동물 성격
+				like(false).build();
+		return result;
+	}
+	
+	public AnimalListFE animalDetail(String user_id, Long desertion_no) {
+		System.out.println("SERVICE START");
+		Animal animal = animalRepo.findAnimalByDesertionNo(desertion_no);
+		String[] personality = animalPersonality(desertion_no);
+		boolean like = animalLikeRepo.findAnimalLikeByUserIdAndDesertionNo(user_id, desertion_no).isPresent();
+		AnimalListFE result = AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
+				kind_c(animal.getKind_c()). // 하위 품종
+				color_cd(animal.getColor_cd()). // 털색
+				age(animal.getAge()). // 출생년도(int(4))
+				weight(animal.getWeight()). // 체중
+				popfile(animal.getPopfile()). // 이미지
+				process_state(animal.getProcess_state()). // 입양상태
+				sex_cd(animal.getSex_cd()). // 성별
+				neuter_yn(animal.getNeuter_yn()). // 중성화여부
+				special_mark(animal.getSpecial_mark()). // 특징
+				charge_nm(animal.getCharge_nm()). // 담당자 이름
+				officetel(animal.getOfficetel()). // 담당자 연락처
+				mbti(animal.getMbti()). // 동물 mbti
+				personality(personality). // 동물 성격
+				like(like).build();
+		return result;
 	}
 
 	public String[] animalPersonality(Long desertion_no) {
