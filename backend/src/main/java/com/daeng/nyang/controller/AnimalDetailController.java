@@ -1,7 +1,6 @@
 package com.daeng.nyang.controller;
 
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,8 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daeng.nyang.dto.Animal;
 import com.daeng.nyang.dto.AnimalLike;
+import com.daeng.nyang.dto.AnimalListFE;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.service.animal.AnimalService;
 
@@ -34,15 +33,10 @@ public class AnimalDetailController {
 	public ResponseEntity<HashMap<String, Object>> animalDetail(@RequestParam Long desertion_no) {
 		System.out.println("CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		Animal animal = animalService.animalDetail(desertion_no); // animal 정보
+		AnimalListFE animal = animalService.animalDetail(desertion_no); // animal 정보
 		System.out.println(animal.toString());
 		if (animal != null)
-			map.put("animal", animal);
-		System.out.println(map.toString());
-		String[] personality = animalService.animalPersonality(desertion_no); // ptag 정보
-		System.out.println(personality.toString());
-		if (personality != null)
-			map.put("personality", personality);
+			map.put("animalList", animal);
 		System.out.println("CONTROLLER END");
 		System.out.println(map.toString());
 		if (map.size() == 0)
@@ -58,28 +52,18 @@ public class AnimalDetailController {
 		String token = request.getHeader("Authorization");
 		System.out.println(token);
 		HashMap<String, Object> map = null;
-		Animal animal = animalService.animalDetail(desertion_no); // animal 정보
+		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
+		String user_id = user.getAccount().getUser_id();
+		AnimalListFE animal = animalService.animalDetail(user_id, desertion_no); // animal 정보
 		System.out.println(animal.toString());
 		if (animal != null) {
 			map = new HashMap<String, Object>();
 			map.put("animal", animal);
 			System.out.println(map.toString());
-			String[] personality = animalService.animalPersonality(desertion_no); // ptag 정보
-			System.out.println(personality.toString());
-			if (personality != null)
-				map.put("personality", personality);
-			TotToken t = (TotToken) redisTemplate.opsForValue().get(token);
-			String user_id = t.getAccount().getUser_id();
-			System.out.println("user_id : " + user_id);
-			AnimalLike a = animalService.findAnimalLike(user_id, desertion_no);
-			if (a != null)
-				map.put("like", true);
-			else
-				map.put("like", false);
 		}
 		System.out.println("CONTROLLER END");
 		System.out.println(map.toString());
-		if(map==null)
+		if (map.size() == 0)
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
