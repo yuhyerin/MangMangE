@@ -4,7 +4,7 @@
       <div
         class="front"
         :style="{
-          'background-image': 'url(' + animalInfo.animal.popfile + ')',
+          'background-image': 'url(' + animalInfo.popfile + ')',
         }"
       >
         <div
@@ -34,7 +34,7 @@
         :style="{
           'background-image':
             'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url(' +
-            animalInfo.animal.popfile +
+            animalInfo.popfile +
             ')',
         }"
         @click="clicked"
@@ -58,9 +58,9 @@
             mdi-heart
           </v-icon>
         </div>
-        <h2>{{ animalInfo.animal.kind_cd }}</h2>
-        <p>{{ animalInfo.animal.sex_cd == "M" ? "수컷" : "암컷" }}</p>
-        <p>{{ animalInfo.animal.weight }} (추정)</p>
+        <h2>{{ animalInfo.kind_cd }}</h2>
+        <p>{{ animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}</p>
+        <p>{{ animalInfo.weight }} (추정)</p>
         <p>{{ this.animalTag }}</p>
       </div>
     </div>
@@ -83,8 +83,16 @@ export default {
     return {
       moveTrigger: true,
       likeTrigger: false,
-      animalTag: "",
     };
+  },
+  computed: {
+    animalTag() {
+      var tag = "";
+      for (let i = 0; i < this.animalInfo.personality.length; i++) {
+        tag += "#" + this.animalInfo.personality[i] + " ";
+      }
+      return tag;
+    },
   },
   created() {
     if (this.animalInfo.like == false) {
@@ -93,29 +101,26 @@ export default {
       this.likeTrigger = true;
     }
 
-    axios
-      .get(SERVER.URL + "/newuser/animal/detail", {
-        params: {
-          desertion_no: this.animalInfo.animal.desertion_no,
-        },
-      })
-      .then((res) => {
-        // console.log(res.data.personality);
-        for (let i = 0; i < res.data.personality.length; i++) {
-          this.animalTag += "#" + res.data.personality[i] + " ";
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .get(SERVER.URL + "/newuser/animal/detail", {
+    //     params: {
+    //       desertion_no: this.animalInfo.desertion_no,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     for (let i = 0; i < res.data.personality.length; i++) {
+    //       this.animalTag += "#" + res.data.personality[i] + " ";
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   },
 
   methods: {
     clicked() {
       if (this.moveTrigger == true) {
-        this.$router.push(
-          "/animalDetail" + `/${this.animalInfo.animal.desertion_no}`
-        );
+        this.$router.push("/animalDetail" + `/${this.animalInfo.desertion_no}`);
       }
     },
     setLiked() {
@@ -127,7 +132,7 @@ export default {
             .post(
               SERVER.URL + "/user/animal/animalLike",
               {
-                desertion_no: this.animalInfo.animal.desertion_no,
+                desertion_no: this.animalInfo.desertion_no,
               },
               {
                 headers: {
@@ -148,7 +153,7 @@ export default {
             .post(
               SERVER.URL + "/user/animal/animalLike",
               {
-                desertion_no: this.animalInfo.animal.desertion_no,
+                desertion_no: this.animalInfo.desertion_no,
               },
               {
                 headers: {

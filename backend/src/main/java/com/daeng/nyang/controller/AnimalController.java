@@ -92,7 +92,7 @@ public class AnimalController {
 		System.out.println("USERID : " + user_id);
 		HashMap<String, Object> map = new HashMap<>();
 		List<AnimalListFE> likelist = animalService.animalLikeList(user_id);
-		map.put("likeList", likelist);
+		map.put("animalList", likelist);
 		System.out.println(likelist.toString());
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}

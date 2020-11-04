@@ -1,6 +1,10 @@
 <template>
   <v-app>
     <Header />
+    <div class="loading" v-if="loadingTrigger">
+      <!-- <i class="fas fa-spinner fa-10x fa-spin"></i> -->
+      <img src="@/assets/image/loading.gif" alt="loading" />
+    </div>
     <v-main>
       <v-container style="padding-top: 75px">
         <div style="display: flex; min-height: 87vh">
@@ -105,19 +109,18 @@
                 :key="index"
                 :animalInfo="data"
               />
-              <AllAnimals
+              <!-- <AllAnimals
                 v-if="trigger == 1"
                 v-for="(data, index) in this.matchedDatas"
                 :key="index"
                 :animalInfo="data"
-              />
-              <!--
+              /> -->
               <AllAnimals
                 v-if="trigger == 2"
-                v-for="(data, index) in this.tmpArr"
+                v-for="(data, index) in this.likedDatas"
                 :key="index"
                 :animalInfo="data"
-              /> -->
+              />
             </div>
           </div>
         </div>
@@ -143,10 +146,11 @@ export default {
       testTrigger: false,
       allDatas: data,
       matchedDatas: [],
-      likedDatas: "",
+      likedDatas: [],
       checked: ["F", "M"],
       tmpArr: [],
       userFinishedSurvey: "",
+      loadingTrigger: false,
     };
   },
   components: {
@@ -158,6 +162,7 @@ export default {
       if (newValue == 0) {
         console.log("All Animals");
       } else if (newValue == 1) {
+        this.loadingTrigger = true;
         axios
           .get(SERVER.URL + "/user/animal/matchlist", {
             headers: {
@@ -170,23 +175,37 @@ export default {
             this.matchedDatas = [];
             this.matchedDatas = [...res.data.perfect, ...res.data.good];
             this.userFinishedSurvey = true;
+            this.loadingTrigger = false;
           })
           .catch((err) => {
             SERVER.RefreshToken(err);
+            this.loadingTrigger = false;
           });
       } else {
-        console.log("like animals");
-        axios.get(SERVER.URL+'/user/animal/like',{
-          headers:{
-            Authorization: this.$cookies.get("accessToken")
-          }
-        })
-        .then((res)=>{
-          console.log(res.data.likeList)
-        })
-        .catch((err)=>{
-          console.log(err)
-        })
+        // console.log("like animals");
+        if (this.$cookies.get("accessToken") != null) {
+          this.loadingTrigger = true;
+          axios
+            .get(SERVER.URL + "/user/animal/like", {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            })
+            .then((res) => {
+              console.log(res.data.animalList);
+              this.likedDatas = [];
+              this.likedDatas = [...res.data.animalList];
+              this.loadingTrigger = false;
+            })
+            .catch((err) => {
+              console.log(err);
+              // SERVER.RefreshToken(err);
+              this.loadingTrigger = false;
+            });
+        } else {
+          alert("로그인이 필요한 서비스 입니다.");
+          this.$router.push("/login");
+        }
       }
     },
   },
@@ -199,6 +218,7 @@ export default {
   async created() {
     var data = null;
     if (this.$cookies.get("accessToken") != null) {
+      this.loadingTrigger = true;
       await axios
         .get(SERVER.URL + "/newuser/animal/allread", {
           headers: {
@@ -207,47 +227,53 @@ export default {
         })
         .then((res) => {
           data = res.data.animalList;
-          console.log(res.data);
+          this.loadingTrigger = false;
+          // console.log(res.data);
         })
         .catch((err) => {
           SERVER.RefreshToken(err);
+          this.loadingTrigger = false;
         });
-      // console.log(data);
       this.allDatas = data;
+      // console.log(data);
 
-      await axios
-        .get(SERVER.URL + "/user/animal/surveyread", {
-          headers: {
-            Authorization: $cookies.get("accessToken"),
-          },
-        })
-        .then((res) => {
-          console.log(res.data.survey.answer);
-          if (res.data.survey.answer != null) {
-            this.userFinishedSurvey = true;
-          } else {
-            this.userFinishedSurvey = false;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          SERVER.RefreshToken(err);
-        });
+      // await axios
+      //   .get(SERVER.URL + "/user/animal/surveyread", {
+      //     headers: {
+      //       Authorization: $cookies.get("accessToken"),
+      //     },
+      //   })
+      //   .then((res) => {
+      //     console.log(res.data.survey.answer);
+      //     if (res.data.survey.answer != null) {
+      //       this.userFinishedSurvey = true;
+      //     } else {
+      //       this.userFinishedSurvey = false;
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //     SERVER.RefreshToken(err);
+      //   });
 
-      if (this.eventListener == 1) {
-        // console.log(this.dogMbti);
-        this.trigger = 1;
-      } else if (this.eventListener == 2) {
-        this.tirgger = 0;
-      }
+      // if (this.eventListener == 1) {
+      //   // console.log(this.dogMbti);
+      //   this.trigger = 1;
+      // } else if (this.eventListener == 2) {
+      //   this.tirgger = 0;
+      // }
     } else {
+      this.loadingTrigger = true;
       await axios
         .get(SERVER.URL + "/newuser/animal/allread")
         .then((res) => {
-          // data = res.data.animalList;
-          console.log(res.data);
+          data = res.data.animalList;
+          this.loadingTrigger = false;
+          // console.log(res.data);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          this.loadingTrigger = false;
+        });
       // console.log(data);
       this.allDatas = data;
     }
@@ -298,5 +324,21 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.loading {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  /* background-image: linear-gradient(
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.4)
+  ); */
 }
 </style>
