@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Animal;
 import com.daeng.nyang.dto.AnimalLike;
+import com.daeng.nyang.dto.AnimalListFE;
 import com.daeng.nyang.dto.Survey;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.animal.AnimalService;
@@ -46,7 +47,7 @@ public class AnimalController {
 	@ApiOperation(value = "전체동물목록조회")
 	public ResponseEntity<HashMap<String, Object>> allread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 모든 동물 리스트 반환
-		System.out.println("전체동물목록조회 컨트롤러 진입");
+		System.out.println("CONTROLLER START : allread");
 		String token = request.getHeader("Authorization");
 		// 비회원
 		if (request.getHeader("Authorization") == null) {
@@ -66,41 +67,58 @@ public class AnimalController {
 		// 회원
 		// 좋아요정보 표시 필요
 		else {
-			if (jwtTokenUtil.isTokenExpired(token)) {
-				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			} else {
-				try {
-					HashMap<String, Object> map = new HashMap<>();
-					System.out.println("Animal allread Controller");
-					
-					// 토큰으로 유저 아이디 받아오는 구문
-					String user_id = null; // 일단 null 값
-					user_id = jwtTokenUtil.getUsernameFromToken(token); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
-					System.out.println("user_id : " + user_id); // 확인
+			try {
+				HashMap<String, Object> map = new HashMap<>();
+				System.out.println("Animal allread Controller");
 
-					// 전체동물조회
-					List<Animal> list = animalService.findAnimalAll();
-					map.put("message1", "전체 동물목록 조회  성공");
-					map.put("animalList", list);
+				// 토큰으로 유저 아이디 받아오는 구문
+				String user_id = null; // 일단 null 값
+				user_id = jwtTokenUtil.getUsernameFromToken(token); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
+				System.out.println("user_id : " + user_id); // 확인
 
-					// 좋아요 동물 조회
-					List<AnimalLike> listLike = animalService.findAnimalLikeByUserid(user_id);
-					map.put("message2", "좋아요 동물목록 조회  성공");
-					map.put("animalListLike", listLike);
-					
-					return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-				} catch (Exception e) {
-					return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+				// 전체동물조회
+				List<Animal> list = animalService.findAnimalAll();
+				map.put("message1", "전체 동물목록 조회  성공");
+//				map.put("animalList", list);
+
+				// 좋아요 동물 조회
+				List<AnimalLike> listLike = animalService.findAnimalLikeByUserid(user_id);
+				map.put("message2", "좋아요 동물목록 조회  성공");
+//				map.put("animalListLike", listLike);
+				List<AnimalListFE> result = new ArrayList<>();
+				int j = 0;
+				for (int i = 0; i < listLike.size(); i++) {
+					String desertion_no = listLike.get(i).getDesertion_no();
+					System.out.println("DESERTION_NO : "+desertion_no);
+					for (; j < list.size(); j++) {
+						Animal temp = list.get(j);
+						if ((temp.getDesertion_no()+"").equals(desertion_no)) {
+							result.add(AnimalListFE.builder().animal(temp).like(true).build());
+							j++;
+							break;
+						} else {
+							result.add(AnimalListFE.builder().animal(temp).like(false).build());
+						}
+					}
 				}
+				for (; j < list.size(); j++) {
+					result.add(AnimalListFE.builder().animal(list.get(j)).like(false).build());
+				}
+				map.put("animalList", result);
+				return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+
+			} catch (Exception e) {
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			}
 		}
 	}
+	
 
 	@GetMapping(path = "user/animal/surveyread")
 	@ApiOperation(value = "설문기록여부확인")
 	public ResponseEntity<HashMap<String, Object>> surveyread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 설문기록여부 반환
-		System.out.println("설문기록여부확인 컨트롤러 진입");
+		System.out.println("CONTROLLER START : surveyREAD");
 		String token = request.getHeader("Authorization");
 		if (token == null) {
 			return null;
@@ -117,7 +135,7 @@ public class AnimalController {
 				HashMap<String, Object> map = new HashMap<>();
 				System.out.println("survey read Controller");
 
-				if (user_id == null) { 
+				if (user_id == null) {
 					map.put("message", "토큰을 통해 읽은 유저 아이디 값이 null입니다.");
 				} else {
 					Survey survey = surveyService.findSurveyByUserid(user_id);
@@ -231,7 +249,7 @@ public class AnimalController {
 			}
 		}
 	}
-	
+
 	@PostMapping(path = "user/animal/animalLike")
 	@ApiOperation(value = "좋아요기능생성")
 	public ResponseEntity<HashMap<String, Object>> animalLike(@RequestBody AnimalLike animalLike,
@@ -278,7 +296,7 @@ public class AnimalController {
 			} catch (NullPointerException e) {
 				AnimalLike new_animalLike = null;
 				new_animalLike = animalService.join(animalLike);
-				if(new_animalLike==null) {
+				if (new_animalLike == null) {
 					return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 				} else {
 					map.put("message", "좋아요 생성");
