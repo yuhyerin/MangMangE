@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Header />
-    <v-content>
+    <v-main>
       <v-container style="padding-top: 75px">
         <div style="display: flex; min-height: 87vh">
           <div
@@ -122,7 +122,7 @@
           </div>
         </div>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -187,47 +187,58 @@ export default {
 
   async created() {
     var data = null;
+    if (this.$cookies.get("accessToken") != null) {
+      await axios
+        .get(SERVER.URL + "/newuser/animal/allread", {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          data = res.data.animalList;
+          console.log(res.data);
+        })
+        .catch((err) => {
+          SERVER.RefreshToken(err);
+        });
+      // console.log(data);
+      this.allDatas = data;
 
-    await axios
-      .get(SERVER.URL + "/newuser/animal/allread", {
-        headers: {
-          Authorization: this.$cookies.get("accessToken"),
-        },
-      })
-      .then((res) => {
-        data = res.data.animalList;
-        console.log(res.data);
-      })
-      .catch((err) => {
-        SERVER.RefreshToken(err);
-      });
-    // console.log(data);
-    this.allDatas = data;
+      await axios
+        .get(SERVER.URL + "/user/animal/surveyread", {
+          headers: {
+            Authorization: $cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          console.log(res.data.survey.answer);
+          if (res.data.survey.answer != null) {
+            this.userFinishedSurvey = true;
+          } else {
+            this.userFinishedSurvey = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          SERVER.RefreshToken(err);
+        });
 
-    await axios
-      .get(SERVER.URL + "/user/animal/surveyread", {
-        headers: {
-          Authorization: $cookies.get("accessToken"),
-        },
-      })
-      .then((res) => {
-        console.log(res.data.survey.answer);
-        if (res.data.survey.answer != null) {
-          this.userFinishedSurvey = true;
-        } else {
-          this.userFinishedSurvey = false;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        SERVER.RefreshToken(err);
-      });
-
-    if (this.eventListener == 1) {
-      // console.log(this.dogMbti);
-      this.trigger = 1;
-    } else if (this.eventListener == 2) {
-      this.tirgger = 0;
+      if (this.eventListener == 1) {
+        // console.log(this.dogMbti);
+        this.trigger = 1;
+      } else if (this.eventListener == 2) {
+        this.tirgger = 0;
+      }
+    } else {
+      await axios
+        .get(SERVER.URL + "/newuser/animal/allread")
+        .then((res) => {
+          // data = res.data.animalList;
+          console.log(res.data);
+        })
+        .catch((err) => {});
+      // console.log(data);
+      this.allDatas = data;
     }
   },
 

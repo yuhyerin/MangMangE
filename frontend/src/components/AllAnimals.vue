@@ -1,55 +1,76 @@
 <template>
-  <div class="flip">
-    <div
-      class="front"
-      :style="{ 'background-image': 'url(' + animalInfo.animal.popfile + ')' }"
-    >
+  <div style="width: 200px; margin: 10px">
+    <div class="flip">
       <div
-        style="
-          display: flex;
-          position: absolute;
-          z-index: 1;
-          left: 170px;
-          top: 5px;
-        "
-        @mouseover="setMoveTrigger"
-        @mouseout="setMoveTrigger"
-        @click="setLiked"
+        class="front"
+        :style="{
+          'background-image': 'url(' + animalInfo.animal.popfile + ')',
+        }"
       >
-        <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
-          mdi-heart-outline
-        </v-icon>
-        <v-icon v-if="likeTrigger == true" color="rgb(255,0,0)">
-          mdi-heart
-        </v-icon>
+        <div
+          style="
+            display: flex;
+            position: absolute;
+            z-index: 1;
+            left: 170px;
+            top: 5px;
+          "
+          @mouseover="setMoveTrigger"
+          @mouseout="setMoveTrigger"
+          @click="setLiked"
+        >
+          <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
+            mdi-heart-outline
+          </v-icon>
+          <v-icon v-if="likeTrigger == true" color="rgb(255,0,0)">
+            mdi-heart
+          </v-icon>
+        </div>
+        <!-- <h1 class="text-shadow">{{ data.desertion_no }}</h1> -->
+        <!-- <img :src="data.filename"  alt="동물이미지" /> -->
       </div>
-      <!-- <h1 class="text-shadow">{{ data.desertion_no }}</h1> -->
-      <!-- <img :src="data.filename"  alt="동물이미지" /> -->
-    </div>
-    <div class="back" @click="clicked">
       <div
-        style="
-          display: flex;
-          position: absolute;
-          z-index: 1;
-          left: 170px;
-          top: 5px;
-        "
-        @click="setLiked"
-        @mouseover="setMoveTrigger"
-        @mouseout="setMoveTrigger"
+        class="back"
+        :style="{
+          'background-image':
+            'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url(' +
+            animalInfo.animal.popfile +
+            ')',
+        }"
+        @click="clicked"
       >
-        <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
-          mdi-heart-outline
-        </v-icon>
-        <v-icon v-if="likeTrigger == true" color="rgb(255,0,0)">
-          mdi-heart
-        </v-icon>
+        <div
+          style="
+            display: flex;
+            position: absolute;
+            z-index: 1;
+            left: 170px;
+            top: 5px;
+          "
+          @click="setLiked"
+          @mouseover="setMoveTrigger"
+          @mouseout="setMoveTrigger"
+        >
+          <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
+            mdi-heart-outline
+          </v-icon>
+          <v-icon v-if="likeTrigger == true" color="rgb(255,0,0)">
+            mdi-heart
+          </v-icon>
+        </div>
+        <h2>{{ animalInfo.animal.kind_cd }}</h2>
+        <p>{{ animalInfo.animal.sex_cd == "M" ? "수컷" : "암컷" }}</p>
+        <p>{{ animalInfo.animal.weight }} (추정)</p>
+        <p>{{ this.animalTag }}</p>
       </div>
-      <h2>{{ animalInfo.animal.kind_cd }}</h2>
-      <p>{{ animalInfo.animal.sex_cd == "M" ? "수컷" : "암컷" }}</p>
-      <p>{{ animalInfo.animal.weight }} (추정)</p>
     </div>
+    <div style="display: flex; align-items: center">
+      <v-icon> mdi-hail </v-icon>
+      <div>&nbsp; 215 &nbsp;</div>
+      <v-icon small> mdi-heart </v-icon>
+      <div>&nbsp;4</div>
+    </div>
+    <div>만약 이런식으로 글 제목이 들어간다면 어떨까</div>
   </div>
 </template>
 <script>
@@ -62,21 +83,36 @@ export default {
     return {
       moveTrigger: true,
       likeTrigger: false,
+      animalTag: "",
     };
   },
   created() {
-    console.log(this.animalInfo.like);
     if (this.animalInfo.like == false) {
       this.likeTrigger = false;
     } else {
       this.likeTrigger = true;
     }
+
+    axios
+      .get(SERVER.URL + "/newuser/animal/detail", {
+        params: {
+          desertion_no: this.animalInfo.animal.desertion_no,
+        },
+      })
+      .then((res) => {
+        // console.log(res.data.personality);
+        for (let i = 0; i < res.data.personality.length; i++) {
+          this.animalTag += "#" + res.data.personality[i] + " ";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 
   methods: {
     clicked() {
       if (this.moveTrigger == true) {
-        console.log("페이지 이동!!", this.animalInfo.animal);
         this.$router.push(
           "/animalDetail" + `/${this.animalInfo.animal.desertion_no}`
         );
@@ -137,4 +173,5 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped src="../assets/css/Card.scss"></style>
+<style lang="scss" scoped src="../assets/css/Card.scss">
+</style>

@@ -39,7 +39,7 @@
               width: 30vw;
             "
           >
-            <img :src="animalInfo.popfile" alt="사진" />
+            <img :src="this.animalInfo.animal.popfile" alt="사진" />
           </div>
           <div style="width: 70vw; height: 35vh; margin: 10px">
             <div style="height: 20%">제목</div>
@@ -47,27 +47,29 @@
               <table>
                 <tr>
                   <td>종 / 품종</td>
-                  <td>{{ this.animalInfo.kind_cd }}</td>
+                  <td>{{ this.animalInfo.animal.kind_c }}</td>
                 </tr>
                 <tr>
                   <td>성별(중성화)</td>
-                  <td>{{ this.animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}</td>
+                  <td>
+                    {{ this.animalInfo.animal.sex_cd == "M" ? "수컷" : "암컷" }}
+                  </td>
                 </tr>
                 <tr>
                   <td>나이</td>
-                  <td>{{ this.animalInfo.age }}</td>
+                  <td>{{ this.animalInfo.animal.age }}</td>
                 </tr>
                 <tr>
                   <td>몸무게</td>
-                  <td>{{ this.animalInfo.weight }}</td>
+                  <td>{{ this.animalInfo.animal.weight }}</td>
                 </tr>
                 <tr>
                   <td>털색</td>
-                  <td>{{ this.animalInfo.color_cd }}</td>
+                  <td>{{ this.animalInfo.animal.color_cd }}</td>
                 </tr>
                 <tr>
                   <td>성격</td>
-                  <td>{{ this.animalInfo.mbti }}</td>
+                  <td>{{ this.animalInfo.animal.mbti }}</td>
                 </tr>
               </table>
             </div>
@@ -97,7 +99,8 @@
 
 <script>
 import Header from "../components/Header.vue";
-import dump from "../assets/data/animal.json";
+import axios from "axios";
+import SERVER from "@/api/url";
 
 export default {
   components: {
@@ -110,19 +113,69 @@ export default {
     };
   },
   created() {
-    for (var i = 0; i < dump.animal.length; i++) {
-      if (dump.animal[i].desertion_no == this.$route.params.animalID) {
-        this.animalInfo = dump.animal[i];
-      }
-    }
+    axios
+      .get(SERVER.URL + "/newuser/animal/detail", {
+        params: {
+          desertion_no: this.$route.params.animalID,
+        },
+      })
+      .then((res) => {
+        this.animalInfo = res.data;
+        console.log(this.animalInfo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   methods: {
     setLiked() {
-      console.log("즐겨찾기!!");
+      if (this.likeTrigger == true) {
+        // 좋아요 해제
+        console.log("false");
+        axios
+          .post(
+            SERVER.URL + "/user/animal/animalLike",
+            {
+              desertion_no: this.animalInfo.animal.desertion_no,
+            },
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        // 좋아요 등록
+        console.log("true");
+        axios
+          .post(
+            SERVER.URL + "/user/animal/animalLike",
+            {
+              desertion_no: this.animalInfo.animal.desertion_no,
+            },
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
       this.likeTrigger = !this.likeTrigger;
     },
     moveTo(page) {
-      this.$router.push(page + `/${this.animalInfo.desertion_no}`);
+      this.$router.push(page + `/${this.animalInfo.animal.desertion_no}`);
     },
   },
 };
