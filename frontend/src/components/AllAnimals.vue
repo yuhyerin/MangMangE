@@ -53,6 +53,9 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+import SERVER from "@/api/url";
+
 export default {
   props: ["animalInfo"],
   data() {
@@ -61,16 +64,60 @@ export default {
       likeTrigger: false,
     };
   },
+  created() {},
+
   methods: {
     clicked() {
       if (this.moveTrigger == true) {
         console.log("페이지 이동!!", this.animalInfo);
-        this.$router.push("/animalDetail" + `/${this.animalInfo.desertionNo}`);
+        this.$router.push("/animalDetail" + `/${this.animalInfo.desertion_no}`);
       }
     },
     setLiked() {
       if (this.moveTrigger == false) {
-        console.log("즐겨찾기!!");
+        if (this.likeTrigger == true) {
+          // 좋아요 해제
+          console.log("false");
+          axios
+            .post(
+              SERVER.URL + "/user/animal/animalLike",
+              {
+                desertion_no: this.animalInfo.desertion_no,
+              },
+              {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          // 좋아요 등록
+          console.log("true");
+          axios
+            .post(
+              SERVER.URL + "/user/animal/animalLike",
+              {
+                desertion_no: this.animalInfo.desertion_no,
+              },
+              {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
         this.likeTrigger = !this.likeTrigger;
       }
     },

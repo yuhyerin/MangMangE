@@ -105,12 +105,13 @@
                 :key="index"
                 :animalInfo="data"
               />
-              <!-- <AllAnimals
+              <AllAnimals
                 v-if="trigger == 1"
-                v-for="(data, index) in this.tmpArr"
+                v-for="(data, index) in this.matchedDatas"
                 :key="index"
                 :animalInfo="data"
               />
+              <!--
               <AllAnimals
                 v-if="trigger == 2"
                 v-for="(data, index) in this.tmpArr"
@@ -141,10 +142,11 @@ export default {
       tmp: 0,
       testTrigger: false,
       allDatas: data,
-      matchedDatas: "",
+      matchedDatas: [],
       likedDatas: "",
       checked: ["F", "M"],
       tmpArr: [],
+      userFinishedSurvey: "",
     };
   },
   components: {
@@ -166,10 +168,23 @@ export default {
         //     console.log(res.data.animalList);
         //   });
       } else if (newValue == 1) {
-        this.tmp = 4;
-        console.log("matched Animals");
+        axios
+          .get(SERVER.URL + "/user/animal/matchlist", {
+            headers: {
+              Authorization: $cookies.get("accessToken"),
+            },
+          })
+          .then((res) => {
+            console.log(res.data.perfect);
+            console.log(res.data.good);
+            this.matchedDatas = [];
+            this.matchedDatas = [...res.data.perfect, ...res.data.good];
+            this.userFinishedSurvey = true;
+          })
+          .catch((err) => {
+            SERVER.RefreshToken(err);
+          });
       } else {
-        this.tmp = 2;
         console.log("like animals");
       }
     },
@@ -177,6 +192,7 @@ export default {
 
   computed: {
     ...mapState(["eventListener"]),
+    ...mapState(["dogMbti"]),
   },
 
   async created() {
@@ -185,10 +201,30 @@ export default {
     await axios.get(SERVER.URL + "/newuser/animal/allread").then((res) => {
       data = res.data.animalList;
     });
-
+    console.log(data);
     this.allDatas = data;
 
+    await axios
+      .get(SERVER.URL + "/user/animal/surveyread", {
+        headers: {
+          Authorization: $cookies.get("accessToken"),
+        },
+      })
+      .then((res) => {
+        console.log(res.data.survey.answer);
+        if (res.data.survey.answer != null) {
+          this.userFinishedSurvey = true;
+        } else {
+          this.userFinishedSurvey = false;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        SERVER.RefreshToken(err);
+      });
+
     if (this.eventListener == 1) {
+      // console.log(this.dogMbti);
       this.trigger = 1;
     } else if (this.eventListener == 2) {
       this.tirgger = 0;
@@ -198,9 +234,21 @@ export default {
   methods: {
     ...mapGetters(["getPageCheck"]),
     ...mapMutations(["checkThisPage"]),
+
     setTrigger(num) {
       this.trigger = num;
+      if (this.trigger == 1 && this.userFinishedSurvey == false) {
+        var surveyCheck = confirm(
+          "아직 추천동물 기록이 없습니다. 추천 설문을 하시겠습니까?"
+        );
+        if (surveyCheck) {
+          this.$router.push("/survey");
+        } else {
+          this.trigger = 0;
+        }
+      }
     },
+
     test() {
       this.testTrigger = true;
       setTimeout(() => {

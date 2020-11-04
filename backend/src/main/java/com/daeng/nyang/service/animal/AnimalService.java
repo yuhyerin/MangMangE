@@ -39,7 +39,10 @@ public class AnimalService {
 	// 좋아요 저장
 	public AnimalLike join(AnimalLike animalLike) {
 		System.out.println("AnimalLike Create Service");
-		return animalLikeRepo.save(animalLike);
+		System.out.println(animalLike.toString());
+		AnimalLike result = animalLikeRepo.save(animalLike);
+		System.out.println("RESULT : "+result.toString());
+		return result;
 	}
 
 	// 유저 아이디를 통해 좋아요 정보 가져오기.
@@ -50,8 +53,11 @@ public class AnimalService {
 	
 	// 유저 아이디와 desertion_no를 통해 좋아요 정보 가져오기.
 		public AnimalLike findAnimalLike(String user_id, String desertion_no) {
-			System.out.println("find AnimalLike By (Userid,desertion_no) Service");
-			return animalLikeRepo.findAnimalLike(user_id, desertion_no);
+			System.out.println("find AnimalLike By (Userid,desertion_no) Service" + user_id + " " + desertion_no);
+			AnimalLike animalLike = animalLikeRepo.findAnimalLike(user_id, desertion_no);
+			if(animalLike!=null)
+				System.out.println(animalLike.toString());
+			return animalLike;
 		}
 	
 	// 좋아요 삭제
