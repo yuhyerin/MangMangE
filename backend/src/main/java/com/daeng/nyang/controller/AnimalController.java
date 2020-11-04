@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Animal;
 import com.daeng.nyang.dto.AnimalLike;
+import com.daeng.nyang.dto.AnimalListFE;
 import com.daeng.nyang.dto.Survey;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.animal.AnimalService;
@@ -46,7 +46,7 @@ public class AnimalController {
 	@ApiOperation(value = "전체동물목록조회")
 	public ResponseEntity<HashMap<String, Object>> allread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 모든 동물 리스트 반환
-		System.out.println("전체동물목록조회 컨트롤러 진입");
+		System.out.println("CONTROLLER START : allread");
 		String token = request.getHeader("Authorization");
 		// 비회원
 		if (request.getHeader("Authorization") == null) {
@@ -78,26 +78,62 @@ public class AnimalController {
 				// 전체동물조회
 				List<Animal> list = animalService.findAnimalAll();
 				map.put("message1", "전체 동물목록 조회  성공");
-				map.put("animalList", list);
+//				map.put("animalList", list);
 
 				// 좋아요 동물 조회
 				List<AnimalLike> listLike = animalService.findAnimalLikeByUserid(user_id);
 				map.put("message2", "좋아요 동물목록 조회  성공");
-				map.put("animalListLike", listLike);
-
+//				map.put("animalListLike", listLike);
+				List<AnimalListFE> result = new ArrayList<>();
+				int j = 0;
+				for (int i = 0; i < listLike.size(); i++) {
+					String desertion_no = listLike.get(i).getDesertion_no();
+					System.out.println("DESERTION_NO : "+desertion_no);
+					for (; j < list.size(); j++) {
+						Animal temp = list.get(j);
+						if ((temp.getDesertion_no()+"").equals(desertion_no)) {
+							result.add(AnimalListFE.builder().animal(temp).like(true).build());
+							j++;
+							break;
+						} else {
+							result.add(AnimalListFE.builder().animal(temp).like(false).build());
+						}
+					}
+				}
+				for (; j < list.size(); j++) {
+					result.add(AnimalListFE.builder().animal(list.get(j)).like(false).build());
+				}
+				map.put("animalList", result);
 				return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+
 			} catch (Exception e) {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			}
 		}
 //		}
 	}
+	
+	@GetMapping(path="/user/animal/like")
+	@ApiOperation("좋아요 리스트")
+	public ResponseEntity<HashMap<String, Object>> animalLikeList(HttpServletRequest request){
+		System.out.println("CONTROLLER START : 좋아요 리스트");
+		String token = request.getHeader("Authorization");
+		System.out.println("token : "+token);
+		String user_id = jwtTokenUtil.getUsernameFromToken(token);
+		System.out.println("user_id : "+user_id);
+		HashMap<String, Object> map = new HashMap<>();
+		List<AnimalListFE> likelist = animalService.animalLikeList(user_id);
+		map.put("likeList", likelist);
+		System.out.println(likelist.toString());
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+	
 
 	@GetMapping(path = "user/animal/surveyread")
 	@ApiOperation(value = "설문기록여부확인")
 	public ResponseEntity<HashMap<String, Object>> surveyread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 설문기록여부 반환
-		System.out.println("설문기록여부확인 컨트롤러 진입");
+		System.out.println("CONTROLLER START : surveyREAD");
 		String token = request.getHeader("Authorization");
 		if (token == null) {
 			return null;

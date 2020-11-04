@@ -2,7 +2,7 @@
   <div class="flip">
     <div
       class="front"
-      :style="{ 'background-image': 'url(' + animalInfo.popfile + ')' }"
+      :style="{ 'background-image': 'url(' + animalInfo.animal.popfile + ')' }"
     >
       <div
         style="
@@ -46,9 +46,9 @@
           mdi-heart
         </v-icon>
       </div>
-      <h2>{{ animalInfo.kind_cd }}</h2>
-      <p>{{ animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}</p>
-      <p>{{ animalInfo.weight }} (추정)</p>
+      <h2>{{ animalInfo.animal.kind_cd }}</h2>
+      <p>{{ animalInfo.animal.sex_cd == "M" ? "수컷" : "암컷" }}</p>
+      <p>{{ animalInfo.animal.weight }} (추정)</p>
     </div>
   </div>
 </template>
@@ -64,13 +64,22 @@ export default {
       likeTrigger: false,
     };
   },
-  created() {},
+  created() {
+    console.log(this.animalInfo.like);
+    if (this.animalInfo.like == false) {
+      this.likeTrigger = false;
+    } else {
+      this.likeTrigger = true;
+    }
+  },
 
   methods: {
     clicked() {
       if (this.moveTrigger == true) {
-        console.log("페이지 이동!!", this.animalInfo);
-        this.$router.push("/animalDetail" + `/${this.animalInfo.desertion_no}`);
+        console.log("페이지 이동!!", this.animalInfo.animal);
+        this.$router.push(
+          "/animalDetail" + `/${this.animalInfo.animal.desertion_no}`
+        );
       }
     },
     setLiked() {
@@ -82,7 +91,7 @@ export default {
             .post(
               SERVER.URL + "/user/animal/animalLike",
               {
-                desertion_no: this.animalInfo.desertion_no,
+                desertion_no: this.animalInfo.animal.desertion_no,
               },
               {
                 headers: {
@@ -103,7 +112,7 @@ export default {
             .post(
               SERVER.URL + "/user/animal/animalLike",
               {
-                desertion_no: this.animalInfo.desertion_no,
+                desertion_no: this.animalInfo.animal.desertion_no,
               },
               {
                 headers: {

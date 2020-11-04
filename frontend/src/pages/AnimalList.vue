@@ -157,16 +157,6 @@ export default {
     trigger(newValue, oldValue) {
       if (newValue == 0) {
         console.log("All Animals");
-        // axios
-        //   .get(SERVER.URL + "/newuser/animal/allread", {
-        //     headers: {
-        //       Authorization: this.$cookies.get("accessToken"),
-        //     },
-        //   })
-        //   .then((res) => {
-        //     this.allDatas = res.data.animalList;
-        //     console.log(res.data.animalList);
-        //   });
       } else if (newValue == 1) {
         axios
           .get(SERVER.URL + "/user/animal/matchlist", {
@@ -186,6 +176,17 @@ export default {
           });
       } else {
         console.log("like animals");
+        axios.get(SERVER.URL+'/user/animal/like',{
+          headers:{
+            Authorization: this.$cookies.get("accessToken")
+          }
+        })
+        .then((res)=>{
+          console.log(res.data.likeList)
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
       }
     },
   },
@@ -198,10 +199,20 @@ export default {
   async created() {
     var data = null;
 
-    await axios.get(SERVER.URL + "/newuser/animal/allread").then((res) => {
-      data = res.data.animalList;
-    });
-    console.log(data);
+    await axios
+      .get(SERVER.URL + "/newuser/animal/allread", {
+        headers: {
+          Authorization: this.$cookies.get("accessToken"),
+        },
+      })
+      .then((res) => {
+        data = res.data.animalList;
+        console.log(res.data);
+      })
+      .catch((err) => {
+        SERVER.RefreshToken(err);
+      });
+    // console.log(data);
     this.allDatas = data;
 
     await axios

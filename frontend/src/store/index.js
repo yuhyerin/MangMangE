@@ -15,6 +15,7 @@ export default new Vuex.Store({
     dogMbtiArr: ["", "", "", ""],
     dogMbti: "",
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    address: '',
     findUserId: '',
 
     // 1: survey to animalList, 2: main to animalList
@@ -54,6 +55,11 @@ export default new Vuex.Store({
       }
     },
 
+    findPersonAddress(state, address) {
+      state.address = address
+      console.log(state.address)
+    },
+    
     setEventListener(state, payload) {
       state.eventListener = payload
     },
