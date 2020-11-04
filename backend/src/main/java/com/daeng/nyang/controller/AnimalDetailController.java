@@ -36,6 +36,8 @@ public class AnimalDetailController {
 			map.put("personality", personality);
 		System.out.println("CONTROLLER END");
 		System.out.println(map.toString());
+		if(map.size()==0)
+			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
