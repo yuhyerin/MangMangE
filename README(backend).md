@@ -16,9 +16,9 @@
 
 ## Account Controller
 
-## 비회원
+### 비회원
 
-### 1. 회원가입
+#### 1. 회원가입
 
 > method : POST
 >
@@ -32,7 +32,7 @@
 >
 > > res.data.message : duplicated user_id
 
-### 2. 이메일 유효성 검사
+#### 2. 이메일 유효성 검사
 
 > method : GET
 >
@@ -44,7 +44,7 @@
 >
 > **(202)** res.data.origin_hash : null
 
-### 3. 인증번호 검사
+#### 3. 인증번호 검사
 
 > method : GET
 >
@@ -56,7 +56,7 @@
 >
 > **(202)** res.data.result : false
 
-### 4. 로그인
+#### 4. 로그인
 
 > method : POST
 >
@@ -72,7 +72,7 @@
 >
 > > res.data.message : authenticate ERROR
 
-### 5. 토큰 재발급
+#### 5. 토큰 재발급
 
 > method : POST
 >
@@ -88,9 +88,9 @@
 
 
 
-## 회원 (accessToken 필요)
+### 회원 (accessToken 필요)
 
-### 1.  로그아웃
+#### 1.  로그아웃
 
 > method : POST
 >
@@ -102,7 +102,7 @@
 >
 > **(401)** err.response.status :  UNAUTHORIZED
 
-### 2. 문자 인증
+#### 2. 문자 인증
 
 > method : GET
 >
@@ -116,7 +116,7 @@
 >
 > **(400)** res.data.success : false (번호가 잘못됨)
 
-### 3. 입양신청
+#### 3. 입양신청
 
 > method : POST
 >
@@ -128,7 +128,7 @@
 >
 > **(400)** err.data.success : false
 
-### 4. 입양신청 목록 조회
+#### 4. 입양신청 목록 조회
 
 > method : GET
 >
@@ -142,7 +142,7 @@
 >
 > **(401)** res.response.status : UNAUTHORIZED
 
-### 5. 입양신청서 조회
+#### 5. 입양신청서 조회
 
 > method : GET
 >
@@ -160,3 +160,20 @@
 
 
 
+## AnimalDetailController
+
+### 비회원
+
+#### 1. 동물상세조회
+
+> method : GET
+>
+> url : localhost:8080/animal/detail
+>
+> requestParam : desertion_no
+>
+> **(200)** res.response.status : OK
+>
+> > res.data.animal & res.data.personality
+>
+> **(202)** res.response.status : ACCEPTED

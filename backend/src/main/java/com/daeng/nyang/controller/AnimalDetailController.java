@@ -17,21 +17,24 @@ import com.daeng.nyang.service.animal.AnimalService;
 @RestController
 @CrossOrigin("*")
 public class AnimalDetailController {
-	
+
 	@Autowired
 	private AnimalService animalService;
-	
+
 	@GetMapping("/newuser/animal/detail")
-	public ResponseEntity<HashMap<String, Object>> animalDetail(@RequestParam Long desertion_no){
+	public ResponseEntity<HashMap<String, Object>> animalDetail(@RequestParam Long desertion_no) {
 		System.out.println("CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		Animal animal = animalService.animalDetail(desertion_no);
-		map.put("animal", animal);
+		System.out.println(animal.toString());
+		if(animal!=null)
+			map.put("animal", animal);
 		System.out.println(map.toString());
 		List<String> personality = animalService.animalPersonality(desertion_no);
 		System.out.println(personality.toString());
+		if(personality!=null)
+			map.put("personality", personality);
 		System.out.println("CONTROLLER END");
-		map.put("personality", personality);
 		System.out.println(map.toString());
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
