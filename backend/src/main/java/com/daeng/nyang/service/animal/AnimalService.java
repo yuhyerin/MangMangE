@@ -1,6 +1,7 @@
 package com.daeng.nyang.service.animal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,9 +88,35 @@ public class AnimalService {
 	}
 
 	// 100퍼센트 일치. 추천율 100프로.
-	public List<Animal> findAnimalByMbti(String mbti) {
-		List<Animal> animal = animalRepo.findAnimalByMbti(mbti);
-		return animal;
+	public List<AnimalListFE> findAnimalByMbti(String user_id, String mbti) {
+		// 1. mbti 매칭동물리스트
+		List<Animal> list = animalRepo.findAnimalByMbti(mbti);
+		List<AnimalListFE> result = new ArrayList<AnimalListFE>();
+		for (int i = 0; i < list.size(); i++) {
+			Animal animal = list.get(i);
+			// 2. 각 동물별 성격
+			String[] personality = ptagRepo.findTagNameByDesertionNo(animal.getDesertion_no());
+			// 3. 좋아요 여부
+			boolean like = animalLikeRepo.findAnimalLikeByUserIdAndDesertionNo(user_id, animal.getDesertion_no())
+					.isPresent();
+			result.add(AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
+					kind_c(animal.getKind_c()). // 하위 품종
+					color_cd(animal.getColor_cd()). // 털색
+					age(animal.getAge()). // 출생년도(int(4))
+					weight(animal.getWeight()). // 체중
+					popfile(animal.getPopfile()). // 이미지
+					process_state(animal.getProcess_state()). // 입양상태
+					sex_cd(animal.getSex_cd()). // 성별
+					neuter_yn(animal.getNeuter_yn()). // 중성화여부
+					special_mark(animal.getSpecial_mark()). // 특징
+					charge_nm(animal.getCharge_nm()). // 담당자 이름
+					officetel(animal.getOfficetel()). // 담당자 연락처
+					mbti(animal.getMbti()). // 동물 mbti
+					personality(personality). // 동물 성격
+					like(like).build());
+		}
+
+		return result;
 	}
 
 	public List<Animal> findAnimalMbtiByKeyword(String mbti) {
@@ -121,7 +148,7 @@ public class AnimalService {
 	}
 
 	// 좋아요 삭제
-	public void deleteAnimalLike(String user_id, String desertion_no) {
+	public void deleteAnimalLike(String user_id, Long desertion_no) {
 		System.out.println("Delete AnimalLike Service");
 		animalLikeRepo.deleteAnimalLike(user_id, desertion_no);
 	}
@@ -155,7 +182,7 @@ public class AnimalService {
 		for (int i = 0; i < desertion_no.size(); i++) {
 			Long no = desertion_no.get(i);
 			Animal animal = animalRepo.findAnimalByDesertionNo(no);
-			String[] personality=animalPersonality(no);
+			String[] personality = animalPersonality(no);
 			result.add(AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
 					kind_c(animal.getKind_c()). // 하위 품종
 					color_cd(animal.getColor_cd()). // 털색
@@ -170,8 +197,7 @@ public class AnimalService {
 					officetel(animal.getOfficetel()). // 담당자 연락처
 					mbti(animal.getMbti()). // 동물 mbti
 					personality(personality). // 동물 성격
-					like(true).build()
-					);
+					like(true).build());
 		}
 		System.out.println(result.toString());
 		System.out.println("SERVICE END : 좋아요 리스트");
