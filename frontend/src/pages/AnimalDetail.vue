@@ -181,7 +181,15 @@ export default {
       this.likeTrigger = !this.likeTrigger;
     },
     moveTo(page) {
-      this.$router.push(page + `/${this.animalInfo.desertion_no}`);
+      // this.$router.push(page + `/${this.animalInfo.desertion_no}`);
+      this.$router.push(
+        {
+          name: 'Adoption',
+          params: {
+            animalId: this.animalInfo.desertion_no
+          }
+        }
+      )
     },
   },
 };

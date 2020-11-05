@@ -4,9 +4,9 @@
     <div class="container" style="height: 710px; margin-top: 65px">
       <div class="row">
         <div class="application col-lg-10 col-md-10 col-sm-10">
-          <h4 class="application-title">입양신청서</h4>
+          <h3 class="application-title">입양신청서</h3>
           <div class="selfcheck">
-            <h5 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h5>
+            <h4 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h4>
             <ul class="selfchecklist">
               <li>입양에 필요한 비용을 감당하실 수 있나요?</li>
               <li>정기적인 검진에 따른 비용을 감당하실 수 있나요?</li>
@@ -24,7 +24,7 @@
             </ul>
           </div>
           <hr class="dog-information-startline" />
-          <h5>유기동물 정보</h5>
+          <h4>유기동물 정보</h4>
           <div class="flex">
             <div class="dog-information">
               <div class="row dog-information-serial">
@@ -81,7 +81,7 @@
           </div>
           <hr class="dog-information-endline" />
 
-          <h5>입양희망자 정보</h5>
+          <h4>입양희망자 정보</h4>
           <div class="adopter-information">
             <div class="row adopter-information-name">
               <div class="col-2">
@@ -589,7 +589,7 @@ export default {
     axios
       .get(SERVER.URL + "/newuser/animal/detail", {
         params: {
-          desertion_no: 430364202000067,
+          desertion_no: this.$route.params.animalId,
         },
         // {
         //   headers: {
@@ -658,7 +658,7 @@ hr.dog-information-startline {
 
 div.selfcheck {
   background: rgb(244, 236, 225);
-  padding: 12px 12px 5px 12px;
+  padding: 12px 12px 12px 12px;
 }
 
 .selfcheckstart {
@@ -674,7 +674,7 @@ ul.selfchecklist {
 div.list {
   background: rgb(244, 236, 225);
   /* background: #d9edf7; */
-  padding: 12px 12px 1px 12px;
+  padding: 12px 12px 12px 12px;
 }
 
 button.check-number {

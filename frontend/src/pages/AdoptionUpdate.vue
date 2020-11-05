@@ -176,62 +176,40 @@ export default {
         })
         .then((res) => {
           console.log(res.data)
+          this.dogSerial = res.data.apply.ani_num
           this.personTitle = res.data.apply.title
           this.personPhone = res.data.apply.user_phone
           this.personName = res.data.apply.user_name
           this.personEmail = res.data.apply.user_email
           console.log(this.personTitle)
-        })
-        .catch((err) => {
-          console.log("catch err : ", err);
-        });
-
-      // 동물정보 불러오기
-      axios
-      .get(SERVER.URL + "/newuser/animal/detail", {
-        params: {
-          desertion_no: 430364202000067,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.dogSerial = res.data.animalList.desertion_no;
-        this.dogAge = 2020 - res.data.animalList.age + "살";
-        this.dogBreed = res.data.animalList.kind_c;
-        if (res.data.animalList.sex_cd == "M") {
-          this.dogGender = "남";
-        } else {
-          this.dogGender = "여";
-        }
-        this.dogFur = res.data.animalList.color_cd;
-      })
-      .catch((err) => {
-        console.log(err.response);
-        if (err.response.status == 401) {
-          //accessToken만료
+          // 동물정보 불러오기
           axios
-            .post(
-              SERVER.URL + "/newuser/refresh",
-              {},
-              {
-                headers: {
-                  accessToken: this.$cookies.get("accessToken"),
-                  refreshToken: this.$cookies.get("refreshToken"),
-                },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-              if (res.data.success) {
-                this.$cookies.set("accessToken", res.data.accessToken);
-                console.log(this.$cookies.get("accessToken"));
-              }
+          .get(SERVER.URL + "/newuser/animal/detail", {
+            params: {
+              desertion_no: this.dogSerial,
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            this.dogSerial = res.data.animalList.desertion_no;
+            this.dogAge = 2020 - res.data.animalList.age + "살";
+            this.dogBreed = res.data.animalList.kind_c;
+            if (res.data.animalList.sex_cd == "M") {
+              this.dogGender = "남";
+            } else {
+              this.dogGender = "여";
+            }
+            this.dogFur = res.data.animalList.color_cd;
+          })
+          .catch((err) => {
+            console.log(err.response);
+            SERVER.RefreshToken(err);
+          });
             })
             .catch((err) => {
-              console.log(err);
+              console.log("catch err : ", err);
             });
-        }
-      });
+
   }
 }
 </script>
