@@ -29,7 +29,14 @@ public class SurveyService {
 	
 	// 유저 아이디를 통해 설문정보 가져오기.
 	public Survey findSurveyByUserid(String user_id) {
-		System.out.println("find Survey By Userid Service");
-		return surveyRepo.findSurveyByUserid(user_id);
+		System.out.println("FINDSURVEY");
+		Survey surve = null;
+		try {
+		surve = surveyRepo.findSurveyByUserid(user_id);
+		} catch(NullPointerException e) {
+			System.out.println("NULL 잡잡");
+			return null;
+		}
+		return surve;
 	}
 }

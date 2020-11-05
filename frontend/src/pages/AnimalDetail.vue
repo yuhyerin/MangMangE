@@ -39,7 +39,11 @@
               width: 30vw;
             "
           >
-            <img :src="animalInfo.popfile" alt="사진" />
+            <img
+              :src="this.animalInfo.popfile"
+              alt="사진"
+              style="width: 100%"
+            />
           </div>
           <div style="width: 70vw; height: 35vh; margin: 10px">
             <div style="height: 20%">제목</div>
@@ -47,11 +51,13 @@
               <table>
                 <tr>
                   <td>종 / 품종</td>
-                  <td>{{ this.animalInfo.kind_cd }}</td>
+                  <td>{{ this.animalInfo.kind_c }}</td>
                 </tr>
                 <tr>
                   <td>성별(중성화)</td>
-                  <td>{{ this.animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}</td>
+                  <td>
+                    {{ this.animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}
+                  </td>
                 </tr>
                 <tr>
                   <td>나이</td>
@@ -97,7 +103,8 @@
 
 <script>
 import Header from "../components/Header.vue";
-import dump from "../assets/data/animal.json";
+import axios from "axios";
+import SERVER from "@/api/url";
 
 export default {
   components: {
@@ -110,16 +117,97 @@ export default {
     };
   },
   created() {
-    for (var i = 0; i < dump.animal.length; i++) {
-      if (dump.animal[i].desertion_no == this.$route.params.animalID) {
-        this.animalInfo = dump.animal[i];
-      }
+    this.animalInfo = "";
+    this.likeTrigger = false;
+
+    if (this.animalInfo.like == false) {
+      this.likeTrigger = true;
+    } else {
+      this.likeTrigger = false;
+    }
+
+    if (this.$cookies.get("accessToken") != null) {
+      axios
+        .get(SERVER.URL + "/user/animal/detail", {
+          params: {
+            desertion_no: this.$route.params.animalID,
+          },
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          this.animalInfo = res.data.animalList;
+          // console.log(res.data.animalList);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .get(SERVER.URL + "/newuser/animal/detail", {
+          params: {
+            desertion_no: this.$route.params.animalID,
+          },
+        })
+        .then((res) => {
+          this.animalInfo = res.data.animalList;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   },
   methods: {
     setLiked() {
-      console.log("즐겨찾기!!");
-      this.likeTrigger = !this.likeTrigger;
+      if (this.$cookies.get("accessToken") == null) {
+        alert("로그인이 필요한 서비스 입니다.");
+      } else {
+        if (this.likeTrigger == true) {
+          // 좋아요 해제
+          console.log("false");
+          axios
+            .post(
+              SERVER.URL + "/user/animal/animalLike",
+              {
+                desertion_no: this.animalInfo.desertion_no,
+              },
+              {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          // 좋아요 등록
+          console.log("true");
+          axios
+            .post(
+              SERVER.URL + "/user/animal/animalLike",
+              {
+                desertion_no: this.animalInfo.desertion_no,
+              },
+              {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+        this.likeTrigger = !this.likeTrigger;
+      }
     },
     moveTo(page) {
       this.$router.push(page + `/${this.animalInfo.desertion_no}`);

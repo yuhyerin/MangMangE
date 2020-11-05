@@ -26,5 +26,5 @@ public class AnimalLike {
 	private String user_id;
 
 	@Column
-	private String desertion_no;
+	private Long desertion_no;
 }

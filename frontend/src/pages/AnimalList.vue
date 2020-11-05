@@ -1,10 +1,14 @@
 <template>
   <v-app>
-    <Header />
-    <v-content>
-      <v-container style="padding-top: 75px">
+    <AnimalListHeader @changeComponents="componentChange" />
+    <div class="loading" v-if="loadingTrigger">
+      <!-- <i class="fas fa-spinner fa-10x fa-spin"></i> -->
+      <img src="@/assets/image/loading.gif" alt="loading" />
+    </div>
+    <v-main>
+      <div style="padding-top: 75px; display: flex; justify-content: center">
         <div style="display: flex; min-height: 87vh">
-          <div
+          <!-- <div
             style="
               width: 20vw;
               max-height: 88vh;
@@ -86,16 +90,26 @@
                 />
               </div>
             </div>
-          </div>
+          </div> -->
           <div
             style="
               width: 80vw;
-              background-color: rgb(244, 236, 225);
               border-radius: 20px;
-              margin: 5px;
+              margin: 10px;
               align-text: center;
+              justify-content: center;
             "
           >
+            <!-- <div
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalCard
+                v-if="trigger == 0"
+                v-for="(data, index) in this.allDatas"
+                :key="index"
+                :animalInfo="data"
+              />
+            </div> -->
             <div
               style="display: flex; flex-wrap: wrap; justify-content: center"
             >
@@ -105,31 +119,31 @@
                 :key="index"
                 :animalInfo="data"
               />
-              <!-- <AllAnimals
+              <AllAnimals
                 v-if="trigger == 1"
-                v-for="(data, index) in this.tmpArr"
+                v-for="(data, index) in this.matchedDatas"
                 :key="index"
                 :animalInfo="data"
               />
               <AllAnimals
                 v-if="trigger == 2"
-                v-for="(data, index) in this.tmpArr"
+                v-for="(data, index) in this.likedDatas"
                 :key="index"
                 :animalInfo="data"
-              /> -->
+              />
             </div>
           </div>
         </div>
-      </v-container>
-    </v-content>
+      </div>
+    </v-main>
   </v-app>
 </template>
 
 <script>
 import AllAnimals from "../components/AllAnimals.vue";
-import Header from "../components/Header.vue";
-import { mapGetters, mapMutations } from "vuex";
-import data from "../assets/data/animal.json";
+import AnimalListHeader from "../components/AnimalListHeader.vue";
+import { mapState, mapGetters, mapMutations } from "vuex";
+// import data from "../assets/data/animal.json";
 
 import SERVER from "@/api/url";
 import axios from "axios";
@@ -137,55 +151,197 @@ import axios from "axios";
 export default {
   data() {
     return {
-      trigger: 0,
+      trigger: "",
       tmp: 0,
       testTrigger: false,
-      allDatas: data,
-      matchedDatas: "",
+      allDatas: "",
+      matchedDatas: [],
       likedDatas: [],
       checked: ["F", "M"],
       tmpArr: [],
+      userFinishedSurvey: false,
+      loadingTrigger: false,
     };
   },
   components: {
     AllAnimals,
-    Header,
+    AnimalListHeader,
   },
   watch: {
     trigger(newValue, oldValue) {
       if (newValue == 0) {
-        this.tmp = 10;  
+        this.allDatas = "";
         console.log("All Animals");
-        axios.get(SERVER.URL + "/newuser/animal/allread",{
-          headers: {
-            Authorization: this.$cookies.get('accessToken')
-          }
-        }).then((res) => {
-          this.allDatas = res.data.animalList;
-          console.log(res.data.animalList);
-        });
+        if (this.$cookies.get("accessToken") != null) {
+          this.loadingTrigger = true;
+          axios
+            .get(SERVER.URL + "/user/animal/allread", {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            })
+            .then((res) => {
+              this.allDatas = res.data.animalList;
+              this.loadingTrigger = false;
+            })
+            .catch((err) => {
+              // SERVER.RefreshToken(err);
+              this.loadingTrigger = false;
+            });
+        } else {
+          this.loadingTrigger = true;
+          axios
+            .get(SERVER.URL + "/newuser/animal/allread")
+            .then((res) => {
+              this.allDatas = res.data.animalList;
+              this.loadingTrigger = false;
+              // console.log(res.data);
+            })
+            .catch((err) => {
+              this.loadingTrigger = false;
+            });
+          // console.log(data);
+        }
       } else if (newValue == 1) {
-        this.tmp = 4;
-        console.log("matched Animals");
+        this.matchedDatas = [];
+        this.loadingTrigger = true;
+        axios
+          .get(SERVER.URL + "/user/animal/matchlist", {
+            headers: {
+              Authorization: $cookies.get("accessToken"),
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            if (res.data.survey != null) {
+              this.matchedDatas = [];
+              this.matchedDatas = [...res.data.perfect, ...res.data.good];
+              this.userFinishedSurvey = true;
+              this.loadingTrigger = false;
+            } else {
+              this.userFinishedSurvey = false;
+              this.loadingTrigger = false;
+              console.log(res);
+            }
+          })
+          .catch((err) => {
+            console.log("error message", err);
+            // SERVER.RefreshToken(err);
+          });
       } else {
-        this.tmp = 2;
-        console.log("like animals");
+        // console.log("like animals");
+        this.likedDatas = [];
+        if (this.$cookies.get("accessToken") != null) {
+          this.loadingTrigger = true;
+          axios
+            .get(SERVER.URL + "/user/animal/like", {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            })
+            .then((res) => {
+              this.likedDatas = [];
+              this.likedDatas = [...res.data.animalList];
+              this.loadingTrigger = false;
+            })
+            .catch((err) => {
+              console.log(err);
+              // SERVER.RefreshToken(err);
+              this.loadingTrigger = false;
+            });
+        } else {
+          alert("로그인이 필요한 서비스 입니다.");
+          this.$router.push("/login");
+        }
       }
     },
   },
 
-  created() {
-    axios.get(SERVER.URL + "/newuser/animal/allread").then((res) => {
-      this.allDatas = res.data.animalList;
-    });
+  computed: {
+    ...mapState(["eventListener"]),
+    ...mapState(["dogMbti"]),
+  },
+
+  async created() {
+    this.userFinishedSurvey = false;
+    var data = null;
+    if (this.$cookies.get("accessToken") != null) {
+      this.loadingTrigger = true;
+      await axios
+        .get(SERVER.URL + "/user/animal/allread", {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          this.allDatas = res.data.animalList;
+          this.loadingTrigger = false;
+          // console.log(res.data);
+        })
+        .catch((err) => {
+          SERVER.RefreshToken(err);
+          this.loadingTrigger = false;
+        });
+
+      await axios
+        .get(SERVER.URL + "/user/animal/surveyread", {
+          headers: {
+            Authorization: $cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          if (res.data.survey != null) {
+            this.userFinishedSurvey = true;
+          } else if (res.data.survey == null) {
+            this.userFinishedSurvey = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response != undefined) {
+            SERVER.RefreshToken(err);
+          }
+        });
+
+      if (this.eventListener == 1) {
+        // console.log(this.dogMbti);
+        this.trigger = 1;
+      } else if (this.eventListener == 2) {
+        this.tirgger = 0;
+      }
+    } else {
+      this.loadingTrigger = true;
+      await axios
+        .get(SERVER.URL + "/newuser/animal/allread")
+        .then((res) => {
+          this.allDatas = res.data.animalList;
+          this.loadingTrigger = false;
+        })
+        .catch((err) => {
+          this.loadingTrigger = false;
+        });
+      // console.log(data);
+    }
   },
 
   methods: {
     ...mapGetters(["getPageCheck"]),
     ...mapMutations(["checkThisPage"]),
+
     setTrigger(num) {
       this.trigger = num;
+      if (this.trigger == 1 && this.userFinishedSurvey == false) {
+        var surveyCheck = confirm(
+          "아직 추천동물 기록이 없습니다. 추천 설문을 하시겠습니까?"
+        );
+        if (surveyCheck) {
+          this.$router.push("/survey");
+        } else {
+          this.trigger = 0;
+        }
+      }
     },
+
     test() {
       this.testTrigger = true;
       setTimeout(() => {
@@ -193,14 +349,8 @@ export default {
       }, 3300);
     },
 
-    changeValue() {
-      this.tmpArr.length = 0;
-      for (var i = 0; i < data.animal.length; i++) {
-        if (this.checked.includes(data.animal[i].sex_cd)) {
-          this.tmpArr.push(data.animal[i]);
-        }
-      }
-      console.log(this.tmpArr);
+    componentChange(value) {
+      this.trigger = value;
     },
   },
 };
@@ -213,5 +363,21 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.loading {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  /* background-image: linear-gradient(
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.4)
+  ); */
 }
 </style>
