@@ -74,7 +74,7 @@ public class AnimalService {
 	public List<AnimalListFE> allAnimalRead(String user_id) {
 		// 1. 동물 리스트
 		List<Animal> animalList = animalRepo.findAnimalAll();
-		List<Ptag> personalityList = ptagRepo.findAllByUserId(user_id);
+		List<Ptag> personalityList = ptagRepo.findAll();
 		Long[] likeList = animalLikeRepo.findDesertionNoByUserId(user_id);
 		List<AnimalListFE> result = new ArrayList<>();
 		int j = 0, k = 0;
@@ -94,12 +94,16 @@ public class AnimalService {
 			// 3. 좋아요 여부
 			boolean like = false;
 			for (; k < likeList.length; k++) {
-				if (animal.getDesertion_no() == likeList[k]) {
+				if ((long) animal.getDesertion_no() == likeList[k]) {
 					like = true;
 					break;
 				} else if (aniDN < likeList[k])
 					break;
 			}
+			
+			String[] personality = new String[personalList.size()];
+			for(int z=0;z<personality.length;z++)
+				personality[z] = personalList.get(z);
 			result.add(AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
 					kind_c(animal.getKind_c()). // 하위 품종
 					color_cd(animal.getColor_cd()). // 털색
@@ -113,7 +117,7 @@ public class AnimalService {
 					charge_nm(animal.getCharge_nm()). // 담당자 이름
 					officetel(animal.getOfficetel()). // 담당자 연락처
 					mbti(animal.getMbti()). // 동물 mbti
-					personality((String[]) personalityList.toArray()). // 동물 성격
+					personality(personality). // 동물 성격
 					like(like).build() // 좋아요 여부
 			);
 		}

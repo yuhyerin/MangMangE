@@ -117,7 +117,9 @@ public class AnimalController {
 				return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 			} else {
 				Survey survey = surveyService.findSurveyByUserid(user_id); // 토큰을 통해 얻은 유저아이디로 이 유저가 설문을 한적있는지 검사.
-
+				if(survey==null) {
+					return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+				}
 				// 설문결과 유저에게 어울리는 강아지의 MBTI
 				String userDogMbti = survey.getAnswer();
 

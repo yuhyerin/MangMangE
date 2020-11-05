@@ -18,7 +18,4 @@ public interface PtagRepo extends JpaRepository<Ptag, String> {
 	@Query(value = "select * from ptag p order by desertion_no asc", nativeQuery = true)
 	List<Ptag> findAllOrderByDesertionNo();
 	
-	@Query(value = "select * from ptag p where p.user_id=:user_id order by desertion_no", nativeQuery = true)
-	List<Ptag> findAllByUserId(String user_id);
-	
 }

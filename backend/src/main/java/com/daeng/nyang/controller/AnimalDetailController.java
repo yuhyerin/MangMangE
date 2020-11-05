@@ -53,7 +53,7 @@ public class AnimalDetailController {
 		AnimalListFE animal = animalService.animalDetail(user_id, desertion_no); // animal 정보
 		if (animal != null) {
 			map = new HashMap<String, Object>();
-			map.put("animal", animal);
+			map.put("animalList", animal);
 		}
 		System.out.println(map.toString());
 		if (map.size() == 0)
