@@ -105,7 +105,7 @@
                 :key="index"
                 :animalInfo="data"
               />
-              <!-- <AllAnimals
+              <AllAnimals
                 v-if="trigger == 1"
                 v-for="(data, index) in this.tmpArr"
                 :key="index"
@@ -116,7 +116,7 @@
                 v-for="(data, index) in this.tmpArr"
                 :key="index"
                 :animalInfo="data"
-              /> -->
+              />
             </div>
           </div>
         </div>
@@ -162,14 +162,38 @@ export default {
           }
         }).then((res) => {
           this.allDatas = res.data.animalList;
+          console.log(res.data);
           console.log(res.data.animalList);
+          console.log(res.data.animalListLike);
         });
       } else if (newValue == 1) {
         this.tmp = 4;
         console.log("matched Animals");
+        axios.get(SERVER.URL + "/user/animal/matchlist",{
+          headers: {
+            Authorization: this.$cookies.get('accessToken')
+          }
+        }).then((res) => {
+          console.log(res.data);
+          console.log(res.data.good);
+          console.log(res.data.perfect);
+          this.tmpArr = res.data.good;
+        });
       } else {
         this.tmp = 2;
         console.log("like animals");
+        axios.post(SERVER.URL + "/user/animal/animalLike",{
+            "desertion_no": data.desertion_no,
+          },
+          {
+            headers: {
+              Authorization: $cookies.get("accessToken")
+            }
+          }).then((res) => {
+          console.log(res.data.good);
+          console.log(res.data.perfect);
+          this.tmpArr = res.data.good;
+        });
       }
     },
   },

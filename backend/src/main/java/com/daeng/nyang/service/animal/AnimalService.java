@@ -27,6 +27,7 @@ public class AnimalService {
 
 	// 100퍼센트 일치. 추천율 100프로.
 	public List<Animal> findAnimalByMbti(String mbti) {
+		System.out.println("확인 : " + animalRepo.findAnimalByMbti(mbti));
 		List<Animal> animal = animalRepo.findAnimalByMbti(mbti);
 		return animal;
 	}
@@ -50,7 +51,7 @@ public class AnimalService {
 	
 	// 유저 아이디와 desertion_no를 통해 좋아요 정보 가져오기.
 		public AnimalLike findAnimalLike(String user_id, String desertion_no) {
-			System.out.println("find AnimalLike By (Userid,desertion_no) Service");
+			System.out.println("find AnimalLike By (" + user_id + "," + desertion_no + ") Service");
 			return animalLikeRepo.findAnimalLike(user_id, desertion_no);
 		}
 	

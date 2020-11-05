@@ -53,6 +53,8 @@
   </div>
 </template>
 <script>
+import SERVER from "@/api/url";
+import axios from "axios";
 export default {
   props: ["animalInfo"],
   data() {
@@ -65,7 +67,7 @@ export default {
     clicked() {
       if (this.moveTrigger == true) {
         console.log("페이지 이동!!", this.animalInfo);
-        this.$router.push("/animalDetail" + `/${this.animalInfo.desertionNo}`);
+        this.$router.push("/animalDetail" + `/${this.animalInfo.desertion_No}`);
       }
     },
     setLiked() {
@@ -73,6 +75,17 @@ export default {
         console.log("즐겨찾기!!");
         this.likeTrigger = !this.likeTrigger;
       }
+      console.log("this.animalInfo.desertion_no : " + this.animalInfo.desertion_no);
+      axios.post(SERVER.URL + "/user/animal/animalLike",{
+            "desertion_no": this.animalInfo.desertion_no,
+          },
+          {
+            headers: {
+              Authorization: $cookies.get("accessToken")
+            }
+          }).then((res) => {
+          console.log(res.data.new_animalLike);
+        });
     },
     setMoveTrigger() {
       this.moveTrigger = !this.moveTrigger;

@@ -158,19 +158,29 @@ public class AnimalController {
 				if (user_id == null) {
 					map.put("message", "토큰을 통해 읽은 유저 아이디 값이 null입니다.");
 				} else {
-					Survey survey = surveyService.findSurveyByUserid(user_id); // 토큰을 통해 얻은 유저아이디로 이 유저가 설문을 한적있는지 검사.
+					Survey survey = new Survey();
+					
+					if(surveyService.findSurveyByUserid(user_id) == null) { // 토큰을 통해 얻은 유저아이디로 이 유저가 설문을 한적있는지 검사.
+						// 설문을 한 적 없는 경우
+						map.put("isSurveyDone", null);
+						return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+					} else {
+						survey = surveyService.findSurveyByUserid(user_id);
+					}
 
 					// 유저의 MBTI
-					String userMbti = survey.getMbti(); // 설문을 한적 없다면 이 구문에서 에러가 나서 NOT_FOUND상태가 반환됨.
+					String userMbti = survey.getMbti();
 					System.out.println("userMbti : " + userMbti); // 확인
 
 					// 설문결과 유저에게 어울리는 강아지의 MBTI
-					String userDogMbti = survey.getAnswer(); // 설문을 한적 없다면 이 구문에서 에러가 나서 NOT_FOUND상태가 반환됨.
+					String userDogMbti = survey.getAnswer();
 					System.out.println("userDogMbti : " + userDogMbti); // 확인
 
 					// 추천율 100%
 					// 설문결과 유저에게 어울리는 강아지의 MBTI를 똑같이 가지고 있는 강아지 리스트 반환.
+					System.out.println(animalService.findAnimalByMbti(userDogMbti));
 					List<Animal> perfectlist = animalService.findAnimalByMbti(userDogMbti);
+					System.out.println("perfectlist : " + perfectlist);
 					map.put("perfect", perfectlist);
 
 					// 추천율 75%
@@ -222,6 +232,7 @@ public class AnimalController {
 					goodlist.addAll(goodlist4);
 
 					map.put("good", goodlist);
+					System.out.println("goodlist" + goodlist);
 					map.put("message", "perfect는 100%추천, good_1~4는 75%추천 입니다.");
 				}
 
@@ -243,7 +254,7 @@ public class AnimalController {
 
 		if (token == null) {
 			return null;
-		} else if (jwtTokenUtil.isTokenExpired(token)) {
+		} else if (jwtTokenUtil.isTokenExpired(token) || animalLike.getDesertion_no()==null) { // 토큰만료 혹은 프론트에서 값을 제대로 못받은경우
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		} else {
 			// 토큰으로 유저 아이디 받아오는 구문
@@ -261,20 +272,20 @@ public class AnimalController {
 				// 이제 해당 유저 아이디로 등록되어있는 desertion_no가 기존에 있는지 검색해서 없으면 생성, 있다면 삭제를 한다.
 
 				// 우선 있는지 확인
-				AnimalLike new_animalLike = new AnimalLike();
-				new_animalLike = animalService.findAnimalLike(animalLike.getUser_id(), animalLike.getDesertion_no());
-
 				// 있다면 null이 아닐 것이고 없다면 null일 것이다.
-				if (new_animalLike.getDesertion_no() != null) { // 있는 경우 [삭제]
-					animalService.deleteAnimalLike(new_animalLike.getUser_id(), new_animalLike.getDesertion_no());
-					map.put("message", "좋아요 삭제");
-				} else { // 없는 경우 [생성]
-					new_animalLike = animalService.join(new_animalLike);
+				AnimalLike new_animalLike = new AnimalLike();
+				if(animalService.findAnimalLike(animalLike.getUser_id(), animalLike.getDesertion_no()) == null) { // 없는 경우 [생성]
+					new_animalLike = animalService.join(animalLike);
 					map.put("message", "좋아요 생성");
 					map.put("new_animalLike", new_animalLike);
+				} else { // 있는 경우 [삭제]
+					animalService.deleteAnimalLike(animalLike.getUser_id(), animalLike.getDesertion_no());
+					map.put("message", "좋아요 삭제");
 				}
 				return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 			} catch (Exception e) {
+				System.out.println("error : " + e);
+				
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			}
 		}

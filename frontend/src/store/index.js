@@ -63,8 +63,8 @@ export default new Vuex.Store({
       axios
         .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
           {
-            "MBTI": state.userMbti,
-            "answers": state.dogMbti,
+            "mbti": state.userMbti,
+            "answer": state.dogMbti,
           },
           {
             headers: {
