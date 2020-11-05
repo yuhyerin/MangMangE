@@ -21,12 +21,41 @@
       border-bottom: 1px solid gray;
     "
   >
-    <div @click="moveToMain">로고</div>
-    <div>
+    <div @click="moveToMain" style="width: 10vw">로고</div>
+    <div style="width: 80vw; display: flex; justify-content: space-around">
+      <v-btn
+        text
+        :color="btnChecked1 == true ? 'white' : 'black'"
+        @click="moveToAllAnimals"
+        :style="btnChecked1 == true ? 'background-color:rgb(33,150,243)' : null"
+        width="10vw"
+      >
+        <div>모든 동물 보기</div>
+      </v-btn>
+      <v-btn
+        text
+        :color="btnChecked2 == true ? 'white' : 'black'"
+        @click="moveToMatchedAnimals"
+        :style="btnChecked2 == true ? 'background-color:rgb(33,150,243)' : null"
+        width="10vw"
+      >
+        <div>나와 맞는 동물은?</div>
+      </v-btn>
+      <v-btn
+        text
+        :color="btnChecked3 == true ? 'white' : 'black'"
+        @click="moveToLikedAnimals"
+        :style="btnChecked3 == true ? 'background-color:rgb(33,150,243)' : null"
+        width="10vw "
+      >
+        <div>즐겨 찾는 동물들</div>
+      </v-btn>
+    </div>
+    <div style="width: 10vw">
       <div
         style="
           display: flex;
-          justify-content: flex-end;
+          justify-content: center;
           align-items: center;
           font-size: 10px;
         "
@@ -41,14 +70,7 @@
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn text @click="countDownTimer">
-          <div>버어튼</div>
-          <div>{{ this.countDown }}</div>
-        </v-btn>
-        <v-btn text @click="moveTo('/animals')">
-          <div>동물 보기</div>
-        </v-btn>
-        <v-btn text @click="moveTo('/videos')">
+        <v-btn text @click="moveTo('/videos')" width="100%">
           <div>동영상 게시판</div>
         </v-btn>
       </div>
@@ -67,6 +89,10 @@ export default {
       isUser: this.$cookies.get("accessToken") == null ? false : true,
       countDown: 10,
       timerTrigger: false,
+      toggle_exclusive: undefined,
+      btnChecked1: false,
+      btnChecked2: false,
+      btnChecked3: false,
     };
   },
   watch: {
@@ -78,6 +104,16 @@ export default {
     ...mapState(["eventListener"]),
   },
   created() {
+    if (this.eventListener == 1) {
+      this.btnChecked1 = false;
+      this.btnChecked2 = true;
+      this.btnChecked3 = false;
+    } else if (this.eventListener == 2) {
+      this.btnChecked1 = true;
+      this.btnChecked2 = false;
+      this.btnChecked3 = false;
+    }
+
     if (this.$cookies.get("accessToken") == null) {
       this.isUser = false;
     } else {
@@ -101,28 +137,30 @@ export default {
         this.logout();
       }
     },
-    moveTo(page) {
-      if (page == "/animals") {
-        this.setEventListener(2);
-      }
-      this.$router.push(page);
+    moveToAllAnimals() {
+      this.btnChecked1 = true;
+      this.btnChecked2 = false;
+      this.btnChecked3 = false;
+      this.$emit("changeComponents", 0);
     },
-    // test() {
-    //   axios
-    //     .get(SERVER.URL + "/admin", {
-    //       headers: {
-    //         Authorization: this.$cookies.get("accessToken"),
-    //         refreshToken: this.$cookies.get("refreshToken"),
-    //       },
-    //     })
-    //     .then((res) => {
-    //       console.log(res);
-    //     })
-    //     .catch((err) => {
-    //       console.log("err : ", err.response.status);
-    //       SERVER.RefreshToken(err);
-    //     });
-    // },
+    moveToMatchedAnimals() {
+      if (this.$cookies.get("accessToken") == null) {
+        alert("로그인이 필요한 서비스 입니다.");
+        return;
+      } else {
+        this.btnChecked1 = false;
+        this.btnChecked2 = true;
+        this.btnChecked3 = false;
+        this.$emit("changeComponents", 1);
+      }
+    },
+    moveToLikedAnimals() {
+      this.btnChecked1 = false;
+      this.btnChecked2 = false;
+      this.btnChecked3 = true;
+      this.$emit("changeComponents", 2);
+    },
+
     countDownTimer() {
       if (this.countDown > 0) {
         setTimeout(() => {
@@ -131,7 +169,6 @@ export default {
         }, 1000);
       }
     },
-
     logout() {
       axios
         .post(
@@ -142,6 +179,7 @@ export default {
           {
             headers: {
               Authorization: this.$cookies.get("accessToken"),
+              "content-type": "application/json",
             },
           }
         )

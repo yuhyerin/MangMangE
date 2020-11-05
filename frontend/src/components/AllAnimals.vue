@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 200px; margin: 10px">
+  <div style="width: 200px; margin: 20px">
     <div class="flip">
       <div
         class="front"
@@ -64,12 +64,15 @@
         <p>{{ this.animalTag }}</p>
       </div>
     </div>
-    <div style="display: flex; align-items: center">
+    <div style="font-weight: bold">
+      {{ this.animalTag }}
+    </div>
+    <!-- <div style="display: flex; align-items: center">
       <v-icon> mdi-hail </v-icon>
       <div>&nbsp; 215 &nbsp;</div>
       <v-icon small> mdi-heart </v-icon>
       <div>&nbsp;4</div>
-    </div>
+    </div> -->
     <!-- <div>만약 이런식으로 글 제목이 들어간다면 어떨까</div> -->
   </div>
 </template>
@@ -125,51 +128,55 @@ export default {
       }
     },
     setLiked() {
-      if (this.moveTrigger == false) {
-        if (this.likeTrigger == true) {
-          // 좋아요 해제
-          console.log("false");
-          axios
-            .post(
-              SERVER.URL + "/user/animal/animalLike",
-              {
-                desertion_no: this.animalInfo.desertion_no,
-              },
-              {
-                headers: {
-                  Authorization: this.$cookies.get("accessToken"),
+      if (this.$cookies.get("accessToken") == null) {
+        alert("로그인이 필요한 서비스 입니다.");
+      } else {
+        if (this.moveTrigger == false) {
+          if (this.likeTrigger == true) {
+            // 좋아요 해제
+            console.log("false");
+            axios
+              .post(
+                SERVER.URL + "/user/animal/animalLike",
+                {
+                  desertion_no: this.animalInfo.desertion_no,
                 },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          // 좋아요 등록
-          console.log("true");
-          axios
-            .post(
-              SERVER.URL + "/user/animal/animalLike",
-              {
-                desertion_no: this.animalInfo.desertion_no,
-              },
-              {
-                headers: {
-                  Authorization: this.$cookies.get("accessToken"),
+                {
+                  headers: {
+                    Authorization: this.$cookies.get("accessToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            // 좋아요 등록
+            console.log("true");
+            axios
+              .post(
+                SERVER.URL + "/user/animal/animalLike",
+                {
+                  desertion_no: this.animalInfo.desertion_no,
                 },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+                {
+                  headers: {
+                    Authorization: this.$cookies.get("accessToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+          this.likeTrigger = !this.likeTrigger;
         }
-        this.likeTrigger = !this.likeTrigger;
       }
     },
     setMoveTrigger() {

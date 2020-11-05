@@ -58,7 +58,7 @@ public class AnimalDetailController {
 		System.out.println(animal.toString());
 		if (animal != null) {
 			map = new HashMap<String, Object>();
-			map.put("animal", animal);
+			map.put("animalList", animal);
 			System.out.println(map.toString());
 		}
 		System.out.println("CONTROLLER END");

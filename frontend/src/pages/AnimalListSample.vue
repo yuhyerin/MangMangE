@@ -1,148 +1,35 @@
 <template>
   <v-app>
-    <AnimalListHeader @changeComponents="componentChange" />
+    <Header />
     <div class="loading" v-if="loadingTrigger">
       <!-- <i class="fas fa-spinner fa-10x fa-spin"></i> -->
       <img src="@/assets/image/loading.gif" alt="loading" />
     </div>
     <v-main>
-      <div style="padding-top: 75px; display: flex; justify-content: center">
-        <div style="display: flex; min-height: 87vh">
-          <!-- <div
-            style="
-              width: 20vw;
-              max-height: 88vh;
-              display: flex;
-              justify-content: center;
-            "
-          >
-            <div
-              style="
-                background-color: rgb(244, 236, 225);
-                border-radius: 20px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                position: fixed;
-                height: 87vh;
-                margin: 5px;
-              "
-            >
-              <div>
-                <div class="categoryBtn">
-                  <v-btn text color="black" @click="setTrigger(0)">
-                    모든 아이들 보기 &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 0" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-                <div class="categoryBtn">
-                  <v-btn text color="black" @click="setTrigger(1)">
-                    나와 맞는 아이는? &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 1" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-                <div class="categoryBtn" style="">
-                  <v-btn text color="black" @click="setTrigger(2)">
-                    즐겨 찾는 아이들 &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 2" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-              </div>
-              <div style="text-align: center">
-                <div>
-                  <input
-                    type="checkbox"
-                    id="checkbox"
-                    v-model="checked[0]"
-                    true-value="F"
-                    false-value="no"
-                    checked
-                    @change="changeValue"
-                  />
-                  <label for="checkbox">암컷</label>
-                  <input
-                    type="checkbox"
-                    id="checkbox"
-                    v-model="checked[1]"
-                    true-value="M"
-                    false-value="no"
-                    checked
-                    @change="changeValue"
-                  />
-                  <label for="checkbox">수컷</label>
-                </div>
-                <img
-                  v-if="testTrigger == false"
-                  src="../assets/image/1wait.gif"
-                  alt="멍멍"
-                  @click="test"
-                />
-                <img
-                  v-if="testTrigger == true"
-                  src="../assets/image/1pop.gif"
-                  alt="멍멍"
-                />
-              </div>
-            </div>
-          </div> -->
-          <div
-            style="
-              width: 80vw;
-              border-radius: 20px;
-              margin: 10px;
-              align-text: center;
-              justify-content: center;
-            "
-          >
-            <!-- <div
-              style="display: flex; flex-wrap: wrap; justify-content: center"
-            >
-              <AnimalCard
-                v-if="trigger == 0"
-                v-for="(data, index) in this.allDatas"
-                :key="index"
-                :animalInfo="data"
-              />
-            </div> -->
-            <div
-              style="display: flex; flex-wrap: wrap; justify-content: center"
-            >
-              <AllAnimals
-                v-if="trigger == 0"
-                v-for="(data, index) in this.allDatas"
-                :key="index"
-                :animalInfo="data"
-              />
-              <AllAnimals
-                v-if="trigger == 1"
-                v-for="(data, index) in this.matchedDatas"
-                :key="index"
-                :animalInfo="data"
-              />
-              <AllAnimals
-                v-if="trigger == 2"
-                v-for="(data, index) in this.likedDatas"
-                :key="index"
-                :animalInfo="data"
-              />
-            </div>
-          </div>
-        </div>
+      <div
+        class="test"
+        style="
+          width: 100%;
+          height: 100%;
+          padding-top: 75px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+        "
+      >
+        <AnimalPhoto
+          v-for="(data, index) in this.allDatas"
+          :key="index"
+          :animalInfo="data"
+        />
       </div>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import AllAnimals from "../components/AllAnimals.vue";
-import AnimalCard from "../components/AnimalCard.vue";
-import AnimalListHeader from "../components/AnimalListHeader.vue";
+import AnimalPhoto from "../components/AnimalPhoto.vue";
+import Header from "../components/Header.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 // import data from "../assets/data/animal.json";
 
@@ -165,9 +52,8 @@ export default {
     };
   },
   components: {
-    AllAnimals,
-    AnimalListHeader,
-    AnimalCard,
+    Header,
+    AnimalPhoto,
   },
   watch: {
     trigger(newValue, oldValue) {
@@ -284,7 +170,7 @@ export default {
           },
         })
         .then((res) => {
-          if (res.data.survey != null && res.data.survey.answer != null) {
+          if (res.data.survey.answer != null) {
             this.userFinishedSurvey = true;
           } else {
             this.userFinishedSurvey = false;
@@ -292,9 +178,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          if (err.response != undefined) {
-            SERVER.RefreshToken(err);
-          }
+          SERVER.RefreshToken(err);
         });
 
       if (this.eventListener == 1) {
@@ -343,35 +227,22 @@ export default {
       }, 3300);
     },
 
-    componentChange(value) {
-      this.trigger = value;
+    changeValue() {
+      this.tmpArr.length = 0;
+      for (var i = 0; i < data.animal.length; i++) {
+        if (this.checked.includes(data.animal[i].sex_cd)) {
+          this.tmpArr.push(data.animal[i]);
+        }
+      }
+      console.log(this.tmpArr);
     },
   },
 };
 </script>
 
 <style>
-.categoryBtn {
-  padding-top: 10px;
-  height: 7vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading {
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 5px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-  /* background-image: linear-gradient(
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.4)
-  ); */
+.test {
+  background-image: url("../assets/image/cork.jpg");
+  background-repeat: repeat;
 }
 </style>

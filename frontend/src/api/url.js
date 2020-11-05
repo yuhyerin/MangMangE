@@ -7,6 +7,20 @@ export default {
     // updateSurvey: '/survey/update',
   },
 
+  EXPIRETIME: 600,
+
+  // setTimer: function (value) {
+  //   console.log("call timer")
+  //   console.log("timer payload", value)
+  //   if (value > 0) {
+  //     console.log(value)
+  //     setTimeout(() => {
+  //       value -= 1;
+  //       this.setTimer(value)
+  //     }, 1000);
+  //   }
+  // }
+  // ,
   // Token 만료시 갱신 함수 -> SERVER.RefreshToken(err) 로 사용 가능
   RefreshToken: function (err) {
     if (err.response.status == 401) {

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import axios from 'axios'
 import SERVER from '@/api/url'
 import VueRouter from 'vue-router'
@@ -59,14 +59,14 @@ export default new Vuex.Store({
       state.address = address
       console.log(state.address)
     },
-    
+
     setEventListener(state, payload) {
       state.eventListener = payload
     },
 
     setFindUserId(state, payload) {
       state.findUserId = payload
-    }
+    },
   },
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
