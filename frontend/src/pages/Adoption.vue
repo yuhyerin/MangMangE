@@ -221,7 +221,6 @@ export default {
           },
           headers: {
             Authorization: this.$cookies.get("accessToken"),
-            refreshToken: this.$cookies.get("refreshToken")
           }
         })
         .then((res) => {

@@ -212,9 +212,9 @@ public class AccountController {
 		return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/user/adopt/read/{uid}")
-	public ResponseEntity<HashMap<String, Object>> readone(HttpServletRequest request, @PathVariable long uid) {
-		System.out.println("CONTROLLER START");
+	@GetMapping(path = "/user/adopt/readOne")
+	public ResponseEntity<HashMap<String, Object>> readone(@RequestParam long uid, HttpServletRequest request) {
+		System.out.println("CONTROLLER START : READONE");
 		String accessToken = request.getHeader("Authorization");
 		String user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
 		System.out.println("uid : " + uid);

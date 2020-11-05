@@ -66,7 +66,7 @@ const routes = [
     component: AdoptionReview,
   },
   {
-    path: '/adoptionupdate/:apply_id',
+    path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
     component: AdoptionUpdate,
   }

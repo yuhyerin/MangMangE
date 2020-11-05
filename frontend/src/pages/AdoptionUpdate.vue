@@ -26,7 +26,7 @@
                 <label>1. 일련번호</label>
               </div>
               <div class="col-10">
-                <p class="serial-p" style="border: 0.5px solid #bbb;">{{ dogSerial }}</p>
+                <p class="serial-p" style="border: 0.5px solid #bbb;"></p>
               </div>
             </div>
             <div class="row dog-information-age">
@@ -34,7 +34,7 @@
                 <label>2. 추정나이</label>
               </div>
               <div class="col-10">
-                <p class="age-p" style="border: 0.5px solid #bbb;">{{ dogAge }}</p>
+                <p class="age-p" style="border: 0.5px solid #bbb;"></p>
               </div>
             </div>
             <div class="row dog-information-breed">
@@ -42,7 +42,7 @@
                 <label>3. 종류</label>
               </div>
               <div class="col-10">
-                <p class="breed-p" style="border: 0.5px solid #bbb;">{{ dogBreed }}</p>
+                <p class="breed-p" style="border: 0.5px solid #bbb;"></p>
               </div>
             </div>
             <div class="row dog-information-gender">
@@ -50,7 +50,7 @@
                 <label>4. 성별</label>
               </div>
               <div class="col-10">
-                <p class="gender-p" style="border: 0.5px solid #bbb;">{{ dogGender }}</p>
+                <p class="gender-p" style="border: 0.5px solid #bbb;"></p>
               </div>
             </div>
             <div class="row dog-information-fur">
@@ -58,7 +58,7 @@
                 <label>5. 털색</label>
               </div>
               <div class="col-10">
-                <p class="fur-p" style="border: 0.5px solid #bbb;">{{ dogFur }}</p>
+                <p class="fur-p" style="border: 0.5px solid #bbb;"></p>
               </div>
             </div>
           </div>
@@ -72,15 +72,14 @@
               <label>1. 제목</label>
             </div>
             <div class="col-10">
-              <input style="border: 0.5px solid #bbb;" v-model="personTitle"/>
-              <label class="personTitle" v-if="checkPersonTitle === 0" style="color: red; font-size: small;">제목을 입력해주세요</label>
+              <input style="border: 0.5px solid #bbb;" />
             </div>
             <div class="col-2">
               <label>2. 성명</label>
             </div>
             <div class="col-10">
-              <input style="border: 0.5px solid #bbb;" v-model="personName"/>
-              <label class="personNameLabel" v-if="checkPersonName === 0" style="color: red; font-size: small;">성명을 입력해주세요</label>
+              <input style="border: 0.5px solid #bbb;"/>
+              
             </div>
           </div>
           <div class="row adopter-information-number">
@@ -88,22 +87,17 @@
               <label>3. 휴대폰</label>
             </div>
             <div class="col-2">
-              <input style="border: 0.5px solid #bbb;" v-model="firstNum" placeholder="ex> 010"/>
-              <label style="color: red; font-size: small;" v-if="personNumberAuthenticationNotFinish">인증을 완료해주세요</label>
+              <input style="border: 0.5px solid #bbb;" />
+              
             </div>
             <div class="col-2">
-              <input style="border: 0.5px solid #bbb;" v-model="middleNum" placeholder="1234"/>
+              <input style="border: 0.5px solid #bbb;" />
             </div>
             <div class="col-2">
-              <input style="border: 0.5px solid #bbb;" v-model="lastNum" placeholder="5678"/>
+              <input style="border: 0.5px solid #bbb;" />
             </div>
             <div class="col-4">
-              <input v-if="pressedAuthenticationBtn === 0" class="check-number" @click="phoneAuthentication" style="border: 0.5px solid #bbb; background: gray; color: white;" type="button" value="문자인증">
-              <div class="person-authentication-check">
-                <input v-if="pressedAuthenticationBtn === 1" placeholder="인증번호를 입력해주세요" style="border: 0.5px solid #bbb;" v-model="personNumberAuthenticationInput"/>
-                <label style="color: blue; font-size: small;" v-if="personNumberAuthenticationFinish">인증완료</label>
-                <label style="color: red; font-size: small;" v-if="personNumberAuthenticationWrong">틀렸습니다</label>
-              </div>
+              <input class="check-number" style="border: 0.5px solid #bbb; background: gray; color: white;" type="button" value="문자인증">
             </div>
           </div>
             <div class="row adopter-information-email">
@@ -111,8 +105,8 @@
                 <label>4. 이메일</label>
               </div>
               <div class="col-10">
-                <input style="border: 0.5px solid #bbb;" v-model="personEmail" placeholder="ex> naver@naver.com">
-                <label v-if="checkPersonEmail === 0" style="color: red; font-size: small;">이메일을 확인해주세요</label>
+                <input style="border: 0.5px solid #bbb;" />
+                
               </div>
             </div>
             </div>
@@ -135,18 +129,18 @@
               <p style="margin-bottom: 3px;">문의: 010-0000-0000</p>
               <div style="display: flex">
                 <div>
-                  <input type="checkbox" style="width: 20px;" v-model="personCheck"/>
+                  <input type="checkbox" style="width: 20px;" />
                 </div>
                 <div>
                   <label>
                     <p style="margin-bottom: 0px;">개인정보 이용에 동의합니다.</p>
-                    <label v-if="checkPersonCheck === 0" style="color: red; font-size: small;">개인정보 이용 동의에 체크해주세요</label>
+                    
                   </label>
                 </div>
               </div>
             </div>
             <div class="apply-finish" style="display: flex; justify-content: center;">
-              <button class="apply-button" @click="adoptionCheck()">신청</button>
+              <button class="apply-button">신청</button>
             </div>
         </div>
       </div>
@@ -161,12 +155,74 @@ import SERVER from '@/api/url'
 
 export default {
   name: 'AdoptionUpdate',
+  data() {
+    return {
+
+    }
+  },
   created() {
-    axios.get(SERVER.URL + '/user/adopt/read',
+    console.log(this.$route.params.uid)
+
+    axios.get(SERVER.URL + '/user/adopt/readOne',
     {
       params: {
-        apply_id: a
+        uid: this.$route.params.uid
       }
+    },
+    {
+      headers:{
+        Authorization: this.$cookies.get("accessToken")
+      }
+    }
+    )
+    .then((res) => {
+      console.log(res.data)
+    }
+    )
+    .catch((err) => {
+      console.log(err.response)
+        if (err.response.status == 401) {
+          axios
+            .post(
+              SERVER.URL + "/newuser/refresh",
+              {},
+              {
+                headers: {
+                  accessToken: this.$cookies.get("accessToken"),
+                  refreshToken: this.$cookies.get("refreshToken"),
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res.data)
+              if (res.data.success) {
+                this.$cookies.set("accessToken", res.data.accessToken)
+                console.log(this.$cookies.get("accessToken"))
+
+                axios.get(SERVER.URL + '/user/adopt/readOne', 
+                    {
+                      params: {
+                        uid: this.$route.params.uid
+                      }
+                    },
+                    {
+                      headers:{
+                        Authorization: this.$cookies.get("accessToken")
+                      }
+                    }
+                  )
+                  .then((res) => {
+                    console.log("then res : ",res.data)
+                  })
+                  .catch((err) => {
+                    console.log("catch err : ",err)
+              })
+            }
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+        }
     }
     )
   }
