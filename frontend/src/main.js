@@ -5,15 +5,14 @@ import store from './store'
 import VueFullPage from 'vue-fullpage.js'
 import vuetify from './plugins/vuetify';
 import VueCookies from "vue-cookies";
-import BootstrapVue from 'bootstrap-vue'
+import VuePlyr from 'vue-plyr'
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-Vue.use(BootstrapVue)
-
+Vue.use(VuePlyr, {
+  plyr: {
+    fullscreen: { enabled: true }
+  }
+})
 Vue.use(VueCookies);
-
 Vue.use(VueFullPage);
 
 Vue.config.productionTip = false

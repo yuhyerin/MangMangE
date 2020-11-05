@@ -181,7 +181,7 @@ export default {
       this.likeTrigger = !this.likeTrigger;
     },
     moveTo(page) {
-      this.$router.push(page + `/${this.animalInfo.animal.desertion_no}`);
+      this.$router.push(page + `/${this.animalInfo.desertion_no}`);
     },
   },
 };
