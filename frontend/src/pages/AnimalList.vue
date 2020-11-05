@@ -109,12 +109,12 @@
                 :key="index"
                 :animalInfo="data"
               />
-              <!-- <AllAnimals
+              <AllAnimals
                 v-if="trigger == 1"
                 v-for="(data, index) in this.matchedDatas"
                 :key="index"
                 :animalInfo="data"
-              /> -->
+              />
               <AllAnimals
                 v-if="trigger == 2"
                 v-for="(data, index) in this.likedDatas"
@@ -133,7 +133,7 @@
 import AllAnimals from "../components/AllAnimals.vue";
 import Header from "../components/Header.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
-import data from "../assets/data/animal.json";
+// import data from "../assets/data/animal.json";
 
 import SERVER from "@/api/url";
 import axios from "axios";
@@ -144,7 +144,7 @@ export default {
       trigger: "",
       tmp: 0,
       testTrigger: false,
-      allDatas: data,
+      allDatas: "",
       matchedDatas: [],
       likedDatas: [],
       checked: ["F", "M"],
@@ -160,8 +160,40 @@ export default {
   watch: {
     trigger(newValue, oldValue) {
       if (newValue == 0) {
+        this.allDatas = "";
         console.log("All Animals");
+        if (this.$cookies.get("accessToken") != null) {
+          this.loadingTrigger = true;
+          axios
+            .get(SERVER.URL + "/user/animal/allread", {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            })
+            .then((res) => {
+              this.allDatas = res.data.animalList;
+              this.loadingTrigger = false;
+            })
+            .catch((err) => {
+              // SERVER.RefreshToken(err);
+              this.loadingTrigger = false;
+            });
+        } else {
+          this.loadingTrigger = true;
+          axios
+            .get(SERVER.URL + "/newuser/animal/allread")
+            .then((res) => {
+              this.allDatas = res.data.animalList;
+              this.loadingTrigger = false;
+              // console.log(res.data);
+            })
+            .catch((err) => {
+              this.loadingTrigger = false;
+            });
+          // console.log(data);
+        }
       } else if (newValue == 1) {
+        this.matchedDatas = [];
         this.loadingTrigger = true;
         axios
           .get(SERVER.URL + "/user/animal/matchlist", {
@@ -170,8 +202,6 @@ export default {
             },
           })
           .then((res) => {
-            console.log(res.data.perfect);
-            console.log(res.data.good);
             this.matchedDatas = [];
             this.matchedDatas = [...res.data.perfect, ...res.data.good];
             this.userFinishedSurvey = true;
@@ -183,6 +213,7 @@ export default {
           });
       } else {
         // console.log("like animals");
+        this.likedDatas = [];
         if (this.$cookies.get("accessToken") != null) {
           this.loadingTrigger = true;
           axios
@@ -192,7 +223,6 @@ export default {
               },
             })
             .then((res) => {
-              console.log(res.data.animalList);
               this.likedDatas = [];
               this.likedDatas = [...res.data.animalList];
               this.loadingTrigger = false;
@@ -220,13 +250,13 @@ export default {
     if (this.$cookies.get("accessToken") != null) {
       this.loadingTrigger = true;
       await axios
-        .get(SERVER.URL + "/newuser/animal/allread", {
+        .get(SERVER.URL + "/user/animal/allread", {
           headers: {
             Authorization: this.$cookies.get("accessToken"),
           },
         })
         .then((res) => {
-          data = res.data.animalList;
+          this.allDatas = res.data.animalList;
           this.loadingTrigger = false;
           // console.log(res.data);
         })
@@ -234,48 +264,43 @@ export default {
           SERVER.RefreshToken(err);
           this.loadingTrigger = false;
         });
-      this.allDatas = data;
-      // console.log(data);
 
-      // await axios
-      //   .get(SERVER.URL + "/user/animal/surveyread", {
-      //     headers: {
-      //       Authorization: $cookies.get("accessToken"),
-      //     },
-      //   })
-      //   .then((res) => {
-      //     console.log(res.data.survey.answer);
-      //     if (res.data.survey.answer != null) {
-      //       this.userFinishedSurvey = true;
-      //     } else {
-      //       this.userFinishedSurvey = false;
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     SERVER.RefreshToken(err);
-      //   });
+      await axios
+        .get(SERVER.URL + "/user/animal/surveyread", {
+          headers: {
+            Authorization: $cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          if (res.data.survey.answer != null) {
+            this.userFinishedSurvey = true;
+          } else {
+            this.userFinishedSurvey = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          SERVER.RefreshToken(err);
+        });
 
-      // if (this.eventListener == 1) {
-      //   // console.log(this.dogMbti);
-      //   this.trigger = 1;
-      // } else if (this.eventListener == 2) {
-      //   this.tirgger = 0;
-      // }
+      if (this.eventListener == 1) {
+        // console.log(this.dogMbti);
+        this.trigger = 1;
+      } else if (this.eventListener == 2) {
+        this.tirgger = 0;
+      }
     } else {
       this.loadingTrigger = true;
       await axios
         .get(SERVER.URL + "/newuser/animal/allread")
         .then((res) => {
-          data = res.data.animalList;
+          this.allDatas = res.data.animalList;
           this.loadingTrigger = false;
-          // console.log(res.data);
         })
         .catch((err) => {
           this.loadingTrigger = false;
         });
       // console.log(data);
-      this.allDatas = data;
     }
   },
 

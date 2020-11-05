@@ -70,7 +70,7 @@
       <v-icon small> mdi-heart </v-icon>
       <div>&nbsp;4</div>
     </div>
-    <div>만약 이런식으로 글 제목이 들어간다면 어떨까</div>
+    <!-- <div>만약 이런식으로 글 제목이 들어간다면 어떨까</div> -->
   </div>
 </template>
 <script>
@@ -94,7 +94,8 @@ export default {
       return tag;
     },
   },
-  created() {
+  async created() {
+    this.likeTrigger = false;
     if (this.animalInfo.like == false) {
       this.likeTrigger = false;
     } else {

@@ -39,7 +39,7 @@
               width: 30vw;
             "
           >
-            <img :src="this.animalInfo.animal.popfile" alt="사진" />
+            <img :src="this.animalInfo.popfile" alt="사진" />
           </div>
           <div style="width: 70vw; height: 35vh; margin: 10px">
             <div style="height: 20%">제목</div>
@@ -47,29 +47,29 @@
               <table>
                 <tr>
                   <td>종 / 품종</td>
-                  <td>{{ this.animalInfo.animal.kind_c }}</td>
+                  <td>{{ this.animalInfo.kind_c }}</td>
                 </tr>
                 <tr>
                   <td>성별(중성화)</td>
                   <td>
-                    {{ this.animalInfo.animal.sex_cd == "M" ? "수컷" : "암컷" }}
+                    {{ this.animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}
                   </td>
                 </tr>
                 <tr>
                   <td>나이</td>
-                  <td>{{ this.animalInfo.animal.age }}</td>
+                  <td>{{ this.animalInfo.age }}</td>
                 </tr>
                 <tr>
                   <td>몸무게</td>
-                  <td>{{ this.animalInfo.animal.weight }}</td>
+                  <td>{{ this.animalInfo.weight }}</td>
                 </tr>
                 <tr>
                   <td>털색</td>
-                  <td>{{ this.animalInfo.animal.color_cd }}</td>
+                  <td>{{ this.animalInfo.color_cd }}</td>
                 </tr>
                 <tr>
                   <td>성격</td>
-                  <td>{{ this.animalInfo.animal.mbti }}</td>
+                  <td>{{ this.animalInfo.mbti }}</td>
                 </tr>
               </table>
             </div>
@@ -113,6 +113,12 @@ export default {
     };
   },
   created() {
+    this.likeTrigger = false;
+    if (this.animalInfo.like == true) {
+      this.likeTrigger = false;
+    } else {
+      this.likeTrigger = true;
+    }
     axios
       .get(SERVER.URL + "/newuser/animal/detail", {
         params: {
@@ -120,8 +126,8 @@ export default {
         },
       })
       .then((res) => {
-        this.animalInfo = res.data;
-        console.log(this.animalInfo);
+        this.animalInfo = res.data.animalList;
+        // console.log(res.data.animalList);
       })
       .catch((err) => {
         console.log(err);
@@ -136,7 +142,7 @@ export default {
           .post(
             SERVER.URL + "/user/animal/animalLike",
             {
-              desertion_no: this.animalInfo.animal.desertion_no,
+              desertion_no: this.animalInfo.desertion_no,
             },
             {
               headers: {
@@ -157,7 +163,7 @@ export default {
           .post(
             SERVER.URL + "/user/animal/animalLike",
             {
-              desertion_no: this.animalInfo.animal.desertion_no,
+              desertion_no: this.animalInfo.desertion_no,
             },
             {
               headers: {
