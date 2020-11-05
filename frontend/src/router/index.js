@@ -11,6 +11,7 @@ import VideoBoard from '../pages/VideoBoard.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
+import Test from "../pages/Test.vue"
 
 Vue.use(VueRouter)
 
@@ -67,6 +68,11 @@ const routes = [
   },
   {
     path: '/adoptionupdate/:apply_id',
+    name: 'AdoptionUpdate',
+    component: AdoptionUpdate,
+  },
+  {
+    path: '/test',
     name: 'AdoptionUpdate',
     component: AdoptionUpdate,
   }
