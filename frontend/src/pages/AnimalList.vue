@@ -141,7 +141,6 @@
 
 <script>
 import AllAnimals from "../components/AllAnimals.vue";
-import AnimalCard from "../components/AnimalCard.vue";
 import AnimalListHeader from "../components/AnimalListHeader.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 // import data from "../assets/data/animal.json";
@@ -160,14 +159,13 @@ export default {
       likedDatas: [],
       checked: ["F", "M"],
       tmpArr: [],
-      userFinishedSurvey: "",
+      userFinishedSurvey: false,
       loadingTrigger: false,
     };
   },
   components: {
     AllAnimals,
     AnimalListHeader,
-    AnimalCard,
   },
   watch: {
     trigger(newValue, oldValue) {
@@ -214,14 +212,21 @@ export default {
             },
           })
           .then((res) => {
-            this.matchedDatas = [];
-            this.matchedDatas = [...res.data.perfect, ...res.data.good];
-            this.userFinishedSurvey = true;
-            this.loadingTrigger = false;
+            console.log(res);
+            if (res.data.survey != null) {
+              this.matchedDatas = [];
+              this.matchedDatas = [...res.data.perfect, ...res.data.good];
+              this.userFinishedSurvey = true;
+              this.loadingTrigger = false;
+            } else {
+              this.userFinishedSurvey = false;
+              this.loadingTrigger = false;
+              console.log(res);
+            }
           })
           .catch((err) => {
-            SERVER.RefreshToken(err);
-            this.loadingTrigger = false;
+            console.log("error message", err);
+            // SERVER.RefreshToken(err);
           });
       } else {
         // console.log("like animals");
@@ -258,6 +263,7 @@ export default {
   },
 
   async created() {
+    this.userFinishedSurvey = false;
     var data = null;
     if (this.$cookies.get("accessToken") != null) {
       this.loadingTrigger = true;
@@ -284,9 +290,9 @@ export default {
           },
         })
         .then((res) => {
-          if (res.data.survey != null && res.data.survey.answer != null) {
+          if (res.data.survey != null) {
             this.userFinishedSurvey = true;
-          } else {
+          } else if (res.data.survey == null) {
             this.userFinishedSurvey = false;
           }
         })

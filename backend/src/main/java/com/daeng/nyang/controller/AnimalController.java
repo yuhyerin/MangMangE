@@ -99,15 +99,16 @@ public class AnimalController {
 //		user_id = jwtTokenUtil.getUsernameFromToken(token); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
-		System.out.println("user_id : " + user_id); // 확인
-
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			if (user_id == null) {
 				return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 			} else {
 				Survey survey = surveyService.findSurveyByUserid(user_id);
-				map.put("survey", survey);
+				if(survey==null)
+					map.put("survey", null);
+				else
+					map.put("survey", survey);
 			}
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
@@ -135,8 +136,12 @@ public class AnimalController {
 			if (user_id == null) {
 				return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 			} else {
-				Survey survey = surveyService.findSurveyByUserid(user_id); // 토큰을 통해 얻은 유저아이디로 이 유저가 설문을 한적있는지 검사.
-
+				Survey survey = null;
+				survey = surveyService.findSurveyByUserid(user_id); // 토큰을 통해 얻은 유저아이디로 이 유저가 설문을 한적있는지 검사.
+				if(survey==null) {
+					map.put("survey", null);
+					return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
+				}
 				// 유저의 MBTI
 //				String userMbti = survey.getMbti(); // 설문을 한적 없다면 이 구문에서 에러가 나서 NOT_FOUND상태가 반환됨.
 
