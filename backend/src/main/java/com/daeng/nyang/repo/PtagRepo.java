@@ -1,5 +1,7 @@
 package com.daeng.nyang.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,5 +14,11 @@ public interface PtagRepo extends JpaRepository<Ptag, String> {
 
 	@Query(value = "select tagname from ptag p where p.desertion_no=:desertion_no", nativeQuery = true)
 	String[] findTagNameByDesertionNo(Long desertion_no);
-
+	
+	@Query(value = "select * from ptag p order by desertion_no asc", nativeQuery = true)
+	List<Ptag> findAllOrderByDesertionNo();
+	
+	@Query(value = "select * from ptag p where p.user_id=:user_id order by desertion_no", nativeQuery = true)
+	List<Ptag> findAllByUserId(String user_id);
+	
 }

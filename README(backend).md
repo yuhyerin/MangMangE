@@ -28,9 +28,9 @@
 >
 > **(200)** res.data.success : true 
 >
-> **(202)** res.data.success : false
+> **(202)** res.data.success : false, res.status
 >
-> > res.data.message : duplicated user_id
+> > res.data.message : "duplicated user_id"
 
 #### 2. 이메일 유효성 검사
 
@@ -90,6 +90,22 @@
 
 ### 회원 (accessToken 필요)
 
+#### 0. 비밀번호 변경
+
+> method : POST
+>
+> url : localhost:8080/user/changepw
+>
+> requestBody : Account (user_id, user_email, user_password, user_name)
+>
+> **(200)** 
+>
+> > res.data.success : true
+>
+> **(200)**
+>
+> > res.data.success : false
+
 #### 1.  로그아웃
 
 > method : POST
@@ -116,13 +132,25 @@
 >
 > **(400)** res.data.success : false (번호가 잘못됨)
 
-#### 3. 입양신청
+#### 3. 입양신청 등록
 
 > method : POST
 >
 > url : localhost:8080/user/adopt/create
 >
 > requestBody : Apply (ani_num, user_name, user_phone, user_email, title)
+>
+> **(200)** res.data.success : true 
+>
+> **(400)** err.data.success : false
+
+#### 3-1. 입양신청 수정
+
+> method : POST
+>
+> url : localhost:8080/user/adopt/create
+>
+> requestBody : Apply (uid, ani_num, regtime, user_name, user_phone, user_email, title)
 >
 > **(200)** res.data.success : true 
 >
@@ -157,6 +185,40 @@
 > **(401)** res.response.status : UNAUTHORIZED
 
 
+
+## AnimalController
+
+### 비회원
+
+#### 1. 전체동물조회
+
+> method : GET
+>
+> url : localhost:8080/newuser/animal/allread
+>
+> **(200)**  res.response.status : OK
+>
+> > res.data.animalList
+>
+> **(202)** err.response.status : ACCPTED
+
+
+
+### 회원
+
+#### 1. 전체동물조회
+
+> method : GET
+>
+> url : localhost:8080/user/animal/allread
+>
+> **(200)** res.response.status : OK
+>
+> > res.data.animalList
+>
+> **(202)** res.response.status : ACCEPTED
+>
+> **(401)** err.response.status : UNAUTHORIZED
 
 
 

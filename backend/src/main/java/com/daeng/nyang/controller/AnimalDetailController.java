@@ -24,7 +24,6 @@ public class AnimalDetailController {
 
 	@Autowired
 	private AnimalService animalService;
-
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
@@ -34,10 +33,8 @@ public class AnimalDetailController {
 		System.out.println("CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		AnimalListFE animal = animalService.animalDetail(desertion_no); // animal 정보
-		System.out.println(animal.toString());
 		if (animal != null)
 			map.put("animalList", animal);
-		System.out.println("CONTROLLER END");
 		System.out.println(map.toString());
 		if (map.size() == 0)
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
@@ -50,18 +47,14 @@ public class AnimalDetailController {
 			HttpServletRequest request) {
 		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
-		System.out.println(token);
-		HashMap<String, Object> map = null;
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
+		HashMap<String, Object> map = null;
 		AnimalListFE animal = animalService.animalDetail(user_id, desertion_no); // animal 정보
-		System.out.println(animal.toString());
 		if (animal != null) {
 			map = new HashMap<String, Object>();
 			map.put("animal", animal);
-			System.out.println(map.toString());
 		}
-		System.out.println("CONTROLLER END");
 		System.out.println(map.toString());
 		if (map.size() == 0)
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
