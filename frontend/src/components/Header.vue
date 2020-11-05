@@ -41,8 +41,9 @@
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn text @click="test">
+        <v-btn text @click="countDownTimer">
           <div>버어튼</div>
+          <div>{{ this.countDown }}</div>
         </v-btn>
         <v-btn text @click="moveTo('/animals')">
           <div>동물 보기</div>
@@ -64,6 +65,8 @@ export default {
   data() {
     return {
       isUser: this.$cookies.get("accessToken") == null ? false : true,
+      countDown: 10,
+      timerTrigger: false,
     };
   },
   watch: {
@@ -104,21 +107,29 @@ export default {
       }
       this.$router.push(page);
     },
-    test() {
-      axios
-        .get(SERVER.URL + "/admin", {
-          headers: {
-            Authorization: this.$cookies.get("accessToken"),
-            refreshToken: this.$cookies.get("refreshToken"),
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log("err : ", err.response.status);
-          SERVER.RefreshToken(err);
-        });
+    // test() {
+    //   axios
+    //     .get(SERVER.URL + "/admin", {
+    //       headers: {
+    //         Authorization: this.$cookies.get("accessToken"),
+    //         refreshToken: this.$cookies.get("refreshToken"),
+    //       },
+    //     })
+    //     .then((res) => {
+    //       console.log(res);
+    //     })
+    //     .catch((err) => {
+    //       console.log("err : ", err.response.status);
+    //       SERVER.RefreshToken(err);
+    //     });
+    // },
+    countDownTimer() {
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1;
+          this.countDownTimer();
+        }, 1000);
+      }
     },
     logout() {
       axios

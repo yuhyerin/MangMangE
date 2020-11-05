@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default {
-  URL: 'http://localhost:8080',
+  URL: 'http://localhost:8084',
   ROUTES: {
     submitSurvey: '/user/survey/create',
     // updateSurvey: '/survey/update',
@@ -26,6 +26,8 @@ export default {
           console.log(res);
           if (res.data.success) {
             $cookies.set("accessToken", res.data.accessToken);
+            alert("세션이 만료되어 메인페이지로 이동합니다.");
+            location.href = "/"
           }
         })
         .catch((err) => {

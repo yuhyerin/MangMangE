@@ -26,7 +26,7 @@
                 <label>1. 일련번호</label>
               </div>
               <div class="col-10">
-                <p class="serial-p" style="border: 0.5px solid #bbb;"></p>
+                <p class="serial-p" style="border: 0.5px solid #bbb;">{{ dogSerial }}</p>
               </div>
             </div>
             <div class="row dog-information-age">
@@ -34,7 +34,7 @@
                 <label>2. 추정나이</label>
               </div>
               <div class="col-10">
-                <p class="age-p" style="border: 0.5px solid #bbb;"></p>
+                <p class="age-p" style="border: 0.5px solid #bbb;">{{ dogAge }}</p>
               </div>
             </div>
             <div class="row dog-information-breed">
@@ -42,7 +42,7 @@
                 <label>3. 종류</label>
               </div>
               <div class="col-10">
-                <p class="breed-p" style="border: 0.5px solid #bbb;"></p>
+                <p class="breed-p" style="border: 0.5px solid #bbb;">{{ dogBreed }}</p>
               </div>
             </div>
             <div class="row dog-information-gender">
@@ -50,7 +50,7 @@
                 <label>4. 성별</label>
               </div>
               <div class="col-10">
-                <p class="gender-p" style="border: 0.5px solid #bbb;"></p>
+                <p class="gender-p" style="border: 0.5px solid #bbb;">{{ dogGender }}</p>
               </div>
             </div>
             <div class="row dog-information-fur">
@@ -58,7 +58,7 @@
                 <label>5. 털색</label>
               </div>
               <div class="col-10">
-                <p class="fur-p" style="border: 0.5px solid #bbb;"></p>
+                <p class="fur-p" style="border: 0.5px solid #bbb;">{{ dogFur }}</p>
               </div>
             </div>
           </div>
@@ -72,41 +72,30 @@
               <label>1. 제목</label>
             </div>
             <div class="col-10">
-              <input style="border: 0.5px solid #bbb;" />
+              <p style="border: 0.5px solid #bbb;">{{ personTitle }}</p>
             </div>
             <div class="col-2">
               <label>2. 성명</label>
             </div>
             <div class="col-10">
-              <input style="border: 0.5px solid #bbb;"/>
-              
+              <p style="border: 0.5px solid #bbb;">{{ personName }}</p>
             </div>
           </div>
           <div class="row adopter-information-number">
             <div class="col-2">
               <label>3. 휴대폰</label>
             </div>
-            <div class="col-2">
-              <input style="border: 0.5px solid #bbb;" />
-              
+            <div class="col-10">
+              <p style="border: 0.5px solid #bbb;">{{ personPhone }}</p>
             </div>
-            <div class="col-2">
-              <input style="border: 0.5px solid #bbb;" />
-            </div>
-            <div class="col-2">
-              <input style="border: 0.5px solid #bbb;" />
-            </div>
-            <div class="col-4">
-              <input class="check-number" style="border: 0.5px solid #bbb; background: gray; color: white;" type="button" value="문자인증">
-            </div>
+
           </div>
             <div class="row adopter-information-email">
               <div class="col-2">
                 <label>4. 이메일</label>
               </div>
               <div class="col-10">
-                <input style="border: 0.5px solid #bbb;" />
-                
+                <p style="border: 0.5px solid #bbb;">{{ personEmail }}</p>
               </div>
             </div>
             </div>
@@ -129,7 +118,7 @@
               <p style="margin-bottom: 3px;">문의: 010-0000-0000</p>
               <div style="display: flex">
                 <div>
-                  <input type="checkbox" style="width: 20px;" />
+                  <input type="checkbox" style="width: 20px;" checked />
                 </div>
                 <div>
                   <label>
@@ -155,33 +144,71 @@ import SERVER from '@/api/url'
 
 export default {
   name: 'AdoptionUpdate',
+  components: {
+    Header,
+  },
   data() {
     return {
+      dogSerial: "",
+      dogAge: "",
+      dogBreed: "",
+      dogGender: "",
+      dogFur: "",
 
+      personTitle: "",
+      personPhone: "",
+      personName: "",
+      personEmail: "",
     }
   },
   created() {
     console.log(this.$route.params.uid)
 
-    axios.get(SERVER.URL + '/user/adopt/readOne',
-    {
-      params: {
-        uid: this.$route.params.uid
-      }
-    },
-    {
-      headers:{
-        Authorization: this.$cookies.get("accessToken")
-      }
-    }
-    )
-    .then((res) => {
-      console.log(res.data)
-    }
-    )
-    .catch((err) => {
-      console.log(err.response)
+      // 내글 불러오기
+      axios
+        .get(SERVER.URL + "/user/adopt/readOne", {
+          params: {
+            uid: this.$route.params.uid
+          },
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          console.log(res.data)
+          this.personTitle = res.data.apply.title
+          this.personPhone = res.data.apply.user_phone
+          this.personName = res.data.apply.user_name
+          this.personEmail = res.data.apply.user_email
+          console.log(this.personTitle)
+        })
+        .catch((err) => {
+          console.log("catch err : ", err);
+        });
+
+      // 동물정보 불러오기
+      axios
+      .get(SERVER.URL + "/newuser/animal/detail", {
+        params: {
+          desertion_no: 430364202000067,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        this.dogSerial = res.data.animalList.desertion_no;
+        this.dogAge = 2020 - res.data.animalList.age + "살";
+        this.dogBreed = res.data.animalList.kind_c;
+        if (res.data.animalList.sex_cd == "M") {
+          this.dogGender = "남";
+        } else {
+          this.dogGender = "여";
+        }
+        this.dogFur = res.data.animalList.color_cd;
+      })
+      .catch((err) => {
+        console.log(err.response);
         if (err.response.status == 401) {
+          //accessToken만료
           axios
             .post(
               SERVER.URL + "/newuser/refresh",
@@ -194,37 +221,17 @@ export default {
               }
             )
             .then((res) => {
-              console.log(res.data)
+              console.log(res);
               if (res.data.success) {
-                this.$cookies.set("accessToken", res.data.accessToken)
-                console.log(this.$cookies.get("accessToken"))
-
-                axios.get(SERVER.URL + '/user/adopt/readOne', 
-                    {
-                      params: {
-                        uid: this.$route.params.uid
-                      }
-                    },
-                    {
-                      headers:{
-                        Authorization: this.$cookies.get("accessToken")
-                      }
-                    }
-                  )
-                  .then((res) => {
-                    console.log("then res : ",res.data)
-                  })
-                  .catch((err) => {
-                    console.log("catch err : ",err)
-              })
-            }
+                this.$cookies.set("accessToken", res.data.accessToken);
+                console.log(this.$cookies.get("accessToken"));
+              }
             })
             .catch((err) => {
               console.log(err);
-            })
+            });
         }
-    }
-    )
+      });
   }
 }
 </script>

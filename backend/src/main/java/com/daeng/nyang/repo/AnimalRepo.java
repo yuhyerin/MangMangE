@@ -15,14 +15,14 @@ import com.daeng.nyang.dto.Animal;
 @Transactional
 public interface AnimalRepo extends JpaRepository<Animal, String>{
 	
-	@Query(value="select * from animal", nativeQuery = true)
+	@Query(value="select * from animal order by desertion_no asc", nativeQuery = true)
 	List<Animal> findAnimalAll();
 	
 	// 100퍼센트 일치. 추천율 100프로.
-	@Query(value="select * from animal where mbti=:mbti", nativeQuery = true)
+	@Query(value="select * from animal where mbti=:mbti order by desertion_no asc", nativeQuery = true)
 	List<Animal> findAnimalByMbti(String mbti);
 	
-	@Query(value="select * from animal a where a.mbti like %:mbti%", nativeQuery = true)
+	@Query(value="select * from animal a where a.mbti like %:mbti% order by desertion_no asc", nativeQuery = true)
 	List<Animal>  findAnimalMbtiByKeyword(@Param("mbti") String mbti);
 	
 //	@Query(value="select * from animal a where (a.mbti like %:first%) and (a.mbti like %:second%) and (a.mbti like %:third%) and (a.mbti like %:fourth%)", nativeQuery = true)
