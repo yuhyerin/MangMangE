@@ -71,6 +71,10 @@ const routes = [
     name: 'AdoptionUpdate',
     component: AdoptionUpdate,
   },
+  {
+    path: '/test',
+    component: Test,
+  }
 ]
 
 const router = new VueRouter({

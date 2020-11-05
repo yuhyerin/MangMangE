@@ -131,6 +131,7 @@ export default {
         }, 1000);
       }
     },
+
     logout() {
       axios
         .post(
@@ -141,7 +142,6 @@ export default {
           {
             headers: {
               Authorization: this.$cookies.get("accessToken"),
-              "content-type": "application/json",
             },
           }
         )
@@ -153,7 +153,6 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          SERVER.RefreshToken(err);
         });
     },
   },

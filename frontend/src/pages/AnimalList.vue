@@ -1,14 +1,14 @@
 <template>
   <v-app>
-    <Header />
+    <AnimalListHeader @changeComponents="componentChange" />
     <div class="loading" v-if="loadingTrigger">
       <!-- <i class="fas fa-spinner fa-10x fa-spin"></i> -->
       <img src="@/assets/image/loading.gif" alt="loading" />
     </div>
     <v-main>
-      <v-container style="padding-top: 75px">
+      <div style="padding-top: 75px; display: flex; justify-content: center">
         <div style="display: flex; min-height: 87vh">
-          <div
+          <!-- <div
             style="
               width: 20vw;
               max-height: 88vh;
@@ -90,16 +90,26 @@
                 />
               </div>
             </div>
-          </div>
+          </div> -->
           <div
             style="
               width: 80vw;
-              background-color: rgb(244, 236, 225);
               border-radius: 20px;
-              margin: 5px;
+              margin: 10px;
               align-text: center;
+              justify-content: center;
             "
           >
+            <!-- <div
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalCard
+                v-if="trigger == 0"
+                v-for="(data, index) in this.allDatas"
+                :key="index"
+                :animalInfo="data"
+              />
+            </div> -->
             <div
               style="display: flex; flex-wrap: wrap; justify-content: center"
             >
@@ -124,14 +134,14 @@
             </div>
           </div>
         </div>
-      </v-container>
+      </div>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import AllAnimals from "../components/AllAnimals.vue";
-import Header from "../components/Header.vue";
+import AnimalListHeader from "../components/AnimalListHeader.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 // import data from "../assets/data/animal.json";
 
@@ -149,13 +159,13 @@ export default {
       likedDatas: [],
       checked: ["F", "M"],
       tmpArr: [],
-      userFinishedSurvey: "",
+      userFinishedSurvey: false,
       loadingTrigger: false,
     };
   },
   components: {
     AllAnimals,
-    Header,
+    AnimalListHeader,
   },
   watch: {
     trigger(newValue, oldValue) {
@@ -202,14 +212,21 @@ export default {
             },
           })
           .then((res) => {
-            this.matchedDatas = [];
-            this.matchedDatas = [...res.data.perfect, ...res.data.good];
-            this.userFinishedSurvey = true;
-            this.loadingTrigger = false;
+            console.log(res);
+            if (res.data.survey != null) {
+              this.matchedDatas = [];
+              this.matchedDatas = [...res.data.perfect, ...res.data.good];
+              this.userFinishedSurvey = true;
+              this.loadingTrigger = false;
+            } else {
+              this.userFinishedSurvey = false;
+              this.loadingTrigger = false;
+              console.log(res);
+            }
           })
           .catch((err) => {
-            SERVER.RefreshToken(err);
-            this.loadingTrigger = false;
+            console.log("error message", err);
+            // SERVER.RefreshToken(err);
           });
       } else {
         // console.log("like animals");
@@ -246,6 +263,7 @@ export default {
   },
 
   async created() {
+    this.userFinishedSurvey = false;
     var data = null;
     if (this.$cookies.get("accessToken") != null) {
       this.loadingTrigger = true;
@@ -272,15 +290,17 @@ export default {
           },
         })
         .then((res) => {
-          if (res.data.survey.answer != null) {
+          if (res.data.survey != null) {
             this.userFinishedSurvey = true;
-          } else {
+          } else if (res.data.survey == null) {
             this.userFinishedSurvey = false;
           }
         })
         .catch((err) => {
           console.log(err);
-          SERVER.RefreshToken(err);
+          if (err.response != undefined) {
+            SERVER.RefreshToken(err);
+          }
         });
 
       if (this.eventListener == 1) {
@@ -329,14 +349,8 @@ export default {
       }, 3300);
     },
 
-    changeValue() {
-      this.tmpArr.length = 0;
-      for (var i = 0; i < data.animal.length; i++) {
-        if (this.checked.includes(data.animal[i].sex_cd)) {
-          this.tmpArr.push(data.animal[i]);
-        }
-      }
-      console.log(this.tmpArr);
+    componentChange(value) {
+      this.trigger = value;
     },
   },
 };

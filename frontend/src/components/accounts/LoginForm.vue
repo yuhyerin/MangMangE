@@ -70,6 +70,7 @@
 <script>
 import axios from "axios";
 import SERVER from "@/api/url";
+import { mapMutations } from "vuex";
 
 export default {
   data() {
@@ -136,6 +137,7 @@ export default {
           console.log(res);
           this.$cookies.set("accessToken", res.data.accessToken);
           this.$cookies.set("refreshToken", res.data.refreshToken);
+          // SERVER.setTimer(SERVER.EXPIRETIME);
           this.$router.push("/");
           // res.data.accessToken
           // res.data.refreshToken
