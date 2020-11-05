@@ -12,9 +12,13 @@ export default new Vuex.Store({
   state: {
     page: 1,
     userMbti: '',
-    dogMbti: '',
+    dogMbtiArr: ["", "", "", ""],
+    dogMbti: "",
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    address: '',
+    findUserId: '',
 
+    // 1: survey to animalList, 2: main to animalList
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
     eventListener: 0,
   },
@@ -38,10 +42,11 @@ export default new Vuex.Store({
 
     whatIsDogMbti(state, payload) {
       state.survey[payload.idx] = payload.answer
-      state.survey[1] > 0 ? state.dogMbti += 'E' : state.dogMbti += 'Q';
-      state.survey[2] + state.survey[5] + state.survey[8] > 0 ? state.dogMbti += 'S' : state.dogMbti += 'I';
-      state.survey[3] + state.survey[4] + state.survey[6] > 0 ? state.dogMbti += 'W' : state.dogMbti += 'A';
-      state.survey[7] > 0 ? state.dogMbti += 'F' : state.dogMbti += 'C';
+      state.survey[1] > 0 ? state.dogMbtiArr[0] = 'E' : state.dogMbtiArr[0] += 'Q';
+      state.survey[2] + state.survey[5] + state.survey[8] > 0 ? state.dogMbtiArr[2] = 'S' : state.dogMbtiArr[2] = 'I';
+      state.survey[3] + state.survey[4] + state.survey[6] > 0 ? state.dogMbtiArr[3] = 'W' : state.dogMbtiArr[3] = 'A';
+      state.survey[7] > 0 ? state.dogMbtiArr[1] = 'F' : state.dogMbtiArr[1] = 'C';
+
     },
 
     goPage(state, pageNum) {
@@ -50,8 +55,17 @@ export default new Vuex.Store({
       }
     },
 
+    findPersonAddress(state, address) {
+      state.address = address
+      console.log(state.address)
+    },
+    
     setEventListener(state, payload) {
       state.eventListener = payload
+    },
+
+    setFindUserId(state, payload) {
+      state.findUserId = payload
     }
   },
 
@@ -59,6 +73,12 @@ export default new Vuex.Store({
   actions: {
     submitSurvey({ state, commit }, payload) {
       commit('whatIsDogMbti', payload)
+
+      state.dogMbti = ""
+      for (let i = 0; i < state.dogMbtiArr.length; i++) {
+        state.dogMbti += state.dogMbtiArr[i];
+      }
+
       console.log('설문조사 결과:', state.userMbti, state.dogMbti)
       axios
         .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
@@ -79,6 +99,7 @@ export default new Vuex.Store({
         })
         .catch(err => {
           console.log('MBTI XXX', err)
+          SERVER.RefreshToken(err);
         })
     },
 

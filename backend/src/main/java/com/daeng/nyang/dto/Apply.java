@@ -27,17 +27,16 @@ public class Apply {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long uid;
 
-	@Column
-	private long Ani_num;	// FK
+	private long ani_num;	// FK
 //	@ManyToOne(optional=false) @JoinColumn(name="user_id", insertable=false, updatable=false)
 //	private Account account;	// FK
 	private String user_id;
 	private String user_name;
 	private String user_phone;
+	private String user_email;
 	private String title;
-	private String content;
 	
-	@Column @CreationTimestamp
-	private Date createDateTime;
+	@CreationTimestamp
+	private Date regtime;
 
 }

@@ -5,8 +5,14 @@ import store from './store'
 import VueFullPage from 'vue-fullpage.js'
 import vuetify from './plugins/vuetify';
 import VueCookies from "vue-cookies";
-Vue.use(VueCookies);
+import VuePlyr from 'vue-plyr'
 
+Vue.use(VuePlyr, {
+  plyr: {
+    fullscreen: { enabled: true }
+  }
+})
+Vue.use(VueCookies);
 Vue.use(VueFullPage);
 
 Vue.config.productionTip = false
