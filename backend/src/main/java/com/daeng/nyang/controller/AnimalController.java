@@ -123,7 +123,6 @@ public class AnimalController {
 		System.out.println("CONTROLLER START : MATCHLIST");
 		String token = request.getHeader("Authorization"); // 토큰받기
 		System.out.println(token); // 받은 토큰 출력, 확인
-
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
 		// 토큰으로 유저 아이디 받아오는 구문
