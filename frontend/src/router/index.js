@@ -10,6 +10,7 @@ import AdoptionList from '../pages/AdoptionList.vue'
 import VideoList from '../pages/VideoList.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
+import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 
 Vue.use(VueRouter)
 
@@ -64,6 +65,11 @@ const routes = [
     name: 'AdoptionReview',
     component: AdoptionReview,
   },
+  {
+    path: '/adoptionupdate/:apply_id',
+    name: 'AdoptionUpdate',
+    component: AdoptionUpdate,
+  }
 ]
 
 const router = new VueRouter({
