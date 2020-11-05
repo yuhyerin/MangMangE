@@ -4,6 +4,7 @@
       v-for="p in paginatedData"
       :key="p.no"
       style="margin-bottom: 10px;"
+      @click="showMyApply(p)"
     >
       <v-card-title>
         <strong>{{ p.title }}</strong>
@@ -30,24 +31,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <!-- <table>
-      <thead>
-        <tr style="background: pink;">
-          <th style="width: 20%;">NO</th>
-          <th style="width: 55%;">제목</th>
-          <th style="width: 15%;">아이디</th>
-          <th style="width: 10%;">작성일</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(p, idx) in paginatedData" :key="p.title">
-          <td>{{ idx + 1 }}</td>
-          <td>{{ p.title }}</td>
-          <td>{{ p.user_id }}</td>
-          <td>{{ p.regtime.slice(0, 10) }}</td>
-        </tr>
-      </tbody>
-    </table> -->
     <div class="btn-cover">
       <v-btn
         class="mx-2"
@@ -60,9 +43,6 @@
           mdi-arrow-left
         </v-icon>
       </v-btn>
-      <!-- <button style="border: 1px solid black;" :disabled="pageNum === 0" @click="prevPage" class="page-btn" >
-        이전
-      </button> -->
       <span class="page-count"><strong>{{ pageNum + 1 }} / {{ pageCount }} 페이지</strong></span>
       <v-btn
         class="mx-2"
@@ -75,16 +55,13 @@
           mdi-arrow-right
         </v-icon>
       </v-btn>
-      <!-- <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="page-btn">
-        다음
-      </button> -->
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'PaginatedListTest',
+  name: 'AdoptionListPagination',
   data () {
     return {
       pageNum: 0
@@ -99,6 +76,10 @@ export default {
       type: Number,
       required: false,
       default: 5
+    },
+    userId: {
+      type: String,
+      required: true
     }
   },
   methods: {
@@ -107,6 +88,20 @@ export default {
     },
     prevPage () {
       this.pageNum -= 1;
+    },
+    showMyApply(item) {
+      if (item.user_id === this.userId) {
+        this.$router.push(
+          {
+            name: 'AdoptionUpdate',
+            params: {
+              apply_id: this.item.uid
+            }
+          }
+        )
+      } else {
+        alert('본인의 글만 열람할 수 있습니다')
+      }
     }
   },
   computed: {
@@ -135,31 +130,6 @@ export default {
 </script>
 
 <style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  /* table th {
-    font-size: 1.2rem;
-  } */
-
-  table tr {
-    height: 2rem;
-    text-align: center;
-    border-bottom: 0.5px solid darkgray;
-    /* border-bottom: 0.5px solid #505050; */
-  }
-
-  table tr:first-of-type {
-    border-top: 0.5px solid pink;
-  }
-
-  table tr td {
-    padding: 1rem 0;
-    /* font-size: 1.1rem; */
-  }
-
   .btn-cover {
     margin-top: 1.5rem;
     text-align: center;

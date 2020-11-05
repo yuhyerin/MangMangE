@@ -10,8 +10,7 @@ import AdoptionList from '../pages/AdoptionList.vue'
 import VideoList from '../pages/VideoList.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
-import SimplePagination from '../pages/SimplePagination.vue'
-import CardTest from '../pages/CardTest.vue'
+import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 
 Vue.use(VueRouter)
 
@@ -67,14 +66,9 @@ const routes = [
     component: AdoptionReview,
   },
   {
-    path: '/simplepagination',
-    name: 'SimplePagination',
-    component: SimplePagination,
-  },
-  {
-    path: '/cardtest',
-    name: 'CardTest',
-    component: CardTest,
+    path: '/adoptionupdate/:apply_id',
+    name: 'AdoptionUpdate',
+    component: AdoptionUpdate,
   }
 ]
 

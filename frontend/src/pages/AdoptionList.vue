@@ -5,8 +5,16 @@
       <div class="row">
         <div class="adoption-list-div col-lg-8 col-md-8 col-sm-8">
           <h3 class="adoption-list"><strong>입양신청목록</strong></h3>
-          <p class="adoption-mylist" @click="showMyList">내글보기</p>
-          <PaginatedListTest :items="items" />
+          <div style="display: flex; justify-content: flex-end;">
+            <v-btn
+            @click="showMyList"
+            style="background: black; color: white;"
+            >
+              <strong>내글보기</strong>
+            </v-btn>
+          </div>
+          <!-- <p class="adoption-mylist" @click="showMyList">내글보기</p> -->
+          <AdoptionListPagination :items="items" :userId="userId"/>
         </div>
       </div>
     </div>
@@ -16,14 +24,14 @@
 <script>
 import Header from "../components/Header.vue"
 import axios from 'axios'
-import PaginatedListTest from "../components/PaginatedListTest.vue"
+import AdoptionListPagination from "../components/AdoptionListPagination.vue"
 import SERVER from '@/api/url'
 
 export default {
   name: 'AdoptionList',
   components: {
     Header,
-    PaginatedListTest
+    AdoptionListPagination
   },
   data () {
     return {
@@ -70,7 +78,7 @@ export default {
       .then((res) => {
         console.log(res.data)
         this.items = res.data.list.reverse()
-        this.itemsOriginal = res.data.list.reverse()
+        this.itemsOriginal = this.items
         this.userId = res.data.user_id
       })
       .catch((err) => {
