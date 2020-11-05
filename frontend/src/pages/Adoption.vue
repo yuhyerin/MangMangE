@@ -326,7 +326,6 @@ export default {
           },
           headers: {
             Authorization: this.$cookies.get("accessToken"),
-            // refreshToken: this.$cookies.get("refreshToken"),
           },
         })
         .then((res) => {
@@ -337,53 +336,6 @@ export default {
         .catch((err) => {
           console.log("catch err : ", err);
           SERVER.refreshToken(err);
-          // if (err.response.status == 401) {
-          //   axios
-          //     .post(
-          //       SERVER.URL + "/newuser/refresh",
-          //       {},
-          //       {
-          //         headers: {
-          //           accessToken: this.$cookies.get("accessToken"),
-          //           refreshToken: this.$cookies.get("refreshToken"),
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       console.log(res.data);
-          //       if (res.data.success) {
-          //         this.$cookies.set("accessToken", res.data.accessToken);
-          //         console.log(this.$cookies.get("accessToken"));
-
-          //         axios
-          //           .get(SERVER.URL + "/user/adopt/create", {
-          //             params: {
-          //               phone:
-          //                 this.firstNum +
-          //                 "-" +
-          //                 this.middleNum +
-          //                 "-" +
-          //                 this.lastNum,
-          //             },
-          //             headers: {
-          //               Authorization: this.$cookies.get("accessToken"),
-          //               refreshToken: this.$cookies.get("refreshToken"),
-          //             },
-          //           })
-          //           .then((res) => {
-          //             console.log("then res : ", res.data);
-          //             this.pressedAuthenticationBtn = 1;
-          //             this.personNumberAuthentication = res.data.number;
-          //           })
-          //           .catch((err) => {
-          //             console.log("catch err : ", err);
-          //           });
-          //       }
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //     });
-          // }
         });
     },
 
@@ -475,30 +427,31 @@ export default {
         })
         .catch((err) => {
           console.log("catch err : ", err);
-          if (err.response.status == 401) {
-            //accessToken만료
-            axios
-              .post(
-                SERVER.URL + "/newuser/refresh",
-                {},
-                {
-                  headers: {
-                    accessToken: this.$cookies.get("accessToken"),
-                    refreshToken: this.$cookies.get("refreshToken"),
-                  },
-                }
-              )
-              .then((res) => {
-                console.log(res);
-                if (res.data.success) {
-                  this.$cookies.set("accessToken", res.data.accessToken);
-                  console.log(this.$cookies.get("accessToken"));
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
+          SERVER.refreshToken(err);
+          // if (err.response.status == 401) {
+
+          //   axios
+          //     .post(
+          //       SERVER.URL + "/newuser/refresh",
+          //       {},
+          //       {
+          //         headers: {
+          //           accessToken: this.$cookies.get("accessToken"),
+          //           refreshToken: this.$cookies.get("refreshToken"),
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       console.log(res);
+          //       if (res.data.success) {
+          //         this.$cookies.set("accessToken", res.data.accessToken);
+          //         console.log(this.$cookies.get("accessToken"));
+          //       }
+          //     })
+          //     .catch((err) => {
+          //       console.log(err);
+          //     });
+          // }
         });
     },
   },
@@ -552,30 +505,6 @@ export default {
       }
     },
 
-    personGender() {
-      if (this.personGender === 0) {
-        this.checkPersonGender = 0;
-      } else {
-        this.checkPersonGender = 1;
-      }
-    },
-
-    personBirthday() {
-      if (this.personBirthday.length === 0) {
-        this.checkPersonBirthday = 0;
-      } else {
-        this.checkPersonBirthday = 1;
-      }
-    },
-
-    personAddress() {
-      if (this.personAddress.length === 0) {
-        this.checkPersonAddress = 0;
-      } else {
-        this.checkPersonAddress = 1;
-      }
-    },
-
     personCheck() {
       if (this.personCheck === false) {
         this.checkPersonCheck = 0;
@@ -611,30 +540,31 @@ export default {
       })
       .catch((err) => {
         console.log(err.response);
-        if (err.response.status == 401) {
-          //accessToken만료
-          axios
-            .post(
-              SERVER.URL + "/newuser/refresh",
-              {},
-              {
-                headers: {
-                  accessToken: this.$cookies.get("accessToken"),
-                  refreshToken: this.$cookies.get("refreshToken"),
-                },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-              if (res.data.success) {
-                this.$cookies.set("accessToken", res.data.accessToken);
-                console.log(this.$cookies.get("accessToken"));
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
+        SERVER.refreshToken(err);
+        // if (err.response.status == 401) {
+          
+        //   axios
+        //     .post(
+        //       SERVER.URL + "/newuser/refresh",
+        //       {},
+        //       {
+        //         headers: {
+        //           accessToken: this.$cookies.get("accessToken"),
+        //           refreshToken: this.$cookies.get("refreshToken"),
+        //         },
+        //       }
+        //     )
+        //     .then((res) => {
+        //       console.log(res);
+        //       if (res.data.success) {
+        //         this.$cookies.set("accessToken", res.data.accessToken);
+        //         console.log(this.$cookies.get("accessToken"));
+        //       }
+        //     })
+        //     .catch((err) => {
+        //       console.log(err);
+        //     });
+        // }
       });
   },
 };

@@ -72,30 +72,104 @@
               <label>1. 제목</label>
             </div>
             <div class="col-10">
-              <p style="border: 0.5px solid #bbb;">{{ personTitle }}</p>
+              <input style="border: 0.5px solid #bbb;" v-model="personTitle" />
+              <label
+                  class="personTitle"
+                  v-if="checkPersonTitle === 0"
+                  style="color: red; font-size: small"
+                  >제목을 입력해주세요</label
+                >
             </div>
             <div class="col-2">
               <label>2. 성명</label>
             </div>
             <div class="col-10">
-              <p style="border: 0.5px solid #bbb;">{{ personName }}</p>
+              <input style="border: 0.5px solid #bbb;" v-model="personName" />
+              <label
+                  class="personNameLabel"
+                  v-if="checkPersonName === 0"
+                  style="color: red; font-size: small"
+                  >성명을 입력해주세요</label
+                >
             </div>
           </div>
-          <div class="row adopter-information-number">
+                      <div class="row adopter-information-number">
+              <div class="col-2">
+                <label>3. 휴대폰</label>
+              </div>
+              <div class="col-2">
+                <input
+                  style="border: 0.5px solid #bbb"
+                  v-model="firstNum"
+                  placeholder="ex> 010"
+                />
+                <label
+                  style="color: red; font-size: small"
+                  v-if="personNumberAuthenticationNotFinish"
+                  >인증을 완료해주세요</label
+                >
+              </div>
+              <div class="col-2">
+                <input
+                  style="border: 0.5px solid #bbb"
+                  v-model="middleNum"
+                  placeholder="1234"
+                />
+              </div>
+              <div class="col-2">
+                <input
+                  style="border: 0.5px solid #bbb"
+                  v-model="lastNum"
+                  placeholder="5678"
+                />
+              </div>
+              <div class="col-4">
+                <input
+                  v-if="pressedAuthenticationBtn === 0"
+                  class="check-number"
+                  @click="phoneAuthentication"
+                  style="
+                    border: 0.5px solid #bbb;
+                    background: gray;
+                    color: white;
+                  "
+                  type="button"
+                  value="문자인증"
+                />
+                <div class="person-authentication-check">
+                  <input
+                    v-if="pressedAuthenticationBtn === 1"
+                    placeholder="인증번호를 입력해주세요"
+                    style="border: 0.5px solid #bbb"
+                    v-model="personNumberAuthenticationInput"
+                  />
+                  <label
+                    style="color: blue; font-size: small"
+                    v-if="personNumberAuthenticationFinish"
+                    >인증완료</label
+                  >
+                  <label
+                    style="color: red; font-size: small"
+                    v-if="personNumberAuthenticationWrong"
+                    >틀렸습니다</label
+                  >
+                </div>
+              </div>
+              </div>
+          <!-- <div class="row adopter-information-number">
             <div class="col-2">
               <label>3. 휴대폰</label>
             </div>
             <div class="col-10">
               <p style="border: 0.5px solid #bbb;">{{ personPhone }}</p>
-            </div>
-
-          </div>
+            </div> 
+            </div> -->
             <div class="row adopter-information-email">
               <div class="col-2">
                 <label>4. 이메일</label>
               </div>
               <div class="col-10">
-                <p style="border: 0.5px solid #bbb;">{{ personEmail }}</p>
+                <input style="border: 0.5px solid #bbb;" v-model="personEmail" />
               </div>
             </div>
             </div>
@@ -118,18 +192,17 @@
               <p style="margin-bottom: 3px;">문의: 010-0000-0000</p>
               <div style="display: flex">
                 <div>
-                  <input type="checkbox" style="width: 20px;" checked />
+                  <input type="checkbox" style="width: 20px;" checked disabled/>
                 </div>
                 <div>
                   <label>
                     <p style="margin-bottom: 0px;">개인정보 이용에 동의합니다.</p>
-                    
                   </label>
                 </div>
               </div>
             </div>
             <div class="apply-finish" style="display: flex; justify-content: center;">
-              <button class="apply-button">신청</button>
+              <button class="apply-button" @click="adoptionCheck">수정</button>
             </div>
         </div>
       </div>
@@ -149,6 +222,8 @@ export default {
   },
   data() {
     return {
+      uid: 0,
+
       dogSerial: "",
       dogAge: "",
       dogBreed: "",
@@ -156,14 +231,129 @@ export default {
       dogFur: "",
 
       personTitle: "",
+      firstNum: "",
+      middleNum: "",
+      lastNum: "",
+
+      pressedAuthenticationBtn: 0,
+      personNumberAuthentication: 0,
+      personNumberAuthenticationInput: "",
+      personNumberAuthenticationFinish: 0,
+      personNumberAuthenticationWrong: 0,
+      personNumberAuthenticationNotFinish: 0,
+
       personPhone: "",
       personName: "",
       personEmail: "",
+      personRegtime: "",
+
+      checkPersonTitle: 1,
+      checkPersonName: 1,
+      checkPersonEmail: 1,
     }
   },
+  methods: {
+    phoneAuthentication() {
+      console.log(
+        "FE input Form : ",
+        this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+      );
+
+      axios
+        .get(SERVER.URL + "/user/adopt/create", {
+          params: {
+            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+          },
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          console.log("then res : ", res.data);
+          this.pressedAuthenticationBtn = 1;
+          this.personNumberAuthentication = res.data.number;
+        })
+        .catch((err) => {
+          console.log("catch err : ", err);
+          SERVER.refreshToken(err);
+        })
+    },
+
+    adoptionCheck() {
+      if (this.personTitle.length === 0) {
+        this.checkPersonTitle = 0;
+      } else {
+        this.checkPersonTitle = 1;
+      }
+
+      if (this.personName.length === 0) {
+        this.checkPersonName = 0;
+      } else {
+        this.checkPersonName = 1;
+      }
+
+      if (this.personNumberAuthenticationFinish !== 1) {
+        this.personNumberAuthenticationNotFinish = 1;
+      } else {
+        this.personNumberAuthenticationNotFinish = 0;
+      }
+
+      if (this.personEmail.length > 0) {
+        var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if (this.personEmail.match(regExp) != null) {
+          this.checkPersonEmail = 1;
+        } else {
+          this.checkPersonEmail = 0;
+        }
+      } else {
+        this.checkPersonEmail = 0;
+      }
+
+      if (
+        this.checkPersonTitle === 1 &&
+        this.checkPersonName === 1 &&
+        // 여기에 추후에 전화번호 인증 여부도 조건에 추가해야 한다!
+        // 지금은 문자 포인트 문제로 빼놓음
+        // this.personNumberAuthenticationFinish === 1 &&
+        this.checkPersonEmail === 1
+      ) {
+        this.adoptionUpdate();
+      }
+    },
+
+    adoptionUpdate() {
+      axios
+        .post(
+          SERVER.URL + "/user/adopt/create",
+          {
+            uid: this.uid,
+            ani_num: this.dogSerial,
+            title: this.personTitle,
+            user_phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+            user_name: this.personName,
+            user_email: this.personEmail,
+            regtime: this.personRegtime
+          },
+          {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+            },
+          }
+        )
+        .then((res) => {
+          console.log("then res : ", res.data);
+          alert('수정이 완료됐습니다')
+          this.$router.push('/adoptionlist')
+        })
+        .catch((err) => {
+          console.log("catch err : ", err);
+        });
+    }
+  },
+
   created() {
     console.log(this.$route.params.uid)
-
+    this.uid = this.$route.params.uid
       // 내글 불러오기
       axios
         .get(SERVER.URL + "/user/adopt/readOne", {
@@ -181,35 +371,95 @@ export default {
           this.personPhone = res.data.apply.user_phone
           this.personName = res.data.apply.user_name
           this.personEmail = res.data.apply.user_email
+          this.personRegtime = res.data.apply.regtime
+          console.log(this.personRegtime)
           console.log(this.personTitle)
           // 동물정보 불러오기
-          axios
-          .get(SERVER.URL + "/newuser/animal/detail", {
-            params: {
-              desertion_no: this.dogSerial,
-            },
-          })
-          .then((res) => {
-            console.log(res.data);
-            this.dogSerial = res.data.animalList.desertion_no;
-            this.dogAge = 2020 - res.data.animalList.age + "살";
-            this.dogBreed = res.data.animalList.kind_c;
-            if (res.data.animalList.sex_cd == "M") {
-              this.dogGender = "남";
-            } else {
-              this.dogGender = "여";
-            }
-            this.dogFur = res.data.animalList.color_cd;
-          })
-          .catch((err) => {
-            console.log(err.response);
-            SERVER.RefreshToken(err);
+            axios
+            .get(SERVER.URL + "/newuser/animal/detail", {
+              params: {
+                desertion_no: this.dogSerial,
+              },
+            })
+            .then((res) => {
+              console.log(res.data);
+              console.log('받음')
+
+              // 비동기라 앞선 요청에서 받은 personPhone 자르기를 여기서
+              this.firstNum = this.personPhone.slice(0, 3)
+              this.middleNum = this.personPhone.slice(4, 8)
+              this.lastNum = this.personPhone.slice(9, 13)
+
+              this.dogSerial = res.data.animalList.desertion_no;
+              this.dogAge = 2020 - res.data.animalList.age + "살";
+              this.dogBreed = res.data.animalList.kind_c;
+              if (res.data.animalList.sex_cd == "M") {
+                this.dogGender = "남";
+              } else {
+                this.dogGender = "여";
+              }
+              this.dogFur = res.data.animalList.color_cd;
+            })
+            .catch((err) => {
+              console.log(err.response);
+              SERVER.RefreshToken(err);
           });
             })
             .catch((err) => {
               console.log("catch err : ", err);
             });
 
+  },
+
+  watch: {
+    personTitle() {
+      if (this.personTitle.length === 0) {
+        this.checkPersonTitle = 0;
+      } else {
+        this.checkPersonTitle = 1;
+      }
+    },
+
+    personName() {
+      if (this.personName.length === 0) {
+        this.checkPersonName = 0;
+      } else {
+        this.checkPersonName = 1;
+      }
+    },
+
+    personNumberAuthenticationInput() {
+      if (
+        this.personNumberAuthenticationInput == this.personNumberAuthentication
+      ) {
+        console.log("인증 완료");
+        this.personNumberAuthenticationFinish = 1;
+      }
+
+      if (this.personNumberAuthenticationInput.length === 6) {
+        if (
+          this.personNumberAuthenticationInput !=
+          this.personNumberAuthentication
+        ) {
+          this.personNumberAuthenticationWrong = 1;
+        } else {
+          this.personNumberAuthenticationWrong = 0;
+        }
+      }
+    },
+
+    personEmail() {
+      if (this.personEmail.length > 0) {
+        var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if (this.personEmail.match(regExp) != null) {
+          this.checkPersonEmail = 1;
+        } else {
+          this.checkPersonEmail = 0;
+        }
+      } else {
+        this.checkPersonEmail = 0;
+      }
+    },
   }
 }
 </script>

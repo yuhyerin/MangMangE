@@ -1,7 +1,27 @@
 <template>
-  <div class="section s1">
+  <div class="section s2">
     <div class="container s3">
       <div style="height: 100%">
+        <!-- <div style="text-align: center">
+            <h2>아이들을 영상으로 만나보세요</h2>
+          </div>
+        <div class="more-video-button" style="display: flex; justify-content: flex-end;">
+          <v-btn
+           @click="moveToVideos"
+            elevation="10"
+            style="background: green; color: white; margin-bottom: 5px;"
+          >영상 더보기</v-btn>
+        </div>
+
+        <div>
+          <object
+              type="text/html"
+              width="100%"
+              height="500"
+              data="//www.youtube.com/embed/OR90YT2BtH0"
+              allowFullScreen="true"
+            ></object>
+        </div> -->
         <div
           style="
             margin: 10px;
@@ -13,7 +33,7 @@
         >
           <div
             class="video-container"
-            style="width: 70vw; height: ; display: flex; align-items: center"
+            style="width: 70vw; display: flex; align-items: center"
           >
             <object
               type="text/html"
@@ -24,45 +44,23 @@
             ></object>
           </div>
           <div style="width: 30vw">
+            <!-- <p style="font-size: xxx-large; vertical-align: top;"><strong>아이들을</strong></p>
+            <p style="font-size: xxx-large;"><strong>영상으로</strong></p>
+            <p style="font-size: xxx-large;"><strong>만나보세요</strong></p> -->
             <div
               style="display:flex; justify-content: center; align-center; height: 100%"
             >
-              <div>더보기</div>
+              <div @click="moveToVideos">
+                <v-btn
+                  elevation="5"
+                  style="background: green; color: white;"
+                >영상 더보기</v-btn>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- <div class="container s3">
-      <SearchBar />
-      <div class="row">
-        <div class="col-lg-8">
-          <div
-            class="embed-responsive embed-responsive-4by3"
-            style="margin-top: 30px"
-          >
-            <iframe
-              class="embed-responsive-item"
-              :src="videoUrl"
-              allowfullscreen
-            ></iframe>
-          </div>
-        </div>
-        <div class="col-lg-3">
-          <div style="height: 95%; margin-top: 28px; background-color: white">
-            <p class="more-videos">
-              <strong class="more-videos-strong"> </strong>
-            </p>
-          </div>
-        </div>
-        <div class="col-lg-1" style="margin-top: auto; margin-bottom: auto">
-          <img
-            class="right-arrow"
-            src="../assets/image/mainpage/section3-right-arrow.png"
-          />
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -78,6 +76,11 @@ export default {
   components: {
     SearchBar,
   },
+  methods: {
+    moveToVideos() {
+      this.$router.push('/videos')
+    }
+  },
   computed: {
     videoUrl() {
       return `https://youtube.com/embed/OrxmtDw4pVI?autoplay=1`;
@@ -87,6 +90,10 @@ export default {
 </script>
 
 <style>
+.section.s2 {
+  padding-top: 75px;
+  background-color: rgb(244, 236, 225);
+}
 .container.s3 {
   background-color: rgb(244, 236, 225);
   height: 85vh;
@@ -94,20 +101,5 @@ export default {
   border-radius: 20px;
 }
 
-.more-videos {
-  cursor: pointer;
-  font-size: x-large;
-  text-align: center;
-  margin-top: auto;
-  margin-bottom: auto;
-}
 
-.more-videos-strong:hover {
-  background-color: darkgray;
-}
-
-img.right-arrow {
-  width: 25px;
-  height: 25px;
-}
 </style>

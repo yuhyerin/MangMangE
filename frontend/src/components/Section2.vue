@@ -99,7 +99,7 @@ export default {
 .container.s2 {
   height: 85vh;
   border-radius: 20px;
-  background-color: rgb(244, 236, 225);
+  /* background-color: rgb(244, 236, 225); */
   text-align: center;
   margin-top: 20px;
 }
