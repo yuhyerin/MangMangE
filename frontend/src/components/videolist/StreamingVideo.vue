@@ -6,29 +6,19 @@
           src="@/assets/videos/video1.mp4"
           type="video/mp4"
           controls
-<<<<<<< HEAD
-=======
           style="width: 100%"
->>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
         ></video>
       </v-col>
       <v-col style="padding: 15px">
         <v-row>
           <div style="font-size: 30px; padding-bottom: 5px">동영상 타이틀</div>
           <v-spacer></v-spacer>
-<<<<<<< HEAD
           <div v-show="upload">
             <v-btn @click="uploadVideo" small outlined class="ma-2 upload-btn">
               Upload
               <v-icon right dark> mdi-cloud-upload </v-icon>
             </v-btn>
           </div>
-=======
-          <v-btn @click="uploadVideo" small outlined class="ma-2 upload-btn">
-            Upload
-            <v-icon right dark> mdi-cloud-upload </v-icon>
-          </v-btn>
->>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
         </v-row>
         <v-row>
           <div style="padding-left: 5px; line-height: 150%">
@@ -68,11 +58,8 @@
 
 <script>
 import router from "@/router";
-<<<<<<< HEAD
 import SERVER from "@/api/url";
 import axios from 'axios';
-=======
->>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
 export default {
   data() {
     return {
@@ -90,15 +77,10 @@ export default {
           video: "video1",
         },
       ],
-<<<<<<< HEAD
-      upload: false,
-=======
->>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
     };
   },
   mounted() {
     console.log(this.$refs.plyr.player);
-<<<<<<< HEAD
   },
   created() {
     if (this.$cookies.get("accessToken") != null) {
@@ -120,8 +102,6 @@ export default {
     else{
       this.upload= false;
     }
-=======
->>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
   },
   methods: {
     videoSeeMore() {
