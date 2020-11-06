@@ -74,6 +74,17 @@ public class AccountController {
 	}
 
 	@GetMapping(path = "/newuser/signup")
+	@ApiOperation("아이디 중복 검사")
+	public ResponseEntity<HashMap<String, Object>> checkID(@RequestParam String user_id) {
+		System.out.println("CONTROLLER START");
+		if (accountService.checkID(user_id)) // 없으면 true
+			return new ResponseEntity<>(HttpStatus.OK);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("msg", "duplicated");
+		return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping(path = "/newuser/signup")
 	@ApiOperation("이메일 유효성 검사")
 	public ResponseEntity<?> checkEmail(@RequestParam String email) {
 		System.out.println("CONTROLLER START");

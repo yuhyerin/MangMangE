@@ -88,6 +88,14 @@ public class AccountService {
 		System.out.println("SERVICE END");
 		return map;
 	}
+	
+	//아이디 중복 검사
+	public boolean checkID(String user_id) {
+		Account acc = accountRepo.findAccountByUserId(user_id);
+		if(acc==null)
+			return true;
+		return false;
+	}
 
 	// 로그인
 	public HashMap<String, Object> login(String id, String pwd) {
