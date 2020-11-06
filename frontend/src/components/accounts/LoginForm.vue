@@ -127,7 +127,6 @@ export default {
                 SERVER.RefreshToken(err);
               }
             });
-
           this.$router.push("/");
         })
         .catch((err) => {
