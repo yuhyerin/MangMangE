@@ -210,15 +210,33 @@ export default {
       }
     },
     moveTo(page) {
-      // this.$router.push(page + `/${this.animalInfo.desertion_no}`);
-      this.$router.push(
+      axios
+        .get(SERVER.URL + '/user/adopt/read',
         {
-          name: 'Adoption',
           params: {
-            animalId: this.animalInfo.desertion_no
+            desertion_no: this.$route.params.animalID
+          },
+          headers: {
+            Authorization: this.$cookies.get("accessToken")
+          },
+        })
+        .then((res) => {
+          console.log(res.data)
+          if (res.data.success) {
+            this.$router.push(
+              {
+                name: 'Adoption',
+                params: {
+                  animalId: this.animalInfo.desertion_no
+                }
+              }
+          )} else {
+            alert('이미 신청했습니다.')
           }
-        }
-      )
+        })
+        .catch((err) => {
+          console.log(err.response)
+        })
     },
   },
 };

@@ -12,7 +12,8 @@
       >
         <div class="mainWindow">
           <div style="height: 40%">
-            지금 당신에게 맞는 반려동물을 찾아보세요
+            <h2 style="text-align: center;">지금 당신에게 맞는 </h2>
+            <h2 style="text-align: center;">반려동물을 찾아보세요</h2>
           </div>
           <div
             style="display: flex; width: 100%; justify-content: space-around"
@@ -108,8 +109,8 @@ a.moveToSection2:visited {
 }
 
 .mainWindow {
-  width: 60%;
-  height: 50%;
+  width: 50%;
+  height: 40%;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 15px;
   display: flex;

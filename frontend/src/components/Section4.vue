@@ -14,33 +14,40 @@
           <h2 class="second-word">공지사항</h2>
         </div>
         <div class="third">
-          <img class="img3" src="../assets/image/mainpage/section4-adopt.jpg" />
+          <img class="img3" src="../assets/image/mainpage/section4-adopt.jpg" @click="moveToAdoptionList" />
           <h2 class="third-word">입양 신청 목록</h2>
         </div>
       </div>
     </div>
-    <div class="footer">
-      <div class="footer-first">
-        <h3>Contact</h3>
-        <h4>ssafy@ssafy.com</h4>
-        <h4>010-0000-0000</h4>
+    <div class="footer" style="color: white;">
+      <div class="footer-first" style="margin-top: 20px;">
+        <h2 style="margin-bottom: 5px;">CONTACT</h2>
+        <hr width="100px;" style="margin: 0 auto;">
+        <br>
+        <h4>SSAFY@SSAFY.COM</h4>
+        <h4>010-1234-5678</h4>
       </div>
-      <div class="footer-second">
-        <h3>오시는길</h3>
-        <h4>대전시 유성구 덕명동 11111번지</h4>
+      <div class="footer-second" style="margin-top: 20px;">
+        <h2 style="margin-bottom: 5px;">오시는길</h2>
+        <hr width="100px;" style="margin: 0 auto;">
+        <br>
+        <h4>대전시 유성구</h4>
+        <h4>덕명동 111번지</h4>
       </div>
-      <div class="footer-third">
-        <h3>영업시간</h3>
-        <h4>09시 00분 ~ 09시 01분</h4>
+      <div class="footer-third" style="margin-top: 20px;">
+        <h2 style="margin-bottom: 5px;">영업시간</h2>
+        <hr width="100px;" style="margin: 0 auto;">
+        <br>
+        <h4>09시 00분 ~</h4>
+        <h4>18시 00분</h4>
       </div>
-      <div class="footer-fourth">
-        <h3>개발자</h3>
-        <h4>유혜린</h4>
-        <h4>박경수</h4>
-        <h4>정현희</h4>
-        <h4>김승환</h4>
-        <h4>고소영</h4>
-        <h4>최규식</h4>
+      <div class="footer-fourth" style="margin-top: 20px;">
+        <h2 style="margin-bottom: 5px;">개발자</h2>
+        <hr width="100px;" style="margin: 0 auto;">
+        <br>
+        <h4>유혜린 박경수</h4>
+        <h4>정현희 고소영</h4>
+        <h4>김승환 최규식</h4>
       </div>
     </div>
   </div>
@@ -49,7 +56,16 @@
 <script>
 export default {
   name: "Section4",
-};
+  methods: {
+    moveToAdoptionList() {
+      if (this.$cookies.get("accessToken")) {
+        this.$router.push('/adoptionlist')  
+      } else {
+        alert('로그인해주세요')
+      }
+    }
+  }
+}
 </script>
 
 <style>
