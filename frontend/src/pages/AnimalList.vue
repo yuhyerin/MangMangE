@@ -8,89 +8,6 @@
     <v-main>
       <div style="padding-top: 75px; display: flex; justify-content: center">
         <div style="display: flex; min-height: 87vh">
-          <!-- <div
-            style="
-              width: 20vw;
-              max-height: 88vh;
-              display: flex;
-              justify-content: center;
-            "
-          >
-            <div
-              style="
-                background-color: rgb(244, 236, 225);
-                border-radius: 20px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                position: fixed;
-                height: 87vh;
-                margin: 5px;
-              "
-            >
-              <div>
-                <div class="categoryBtn">
-                  <v-btn text color="black" @click="setTrigger(0)">
-                    모든 아이들 보기 &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 0" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-                <div class="categoryBtn">
-                  <v-btn text color="black" @click="setTrigger(1)">
-                    나와 맞는 아이는? &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 1" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-                <div class="categoryBtn" style="">
-                  <v-btn text color="black" @click="setTrigger(2)">
-                    즐겨 찾는 아이들 &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 2" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-              </div>
-              <div style="text-align: center">
-                <div>
-                  <input
-                    type="checkbox"
-                    id="checkbox"
-                    v-model="checked[0]"
-                    true-value="F"
-                    false-value="no"
-                    checked
-                    @change="changeValue"
-                  />
-                  <label for="checkbox">암컷</label>
-                  <input
-                    type="checkbox"
-                    id="checkbox"
-                    v-model="checked[1]"
-                    true-value="M"
-                    false-value="no"
-                    checked
-                    @change="changeValue"
-                  />
-                  <label for="checkbox">수컷</label>
-                </div>
-                <img
-                  v-if="testTrigger == false"
-                  src="../assets/image/1wait.gif"
-                  alt="멍멍"
-                  @click="test"
-                />
-                <img
-                  v-if="testTrigger == true"
-                  src="../assets/image/1pop.gif"
-                  alt="멍멍"
-                />
-              </div>
-            </div>
-          </div> -->
           <div
             style="
               width: 80vw;
@@ -104,15 +21,41 @@
               v-if="trigger == 0"
               style="display: flex; flex-wrap: wrap; justify-content: center"
             >
-              <AllAnimals
+              <AnimalCard
                 v-for="(data, index) in this.allDatas"
                 :key="index"
                 :animalInfo="data"
               />
             </div>
             <div v-if="trigger == 1">
-              <div>
-                <div>완전 잘맞음</div>
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
                 <div
                   style="
                     display: flex;
@@ -120,15 +63,43 @@
                     justify-content: center;
                   "
                 >
-                  <AllAnimals
+                  <AnimalCard
                     v-for="data in this.perfectDatas"
                     :key="data.desertion_no"
                     :animalInfo="data"
                   />
                 </div>
               </div>
-              <div>
-                <div>쫌 잘맞음</div>
+              <br />
+              <v-divider></v-divider>
+              <br />
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 0.2px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
                 <div
                   style="
                     display: flex;
@@ -136,7 +107,7 @@
                     justify-content: center;
                   "
                 >
-                  <AllAnimals
+                  <AnimalCard
                     v-for="data in this.goodDatas"
                     :key="data.desertion_no"
                     :animalInfo="data"
@@ -148,7 +119,7 @@
               v-if="trigger == 2"
               style="display: flex; flex-wrap: wrap; justify-content: center"
             >
-              <AllAnimals
+              <AnimalCard
                 v-for="(data, index) in this.likedDatas"
                 :key="index"
                 :animalInfo="data"
@@ -162,7 +133,7 @@
 </template>
 
 <script>
-import AllAnimals from "../components/AllAnimals.vue";
+import AnimalCard from "../components/AnimalCard.vue";
 import AnimalListHeader from "../components/AnimalListHeader.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 
@@ -189,7 +160,7 @@ export default {
     };
   },
   components: {
-    AllAnimals,
+    AnimalCard,
     AnimalListHeader,
   },
   watch: {
@@ -210,7 +181,7 @@ export default {
               this.loadingTrigger = false;
             })
             .catch((err) => {
-              // SERVER.RefreshToken(err);
+              SERVER.RefreshToken(err);
               this.loadingTrigger = false;
             });
         } else {
