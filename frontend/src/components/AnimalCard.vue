@@ -58,6 +58,7 @@
             mdi-heart
           </v-icon>
         </div>
+
         <h2>{{ animalInfo.kind_cd }}</h2>
         <p>일련번호 : {{ animalInfo.desertion_no }}</p>
         <br />

@@ -7,8 +7,17 @@
     </div>
     <v-main>
       <div style="padding-top: 75px; display: flex; justify-content: center">
+        <div>
+          <v-btn @click="changeViewStyle(false)">
+            <v-icon>mdi-format-align-right</v-icon>
+          </v-btn>
+          <v-btn @click="changeViewStyle(true)">
+            <v-icon>mdi-format-align-justify</v-icon>
+          </v-btn>
+        </div>
         <div style="display: flex; min-height: 87vh">
           <div
+            v-if="viewStyle == false"
             style="
               width: 80vw;
               border-radius: 20px;
@@ -21,6 +30,11 @@
               v-if="trigger == 0"
               style="display: flex; flex-wrap: wrap; justify-content: center"
             >
+              <!-- <AnimalInfo
+                v-for="(data, index) in this.allDatas"
+                :key="index"
+                :animalInfo="data"
+              /> -->
               <AnimalCard
                 v-for="(data, index) in this.allDatas"
                 :key="index"
@@ -126,6 +140,127 @@
               />
             </div>
           </div>
+
+          <!-- **************************페이지 표시 구분************************* -->
+          <div
+            v-if="viewStyle == true"
+            style="
+              width: 80vw;
+              border-radius: 20px;
+              margin: 10px;
+              align-text: center;
+              justify-content: center;
+            "
+          >
+            <div
+              v-if="trigger == 0"
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalInfo
+                v-for="(data, index) in this.allDatas"
+                :key="index"
+                :animalInfo="data"
+              />
+            </div>
+            <div v-if="trigger == 1">
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AnimalInfo
+                    v-for="(data, index) in this.perfectDatas"
+                    :key="index"
+                    :animalInfo="data"
+                  />
+                </div>
+              </div>
+              <br />
+              <v-divider></v-divider>
+              <br />
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 0.2px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AnimalInfo
+                    v-for="(data, index) in this.goodDatas"
+                    :key="index"
+                    :animalInfo="data"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="trigger == 2"
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalInfo
+                v-for="(data, index) in this.likedDatas"
+                :key="index"
+                :animalInfo="data"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </v-main>
@@ -134,6 +269,7 @@
 
 <script>
 import AnimalCard from "../components/AnimalCard.vue";
+import AnimalInfo from "../components/AnimalInfo.vue";
 import AnimalListHeader from "../components/AnimalListHeader.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 
@@ -157,11 +293,13 @@ export default {
       loadingTrigger: false,
       perfectLength: 0,
       goddLength: 0,
+      viewStyle: false,
     };
   },
   components: {
     AnimalCard,
     AnimalListHeader,
+    AnimalInfo,
   },
   watch: {
     trigger(newValue, oldValue) {
@@ -315,6 +453,9 @@ export default {
           this.trigger = 0;
         }
       }
+    },
+    changeViewStyle(value) {
+      this.viewStyle = value;
     },
 
     test() {
