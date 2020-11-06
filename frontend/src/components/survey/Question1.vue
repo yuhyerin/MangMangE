@@ -1,28 +1,36 @@
 <template>
-  <div class="mbti" style="text-align: center">
-    <div class="question">
-      <h2>Q1. 내 MBTI를 선택해주세요.</h2>
+  <div class="quiz-box">
+    <v-row style="position: absolute; top: 4%; left: 48%;">
+    <v-avatar color="rgb(1,118,72)" size="50">
+      <h3 style="color: white">Q1</h3>
+    </v-avatar>
+    </v-row>
+    <v-row class="quiz-header" style="display: flex; justify-content: space-around; ">
+      <h2 style="margin-top:20px; padding: 5px;">내 MBTI를 선택해주세요.</h2>
       <p>
         만약 내 MBTI를 모른다면
         <a href="https://www.16personalities.com/ko/" target="_blank">여기</a>를
         눌러주세요
       </p>
-    </div>
-    <div class="mbti-buttons">
-      <v-row>
-        <v-col v-for="(mbti, index) in mbtiList" :key="mbti.id" cols="3">
-          <v-btn
+    </v-row>
+    <v-row class="quiz-img" style="display: flex; justify-content: space-around; margin-top:0">
+      <img style="margin:10px; width:25%" src="@/assets/survey/question.png" alt=""/>
+    </v-row>
+    <v-row style="margin:0 10px 0 10px; padding:0 10px 0 10px">
+      <v-col v-for="(mbti, index) in mbtiList" :key="mbti.id" cols="3">
+        <div
+            class="select-mbti"
             v-if="userMbti == mbtiList[index]"
+            @click="selectedUserMbti(mbtiList[index])"
             color="rgb(1, 118, 72)"
-            style="color: white"
-            >{{ mbti }}</v-btn
+            style="color: white;  background-color: rgb(1, 118, 72);"
+            ><h4 style="padding: 7px;">{{ mbti }}</h4></div
           >
-          <v-btn v-else @click="selectedUserMbti(mbtiList[index])">{{
-            mbti
-          }}</v-btn>
-        </v-col>
-      </v-row>
-    </div>
+          <div class="select-mbti" v-else @click="selectedUserMbti(mbtiList[index])">
+            <h4 style="padding: 7px;">{{ mbti }}</h4>
+          </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -60,4 +68,16 @@ export default {
 </script>
 
 <style>
+.select-mbti {
+  border-radius: 15px;
+  cursor: pointer;
+  background-color: #eee;
+}
+.quiz-box {
+  width: 50%; 
+  margin: 10px auto; 
+  border: solid rgb(1, 118, 72); 
+  background-color: white; 
+  border-radius: 15px;
+}
 </style>
