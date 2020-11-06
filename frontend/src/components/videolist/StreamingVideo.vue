@@ -63,6 +63,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      upload: '',
       videos: [
         {
           id: 1,
@@ -85,15 +86,18 @@ export default {
   created() {
     if (this.$cookies.get("accessToken") != null) {
       axios
-        .get(SERVER.URL + "/user/user_id", {
+        .get(SERVER.URL + "/user/userId", {
           headers: {
             Authorization: this.$cookies.get("accessToken"), //the token is a variable which holds the token
           },
         })
         .then((res) => {
           console.log(res.data)
-          if(res.data.user_id.includes("admin"))
+          if(res.data.success)
             this.upload = true;
+          else
+            this.upload=false;
+          console.log(this.upload)
         })
         .catch((err) => {
           console.log(err)
@@ -108,7 +112,6 @@ export default {
       this.$emit("changeVideo", 2);
     },
     uploadVideo() {
-      console.log("클릭");
       router.push({ name: "UploadVideo" });
     },
   },

@@ -1,5 +1,7 @@
 package com.daeng.nyang.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -20,9 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.daeng.nyang.dto.Account;
-import com.daeng.nyang.dto.AnimalListFE;
 import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
@@ -30,7 +32,6 @@ import com.daeng.nyang.service.email.EmailService;
 import com.daeng.nyang.service.signup.SignupService;
 import com.daeng.nyang.service.user.AccountService;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -73,9 +74,9 @@ public class AccountController {
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.ACCEPTED);
 	}
 
-	@GetMapping(path = "/newuser/signup")
+	@GetMapping(path = "/newuser/signup/{user_id}")
 	@ApiOperation("아이디 중복 검사")
-	public ResponseEntity<HashMap<String, Object>> checkID(@RequestParam String user_id) {
+	public ResponseEntity<HashMap<String, Object>> checkID(@PathVariable String user_id) {
 		System.out.println("CONTROLLER START");
 		if (accountService.checkID(user_id)) // 없으면 true
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -237,5 +238,29 @@ public class AccountController {
 		else
 			return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	
+	@GetMapping(path="/user/userId")
+	public ResponseEntity<HashMap<String, Object>> userID(HttpServletRequest request){
+		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+		HashMap<String, Object> map = new HashMap<>();
+		if(user.getAccount().getUser_id().contains("admin")) {
+			map.put("success",true);
+			return new ResponseEntity<>(map, HttpStatus.OK);
+		}
+		map.put("success", false);
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+	
+	@PostMapping(path="/admin/uploadVideo")
+	public ResponseEntity<HashMap<String, Object>> uploadVideo(@RequestParam MultipartFile mfile,HttpServletRequest request){
+		String file_name = mfile.getOriginalFilename();
+		System.out.println(file_name);
+		try {
+			mfile.transferTo(new File("C:/SSAFY/git/s03p31b306/frontend/src/assets/videos/"+file_name));
+		} catch (IllegalStateException | IOException e) {
+			System.out.println("ERROR다 ERROR!!!! ERROR ERROR");
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

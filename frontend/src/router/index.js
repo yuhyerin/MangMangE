@@ -12,6 +12,7 @@ import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
+import UploadVideo from '../pages/UploadVideo.vue'
 
 Vue.use(VueRouter)
 
