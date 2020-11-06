@@ -8,10 +8,10 @@ import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
-import UploadVideo from '../pages/UploadVideo.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
+import VideoDetail from '../pages/VideoDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -57,11 +57,6 @@ const routes = [
     component: VideoBoard,
   },
   {
-    path: '/upload',
-    name: 'UploadVideo',
-    component: UploadVideo,
-  },
-  {
     path: '/adoptionreview',
     name: 'AdoptionReview',
     component: AdoptionReview,
@@ -74,7 +69,12 @@ const routes = [
   {
     path: '/test',
     component: Test,
-  }
+  },
+  {
+    path: '/video/:videoID',
+    name: 'VideoDetail',
+    component: VideoDetail,
+  },
 ]
 
 const router = new VueRouter({
