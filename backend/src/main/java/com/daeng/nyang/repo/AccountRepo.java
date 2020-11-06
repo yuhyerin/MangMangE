@@ -1,11 +1,11 @@
 package com.daeng.nyang.repo;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 import com.daeng.nyang.dto.Account;
 
-public interface AccountRepo extends CrudRepository<Account, Long> {
+public interface AccountRepo extends JpaRepository<Account, Long> {
 	
 	@Query(value="select * from account where user_id=:user_id", nativeQuery = true)
 	Account findByUserid(String user_id);
@@ -21,5 +21,8 @@ public interface AccountRepo extends CrudRepository<Account, Long> {
 	
 	@Query(value="update account set user_password = :temp_password where user_id=:user_id",nativeQuery=true)
 	void updateUserPasswordWithUserid(String user_id, String temp_password);
+	
+	@Query(value="select * from account where user_id=:user_id", nativeQuery=true)
+	Account findAccountByUserId(String user_id);
 
 }

@@ -1,200 +1,254 @@
 <template>
-  <div class="container" style="height: 700px">
-    <div class="row">
-      <div class="application col-lg-8 col-md-8 col-sm-8">
-        <h2 class="application-title">입양신청서</h2>
-        <div class="selfcheck">
-          <h3 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h3>
-          <ul class="selfchecklist">
-            <li>입양에 필요한 비용을 감당하실 수 있나요?</li>
-            <li>정기적인 검진에 따른 비용을 감당하실 수 있나요?</li>
-            <li>사료, 간식, 장난감 등의 비용을 감당하실 수 있나요?</li>
-            <li>매일 반려견과 30분 이상 산책하실 수 있나요?</li>
-            <li>
-              가족과 함께 살고 있다면 가족 구성원 모두 반려견 입양에
-              동의하셨나요?
-            </li>
-            <li>입양을 희망하는 견종의 특성과 성향을 파악하고 계신가요?</li>
-            <li>
-              휴가를 갈때 반려견이 함께 갈 수 없는 경우에 반려견을 어떻게 할지
-              생각해보셨나요?
-            </li>
-          </ul>
-        </div>
-        <hr class="dog-information-startline" />
-        <h3>유기동물 정보</h3>
-        <div class="dog-information">
-          <div class="row dog-information-serial">
-            <div class="col-2">
-              <label>일련번호</label>
-            </div>
-            <div class="col-10">
-              <p style="border: 1px solid black">???</p>
-            </div>
-          </div>
-          <div class="row dog-information-name">
-            <div class="col-2">
-              <label>이름</label>
-            </div>
-            <div class="col-10">
-              <p style="border: 1px solid black">???</p>
-            </div>
-          </div>
-          <div class="row dog-information-breed">
-            <div class="col-2">
-              <label>종류</label>
-            </div>
-            <div class="col-10">
-              <p style="border: 1px solid black">???</p>
-            </div>
-          </div>
-          <div class="row dog-information-gender">
-            <div class="col-2">
-              <label>성별</label>
-            </div>
-            <div class="col-10">
-              <p style="border: 1px solid black">???</p>
-            </div>
-          </div>
-        </div>
-        <hr class="dog-information-endline" />
-
-        <h3>입양희망자 정보</h3>
-        <div class="adopter-information">
-          <div class="row adopter-information-name">
-            <div class="col-2">
-              <label>성명</label>
-            </div>
-            <div class="col-10">
-              <input style="border: 1px solid black" />
-            </div>
-          </div>
-          <div class="row adopter-information-number">
-            <div class="col-2">
-              <label>연락처</label>
-            </div>
-            <div class="col-2">
-              <input style="border: 1px solid black" v-model="firstNum"/>
-            </div>
-            <div class="col-4">
-              <input style="border: 1px solid black" v-model="middleNum" />
-            </div>
-            <div class="col-4">
-              <input style="border: 1px solid black" v-model="lastNum"/>
-            </div>
-            <div class="col-2">
-              <input
-                v-model="phoneNum"
-                style="border: 1px solid black; background: black; color: white"
-                type="text"
-                placeholder="휴대폰번호"
-              />
-              <button class="check-number" @click="test">문자인증</button>
-            </div>
-          </div>
-          <div class="row adopter-information-email">
-            <div class="col-2">
-              <label>이메일</label>
-            </div>
-            <div class="col-10">
-              <input style="border: 1px solid black" />
-            </div>
-          </div>
-          <div class="row adopter-information-gender">
-            <div class="col-2">
-              <label>성별</label>
-            </div>
-            <div class="col-2" style="display: flex">
-              <div>
-                <label for="female">여성</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  name="gender"
-                  id="female"
-                  style="width: 20px"
-                />
-              </div>
-            </div>
-            <div class="col-2" style="display: flex">
-              <div>
-                <label for="male">남성</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  name="gender"
-                  id="male"
-                  style="width: 20px"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="row adopter-information-birthday">
-            <div class="col-2">
-              <label>생년월일</label>
-            </div>
-            <div class="col-10">
-              <input style="border: 1px solid black" />
-            </div>
-          </div>
-        </div>
-        <div class="row adopter-information-address">
-          <div class="col-2">
-            <label>주소</label>
-          </div>
-          <div class="col-10">
-            <input
-              style="border: 1px solid black"
-              @click="findAddress()"
-              v-model="address"
-            />
-          </div>
-        </div>
-        <div class="row adopter-information-personal">
-          <div class="col-12">
-            <label>개인정보 이용에 대한 동의</label>
-          </div>
-        </div>
-        <div class="adopter-information-personal-list">
-          <div class="list">
-            <ul class="adopter-information-personal-ul">
+  <div>
+    <Header />
+    <div class="container" style="height: 710px; margin-top: 65px">
+      <div class="row">
+        <div class="application col-lg-10 col-md-10 col-sm-10">
+          <h3 class="application-title">입양신청서</h3>
+          <div class="selfcheck">
+            <h4 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h4>
+            <ul class="selfchecklist">
+              <li>입양에 필요한 비용을 감당하실 수 있나요?</li>
+              <li>정기적인 검진에 따른 비용을 감당하실 수 있나요?</li>
+              <li>사료, 간식, 장난감 등의 비용을 감당하실 수 있나요?</li>
+              <li>매일 반려견과 30분 이상 산책하실 수 있나요?</li>
               <li>
-                개인정보의 보유 및 이용기간: 3년(관계법령에서 정한 일정한 기간)
+                가족과 함께 살고 있다면 가족 구성원 모두 반려견 입양에
+                동의하셨나요?
               </li>
+              <li>입양을 희망하는 견종의 특성과 성향을 파악하고 계신가요?</li>
               <li>
-                수집하는 개인정보의 항목: 성명, 연락처, 이메일, 성별, 생년월일,
-                주소
-              </li>
-              <li>
-                개인정보의 수집,이용 목적: 추후 댕줍멍줍의 소식을 전달하기 위함
+                휴가를 갈때 반려견이 함께 갈 수 없는 경우에 반려견을 어떻게 할지
+                생각해보셨나요?
               </li>
             </ul>
           </div>
-        </div>
-        <div class="adopter-information-personal-allow">
-          <h5>
-            댕줍멍줍은 법률에서 정하는 경우를 제외하고는 귀하의 동의 없이
-            개인정보를 제 3자에게 제공하지 않습니다.
-          </h5>
-          <h5>문의: 010-0000-0000</h5>
-          <div style="display: flex">
-            <div>
-              <label>
-                <h5>개인정보 이용에 동의합니다.</h5>
-              </label>
-            </div>
-            <div>
-              <input type="checkbox" style="width: 20px" />
+          <hr class="dog-information-startline" />
+          <h4>유기동물 정보</h4>
+          <div class="flex">
+            <div class="dog-information">
+              <div class="row dog-information-serial">
+                <div class="col-2">
+                  <label>1. 일련번호</label>
+                </div>
+                <div class="col-10">
+                  <p class="serial-p" style="border: 0.5px solid #bbb">
+                    {{ dogSerial }}
+                  </p>
+                </div>
+              </div>
+              <div class="row dog-information-age">
+                <div class="col-2">
+                  <label>2. 추정나이</label>
+                </div>
+                <div class="col-10">
+                  <p class="age-p" style="border: 0.5px solid #bbb">
+                    {{ dogAge }}
+                  </p>
+                </div>
+              </div>
+              <div class="row dog-information-breed">
+                <div class="col-2">
+                  <label>3. 종류</label>
+                </div>
+                <div class="col-10">
+                  <p class="breed-p" style="border: 0.5px solid #bbb">
+                    {{ dogBreed }}
+                  </p>
+                </div>
+              </div>
+              <div class="row dog-information-gender">
+                <div class="col-2">
+                  <label>4. 성별</label>
+                </div>
+                <div class="col-10">
+                  <p class="gender-p" style="border: 0.5px solid #bbb">
+                    {{ dogGender }}
+                  </p>
+                </div>
+              </div>
+              <div class="row dog-information-fur">
+                <div class="col-2">
+                  <label>5. 털색</label>
+                </div>
+                <div class="col-10">
+                  <p class="fur-p" style="border: 0.5px solid #bbb">
+                    {{ dogFur }}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          class="apply-finish"
-          style="display: flex; justify-content: center"
-        >
-          <button class="apply-button">신청</button>
+          <hr class="dog-information-endline" />
+
+          <h4>입양희망자 정보</h4>
+          <div class="adopter-information">
+            <div class="row adopter-information-name">
+              <div class="col-2">
+                <label>1. 제목</label>
+              </div>
+              <div class="col-10">
+                <input style="border: 0.5px solid #bbb" v-model="personTitle" />
+                <label
+                  class="personTitle"
+                  v-if="checkPersonTitle === 0"
+                  style="color: red; font-size: small"
+                  >제목을 입력해주세요</label
+                >
+              </div>
+              <div class="col-2">
+                <label>2. 성명</label>
+              </div>
+              <div class="col-10">
+                <input style="border: 0.5px solid #bbb" v-model="personName" />
+                <label
+                  class="personNameLabel"
+                  v-if="checkPersonName === 0"
+                  style="color: red; font-size: small"
+                  >성명을 입력해주세요</label
+                >
+              </div>
+            </div>
+            <div class="row adopter-information-number">
+              <div class="col-2">
+                <label>3. 휴대폰</label>
+              </div>
+              <div class="col-2">
+                <input
+                  style="border: 0.5px solid #bbb"
+                  v-model="firstNum"
+                  placeholder="ex> 010"
+                />
+                <label
+                  style="color: red; font-size: small"
+                  v-if="personNumberAuthenticationNotFinish"
+                  >인증을 완료해주세요</label
+                >
+              </div>
+              <div class="col-2">
+                <input
+                  style="border: 0.5px solid #bbb"
+                  v-model="middleNum"
+                  placeholder="1234"
+                />
+              </div>
+              <div class="col-2">
+                <input
+                  style="border: 0.5px solid #bbb"
+                  v-model="lastNum"
+                  placeholder="5678"
+                />
+              </div>
+              <div class="col-4">
+                <input
+                  v-if="pressedAuthenticationBtn === 0"
+                  class="check-number"
+                  @click="phoneAuthentication"
+                  style="
+                    border: 0.5px solid #bbb;
+                    background: gray;
+                    color: white;
+                  "
+                  type="button"
+                  value="문자인증"
+                />
+                <div class="person-authentication-check">
+                  <input
+                    v-if="pressedAuthenticationBtn === 1"
+                    placeholder="인증번호를 입력해주세요"
+                    style="border: 0.5px solid #bbb"
+                    v-model="personNumberAuthenticationInput"
+                  />
+                  <label
+                    style="color: blue; font-size: small"
+                    v-if="personNumberAuthenticationFinish"
+                    >인증완료</label
+                  >
+                  <label
+                    style="color: red; font-size: small"
+                    v-if="personNumberAuthenticationWrong"
+                    >틀렸습니다</label
+                  >
+                </div>
+              </div>
+              </div>
+              <div class="row adopter-information-email">
+                <div class="col-2">
+                  <label>4. 이메일</label>
+                </div>
+                <div class="col-10">
+                  <input
+                    style="border: 0.5px solid #bbb"
+                    v-model="personEmail"
+                    placeholder="ex> naver@naver.com"
+                  />
+                  <label
+                    v-if="checkPersonEmail === 0"
+                    style="color: red; font-size: small"
+                    >이메일을 확인해주세요</label
+                  >
+                </div>
+            </div>
+            <div class="row adopter-information-personal">
+              <div class="col-12">
+                <label>5. 개인정보 이용에 대한 동의</label>
+              </div>
+            </div>
+            <div class="adopter-information-personal-list">
+              <div class="list">
+                <ul class="adopter-information-personal-ul">
+                  <li>
+                    개인정보의 보유 및 이용기간: 3년(관계법령에서 정한 일정한
+                    기간)
+                  </li>
+                  <li>
+                    수집하는 개인정보의 항목: 성명, 연락처, 이메일, 성별,
+                    생년월일, 주소
+                  </li>
+                  <li>
+                    개인정보의 수집,이용 목적: 추후 댕줍멍줍의 소식을 전달하기
+                    위함
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="adopter-information-personal-allow">
+              <p style="margin-bottom: 3px">
+                법률에서 정하는 경우를 제외하고 귀하의 동의 없이 개인정보를 제
+                3자에게 제공하지 않습니다.
+              </p>
+              <p style="margin-bottom: 3px">문의: 010-0000-0000</p>
+              <div style="display: flex">
+                <div>
+                  <input
+                    type="checkbox"
+                    style="width: 20px"
+                    v-model="personCheck"
+                  />
+                </div>
+                <div>
+                  <label>
+                    <p style="margin-bottom: 0px">
+                      개인정보 이용에 동의합니다.
+                    </p>
+                    <label
+                      v-if="checkPersonCheck === 0"
+                      style="color: red; font-size: small"
+                      >개인정보 이용 동의에 체크해주세요</label
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="apply-finish"
+              style="display: flex; justify-content: center"
+            >
+              <button class="apply-button" @click="adoptionCheck()">
+                신청
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -202,66 +256,316 @@
 </template>
 
 <script>
-// import Header from '../components/Header.vue'
-import axios from 'axios'
-import SERVER from '@/api/url'
+import { mapState, mapMutations } from "vuex";
+import Header from "../components/Header.vue";
+import Datepicker from "vuejs-datepicker";
+import { en, ko } from "vuejs-datepicker/dist/locale/";
+import axios from "axios";
+import SERVER from "@/api/url";
 
 export default {
   name: "Adoption",
   components: {
-    // Header,
+    Header,
+    Datepicker,
   },
   data() {
     return {
-      address: "",
-      phoneNum: "",
+      dogInfo: [],
+      dogSerial: "",
+      dogAge: "",
+      dogBreed: "",
+      dogGender: "",
+      dogFur: "",
+
+      personTitle: "",
+      personName: "",
+      personEmail: "",
+      personCheck: false,
       firstNum: "",
       middleNum: "",
-      lastNum: ""
+      lastNum: "",
+      pressedAuthenticationBtn: 0,
+      personNumberAuthentication: 0,
+      personNumberAuthenticationInput: "",
+      personNumberAuthenticationFinish: 0,
+      personNumberAuthenticationWrong: 0,
+      personNumberAuthenticationNotFinish: 0,
+
+      checkPersonTitle: 1,
+      checkPersonName: 1,
+      checkPersonEmail: 1,
+      checkPersonCheck: 1,
     };
   },
-  methods: {
-    findAddress() {
-      new daum.Postcode({
-        // oncomplete: function(data) {
-        //   var fulladdress = data.address;
-        //   this.address = fulladdress
-        //   console.log(this.address)
-        // }
-        oncomplete: (data) => {
-          var fullAddr = data.address;
-          var extraAddr = "";
 
-          if (data.addressType === "R") {
-            if (data.bname !== "") {
-              extraAddr += data.bname;
-            }
-            if (data.buildingName !== "") {
-              extraAddr +=
-                extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
-            }
-            fullAddr += extraAddr !== "" ? " (" + extraAddr + ")" : "";
-            this.address = fullAddr;
-          } else {
-            this.address = fullAddr;
-          }
-        },
-      }).open();
+  computed: {
+    ...mapState(["address"]),
+  },
+
+  methods: {
+    ...mapMutations(["findPersonAddress"]),
+    changePersonCheck() {
+      if (this.personCheck === 0) {
+        this.personCheck = 1;
+      } else {
+        this.personCheck = 0;
+      }
     },
-    test() {
-      console.log("FE input Form : ", this.firstNum + "-" + this.middleNum + "-" + this.lastNum)
-      axios.get(SERVER.URL + '/user/adopt/create', {
+
+    phoneAuthentication() {
+      console.log(
+        "FE input Form : ",
+        this.firstNum + "-" + this.middleNum + "-" + this.lastNum
+      );
+
+      axios
+        .get(SERVER.URL + "/user/adopt/create", {
           params: {
-            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum
-          }
+            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+          },
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
         })
+        .then((res) => {
+          console.log("then res : ", res.data);
+          this.pressedAuthenticationBtn = 1;
+          this.personNumberAuthentication = res.data.number;
+        })
+        .catch((err) => {
+          console.log("catch err : ", err);
+          SERVER.refreshToken(err);
+        });
+    },
+
+    adoptionCheck() {
+      if (this.personTitle.length === 0) {
+        this.checkPersonTitle = 0;
+      } else {
+        this.checkPersonTitle = 1;
+      }
+
+      if (this.personName.length === 0) {
+        this.checkPersonName = 0;
+      } else {
+        this.checkPersonName = 1;
+      }
+
+      if (this.personNumberAuthenticationFinish !== 1) {
+        this.personNumberAuthenticationNotFinish = 1;
+      } else {
+        this.personNumberAuthenticationNotFinish = 0;
+      }
+
+      if (this.personEmail.length > 0) {
+        var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if (this.personEmail.match(regExp) != null) {
+          this.checkPersonEmail = 1;
+        } else {
+          this.checkPersonEmail = 0;
+        }
+      } else {
+        this.checkPersonEmail = 0;
+      }
+
+      if (this.personCheck === false) {
+        this.checkPersonCheck = 0;
+      } else {
+        this.checkPersonCheck = 1;
+      }
+
+      if (
+        this.checkPersonTitle === 1 &&
+        this.checkPersonName === 1 &&
+        // 여기에 추후에 전화번호 인증 여부도 조건에 추가해야 한다!
+        // 지금은 문자 포인트 문제로 빼놓음
+        // this.personNumberAuthenticationFinish === 1 &&
+        this.checkPersonEmail === 1 &&
+        this.checkPersonCheck === 1
+      ) {
+        this.adoptionApply();
+      }
+    },
+
+    adoptionApply() {
+      console.log("adoptionAPPLY");
+      console.log(
+        this.personName,
+        " ",
+        this.firstNum,
+        "-",
+        this.middleNum,
+        "-",
+        this.lastNum,
+        " ",
+        this.personEmail,
+        " ",
+        this.personTitle
+      );
+
+      axios
+        .post(
+          SERVER.URL + "/user/adopt/create",
+          {
+            ani_num: this.dogSerial,
+            user_name: this.personName,
+            user_phone:
+              this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+            user_email: this.personEmail,
+            title: this.personTitle,
+          },
+          {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+            },
+          }
+        )
+        .then((res) => {
+          console.log("then res : ", res.data);
+          this.$router.push("/adoptionlist");
+        })
+        .catch((err) => {
+          console.log("catch err : ", err);
+          SERVER.refreshToken(err);
+          // if (err.response.status == 401) {
+
+          //   axios
+          //     .post(
+          //       SERVER.URL + "/newuser/refresh",
+          //       {},
+          //       {
+          //         headers: {
+          //           accessToken: this.$cookies.get("accessToken"),
+          //           refreshToken: this.$cookies.get("refreshToken"),
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       console.log(res);
+          //       if (res.data.success) {
+          //         this.$cookies.set("accessToken", res.data.accessToken);
+          //         console.log(this.$cookies.get("accessToken"));
+          //       }
+          //     })
+          //     .catch((err) => {
+          //       console.log(err);
+          //     });
+          // }
+        });
+    },
+  },
+  watch: {
+    personTitle() {
+      if (this.personTitle.length === 0) {
+        this.checkPersonTitle = 0;
+      } else {
+        this.checkPersonTitle = 1;
+      }
+    },
+
+    personName() {
+      if (this.personName.length === 0) {
+        this.checkPersonName = 0;
+      } else {
+        this.checkPersonName = 1;
+      }
+    },
+
+    personNumberAuthenticationInput() {
+      if (
+        this.personNumberAuthenticationInput == this.personNumberAuthentication
+      ) {
+        console.log("인증 완료");
+        this.personNumberAuthenticationFinish = 1;
+      }
+
+      if (this.personNumberAuthenticationInput.length === 6) {
+        if (
+          this.personNumberAuthenticationInput !=
+          this.personNumberAuthentication
+        ) {
+          this.personNumberAuthenticationWrong = 1;
+        } else {
+          this.personNumberAuthenticationWrong = 0;
+        }
+      }
+    },
+
+    personEmail() {
+      if (this.personEmail.length > 0) {
+        var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if (this.personEmail.match(regExp) != null) {
+          this.checkPersonEmail = 1;
+        } else {
+          this.checkPersonEmail = 0;
+        }
+      } else {
+        this.checkPersonEmail = 0;
+      }
+    },
+
+    personCheck() {
+      if (this.personCheck === false) {
+        this.checkPersonCheck = 0;
+      } else {
+        this.checkPersonCheck = 1;
+      }
+    },
+  },
+  created() {
+    console.log("여기");
+    axios
+      .get(SERVER.URL + "/newuser/animal/detail", {
+        params: {
+          desertion_no: this.$route.params.animalId,
+        },
+        // {
+        //   headers: {
+        //     Authorization: this.$cookies.get("accessToken")
+        //   }
+        // }
+      })
       .then((res) => {
-        console.log("then res : ",res.data)
+        console.log(res.data);
+        this.dogSerial = res.data.animalList.desertion_no;
+        this.dogAge = 2020 - res.data.animalList.age + "살";
+        this.dogBreed = res.data.animalList.kind_c;
+        if (res.data.animalList.sex_cd == "M") {
+          this.dogGender = "남";
+        } else {
+          this.dogGender = "여";
+        }
+        this.dogFur = res.data.animalList.color_cd;
       })
       .catch((err) => {
-        console.log("catch err : ",err)
-      })
-    }
+        console.log(err.response);
+        SERVER.refreshToken(err);
+        // if (err.response.status == 401) {
+          
+        //   axios
+        //     .post(
+        //       SERVER.URL + "/newuser/refresh",
+        //       {},
+        //       {
+        //         headers: {
+        //           accessToken: this.$cookies.get("accessToken"),
+        //           refreshToken: this.$cookies.get("refreshToken"),
+        //         },
+        //       }
+        //     )
+        //     .then((res) => {
+        //       console.log(res);
+        //       if (res.data.success) {
+        //         this.$cookies.set("accessToken", res.data.accessToken);
+        //         console.log(this.$cookies.get("accessToken"));
+        //       }
+        //     })
+        //     .catch((err) => {
+        //       console.log(err);
+        //     });
+        // }
+      });
   },
 };
 </script>
@@ -272,34 +576,35 @@ div.application {
 }
 
 hr.dog-information-startline {
-  border-top: 1px solid black;
+  border-top: 1px solid #eee;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-h2.application-title {
+.application-title {
   text-align: center;
   margin-bottom: 10px;
 }
 
 div.selfcheck {
   background: rgb(244, 236, 225);
-  list-style-position: inside;
-  padding: 12px;
+  padding: 12px 12px 12px 12px;
 }
 
-h3.selfcheckstart {
+.selfcheckstart {
   text-align: center;
 }
 
 ul.selfchecklist {
+  list-style-position: inside;
   padding-left: 15px;
+  list-style-type: square;
 }
 
 div.list {
   background: rgb(244, 236, 225);
-  list-style-position: inside;
-  padding: 12px;
+  /* background: #d9edf7; */
+  padding: 12px 12px 12px 12px;
 }
 
 button.check-number {
@@ -307,22 +612,33 @@ button.check-number {
   color: white;
 }
 
+div.adopter-information-personal-allow {
+  margin-top: 10px;
+}
+
 ul.adopter-information-personal-ul {
+  list-style-position: inside;
   padding-left: 15px;
+  list-style-type: square;
 }
 
 div.col-2,
-div.col-10 {
-  padding-bottom: 5px;
+div.col-10,
+div.col-8 {
+  padding: 12px 12px 5px 12px;
 }
 
 hr.dog-information-endline {
-  border-top: 1px solid black;
+  /* border-top: 0.5px solid gray; */
+  border-top: 1px solid #eee;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-p {
+p.serial-p,
+p.name-p,
+p.breed-p,
+p.gender-p {
   margin-bottom: 0;
 }
 

@@ -1,42 +1,103 @@
 <template>
-  <div class="question">
-    <div class="question-header">
-      <h2>Q2. 반려동물과 함께 선호하는 운동은?</h2>
-      <img src="@/assets/survey/1.png" alt="" />
-    </div>
-    <div
-      class="question-answer"
-      style="display: flex; justify-content: space-around; align-item: center"
-    >
-      <div
-        class="selected-answer"
-        @click="selectedDogMbti({ idx: 1, answer: 1 })"
-        style="cursor: pointer"
-      >
-        <h3>체력소모가 있는 매우 활동적인 운동</h3>
-        <img src="@/assets/survey/1-1.png" alt="" />
-      </div>
-      <div
-        class="selected-answer"
-        @click="selectedDogMbti({ idx: 1, answer: -1 })"
-        style="border: solid black; cursor: pointer"
-      >
-        <h3>작은 공간에서도 간단히 할 수 있는 운동</h3>
-        <img src="@/assets/survey/1-2.png" alt="" />
-      </div>
-    </div>
+  <div class="quiz-box">
+    <v-avatar style=" position: absolute; top: 7%; left: 48%;" color="rgb(1,118,72)" size="50">
+      <h3 style="color: white">Q2</h3>
+    </v-avatar>
+    <v-row class="quiz-header" style="display: flex; justify-content: space-around; margin:10px">
+      <h2 style="margin:10px; padding:5px;">반려동물과 함께 선호하는 운동은?</h2>
+    </v-row>
+    <v-row class="quiz-img" style="display: flex; justify-content: space-around; margin:10px">
+      <img style="margin:10px" src="@/assets/survey/1.png" alt="" />
+    </v-row>
+    <v-row class="answer" @click="selectedDogMbti({ idx: 1, answer: 1 }); attachRed = !attachRed" :class="{isSelected: attachRed, noneSelected: !attachRed}">
+      <h3 style="padding: 10px;">체력소모가 있는 매우 활동적인 운동</h3>
+    </v-row>
+    <v-row class="answer" @click="selectedDogMbti({ idx: 1, answer: -1 });">
+      <h3 style="padding: 10px;">작은 공간에서도 간단히 할 수 있는 운동</h3></v-row>
   </div>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
+  data() {
+    return {
+      attachRed: false,
+      backgroundColor: "#eee",
+      color: "black",
+    }
+  },
+  computed: {
+    divClasses() {
+      return {
+        isSelected: this.attachRed,
+        noneSelected: !this.attachRed
+      }
+    }
+  },
   methods: {
     ...mapMutations(["selectedDogMbti"]),
+    selectedAnswer(val) {
+      console.log("클릭", val)
+      if (val == 1) {
+        this.selected1 = true,
+        this.selected2 = false
+      }
+      else if (val == 2) {
+        this.selected1 = false,
+        this.selected2 = true
+      }
+    }
   },
+  computed: mapState(["survey"]),
 };
 </script>
 
 <style>
+/* .isActive {
+  border: solid green;
+  cursor:pointer; 
+  display: flex; 
+  justify-content: space-around; 
+  margin:10px; 
+  background-color: rgb(1, 118, 72);
+  color: white;
+} */
+.question-header {
+  background-color: white;
+}
+.answer {
+  cursor:pointer; 
+  display: flex; 
+  justify-content: space-around; 
+  margin:10px; 
+  background-color: #eee;
+}
+.isSelected {
+  background-color: rgb(1, 118, 72);
+  color: white
+}
+.noneSelected{
+  background-color: #eee;
+  color: black;
+}
+/*.selected {
+  background-color: rgb(1, 118, 72);
+  color: white;
+} */
+.quiz-choice1 {
+  cursor:pointer; 
+  display: flex; 
+  justify-content: space-around; 
+  margin:10px; 
+  background-color: #eee;
+}
+.quiz-choice2 {
+  cursor:pointer; 
+  display: flex; 
+  justify-content: space-around; 
+  margin:10px; 
+  background-color: #eee;
+}
 </style>
