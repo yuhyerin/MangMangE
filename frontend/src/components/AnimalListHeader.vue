@@ -103,28 +103,9 @@ export default {
   },
   computed: {
     ...mapState(["eventListener"]),
+    ...mapState(["userSurveyCheck"]),
   },
   created() {
-    axios
-      .get(SERVER.URL + "/user/animal/surveyread", {
-        headers: {
-          Authorization: $cookies.get("accessToken"),
-        },
-      })
-      .then((res) => {
-        if (res.data.survey != null) {
-          this.userFinishedSurvey = true;
-        } else if (res.data.survey == null) {
-          this.userFinishedSurvey = false;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response != undefined) {
-          SERVER.RefreshToken(err);
-        }
-      });
-
     if (this.eventListener == 1) {
       this.btnChecked1 = false;
       this.btnChecked2 = true;
@@ -168,7 +149,7 @@ export default {
       if (this.$cookies.get("accessToken") == null) {
         alert("로그인이 필요한 서비스 입니다.");
         return;
-      } else if (this.userFinishedSurvey == false) {
+      } else if (this.userSurveyCheck == false) {
         var surveyCheck = confirm(
           "아직 추천동물 기록이 없습니다. 추천 설문을 하시겠습니까?"
         );
@@ -208,13 +189,10 @@ export default {
       axios
         .post(
           SERVER.URL + "/user/logout/",
-          {
-            accessToken: this.$cookies.get("accessToken"),
-          },
+          {},
           {
             headers: {
-              Authorization: this.$cookies.get("accessToken"),
-              "content-type": "application/json",
+              accessToken: this.$cookies.get("accessToken"),
             },
           }
         )
@@ -222,6 +200,7 @@ export default {
           console.log(res);
           this.$cookies.remove("accessToken");
           this.$cookies.remove("refreshToken");
+          this.setUserSurveyCheck(false);
           location.href = "/";
         })
         .catch((err) => {
