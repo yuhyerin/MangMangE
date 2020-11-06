@@ -21,7 +21,23 @@
       border-bottom: 1px solid gray;
     "
   >
-    <div @click="moveToMain">로고</div>
+    <div
+      @click="moveToMain"
+      class="logo"
+      style="
+        height: 75px;
+        width: 10vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <img
+        src="../assets/image/logo3.png"
+        alt="logo"
+        style="height: 75px; width: 120px"
+      />
+    </div>
     <div>
       <div
         style="
@@ -41,7 +57,7 @@
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn text @click="test">
+        <v-btn text @click="countDownTimer">
           <div>버어튼</div>
         </v-btn>
         <v-btn text @click="moveTo('/animals')">
@@ -64,6 +80,8 @@ export default {
   data() {
     return {
       isUser: this.$cookies.get("accessToken") == null ? false : true,
+      countDown: 10,
+      timerTrigger: false,
     };
   },
   watch: {
@@ -73,6 +91,7 @@ export default {
   },
   computed: {
     ...mapState(["eventListener"]),
+    ...mapState(["test"]),
   },
   created() {
     if (this.$cookies.get("accessToken") == null) {
@@ -83,6 +102,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setEventListener"]),
+    ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
       location.href = "/";
     },
@@ -99,57 +119,41 @@ export default {
       }
     },
     moveTo(page) {
+      if (page == "/animals") {
+        this.setEventListener(2);
+      }
       this.$router.push(page);
     },
-    test() {
-      axios
-        .get(SERVER.URL + "/admin", {
-          headers: {
-            Authorization: this.$cookies.get("accessToken"),
-            refreshToken: this.$cookies.get("refreshToken"),
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log("err : ", err.response.status);
-          if (err.response.status == 401) {
-            //accessToken만료
-            axios
-              .post(
-                SERVER.URL + "/newuser/refresh",
-                {},
-                {
-                  headers: {
-                    accessToken: this.$cookies.get("accessToken"),
-                    refreshToken: this.$cookies.get("refreshToken"),
-                  },
-                }
-              )
-              .then((res) => {
-                console.log(res);
-                if (res.data.success)
-                  this.$cookies.set("accessToken", res.data.accessToken);
-                console.log(this.$cookies.get("accessToken"));
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        });
+    // test() {
+    //   axios
+    //     .get(SERVER.URL + "/admin", {
+    //       headers: {
+    //         Authorization: this.$cookies.get("accessToken"),
+    //         refreshToken: this.$cookies.get("refreshToken"),
+    //       },
+    //     })
+    //     .then((res) => {
+    //       console.log(res);
+    //     })
+    //     .catch((err) => {
+    //       console.log("err : ", err.response.status);
+    //       SERVER.RefreshToken(err);
+    //     });
+    // },
+    countDownTimer() {
+      window.setTimeout(() => {
+        alert("확인");
+      }, 2000);
     },
+
     logout() {
       axios
         .post(
           SERVER.URL + "/user/logout/",
-          {
-            accessToken: this.$cookies.get("accessToken"),
-          },
+          {},
           {
             headers: {
               Authorization: this.$cookies.get("accessToken"),
-              "content-type": "application/json",
             },
           }
         )
@@ -157,6 +161,7 @@ export default {
           console.log(res);
           this.$cookies.remove("accessToken");
           this.$cookies.remove("refreshToken");
+          this.setUserSurveyCheck(false);
           location.href = "/";
         })
         .catch((err) => {
@@ -174,5 +179,8 @@ export default {
 .navBtn:hover {
   padding: 2px 5px 2px 5px;
   background-color: rgb(180, 180, 180);
+}
+.logo {
+  background-image: url("../assets/image/logo.png");
 }
 </style>

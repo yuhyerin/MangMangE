@@ -7,9 +7,15 @@ import AnimalDetail from '../pages/AnimalDetail.vue'
 import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
-import VideoList from '../pages/VideoList.vue'
-import UploadVideo from '../pages/UploadVideo.vue'
+// import VideoList from '../pages/VideoList.vue'
+// import UploadVideo from '../pages/UploadVideo.vue'
 import Streaming from '../pages/StreamingHR.vue'
+import VideoBoard from '../pages/VideoBoard.vue'
+import AdoptionReview from '../pages/AdoptionReview.vue'
+import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
+import Test from "../pages/Test.vue"
+import VideoDetail from '../pages/VideoDetail.vue'
+import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 
 Vue.use(VueRouter)
 
@@ -51,18 +57,37 @@ const routes = [
   },
   {
     path: '/videos',
-    name: 'Videos',
-    component: VideoList,
+    name: 'VideoBoard',
+    component: VideoBoard,
   },
   {
-    path: '/upload',
-    name: 'UploadVideo',
-    component: UploadVideo,
+    path: '/adoptionreview',
+    name: 'AdoptionReview',
+    component: AdoptionReview,
   },
   {
     path: '/streaming',
     name: 'Streaming',
     component: Streaming
+  },
+  {
+    path: '/adoptionupdate/:uid',
+    name: 'AdoptionUpdate',
+    component: AdoptionUpdate,
+  },
+  {
+    path: '/test',
+    component: Test,
+  },
+  {
+    path: '/video/:videoID',
+    name: 'VideoDetail',
+    component: VideoDetail,
+  },
+  {
+    path: '/privacypolicy',
+    name: 'PrivacyPolicy',
+    component: PrivacyPolicy
   }
 ]
 
