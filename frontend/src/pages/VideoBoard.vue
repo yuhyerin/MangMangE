@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header/>
+    <Header />
     <v-container style="padding-top: 90px">
       <div
         style="
@@ -11,11 +11,14 @@
         "
       >
         <!--만약 스트리밍중이면-->
-        <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo"/>
+        <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo" />
         <!--스트리밍 X-->
-        <NoneStreamingVideo v-if="pageTrigger == 1" @changeVideo="changeVideo" />
-        
-        <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo"/>
+        <NoneStreamingVideo
+          v-if="pageTrigger == 1"
+          @changeVideo="changeVideo"
+        />
+
+        <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo" />
       </div>
     </v-container>
   </div>
@@ -36,17 +39,16 @@ export default {
   },
   data() {
     return {
-     pageTrigger: 0,
-    }
+      pageTrigger: 0,
+    };
   },
   methods: {
     changeVideo(value) {
       this.pageTrigger = value;
     },
-  }
-}
+  },
+};
 </script>
 
 <style>
-
 </style>

@@ -1,7 +1,9 @@
 package com.daeng.nyang.service.user;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -69,7 +71,7 @@ public class AccountService {
 		String user_id = account.getUser_id();
 		if (accountRepo.findByUserid(user_id) == null) {
 			map = new HashMap<>();
-			if ("admin".equals(user_id)) {
+			if (user_id.contains("admin")) {
 				account.setRole("ROLE_ADMIN");
 			} else {
 				account.setRole("ROLE_USER");
@@ -92,8 +94,11 @@ public class AccountService {
 		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
+			System.out.println("id : " + id + "\t password : " + pwd);
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, pwd));
+			System.out.println("TRY END");
 		} catch (Exception e) {
+			e.printStackTrace();
 			map.put("success", false);
 			map.put("message", "authenticate ERROR");
 			System.out.println("authenticate error");
@@ -122,19 +127,49 @@ public class AccountService {
 		map.put("refreshToken", refreshToken);
 		return map;
 	}
+	
+	public HashMap<String, Object> changPW(Account account){
+		String e_password = bcryptEncoder.encode(account.getUser_password());
+		account.setUser_password(e_password);
+		accountRepo.updateUserPasswordWithUserid(account.getUser_id(), account.getUser_password());
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		Account temp=accountRepo.findAccountByUserId(account.getUser_id());
+		if(temp.getUser_password().equals(e_password)) {
+			result.put("success", true);
+		} else {
+			result.put("success", false);
+		}
+		return result;
+	}
 
-	public ResponseEntity<HashMap<String, Object>> createApply(String user_id, Apply apply) {
+	public HashMap<String, Object> createApply(String user_id, Apply apply) {
 		System.out.println("accountService 입장");
 		System.out.println(apply.toString());
 		apply.setUser_id(user_id);
 		System.out.println(apply.toString());
-		applyRepo.save(apply);
+		Apply app = applyRepo.save(apply);
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("success", true);
-		return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+		if (app == null)
+			map.put("success", false);
+		else
+			map.put("success", true);
+		return map;
+	}
+	
+	public HashMap<String, Object> updateApply(String user_id, Apply apply) {
+		System.out.println("SERVICE START");
+		apply.setUser_id(user_id);
+		System.out.println(apply.toString());
+		Apply app = applyRepo.save(apply);
+		HashMap<String, Object> map = new HashMap<>();
+		if (app == null)
+			map.put("success", false);
+		else
+			map.put("success", true);
+		return map;
 	}
 
-	public ResponseEntity<HashMap<String, Object>> checkPhone(String phone, int number) {
+	public HashMap<String, Object> checkPhone(String phone, int number) {
 		HashMap<String, Object> map = new HashMap<>();
 		System.out.println("apiKey : " + apiKey);
 		System.out.println("apiSecret : " + apiSecret);
@@ -163,21 +198,16 @@ public class AccountService {
 			System.out.println(e.getCode());
 			map = null;
 		}
-		if (map == null)
-			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.BAD_REQUEST);
-		else
-			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-
+		return map;
 	}
 
-	public Map<String, Object> refreshToken(String accessToken, String refreshToken) {
+	public HashMap<String, Object> refreshToken(String accessToken, String refreshToken) {
 		System.out.println("service Start");
-		Map<String, Object> response = new HashMap<>();
+		HashMap<String, Object> response = new HashMap<>();
 		String user_id = null, refreshTokenFromDb = null;
 		System.out.println("accessToken : " + accessToken);
 		System.out.println("refreshToken : " + refreshToken);
 
-		
 		try {
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
 			System.out.println(user_id);
@@ -206,7 +236,7 @@ public class AccountService {
 				response.put("success", true);
 				response.put("accessToken", new_accessToken);
 				System.out.println("new_accessToken : " + new_accessToken);
-				
+
 			} else {
 				response.put("success", false);
 				response.put("msg", "refresh token is expired.");
@@ -215,9 +245,39 @@ public class AccountService {
 			response.put("success", false);
 			response.put("msg", "your refresh token does not exist.");
 		}
-		
+
 		System.out.println("service End");
 		return response;
+	}
+
+	public HashMap<String, Object> readAdopt() {
+//		List<Apply> list = applyRepo.selectList();
+		List<Apply> list = applyRepo.findAll();
+		List<Apply> result = new ArrayList<Apply>();
+		for(int i=0;i<list.size();i++) {
+			Apply app = list.get(i);
+			Apply temp = Apply.builder().
+					uid(app.getUid()).
+					regtime(app.getRegtime()).
+					title(app.getTitle()).
+					user_id(app.getUser_id()).build();
+			result.add(temp);
+		}
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("list", result);
+		return map;
+	}
+
+	public HashMap<String, Object> readAdopt(long uid, String user_id) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		Apply apply = applyRepo.selectByuid(uid);
+		if (apply == null)
+			return null;
+		else {
+			map.put("apply", apply);
+			map.put("user_id", user_id);
+			return map;
+		}
 	}
 
 }

@@ -1,170 +1,109 @@
 <template>
-  <div>
+  <div style="background: rgb(244, 236, 225)">
     <Header />
-    <div class="container">
-      <div style="display: flex; justify-content: space-between">
-        <h1>입양신청목록</h1>
-        <div class="display: flex;">
-          <!-- <input type="text" style="border: 1px solid black; width: 90%; placeholder: '검색'; margin-right: 5px;"/>
-            <span class="fas fa-question"></span> -->
-          <!-- <input name="txtName" id="txtName">
-            <span class="fas fa-question errspan"></span> -->
-          <div class="input-wrapper">
-            <input type="text" placeholder="검색" />
+    <div class="container" style="margin-top: 75px;">
+      <div class="row">
+        <div class="adoption-list-div col-lg-8 col-md-8 col-sm-8">
+          <h3 class="adoption-list"><strong>입양신청목록</strong></h3>
+          <div style="display: flex; justify-content: flex-end;">
+            <v-btn
+            @click="showMyList"
+            style="background: black; color: white;"
+            >
+              <strong>내글보기</strong>
+            </v-btn>
           </div>
+          <!-- <p class="adoption-mylist" @click="showMyList">내글보기</p> -->
+          <AdoptionListPagination :items="items" :userId="userId"/>
         </div>
       </div>
-      <table class="adoption-table">
-        <thead class="adoption-thead">
-          <tr>
-            <th style="width: 20%">번호</th>
-            <th style="width: 60%">제목</th>
-            <th style="width: 10%">글쓴이</th>
-            <th style="width: 10%">작성일</th>
-          </tr>
-        </thead>
-        <tbody class="adoption-tbody">
-          <tr>
-            <td>1</td>
-            <td>말티즈 입양하고 싶어요</td>
-            <td>김싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>2</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>7</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>8</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>9</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>10</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-
-          <tr>
-            <td>11</td>
-            <td>이 아이를 입양하고 싶습니다</td>
-            <td>이싸피</td>
-            <td>2020.10.29</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
 
 <script>
-import Header from "../components/Header.vue";
+import Header from "../components/Header.vue"
+import axios from 'axios'
+import AdoptionListPagination from "../components/AdoptionListPagination.vue"
+import SERVER from '@/api/url'
+
 export default {
-  name: "AdoptionList",
-  data() {
-    return {
-      adoptionNumber: "",
-      title: "",
-      writer: "",
-      adoptionDay: "",
-    };
-  },
+  name: 'AdoptionList',
   components: {
     Header,
+    AdoptionListPagination
   },
-  methods: {},
-  created: {},
-};
+  data () {
+    return {
+      items: [],
+      itemsOriginal: [],
+      userId: "",
+      flag: 0,
+    }
+  },
+
+  methods: {
+    showMyList() {
+      if (this.flag === 0) {
+        this.flag = 1
+      } else {
+        this.flag = 0
+      }
+    }
+  },
+
+  watch: {
+    flag() {
+      if (this.flag === 1) {
+        var arr = []
+        for (let i = 0; i < this.items.length - 1; i++) {
+          if (this.items[i].user_id === this.userId) {
+            arr.push(this.items[i])
+          }
+        }
+        this.items = arr
+      } else {
+        this.items = this.itemsOriginal
+      }
+    }
+  },
+
+  created () {
+    axios.get(SERVER.URL + '/user/adopt/read',
+      {
+        headers: {
+          Authorization: this.$cookies.get("accessToken")
+        }
+      })
+      .then((res) => {
+        console.log(res.data)
+        this.items = res.data.list.reverse()
+        this.itemsOriginal = this.items
+        this.userId = res.data.user_id
+      })
+      .catch((err) => {
+        console.log('cat')
+        console.log(err)
+      })
+  }
+}
 </script>
 
 <style>
-.table {
-  margin-top: 20px;
+.adoption-list-div {
+  margin: 0 auto;
 }
 
-.adoption-table {
-  border-top: 1px solid black;
-  border-collapse: collapse;
-  width: 100%;
+.adoption-list {
+  text-align: center;
+  margin-bottom: 15px;
 }
 
-th,
-td {
-  border-bottom: 1px solid black;
+.adoption-mylist {
+  text-align: right;
 }
 
-th {
-  text-align: left;
-}
-
-.errspan {
-  border: 1px solid black;
-  float: right;
-  margin-right: 6px;
-  margin-top: -20px;
-  position: relative;
-  z-index: 2;
-  width: 50%;
-}
-
-.input-wrapper {
-  display: inline-block;
-  position: relative;
-  border: 1px solid black;
-}
-
-.input-wrapper:after {
-  font-family: "FontAwesome";
-  content: "\f128";
-  position: absolute;
-  right: 6px;
+.adoption-mylist:hover {
+  cursor: pointer;
 }
 </style>

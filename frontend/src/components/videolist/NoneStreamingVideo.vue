@@ -5,8 +5,8 @@
         <div style="max-width: 545px; height:295px; background-color: black;">
         </div>
       </v-col>
-      <v-col style="padding: 15px; display: flex;">
-        <v-row>
+      <v-col style="padding: 15px;">
+        <v-row style="display: flex; float: right;">
            <v-btn @click="uploadVideo" small outlined class="ma-2 upload-btn">
             Upload
             <v-icon
@@ -17,7 +17,7 @@
             </v-icon>
           </v-btn>
         </v-row>
-        <v-row style="align-items: center;" >
+        <v-row style="vertical-align: center;" >
           <div style="font-size: 30px; padding-bottom: 5px;">
             현재 스트리밍중인 동영상이 없습니다.
           </div>
