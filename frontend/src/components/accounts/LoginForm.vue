@@ -108,6 +108,7 @@ export default {
           console.log(res);
           this.$cookies.set("accessToken", res.data.accessToken);
           this.$cookies.set("refreshToken", res.data.refreshToken);
+          this.$cookies.set("expireTime", res.data.refreshToken);
           axios
             .get(SERVER.URL + "/user/animal/surveyread", {
               headers: {

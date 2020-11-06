@@ -137,7 +137,7 @@ export default {
           {},
           {
             headers: {
-              accessToken: this.$cookies.get("accessToken"),
+              Authorization: this.$cookies.get("accessToken"),
             },
           }
         )
