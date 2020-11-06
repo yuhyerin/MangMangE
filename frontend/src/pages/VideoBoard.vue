@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <Header/>
     <v-container style="padding-top: 90px">
       <div
         style="
@@ -10,16 +10,13 @@
           padding: 0px 20px 20px 20px;
         "
       >
+      <UploadVideo />
         <!--만약 스트리밍중이면-->
-        <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo" />
+        <!-- <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo"/> -->
         <!--스트리밍 X-->
-        <NoneStreamingVideo
-          v-if="pageTrigger == 1"
-          @changeVideo="changeVideo"
-        />
-
-        <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo" />
-        <UploadVideo />
+        <!-- <NoneStreamingVideo v-if="pageTrigger == 1" @changeVideo="changeVideo" /> -->
+        
+        <!-- <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo"/> -->
       </div>
     </v-container>
   </div>
@@ -27,17 +24,19 @@
 
 <script>
 import Header from "../components/Header.vue";
-import StreamingVideo from "../components/videolist/StreamingVideo";
-import NoneStreamingVideo from "../components/videolist/NoneStreamingVideo";
-import VideoSeeMore from "../components/videolist/VideoSeeMore";
+// import StreamingVideo from "../components/videolist/StreamingVideo";
+// import NoneStreamingVideo from "../components/videolist/NoneStreamingVideo";
+// import VideoSeeMore from "../components/videolist/VideoSeeMore";
 import UploadVideo from "../components/UploadVideo.vue"
+
 
 export default {
   components: {
     Header,
-    StreamingVideo,
-    NoneStreamingVideo,
-    VideoSeeMore,
+    // StreamingVideo,
+    // NoneStreamingVideo,
+    // VideoSeeMore,
+    UploadVideo
   },
   data() {
     return {
@@ -48,8 +47,8 @@ export default {
     changeVideo(value) {
       this.pageTrigger = value;
     },
-  },
-};
+  }
+}
 </script>
 
 <style>
