@@ -16,6 +16,7 @@ import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
+import Live from '../pages/Live.vue'
 
 Vue.use(VueRouter)
 
@@ -88,7 +89,12 @@ const routes = [
     path: '/privacypolicy',
     name: 'PrivacyPolicy',
     component: PrivacyPolicy
-  }
+  },
+  {
+    path: '/live',
+    name: 'Live',
+    component: Live
+  },
 ]
 
 const router = new VueRouter({
