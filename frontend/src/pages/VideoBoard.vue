@@ -19,6 +19,7 @@
         />
 
         <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo" />
+        <UploadVideo />
       </div>
     </v-container>
   </div>
@@ -29,6 +30,7 @@ import Header from "../components/Header.vue";
 import StreamingVideo from "../components/videolist/StreamingVideo";
 import NoneStreamingVideo from "../components/videolist/NoneStreamingVideo";
 import VideoSeeMore from "../components/videolist/VideoSeeMore";
+import UploadVideo from "../components/UploadVideo.vue"
 
 export default {
   components: {

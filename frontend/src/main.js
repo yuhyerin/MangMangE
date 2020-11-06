@@ -6,7 +6,9 @@ import VueFullPage from 'vue-fullpage.js'
 import vuetify from './plugins/vuetify';
 import VueCookies from "vue-cookies";
 import VuePlyr from 'vue-plyr'
+import vue2Dropzone from 'vue2-dropzone'
 
+Vue.use(vue2Dropzone)
 Vue.use(VuePlyr, {
   plyr: {
     fullscreen: { enabled: true }
