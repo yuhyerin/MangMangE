@@ -126,24 +126,7 @@ export default {
       this.likeTrigger = false;
     }
 
-    if (this.$cookies.get("accessToken") != null) {
-      axios
-        .get(SERVER.URL + "/user/animal/detail", {
-          params: {
-            desertion_no: this.$route.params.animalID,
-          },
-          headers: {
-            Authorization: this.$cookies.get("accessToken"),
-          },
-        })
-        .then((res) => {
-          this.animalInfo = res.data.animalList;
-          // console.log(res.data.animalList);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
+    // if (this.$cookies.get("accessToken") != null) {
       axios
         .get(SERVER.URL + "/newuser/animal/detail", {
           params: {
@@ -152,11 +135,39 @@ export default {
         })
         .then((res) => {
           this.animalInfo = res.data.animalList;
+          // console.log(res.data.animalList);
         })
         .catch((err) => {
+          console.log('user/animal/detail 요청 막힘')
           console.log(err);
+            axios
+              .get(SERVER.URL + "/newuser/animal/detail", {
+                params: {
+                  desertion_no: this.$route.params.animalID,
+                },
+              })
+              .then((res) => {
+                console.log(res.data)
+                this.animalInfo = res.data.animalList;
+              })
+              .catch((err) => {
+                console.log(err);
+              });
         });
-    }
+    // } else {
+    //   axios
+    //     .get(SERVER.URL + "/newuser/animal/detail", {
+    //       params: {
+    //         desertion_no: this.$route.params.animalID,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       this.animalInfo = res.data.animalList;
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // }
   },
   methods: {
     setLiked() {
@@ -211,7 +222,9 @@ export default {
     },
     moveTo(page) {
       axios
-        .get(SERVER.URL + '/user/adopt/read',
+        // .get(SERVER.URL + `/user/adopt/read/${this.$route.params.animalID}`,
+        // .get(SERVER.URL + `/user/animal/detail/${this.$route.params.animalID}`,
+        .get(SERVER.URL + '/user/animal/detail',
         {
           params: {
             desertion_no: this.$route.params.animalID
@@ -222,20 +235,22 @@ export default {
         })
         .then((res) => {
           console.log(res.data)
-          if (res.data.success) {
-            this.$router.push(
-              {
-                name: 'Adoption',
-                params: {
-                  animalId: this.animalInfo.desertion_no
-                }
-              }
-          )} else {
-            alert('이미 신청했습니다.')
-          }
+        //   if (res.data.success) {
+        //     this.$router.push(
+        //       {
+        //         name: 'Adoption',
+        //         params: {
+        //           animalId: this.animalInfo.desertion_no
+        //         }
+        //       }
+        //   )} else {
+        //     alert('이미 신청했습니다.')
+        //   }
         })
         .catch((err) => {
-          console.log(err.response)
+          console.log(err)
+          alert('신청 이력이 있습니다.')
+          this.$router.push('/adoptionlist')
         })
     },
   },

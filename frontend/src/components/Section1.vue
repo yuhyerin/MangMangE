@@ -11,22 +11,22 @@
         "
       >
         <div class="mainWindow">
-          <div style="height: 40%">
+          <div style="height: 30%">
             <h2 style="text-align: center;">지금 당신에게 맞는 </h2>
             <h2 style="text-align: center;">반려동물을 찾아보세요</h2>
           </div>
           <div
             style="display: flex; width: 100%; justify-content: space-around"
           >
-            <v-btn color="rgb(1,118,72)" @click="moveTo('/survey')"
-              ><div style="color: white">매칭하기</div></v-btn
+            <v-btn x-large color="rgb(1,118,72)" @click="moveTo('/survey')"
+              ><div style="color: white">동물 매칭하기</div></v-btn
             >
-            <v-btn color="rgba(64,33,22)" @click="moveTo('/animals')"
+            <v-btn x-large color="rgba(64,33,22)" @click="moveTo('/animals')"
               ><div style="color: white">모든 동물 보기</div></v-btn
             >
           </div>
           <div>
-            <a href="#page2"> How it works? </a>
+            <a class="moveToSection2" href="#page2"> HOW IT WORKS? </a>
           </div>
         </div>
       </div>
@@ -98,24 +98,31 @@ export default {
 
 a.moveToSection2 {
   color: black;
+  text-decoration: none;
+  background: black;
+  border: 5px solid black;
+  color: white;
+  border-radius: 5px;
 }
 
 a.moveToSection2:link {
-  color: black;
+  color: white;
 }
 
 a.moveToSection2:visited {
-  color: black;
+  color: white;
 }
 
 .mainWindow {
   width: 50%;
   height: 40%;
-  background-color: rgba(255, 255, 255, 0.5);
+  background: white;
+  /* background-color: rgba(255, 255, 255, 0.5); */
   border-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  margin-bottom: 50px;
 }
 </style>

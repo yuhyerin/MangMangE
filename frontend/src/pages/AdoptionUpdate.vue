@@ -356,10 +356,7 @@ export default {
     this.uid = this.$route.params.uid
       // 내글 불러오기
       axios
-        .get(SERVER.URL + "/user/adopt/readOne", {
-          params: {
-            uid: this.$route.params.uid
-          },
+        .get(SERVER.URL + `/user/adopt/read/${this.$route.params.uid}`, {
           headers: {
             Authorization: this.$cookies.get("accessToken"),
           },

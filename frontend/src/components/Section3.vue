@@ -33,29 +33,38 @@
         >
           <div
             class="video-container"
-            style="width: 70vw; display: flex; align-items: center"
+            style="width: 50vw; display: flex; align-items: center"
           >
             <object
               type="text/html"
               width="100%"
-              height="500"
+              height="300"
               data="//www.youtube.com/embed/OR90YT2BtH0"
               allowFullScreen="true"
             ></object>
           </div>
-          <div style="width: 30vw">
+          <div style="width: 50vw">
             <!-- <p style="font-size: xxx-large; vertical-align: top;"><strong>아이들을</strong></p>
             <p style="font-size: xxx-large;"><strong>영상으로</strong></p>
             <p style="font-size: xxx-large;"><strong>만나보세요</strong></p> -->
             <div
-              style="display:flex; justify-content: center; align-center; height: 100%"
+              style="display:flex; justify-content: center; height: 100%"
             >
+            <div style="margin-bottom: 15px;">
+              <p style="font-size: xxx-large; color: white;"><strong>아이들을 영상으로</strong></p>
+              <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p>
+              <br>
+              <p style="font-size: large; margin-bottom: 30px; color: white;"><strong>당신을 기다리고 있어요</strong></p>
+              <br>
+              <!-- <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p> -->
               <div @click="moveToVideos">
                 <v-btn
                   elevation="5"
-                  style="background: green; color: white;"
+                  style="background: black; color: white;"
                 >영상 더보기</v-btn>
               </div>
+            </div>
+
             </div>
           </div>
         </div>
@@ -91,11 +100,20 @@ export default {
 
 <style>
 .section.s2 {
-  padding-top: 75px;
-  background-color: rgb(244, 236, 225);
+  background-color: rgba(255, 165, 0, 1);
+  /* background: darkgray; */
+  /* background: #fcf7f0; */
+  /* background: #fa8290; */
+  /* background: #fc6c7c; */
+  padding-top: 30px;
+  /* background-color: rgb(244, 236, 225); */
 }
 .container.s3 {
-  background-color: rgb(244, 236, 225);
+  /* background: darkgray; */
+  /* background: #fcf7f0; */
+  /* background-color: rgb(244, 236, 225); */
+  /* background: #fa8290; */
+  /* background: #fc6c7c; */
   height: 85vh;
   margin-top: 20px;
   border-radius: 20px;
