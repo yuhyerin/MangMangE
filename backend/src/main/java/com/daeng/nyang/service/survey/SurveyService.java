@@ -1,5 +1,7 @@
 package com.daeng.nyang.service.survey;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +32,11 @@ public class SurveyService {
 	// 유저 아이디를 통해 설문정보 가져오기.
 	public Survey findSurveyByUserid(String user_id) {
 		System.out.println("FINDSURVEY");
-		Survey surve = null;
-		try {
-		surve = surveyRepo.findSurveyByUserid(user_id);
-		} catch(NullPointerException e) {
-			System.out.println("NULL 잡잡");
-			return null;
+		Optional<Survey> survey = surveyRepo.findSurveyByUserId(user_id);
+		if(survey.isPresent()) {
+			System.out.println(survey.get().toString());
+			return survey.get();
 		}
-		return surve;
+		return null;
 	}
 }

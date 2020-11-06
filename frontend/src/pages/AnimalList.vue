@@ -218,6 +218,7 @@ export default {
               this.matchedDatas = [...res.data.perfect, ...res.data.good];
               this.userFinishedSurvey = true;
               this.loadingTrigger = false;
+              console.log(this.matchedDatas)
             } else {
               this.userFinishedSurvey = false;
               this.loadingTrigger = false;
@@ -240,6 +241,7 @@ export default {
               },
             })
             .then((res) => {
+              console.log(res.data.animalList)
               this.likedDatas = [];
               this.likedDatas = [...res.data.animalList];
               this.loadingTrigger = false;

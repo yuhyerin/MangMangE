@@ -127,10 +127,37 @@ public class AccountService {
 		map.put("refreshToken", refreshToken);
 		return map;
 	}
+	
+	public HashMap<String, Object> changPW(Account account){
+		String e_password = bcryptEncoder.encode(account.getUser_password());
+		account.setUser_password(e_password);
+		accountRepo.updateUserPasswordWithUserid(account.getUser_id(), account.getUser_password());
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		Account temp=accountRepo.findAccountByUserId(account.getUser_id());
+		if(temp.getUser_password().equals(e_password)) {
+			result.put("success", true);
+		} else {
+			result.put("success", false);
+		}
+		return result;
+	}
 
 	public HashMap<String, Object> createApply(String user_id, Apply apply) {
 		System.out.println("accountService 입장");
 		System.out.println(apply.toString());
+		apply.setUser_id(user_id);
+		System.out.println(apply.toString());
+		Apply app = applyRepo.save(apply);
+		HashMap<String, Object> map = new HashMap<>();
+		if (app == null)
+			map.put("success", false);
+		else
+			map.put("success", true);
+		return map;
+	}
+	
+	public HashMap<String, Object> updateApply(String user_id, Apply apply) {
+		System.out.println("SERVICE START");
 		apply.setUser_id(user_id);
 		System.out.println(apply.toString());
 		Apply app = applyRepo.save(apply);
