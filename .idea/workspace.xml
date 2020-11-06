@@ -3,15 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="bbda9ae7-cf17-42a7-bf87-c95502fa7b9a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/StreamingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/StreamingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/StreamingHR.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/StreamingHR.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming_node_server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/streaming_node_server/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming_node_server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/streaming_node_server/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming_node_server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/streaming_node_server/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
