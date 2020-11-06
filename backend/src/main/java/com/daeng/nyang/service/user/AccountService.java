@@ -2,6 +2,7 @@ package com.daeng.nyang.service.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -130,6 +131,7 @@ public class AccountService {
 		map.put("success", true);
 		map.put("accessToken", accessToken);
 		map.put("refreshToken", refreshToken);
+		map.put("expireTime", new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000) );
 		return map;
 	}
 	

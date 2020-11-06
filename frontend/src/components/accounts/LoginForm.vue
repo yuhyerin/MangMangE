@@ -70,7 +70,7 @@
 <script>
 import axios from "axios";
 import SERVER from "@/api/url";
-import { mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   data() {
@@ -82,7 +82,12 @@ export default {
       showpassword: "",
     };
   },
+  computed: {
+    ...mapState(["userSurveyCheck"]),
+  },
   methods: {
+    ...mapMutations(["setUserSurveyCheck"]),
+    ...mapMutations(["setTimer"]),
     moveToRegister() {
       this.$emit("changeComponents", 1);
     },
@@ -92,40 +97,6 @@ export default {
     moveToFindPw() {
       this.$emit("changeComponents", 3);
     },
-    // logout() {
-    // axios.get(baseURL+'user/animal/surveyread/',{
-    //   headers:{
-    //     "Authorization" : this.$cookies.get("accessToken")
-    //   }
-    // })
-    // .then((res)=>{
-    //   console.log(res)
-    // })
-    // .catch((err)=>{
-    //   console.log(err)
-    // })
-    //   axios
-    //     .post(
-    //       SERVER.URL + "user/logout/",
-    //       {
-    //         headers: {
-    //           Authorization: this.$cookies.get("accessToken"),
-    //           "content-type": "application/json",
-    //         },
-    //       },
-    //       {
-    //         accessToken: this.$cookies.get("accessToken"),
-    //       }
-    //     )
-    //     .then((res) => {
-    //       console.log(res);
-    //       this.$cookies.remove("accessToken");
-    //       this.$cookies.remove("refreshToken");
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
 
     login() {
       axios
@@ -137,25 +108,31 @@ export default {
           console.log(res);
           this.$cookies.set("accessToken", res.data.accessToken);
           this.$cookies.set("refreshToken", res.data.refreshToken);
-          // SERVER.setTimer(SERVER.EXPIRETIME);
+          this.$cookies.set("expireTime", res.data.refreshToken);
+          axios
+            .get(SERVER.URL + "/user/animal/surveyread", {
+              headers: {
+                Authorization: $cookies.get("accessToken"),
+              },
+            })
+            .then((res) => {
+              if (res.data.survey != null) {
+                this.setUserSurveyCheck(true);
+              } else if (res.data.survey == null) {
+                this.setUserSurveyCheck(false);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              if (err.response != undefined) {
+                SERVER.RefreshToken(err);
+              }
+            });
           this.$router.push("/");
-          // res.data.accessToken
-          // res.data.refreshToken
-          // this.$cookies.set("Authorization", res.data.accessToken)
-          //   axios.post(baseURL+'user/logout',
-          // { "accessToken" : this.$cookies.get("Authorization") },
-          // {
-          //     headers:{
-          //       "Authorization": this.$cookies.get("Authorization")
-          //     }
-          // })
-          // .then((res)=>{
-          //   console.log(res)
-          // });
         })
         .catch((err) => {
-          // 없는 유저 아니면 서버 안 킨거
-          console.log(err);
+          alert("아이디 또는 비밀번호를 확인해 주세요.");
+          return;
         });
     },
   },

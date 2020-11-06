@@ -100,33 +100,55 @@
               justify-content: center;
             "
           >
-            <!-- <div
-              style="display: flex; flex-wrap: wrap; justify-content: center"
-            >
-              <AnimalCard
-                v-if="trigger == 0"
-                v-for="(data, index) in this.allDatas"
-                :key="index"
-                :animalInfo="data"
-              />
-            </div> -->
             <div
+              v-if="trigger == 0"
               style="display: flex; flex-wrap: wrap; justify-content: center"
             >
               <AllAnimals
-                v-if="trigger == 0"
                 v-for="(data, index) in this.allDatas"
                 :key="index"
                 :animalInfo="data"
               />
+            </div>
+            <div v-if="trigger == 1">
+              <div>
+                <div>완전 잘맞음</div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AllAnimals
+                    v-for="data in this.perfectDatas"
+                    :key="data.desertion_no"
+                    :animalInfo="data"
+                  />
+                </div>
+              </div>
+              <div>
+                <div>쫌 잘맞음</div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AllAnimals
+                    v-for="data in this.goodDatas"
+                    :key="data.desertion_no"
+                    :animalInfo="data"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="trigger == 2"
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
               <AllAnimals
-                v-if="trigger == 1"
-                v-for="(data, index) in this.matchedDatas"
-                :key="index"
-                :animalInfo="data"
-              />
-              <AllAnimals
-                v-if="trigger == 2"
                 v-for="(data, index) in this.likedDatas"
                 :key="index"
                 :animalInfo="data"
@@ -143,7 +165,6 @@
 import AllAnimals from "../components/AllAnimals.vue";
 import AnimalListHeader from "../components/AnimalListHeader.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
-// import data from "../assets/data/animal.json";
 
 import SERVER from "@/api/url";
 import axios from "axios";
@@ -156,11 +177,15 @@ export default {
       testTrigger: false,
       allDatas: "",
       matchedDatas: [],
+      perfectDatas: [],
+      goodDatas: [],
       likedDatas: [],
       checked: ["F", "M"],
       tmpArr: [],
       userFinishedSurvey: false,
       loadingTrigger: false,
+      perfectLength: 0,
+      goddLength: 0,
     };
   },
   components: {
@@ -212,22 +237,18 @@ export default {
             },
           })
           .then((res) => {
-            console.log(res);
-            if (res.data.survey != null) {
-              this.matchedDatas = [];
-              this.matchedDatas = [...res.data.perfect, ...res.data.good];
-              this.userFinishedSurvey = true;
-              this.loadingTrigger = false;
-              console.log(this.matchedDatas)
-            } else {
-              this.userFinishedSurvey = false;
-              this.loadingTrigger = false;
-              console.log(res);
-            }
+            console.log(res.data.perfect.length, res.data.good.length);
+            this.perfectDatas = [];
+            this.goodDatas = [];
+            this.perfectDatas = [...res.data.perfect];
+            this.goodDatas = [...res.data.good];
+            this.matchedDatas = [];
+            this.matchedDatas = [...res.data.perfect, ...res.data.good];
+            this.loadingTrigger = false;
           })
           .catch((err) => {
             console.log("error message", err);
-            // SERVER.RefreshToken(err);
+            SERVER.RefreshToken(err);
           });
       } else {
         // console.log("like animals");
@@ -241,14 +262,14 @@ export default {
               },
             })
             .then((res) => {
-              console.log(res.data.animalList)
+              console.log(res.data.animalList);
               this.likedDatas = [];
               this.likedDatas = [...res.data.animalList];
               this.loadingTrigger = false;
             })
             .catch((err) => {
               console.log(err);
-              // SERVER.RefreshToken(err);
+              SERVER.RefreshToken(err);
               this.loadingTrigger = false;
             });
         } else {
@@ -267,6 +288,7 @@ export default {
   async created() {
     this.userFinishedSurvey = false;
     var data = null;
+
     if (this.$cookies.get("accessToken") != null) {
       this.loadingTrigger = true;
       await axios
@@ -283,26 +305,6 @@ export default {
         .catch((err) => {
           SERVER.RefreshToken(err);
           this.loadingTrigger = false;
-        });
-
-      await axios
-        .get(SERVER.URL + "/user/animal/surveyread", {
-          headers: {
-            Authorization: $cookies.get("accessToken"),
-          },
-        })
-        .then((res) => {
-          if (res.data.survey != null) {
-            this.userFinishedSurvey = true;
-          } else if (res.data.survey == null) {
-            this.userFinishedSurvey = false;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          if (err.response != undefined) {
-            SERVER.RefreshToken(err);
-          }
         });
 
       if (this.eventListener == 1) {

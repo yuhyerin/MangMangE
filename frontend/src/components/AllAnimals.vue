@@ -59,8 +59,9 @@
           </v-icon>
         </div>
         <h2>{{ animalInfo.kind_cd }}</h2>
-        <p>{{ animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}</p>
-        <p>{{ animalInfo.weight }} (추정)</p>
+        <p>{{ this.animalAge }}살 (추정)</p>
+        <p>{{ animalInfo.sex_cd }}</p>
+        <p>{{ animalInfo.weight }} kg (추정)</p>
         <p>{{ this.animalTag }}</p>
       </div>
     </div>
@@ -81,7 +82,7 @@ import axios from "axios";
 import SERVER from "@/api/url";
 
 export default {
-  props: ["animalInfo"],
+  props: ["animalInfo", "perfect"],
   data() {
     return {
       moveTrigger: true,
@@ -95,6 +96,17 @@ export default {
         tag += "#" + this.animalInfo.personality[i] + " ";
       }
       return tag;
+    },
+
+    animalAge() {
+      var d = new Date();
+      var n = d.getFullYear();
+      var age = n - this.animalInfo.age * 1;
+      if (age < 0) {
+        return "1년 미만";
+      } else {
+        return age;
+      }
     },
   },
   async created() {
