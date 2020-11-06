@@ -90,6 +90,8 @@
 
 ### 회원 (accessToken 필요)
 
+<<<<<<< HEAD
+=======
 #### 0. 비밀번호 변경
 
 > method : POST
@@ -106,6 +108,7 @@
 >
 > > res.data.success : false
 
+>>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
 #### 1.  로그아웃
 
 > method : POST
@@ -132,7 +135,11 @@
 >
 > **(400)** res.data.success : false (번호가 잘못됨)
 
+<<<<<<< HEAD
+#### 3. 입양신청
+=======
 #### 3. 입양신청 등록
+>>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
 
 > method : POST
 >
@@ -144,6 +151,8 @@
 >
 > **(400)** err.data.success : false
 
+<<<<<<< HEAD
+=======
 #### 3-1. 입양신청 수정
 
 > method : POST
@@ -156,6 +165,7 @@
 >
 > **(400)** err.data.success : false
 
+>>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
 #### 4. 입양신청 목록 조회
 
 > method : GET
@@ -186,6 +196,8 @@
 
 
 
+<<<<<<< HEAD
+=======
 ## AnimalController
 
 ### 비회원
@@ -240,6 +252,7 @@
 
 
 
+>>>>>>> 5da61901d92eb409b9cebfcbf770471a096e5a21
 
 
 ## AnimalDetailController

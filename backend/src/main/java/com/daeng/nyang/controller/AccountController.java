@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Account;
+import com.daeng.nyang.dto.AnimalListFE;
 import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
@@ -117,7 +118,7 @@ public class AccountController {
 		else
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.UNAUTHORIZED);
 	}
-	
+
 	@PostMapping(path = "/newuser/refresh")
 	@ApiOperation("accessTOKEN 갱신")
 	public ResponseEntity<HashMap<String, Object>> requestForNewAccessToken(HttpServletRequest request) {
@@ -131,9 +132,8 @@ public class AccountController {
 		else
 			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}
-	
+
 	// 회원
-	
 	@PostMapping(path = "/user/changepw")
 	@ApiOperation("비밀번호 변경")
 	public ResponseEntity<HashMap<String, Object>> findUserId(@RequestBody Account account) {
@@ -194,25 +194,6 @@ public class AccountController {
 			TotToken user = (TotToken) redisTemplate.opsForValue().get(accessToken);
 			String user_id = user.getAccount().getUser_id();
 			HashMap<String, Object> result = accountService.createApply(user_id, apply);
-			if ((boolean) result.get("success"))
-				return new ResponseEntity<>(result, HttpStatus.OK);
-			else
-				return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-		}
-	}
-
-	@PostMapping(path = "/user/adopt/update")
-	@ApiOperation("입양신청서 수정")
-	public ResponseEntity<HashMap<String, Object>> updateAdopt(@RequestBody Apply apply, HttpServletRequest request){
-		System.out.println("CONTROLLER START");
-		String accessToken = request.getHeader("Authorization");
-		try {
-			TotToken user = (TotToken) redisTemplate.opsForValue().get(accessToken);
-			String user_id = user.getAccount().getUser_id();
-			HashMap<String, Object> result = accountService.updateApply(user_id, apply);
 			if ((boolean) result.get("success"))
 				return new ResponseEntity<>(result, HttpStatus.OK);
 			else

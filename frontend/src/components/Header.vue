@@ -21,7 +21,23 @@
       border-bottom: 1px solid gray;
     "
   >
-    <div @click="moveToMain">로고</div>
+    <div
+      @click="moveToMain"
+      class="logo"
+      style="
+        height: 75px;
+        width: 10vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <img
+        src="../assets/image/logo3.png"
+        alt="logo"
+        style="height: 75px; width: 120px"
+      />
+    </div>
     <div>
       <div
         style="
@@ -163,5 +179,8 @@ export default {
 .navBtn:hover {
   padding: 2px 5px 2px 5px;
   background-color: rgb(180, 180, 180);
+}
+.logo {
+  background-image: url("../assets/image/logo.png");
 }
 </style>

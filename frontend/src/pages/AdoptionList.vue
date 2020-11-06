@@ -1,14 +1,14 @@
 <template>
-  <div style="background: rgb(244, 236, 225)">
+  <div>
     <Header />
     <div class="container" style="margin-top: 75px;">
       <div class="row">
-        <div class="adoption-list-div col-lg-8 col-md-8 col-sm-8">
+        <div class="adoption-list-div col-lg-10 col-md-10 col-sm-10">
           <h3 class="adoption-list"><strong>입양신청목록</strong></h3>
           <div style="display: flex; justify-content: flex-end;">
             <v-btn
             @click="showMyList"
-            style="background: black; color: white;"
+            style="background: green; color: white;"
             >
               <strong>내글보기</strong>
             </v-btn>

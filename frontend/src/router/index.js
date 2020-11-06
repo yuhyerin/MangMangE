@@ -12,6 +12,7 @@ import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
+import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 
 Vue.use(VueRouter)
 
@@ -62,7 +63,7 @@ const routes = [
     component: AdoptionReview,
   },
   {
-    path: '/adoptionupdate/:apply_id',
+    path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
     component: AdoptionUpdate,
   },
@@ -75,6 +76,11 @@ const routes = [
     name: 'VideoDetail',
     component: VideoDetail,
   },
+  {
+    path: '/privacypolicy',
+    name: 'PrivacyPolicy',
+    component: PrivacyPolicy
+  }
 ]
 
 const router = new VueRouter({

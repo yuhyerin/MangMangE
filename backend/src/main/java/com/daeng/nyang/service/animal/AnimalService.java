@@ -2,6 +2,7 @@ package com.daeng.nyang.service.animal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.daeng.nyang.dto.Animal;
 import com.daeng.nyang.dto.AnimalLike;
 import com.daeng.nyang.dto.AnimalListFE;
+import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.Ptag;
 import com.daeng.nyang.repo.AnimalLikeRepo;
 import com.daeng.nyang.repo.AnimalRepo;
+import com.daeng.nyang.repo.ApplyRepo;
 import com.daeng.nyang.repo.PtagRepo;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -27,6 +30,9 @@ public class AnimalService {
 
 	@Autowired
 	private AnimalLikeRepo animalLikeRepo;
+	
+	@Autowired
+	private ApplyRepo applyRepo;
 
 	// (비회원) 모든동물조회
 	public List<AnimalListFE> allAnimalRead() {
@@ -119,7 +125,14 @@ public class AnimalService {
 		}
 		return result;
 	}
-
+	
+	// (회원) 입양신청정보 조회
+	public boolean findApply(long desertion_no, String user_id) {
+		System.out.println("SERVICE START");
+		Optional<Apply> app = applyRepo.findApplyByDesertionNoAndUserId(desertion_no, user_id);
+		return app.isPresent();
+	}
+	
 	// (회원) 즐겨찾는 동물 조회
 	public List<AnimalListFE> animalLikeList(String user_id) {
 		System.out.println("SERVICE START");
