@@ -93,6 +93,7 @@ export default {
       btnChecked1: false,
       btnChecked2: false,
       btnChecked3: false,
+      userFinishedSurvey: false,
     };
   },
   watch: {
@@ -104,6 +105,26 @@ export default {
     ...mapState(["eventListener"]),
   },
   created() {
+    axios
+      .get(SERVER.URL + "/user/animal/surveyread", {
+        headers: {
+          Authorization: $cookies.get("accessToken"),
+        },
+      })
+      .then((res) => {
+        if (res.data.survey != null) {
+          this.userFinishedSurvey = true;
+        } else if (res.data.survey == null) {
+          this.userFinishedSurvey = false;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response != undefined) {
+          SERVER.RefreshToken(err);
+        }
+      });
+
     if (this.eventListener == 1) {
       this.btnChecked1 = false;
       this.btnChecked2 = true;
@@ -147,6 +168,15 @@ export default {
       if (this.$cookies.get("accessToken") == null) {
         alert("로그인이 필요한 서비스 입니다.");
         return;
+      } else if (this.userFinishedSurvey == false) {
+        var surveyCheck = confirm(
+          "아직 추천동물 기록이 없습니다. 추천 설문을 하시겠습니까?"
+        );
+        if (surveyCheck) {
+          this.$router.push("/survey");
+        } else {
+          return;
+        }
       } else {
         this.btnChecked1 = false;
         this.btnChecked2 = true;
@@ -155,10 +185,15 @@ export default {
       }
     },
     moveToLikedAnimals() {
-      this.btnChecked1 = false;
-      this.btnChecked2 = false;
-      this.btnChecked3 = true;
-      this.$emit("changeComponents", 2);
+      if (this.$cookies.get("accessToken") == null) {
+        alert("로그인이 필요한 서비스 입니다.");
+        return;
+      } else {
+        this.btnChecked1 = false;
+        this.btnChecked2 = false;
+        this.btnChecked3 = true;
+        this.$emit("changeComponents", 2);
+      }
     },
 
     countDownTimer() {

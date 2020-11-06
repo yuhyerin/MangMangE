@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Adoption from '../pages/Adoption.vue'
 import Login from '../pages/Login.vue'
 import AnimalList from '../pages/AnimalList.vue'
-import AnimalListSample from '../pages/AnimalListSample.vue'
 import AnimalDetail from '../pages/AnimalDetail.vue'
 import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
@@ -26,11 +25,6 @@ const routes = [
     path: '/animals',
     name: 'Animals',
     component: AnimalList
-  },
-  {
-    path: '/animalList',
-    name: 'Animals',
-    component: AnimalListSample
   },
   {
     path: '/animalDetail/:animalID',

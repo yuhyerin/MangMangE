@@ -61,6 +61,7 @@ public class AnimalController {
 			HashMap<String, Object> map = new HashMap<>();
 			List<AnimalListFE> animalList = animalService.allAnimalRead(user_id);
 			map.put("animalList", animalList);
+			System.out.println(animalList.toString());
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,7 +96,10 @@ public class AnimalController {
 				return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 			} else {
 				Survey survey = surveyService.findSurveyByUserid(user_id);
-				map.put("survey", survey);
+				if(survey==null)
+					map.put("survey", null);
+				else
+					map.put("survey", survey);
 			}
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
@@ -116,10 +120,15 @@ public class AnimalController {
 			if (user_id == null) {
 				return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 			} else {
-				Survey survey = surveyService.findSurveyByUserid(user_id); // 토큰을 통해 얻은 유저아이디로 이 유저가 설문을 한적있는지 검사.
+				Survey survey = null;
+				survey = surveyService.findSurveyByUserid(user_id); // 토큰을 통해 얻은 유저아이디로 이 유저가 설문을 한적있는지 검사.
 				if(survey==null) {
-					return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+					map.put("survey", null);
+					return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
 				}
+				// 유저의 MBTI
+//				String userMbti = survey.getMbti(); // 설문을 한적 없다면 이 구문에서 에러가 나서 NOT_FOUND상태가 반환됨.
+
 				// 설문결과 유저에게 어울리는 강아지의 MBTI
 				String userDogMbti = survey.getAnswer();
 

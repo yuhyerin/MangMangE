@@ -217,8 +217,28 @@
 > > res.data.animalList
 >
 > **(202)** res.response.status : ACCEPTED
+
+#### 2. 즐겨찾는동물조회
+
+> method : GET
 >
-> **(401)** err.response.status : UNAUTHORIZED
+> url : localhost:8080/user/animal/like
+>
+> **(200)** res.response.status : OK
+>
+> > res.data.animalList
+
+#### 3. 설문기록조회
+
+> method : GET
+>
+> url : localhost:8080/user/animal/surveyread
+>
+> 
+
+
+
+
 
 
 

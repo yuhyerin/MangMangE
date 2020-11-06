@@ -75,35 +75,31 @@ public class AnimalService {
 		// 1. 동물 리스트
 		List<Animal> animalList = animalRepo.findAnimalAll();
 		List<Ptag> personalityList = ptagRepo.findAll();
-		Long[] likeList = animalLikeRepo.findDesertionNoByUserId(user_id);
+		Long[] likeList = (Long[]) animalLikeRepo.findDesertionNoByUserId(user_id);
 		List<AnimalListFE> result = new ArrayList<>();
-		int j = 0, k = 0;
 		for (int i = 0; i < animalList.size(); i++) {
 			Animal animal = animalList.get(i);
-			long aniDN = animal.getDesertion_no();
+			long aniDN = (long) animal.getDesertion_no();
 			List<String> personalList = new ArrayList<String>();
 			// 2. 각 동물의 personality
-			for (; j < personalityList.size(); j++) {
+			for (int j = 0; j < personalityList.size(); j++) {
 				Ptag tag = personalityList.get(j);
-				long tagDN = tag.getDesertion_no();
+				long tagDN = (long)tag.getDesertion_no();
 				if (tagDN == aniDN)
 					personalList.add(tag.getTagname());
-				else if (tagDN > aniDN)
-					break;
 			}
 			// 3. 좋아요 여부
 			boolean like = false;
-			for (; k < likeList.length; k++) {
+			for (int k = 0; k < likeList.length; k++) {
 				if ((long) animal.getDesertion_no() == likeList[k]) {
 					like = true;
 					break;
-				} else if (aniDN < likeList[k])
-					break;
+				}
 			}
-			
 			String[] personality = new String[personalList.size()];
-			for(int z=0;z<personality.length;z++)
+			for (int z = 0; z < personality.length; z++)
 				personality[z] = personalList.get(z);
+			System.out.println(Arrays.toString(personality));
 			result.add(AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
 					kind_c(animal.getKind_c()). // 하위 품종
 					color_cd(animal.getColor_cd()). // 털색
@@ -123,7 +119,7 @@ public class AnimalService {
 		}
 		return result;
 	}
-	
+
 	// (회원) 즐겨찾는 동물 조회
 	public List<AnimalListFE> animalLikeList(String user_id) {
 		System.out.println("SERVICE START");
@@ -133,27 +129,25 @@ public class AnimalService {
 
 		// 1. animalLike 테이블에서 desertion_no 리스트 가져오기
 		Long[] desertion_no = animalLikeRepo.findDesertionNoByUserId(user_id);
+		System.out.println(Arrays.toString(desertion_no));
 		// 2. animal 테이블에서 desertion_no로 animal 정보 가져오기
-		int j = 0, k=0;
 		for (int i = 0; i < desertion_no.length; i++) {
-			Long no = desertion_no[i];
 			List<String> personalList = new ArrayList<>();
-			for (; j < personalities.size(); j++) {
+			for (int j=0; j < personalities.size(); j++) {
 				Ptag temp = personalities.get(j);
-				if ((long) temp.getDesertion_no() == no)
+				if ((long) temp.getDesertion_no() == (long) desertion_no[i])
 					personalList.add(temp.getTagname());
-				else if ((long) temp.getDesertion_no() > no)
-					break;
 			}
 			String[] personality = new String[personalList.size()];
-			for(int z=0;z<personality.length;z++) {
+			for (int z = 0; z < personality.length; z++) {
 				personality[z] = personalList.get(z);
 			}
 			Animal animal = null;
-			for(;k<animals.size();k++) {
+			for (int k=0; k < animals.size(); k++) {
 				animal = animals.get(k);
-				if((long)animal.getDesertion_no() == no) 
+				if((long) animal.getDesertion_no()== (long) desertion_no[i]) {
 					break;
+				}
 			}
 			result.add(AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
 					kind_c(animal.getKind_c()). // 하위 품종
@@ -293,5 +287,4 @@ public class AnimalService {
 		return personality;
 	}
 
-	
 }
