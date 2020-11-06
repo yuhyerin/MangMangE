@@ -124,6 +124,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setEventListener"]),
+    ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
       location.href = "/";
     },
@@ -192,7 +193,7 @@ export default {
           {},
           {
             headers: {
-              accessToken: this.$cookies.get("accessToken"),
+              Authorization: this.$cookies.get("accessToken"),
             },
           }
         )

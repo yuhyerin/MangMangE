@@ -11,6 +11,7 @@
     "
   >
     <div
+      class="image"
       style="
         width: 30%;
         height: 100%;
@@ -84,6 +85,7 @@
             align-items: center;
             padding-left: 0;
           "
+          @click="clicked"
         >
           <v-icon> mdi-magnify-plus </v-icon>
           <div>프로필 보기</div>
@@ -154,5 +156,25 @@ export default {
 .outLine {
   padding: 20px;
   border: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.image img {
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transform: scale(1);
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+.image:hover img {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
 }
 </style>

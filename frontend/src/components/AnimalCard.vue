@@ -19,6 +19,18 @@
           @mouseout="setMoveTrigger"
           @click="setLiked"
         >
+          <!-- <img
+            v-if="likeTrigger == false"
+            src="../assets/image/unlike1.png"
+            alt="좋아요"
+            style="width: 30px"
+          />
+          <img
+            v-if="likeTrigger == true"
+            src="../assets/image/like1-1.png"
+            alt="좋아요"
+            style="width: 30px"
+          /> -->
           <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
             mdi-heart-outline
           </v-icon>

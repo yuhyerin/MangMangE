@@ -171,23 +171,23 @@
                   >
                 </div>
               </div>
+            </div>
+            <div class="row adopter-information-email">
+              <div class="col-2">
+                <label>4. 이메일</label>
               </div>
-              <div class="row adopter-information-email">
-                <div class="col-2">
-                  <label>4. 이메일</label>
-                </div>
-                <div class="col-10">
-                  <input
-                    style="border: 0.5px solid #bbb"
-                    v-model="personEmail"
-                    placeholder="ex> naver@naver.com"
-                  />
-                  <label
-                    v-if="checkPersonEmail === 0"
-                    style="color: red; font-size: small"
-                    >이메일을 확인해주세요</label
-                  >
-                </div>
+              <div class="col-10">
+                <input
+                  style="border: 0.5px solid #bbb"
+                  v-model="personEmail"
+                  placeholder="ex> naver@naver.com"
+                />
+                <label
+                  v-if="checkPersonEmail === 0"
+                  style="color: red; font-size: small"
+                  >이메일을 확인해주세요</label
+                >
+              </div>
             </div>
             <div class="row adopter-information-personal">
               <div class="col-12">
@@ -335,7 +335,7 @@ export default {
         })
         .catch((err) => {
           console.log("catch err : ", err);
-          SERVER.refreshToken(err);
+          SERVER.RefreshToken(err);
         });
     },
 
@@ -427,7 +427,7 @@ export default {
         })
         .catch((err) => {
           console.log("catch err : ", err);
-          SERVER.refreshToken(err);
+          SERVER.RefreshToken(err);
           // if (err.response.status == 401) {
 
           //   axios
@@ -514,17 +514,14 @@ export default {
     },
   },
   created() {
-    console.log("여기");
     axios
-      .get(SERVER.URL + "/newuser/animal/detail", {
+      .get(SERVER.URL + "/user/animal/detail", {
         params: {
-          desertion_no: this.$route.params.animalId,
+          desertion_no: this.$route.params.animalID,
         },
-        // {
-        //   headers: {
-        //     Authorization: this.$cookies.get("accessToken")
-        //   }
-        // }
+        headers: {
+          Authorization: this.$cookies.get("accessToken"),
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -540,9 +537,9 @@ export default {
       })
       .catch((err) => {
         console.log(err.response);
-        SERVER.refreshToken(err);
+        SERVER.RefreshToken(err);
         // if (err.response.status == 401) {
-          
+
         //   axios
         //     .post(
         //       SERVER.URL + "/newuser/refresh",
