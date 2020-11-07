@@ -21,7 +21,23 @@
       border-bottom: 1px solid gray;
     "
   >
-    <div @click="moveToMain">로고</div>
+    <div
+      @click="moveToMain"
+      class="logo"
+      style="
+        height: 75px;
+        width: 10vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <img
+        src="../assets/image/logo3.png"
+        alt="logo"
+        style="height: 75px; width: 120px"
+      />
+    </div>
     <div>
       <div
         style="
@@ -43,7 +59,6 @@
       <div style="display: flex; justify-content: center; align-items: center">
         <v-btn text @click="countDownTimer">
           <div>버어튼</div>
-          <div>{{ this.countDown }}</div>
         </v-btn>
         <v-btn text @click="moveTo('/animals')">
           <div>동물 보기</div>
@@ -76,6 +91,7 @@ export default {
   },
   computed: {
     ...mapState(["eventListener"]),
+    ...mapState(["test"]),
   },
   created() {
     if (this.$cookies.get("accessToken") == null) {
@@ -86,6 +102,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setEventListener"]),
+    ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
       location.href = "/";
     },
@@ -124,21 +141,16 @@ export default {
     //     });
     // },
     countDownTimer() {
-      if (this.countDown > 0) {
-        setTimeout(() => {
-          this.countDown -= 1;
-          this.countDownTimer();
-        }, 1000);
-      }
+      window.setTimeout(() => {
+        alert("확인");
+      }, 2000);
     },
 
     logout() {
       axios
         .post(
           SERVER.URL + "/user/logout/",
-          {
-            accessToken: this.$cookies.get("accessToken"),
-          },
+          {},
           {
             headers: {
               Authorization: this.$cookies.get("accessToken"),
@@ -149,6 +161,7 @@ export default {
           console.log(res);
           this.$cookies.remove("accessToken");
           this.$cookies.remove("refreshToken");
+          this.setUserSurveyCheck(false);
           location.href = "/";
         })
         .catch((err) => {
@@ -166,5 +179,8 @@ export default {
 .navBtn:hover {
   padding: 2px 5px 2px 5px;
   background-color: rgb(180, 180, 180);
+}
+.logo {
+  background-image: url("../assets/image/logo.png");
 }
 </style>

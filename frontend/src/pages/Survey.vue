@@ -101,7 +101,7 @@
           </v-stepper-step>
         </v-stepper-header>
         <v-stepper-items class="survey-items"
-          style="display: flex; text-align: center; "
+          style="display: flex; text-align: center; align-items:center;"
         >
           <v-stepper-content step="1">
             <Question1 />
@@ -160,6 +160,11 @@ import Question8 from "../components/survey/Question8";
 import Question9 from "../components/survey/Question9";
 
 export default {
+  data() {
+    return {
+      step: {cursor: none}
+    }
+  },
   components: {
     Question1,
     Question2,
@@ -176,7 +181,9 @@ export default {
   },
   methods: {
     ...mapMutations(["goPage"]),
+
   },
+
 };
 </script>
 
@@ -184,7 +191,7 @@ export default {
 .survey-items {
   height: 85vh;
   transform-origin: center top 0px;
-  background-color: rgb(244, 236, 225);
+  /* background-color: rgb(244, 236, 225); */
   border-radius: 50px;
 }
 </style>
