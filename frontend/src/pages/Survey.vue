@@ -160,11 +160,11 @@ import Question8 from "../components/survey/Question8";
 import Question9 from "../components/survey/Question9";
 
 export default {
-  data() {
-    return {
-      step: {cursor: none}
-    }
-  },
+  // data() {
+  //   return {
+  //     step: {cursor: none}
+  //   }
+  // },
   components: {
     Question1,
     Question2,

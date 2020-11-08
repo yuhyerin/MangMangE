@@ -9,95 +9,59 @@
     <v-row class="quiz-img" style="display: flex; justify-content: space-around; margin:10px">
       <img style="margin:10px" src="@/assets/survey/1.png" alt="" />
     </v-row>
-    <v-row class="answer" @click="selectedDogMbti({ idx: 1, answer: 1 }); attachRed = !attachRed" :class="{isSelected: attachRed, noneSelected: !attachRed}">
+    <v-row class="answer" @click="selectedDogMbti({ idx: 1, answer: 1 }); selectedAnswer(1)" :style="answer1">
       <h3 style="padding: 10px;">체력소모가 있는 매우 활동적인 운동</h3>
     </v-row>
-    <v-row class="answer" @click="selectedDogMbti({ idx: 1, answer: -1 });">
-      <h3 style="padding: 10px;">작은 공간에서도 간단히 할 수 있는 운동</h3></v-row>
+    <v-row class="answer" @click="selectedDogMbti({ idx: 1, answer: -1 }); selectedAnswer(2)" :style="answer2">
+      <h3 style="padding: 10px;">작은 공간에서도 간단히 할 수 있는 운동</h3>
+    </v-row>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
   data() {
     return {
-      attachRed: false,
-      backgroundColor: "#eee",
-      color: "black",
-    }
-  },
-  computed: {
-    divClasses() {
-      return {
-        isSelected: this.attachRed,
-        noneSelected: !this.attachRed
-      }
+      answer1: {
+        color: 'black',
+        backgroundColor: '#eee'
+      },
+      answer2: {
+        color: 'black',
+        backgroundColor: '#eee'
+      },
     }
   },
   methods: {
     ...mapMutations(["selectedDogMbti"]),
     selectedAnswer(val) {
-      console.log("클릭", val)
       if (val == 1) {
-        this.selected1 = true,
-        this.selected2 = false
+        this.answer1.color = 'white',
+        this.answer1.backgroundColor = 'rgb(1, 118, 72)'
+        this.answer2.color = 'black',
+        this.answer2.backgroundColor = '#eee'
       }
-      else if (val == 2) {
-        this.selected1 = false,
-        this.selected2 = true
+      else if (val == 2 ) {
+        this.answer2.color = 'white',
+        this.answer2.backgroundColor = 'rgb(1, 118, 72)'
+        this.answer1.color = 'black',
+        this.answer1.backgroundColor = '#eee'
       }
-    }
+    }  
   },
-  computed: mapState(["survey"]),
-};
+}
 </script>
 
 <style>
-/* .isActive {
-  border: solid green;
-  cursor:pointer; 
-  display: flex; 
-  justify-content: space-around; 
-  margin:10px; 
-  background-color: rgb(1, 118, 72);
-  color: white;
-} */
-.question-header {
+/* .question-header {
   background-color: white;
-}
-.answer {
-  cursor:pointer; 
-  display: flex; 
-  justify-content: space-around; 
-  margin:10px; 
-  background-color: #eee;
-}
-.isSelected {
-  background-color: rgb(1, 118, 72);
-  color: white
-}
-.noneSelected{
-  background-color: #eee;
-  color: black;
-}
-/*.selected {
-  background-color: rgb(1, 118, 72);
-  color: white;
 } */
-.quiz-choice1 {
-  cursor:pointer; 
+.answer {
+  cursor: pointer; 
   display: flex; 
   justify-content: space-around; 
-  margin:10px; 
-  background-color: #eee;
-}
-.quiz-choice2 {
-  cursor:pointer; 
-  display: flex; 
-  justify-content: space-around; 
-  margin:10px; 
-  background-color: #eee;
+  margin: 10px; 
 }
 </style>
