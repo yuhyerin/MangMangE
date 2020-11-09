@@ -1,28 +1,42 @@
 <template>
   <div class="quiz-box">
-    <v-avatar style=" position: absolute; top: 7%; left: 48%;" color="rgb(1,118,72)" size="50">
+    <v-avatar class="quiz-num" color="rgb(1,118,72)" size="50">
       <h3 style="color: white">Q8</h3>
     </v-avatar>
-    <v-row class="quiz-header" style="display: flex; justify-content: space-around; margin:10px">
-      <h2 style="margin:10px; padding:5px;">내 반려동물은?</h2>
+    <v-row class="quiz-header">
+      <h2 style="margin:10px; padding:5px;">내 반려동물은 미련한 곰? 눈치빠른 여우?</h2>
     </v-row>
-    <v-row class="quiz-img" style="display: flex; justify-content: space-around; margin:10px">
-      <img style="margin:10px" src="@/assets/survey/1.png" alt="" />
+    <v-row class="quiz-img">
+      <v-col class="answer-img" @click="selectedDogMbti({ idx: 7, answer: 1 }); selectedAnswer(1)" :style="answerImg1" cols="5">
+        <h4 class="img-num">A.</h4><img style="margin:10px; width: 45%;" src="@/assets/survey/Q8A.png" alt=""/>
+      </v-col>
+      <v-col class="answer-img" @click="selectedDogMbti({ idx: 7, answer: -1 }); selectedAnswer(2)" :style="answerImg2" cols="5"> 
+        <h4 class="img-num">B.</h4><img style="margin: 10px; width: 45%" src="@/assets/survey/Q8B.png" alt=""/>
+      </v-col>
     </v-row>
     <v-row class="answer" @click="selectedDogMbti({ idx: 7, answer: 1 }); selectedAnswer(1)" :style="answer1">
-      <h3 style="padding: 10px;">미련한 곰</h3>
+      <h3 style="padding: 10px;">A. 미련한 곰</h3>
     </v-row>
     <v-row class="answer" @click="selectedDogMbti({ idx: 7, answer: -1 }); selectedAnswer(2)" :style="answer2">
-      <h3 style="padding: 10px;">눈치빠른 여우</h3></v-row>
+      <h3 style="padding: 10px;">B. 눈치빠른 여우</h3></v-row>
   </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
+require('@/assets/css/survey.css')
 
 export default {
   data() {
     return {
+      answerImg1: {
+        border: 'hidden',
+        borderRadius: '0'
+      },
+      answerImg2: {
+        borderStyle: 'hidden',
+        borderRadius: '0'
+      },
       answer1: {
         color: 'black',
         backgroundColor: '#eee'
@@ -37,18 +51,26 @@ export default {
     ...mapMutations(["selectedDogMbti"]),
     selectedAnswer(val) {
       if (val == 1) {
-        this.answer1.color = 'white',
+        this.answer1.color = 'white'
         this.answer1.backgroundColor = 'rgb(1, 118, 72)'
-        this.answer2.color = 'black',
+        this.answerImg1.border = 'solid rgb(1,118,72)'
+        this.answerImg1.borderRadius = '5px'
+        this.answer2.color = 'black'
         this.answer2.backgroundColor = '#eee'
+        this.answerImg2.border = 'hidden'
+        this.answerImg2.borderRadius = '0'
       }
       else if (val == 2 ) {
-        this.answer2.color = 'white',
+        this.answer2.color = 'white'
         this.answer2.backgroundColor = 'rgb(1, 118, 72)'
-        this.answer1.color = 'black',
+        this.answerImg2.border = 'solid rgb(1,118,72)'
+        this.answerImg2.borderRadius = '5px'
+        this.answer1.color = 'black'
         this.answer1.backgroundColor = '#eee'
+        this.answerImg1.border = 'hidden'
+        this.answerImg1.borderRadius = '0'
       }
-    }
+    }  
   },
 };
 </script>
