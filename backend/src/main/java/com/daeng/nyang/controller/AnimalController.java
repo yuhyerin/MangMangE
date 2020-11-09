@@ -28,7 +28,6 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @CrossOrigin("*")
 public class AnimalController {
-//	private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
 	@Autowired
 	private SurveyService surveyService;
 	@Autowired
@@ -37,15 +36,13 @@ public class AnimalController {
 	RedisTemplate<String, Object> redisTemplate;
 
 	@GetMapping(path = "/newuser/animal/allread")
-	@ApiOperation(value = "(비회원) 전체동물목록조회")
+	@ApiOperation(value = "(비회원) 전체동물조회")
 	public ResponseEntity<HashMap<String, Object>> allread() {
-		// 프론트에서 토큰을 받아오면 모든 동물 리스트 반환
-		System.out.println("CONTROLLER START : allread");
+		System.out.println("CONTROLLER START");
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			List<AnimalListFE> animalList = animalService.allAnimalRead();
 			map.put("animalList", animalList);
-			System.out.println("CONTROLLER END : allread");
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,18 +51,17 @@ public class AnimalController {
 	}
 
 	@GetMapping(path = "/user/animal/allread")
-	@ApiOperation(value = "(회원) 전체동물목록조회")
+	@ApiOperation(value = "(회원) 전체동물조회")
 	public ResponseEntity<HashMap<String, Object>> allreadUser(HttpServletRequest request) {
-		System.out.println("CONTROLLER START : allreadUser");
+		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
-		System.out.println(token);
 		try {
 			TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 			String user_id = user.getAccount().getUser_id();
 			HashMap<String, Object> map = new HashMap<>();
 			List<AnimalListFE> animalList = animalService.allAnimalRead(user_id);
 			map.put("animalList", animalList);
-			System.out.println("CONTROLLER END : allread");
+			System.out.println(animalList.toString());
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,19 +70,15 @@ public class AnimalController {
 	}
 
 	@GetMapping(path = "/user/animal/like")
-	@ApiOperation("좋아요 리스트")
+	@ApiOperation("즐겨찾는 동물 조회")
 	public ResponseEntity<HashMap<String, Object>> animalLikeList(HttpServletRequest request) {
-		System.out.println("CONTROLLER START : 좋아요 리스트");
+		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
-		System.out.println("token : " + token);
-//		String user_id = jwtTokenUtil.getUsernameFromToken(token);
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
-		System.out.println("USERID : " + user_id);
 		HashMap<String, Object> map = new HashMap<>();
-		List<AnimalListFE> likelist = animalService.animalLikeList(user_id);
-		map.put("animalList", likelist);
-		System.out.println(likelist.toString());
+		List<AnimalListFE> animalList = animalService.animalLikeList(user_id);
+		map.put("animalList", animalList);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
@@ -94,9 +86,8 @@ public class AnimalController {
 	@ApiOperation(value = "설문기록여부확인")
 	public ResponseEntity<HashMap<String, Object>> surveyread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 설문기록여부 반환
-		System.out.println("CONTROLLER START : surveyREAD");
+		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
-//		user_id = jwtTokenUtil.getUsernameFromToken(token); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
 		try {
@@ -120,17 +111,10 @@ public class AnimalController {
 	@GetMapping(path = "/user/animal/matchlist")
 	@ApiOperation(value = "매칭된동물리스트")
 	public ResponseEntity<HashMap<String, Object>> matchlist(HttpServletRequest request) {
-		// 프론트에서 토큰을 받아오면 매칭된 동물 리스트 반환
-		System.out.println("CONTROLLER START : MATCHLIST");
+		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization"); // 토큰받기
-		System.out.println(token); // 받은 토큰 출력, 확인
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
-		// 토큰으로 유저 아이디 받아오는 구문
-//			user_id = jwtTokenUtil.getUsernameFromToken(token); // 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
-		System.out.println("user_id : " + user_id); // 확인
-
-		// 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			if (user_id == null) {
@@ -146,7 +130,7 @@ public class AnimalController {
 //				String userMbti = survey.getMbti(); // 설문을 한적 없다면 이 구문에서 에러가 나서 NOT_FOUND상태가 반환됨.
 
 				// 설문결과 유저에게 어울리는 강아지의 MBTI
-				String userDogMbti = survey.getAnswer(); // 설문을 한적 없다면 이 구문에서 에러가 나서 NOT_FOUND상태가 반환됨.
+				String userDogMbti = survey.getAnswer();
 
 				// 추천율 100%
 				// 설문결과 유저에게 어울리는 강아지의 MBTI를 똑같이 가지고 있는 강아지 리스트 반환.
@@ -202,7 +186,6 @@ public class AnimalController {
 
 				map.put("good", goodlist);
 			}
-			System.out.println("CONTROLLER END");
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -218,32 +201,20 @@ public class AnimalController {
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
 		HashMap<String, Object> map = new HashMap<>();
-//
-//		// 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
 		try {
 			animalLike.setUser_id(user_id); // 여기에 토큰으로 받아온 유저 아이디를 대신 넣는다.
-//			// 그럼 이제 유저 아이디와, 프론트에서 유저가 고른 강아지의 desertion_no가 받아진 것이다.
-//			// 좋아요는 1번 누르면 생성. 다시 누르면 삭제이기 때문에.
-//			// 이제 해당 유저 아이디로 등록되어있는 desertion_no가 기존에 있는지 검색해서 없으면 생성, 있다면 삭제를 한다.
-//
-//			// 우선 있는지 확인
 			AnimalLike new_animalLike = animalService.findAnimalLike(animalLike.getUser_id(),
 					animalLike.getDesertion_no());
-//			// 있다면 null이 아닐 것이고 없다면 null일 것이다.
 			if (new_animalLike != null) { // 있는 경우 [삭제]
-//				System.out.println("삭제");
 				animalService.deleteAnimalLike(new_animalLike.getUser_id(), new_animalLike.getDesertion_no());
 				map.put("like", false);
 			} else { // 없는 경우 [생성]
-//				System.out.println("생성");
 				new_animalLike = animalService.join(animalLike);
 				if (new_animalLike == null) {
 					return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 				} else {
 					map.put("like", true);
 				}
-//				map.put("message", "좋아요 생성");
-//				map.put("new_animalLike", new_animalLike);
 			}
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (NullPointerException e) {

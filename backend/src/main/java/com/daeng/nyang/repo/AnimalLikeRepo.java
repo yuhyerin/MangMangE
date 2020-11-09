@@ -20,8 +20,8 @@ public interface AnimalLikeRepo extends JpaRepository<AnimalLike, Integer> {
 	@Query(value="delete from animal_like where (user_id=:user_id) and (desertion_no=:desertion_no)", nativeQuery = true)
 	void deleteAnimalLike(String user_id, Long desertion_no);
 	
-	@Query(value="select desertion_no from animal_like a where a.user_id=:user_id", nativeQuery=true)
-	List<Long> findDesertionNoByUserId(String user_id);
+	@Query(value="select desertion_no from animal_like a where a.user_id=:user_id order by desertion_no asc", nativeQuery=true)
+	Long[] findDesertionNoByUserId(String user_id);
 	
 	
 	

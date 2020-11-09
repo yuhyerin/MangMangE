@@ -1,6 +1,24 @@
 <template>
   <div>
-    <v-card
+    <table class="pagination-table">
+      <thead>
+        <tr style="background: rgb(244, 236, 225);">
+          <th style="width: 20%;">NO</th>
+          <th style="width: 55%;">제목</th>
+          <th style="width: 15%;">아이디</th>
+          <th style="width: 10%;">작성일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="tr-apply" v-for="p in paginatedData" :key="p.title" @click="showMyApply(p)">
+          <td>{{ p.uid }}</td>
+          <td class="td-title">{{ p.title }}</td>
+          <td>{{ p.user_id }}</td>
+          <td>{{ p.regtime.slice(0, 10) }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- <v-card
       v-for="p in paginatedData"
       :key="p.no"
       style="margin-bottom: 10px;"
@@ -30,7 +48,7 @@
           <strong>{{ p.regtime.slice(0, 10) }}</strong>
         </v-btn>
       </v-card-actions>
-    </v-card>
+    </v-card> -->
     <div class="btn-cover">
       <v-btn
         class="mx-2"
@@ -78,7 +96,6 @@ export default {
       default: 5
     },
     userId: {
-      type: String,
       required: true
     }
   },
@@ -90,12 +107,13 @@ export default {
       this.pageNum -= 1;
     },
     showMyApply(item) {
+      console.log(this.userId)
       if (item.user_id === this.userId) {
         this.$router.push(
           {
             name: 'AdoptionUpdate',
             params: {
-              apply_id: this.item.uid
+              uid: item.uid
             }
           }
         )
@@ -130,6 +148,39 @@ export default {
 </script>
 
 <style>
+  .pagination-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  /* table th {
+    font-size: 1.2rem;
+  } */
+
+  table tr {
+    height: 2rem;
+    text-align: center;
+    border-bottom: 0.5px solid darkgray;
+    /* border-bottom: 0.5px solid #505050; */
+  }
+
+  table tr:first-of-type {
+    border-top: 0.5px solid darkgray;
+  }
+
+  table tr td {
+    padding: 1rem 0;
+    /* font-size: 1.1rem; */
+  }
+
+  .tr-apply:hover {
+    background: lightgray;
+  }
+
+  .td-title:hover {
+    cursor: pointer;
+  }
+
   .btn-cover {
     margin-top: 1.5rem;
     text-align: center;

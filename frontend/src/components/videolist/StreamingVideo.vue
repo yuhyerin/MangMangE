@@ -56,6 +56,8 @@
 
 <script>
 import router from "@/router";
+import SERVER from "@/api/url";
+import axios from 'axios';
 export default {
   data() {
     return {
