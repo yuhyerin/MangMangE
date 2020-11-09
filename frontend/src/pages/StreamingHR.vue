@@ -80,10 +80,8 @@ export default {
             }
         },
         roomOpen(){
-
-
             // window.room = prompt("Enter room name:");
-            this.socket = io.connect('http://localhost:8002');
+            this.socket = io.connect('http://172.30.1.38:8002');
             alert("시작")
 
             if (this.room !== '') {
@@ -208,7 +206,6 @@ export default {
                 this.socket.emit('create or join', room);
                 console.log('>>>>>>> 프론트 : Attempted to create or  join room', room);
             }));
-
 
             this.socket.on('created', ((room)=> {
                 console.log('>>>>>>> 프론트 : Created room ' + room);
