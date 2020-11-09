@@ -251,8 +251,22 @@ public class AccountController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
+	@GetMapping(path="/admin/uploadVideo")
+	public ResponseEntity<HashMap<String, Object>> findUSERID(HttpServletRequest request){
+		System.out.println("CONTROLLER START ");
+		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+		if(user==null)
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+		String user_id = user.getAccount().getUser_id();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("user_id", user_id);
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+	
 	@PostMapping(path="/admin/uploadVideo")
-	public ResponseEntity<HashMap<String, Object>> uploadVideo(@RequestParam MultipartFile mfile,HttpServletRequest request){
+	public ResponseEntity<HashMap<String, Object>> uploadVideo(@RequestParam MultipartFile mfile, 
+			HttpServletRequest request){
+		System.out.println(mfile.toString());
 		String file_name = mfile.getOriginalFilename();
 		System.out.println(file_name);
 		try {

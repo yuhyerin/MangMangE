@@ -10,6 +10,7 @@
           padding: 0px 20px 20px 20px;
         "
       >
+      <!-- <UploadVideo /> -->
         <!--만약 스트리밍중이면-->
         <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo"/>
         <!--스트리밍 X-->
@@ -25,6 +26,8 @@ import Header from "../components/Header.vue";
 import StreamingVideo from "../components/videolist/StreamingVideo";
 import NoneStreamingVideo from "../components/videolist/NoneStreamingVideo";
 import VideoSeeMore from "../components/videolist/VideoSeeMore";
+import UploadVideo from "../components/UploadVideo.vue"
+
 
 
 export default {
@@ -33,6 +36,7 @@ export default {
     StreamingVideo,
     NoneStreamingVideo,
     VideoSeeMore,
+    UploadVideo
   },
   data() {
     return {

@@ -13,6 +13,7 @@ import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
+import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 
 Vue.use(VueRouter)
 
@@ -58,17 +59,12 @@ const routes = [
     component: VideoBoard,
   },
   {
-    path: '/upload',
-    name: 'UploadVideo',
-    component: UploadVideo,
-  },
-  {
     path: '/adoptionreview',
     name: 'AdoptionReview',
     component: AdoptionReview,
   },
   {
-    path: '/adoptionupdate/:apply_id',
+    path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
     component: AdoptionUpdate,
   },
@@ -80,6 +76,16 @@ const routes = [
     path: '/video/:videoID',
     name: 'VideoDetail',
     component: VideoDetail,
+  },
+  {
+   path: '/video/upload',
+   name:'UploadVideo',
+   component:UploadVideo 
+  },
+  {
+    path: '/privacypolicy',
+    name: 'PrivacyPolicy',
+    component: PrivacyPolicy
   },
 ]
 

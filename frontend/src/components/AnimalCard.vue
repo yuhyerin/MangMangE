@@ -59,10 +59,11 @@
           </v-icon>
         </div>
         <h2>{{ animalInfo.kind_cd }}</h2>
-        <p>{{ this.animalAge }}살 (추정)</p>
-        <p>{{ animalInfo.sex_cd }}</p>
+        <p>일련번호 : {{ animalInfo.desertion_no }}</p>
+        <br />
+        <p>{{ this.animalAge }} (추정)</p>
+        <p>{{ animalSex }}</p>
         <p>{{ animalInfo.weight }} kg (추정)</p>
-        <p>{{ this.animalTag }}</p>
       </div>
     </div>
     <div style="font-weight: bold">
@@ -102,10 +103,20 @@ export default {
       var d = new Date();
       var n = d.getFullYear();
       var age = n - this.animalInfo.age * 1;
-      if (age < 0) {
+      if (age < 1) {
         return "1년 미만";
       } else {
-        return age;
+        return age + "살";
+      }
+    },
+
+    animalSex() {
+      if (this.animalInfo.sex_cd == "M") {
+        return "수컷";
+      } else if (this.animalInfo.sex_cd == "F") {
+        return "암컷";
+      } else {
+        return "알수없음";
       }
     },
   },
