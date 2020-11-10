@@ -4,7 +4,6 @@
     <v-container style="padding-top: 90px">
       <p>동영상 업로드 게시판</p>
       <vue-dropzone id="upload" :options="config"></vue-dropzone>
-
     </v-container>
   </div>
 </template>
@@ -16,26 +15,24 @@ import vueDropzone from "vue2-dropzone";
 export default {
   components: {
     Header,
-    vueDropzone
+    vueDropzone,
   },
   data() {
     return {
       config: {
-        url: "http://localhost:3000/assets/videos" 
+        url: "http://localhost:3000/assets/videos",
       },
-      title: '',
-      dogID: '',
-    }
+      title: "",
+      dogID: "",
+    };
   },
   methods: {
     afterComplete(file) {
-      console.log(file)
-    }
-  }
-
-}
+      console.log(file);
+    },
+  },
+};
 </script>
 
-<style>
-
+<style >
 </style>

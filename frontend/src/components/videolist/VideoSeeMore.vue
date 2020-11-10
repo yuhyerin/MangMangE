@@ -1,24 +1,17 @@
 <template>
-  <div
-    v-infinite-scroll="loadMore"
+  <!-- <div v-infinite-scroll="loadMore"
     infinite-scroll-disabled="loading"
-    infinite-scroll-distance="6"
-  >
-    <v-row style="display: flex; justify-content: center">
-      <div class="search">
-        <input
-          type="text"
-          class="searchTerm"
-          placeholder="검색어를 입력하세요."
-        />
-        <button type="submit" @click="searchButton" class="searchButton">
-          <i class="fa fa-search"></i>
-        </button>
-      </div>
+    infinite-scroll-distance="6"> -->
+  <div>
+    <v-row style="margin: 10px 0 5px 20px">
+      <h3>총 동영상 ??개</h3>
     </v-row>
-    <hr />
-    <v-row v-for="video in videos" :key="video">
-      <v-col v-for="n in 3" :key="n" style="padding-bottom: 30px">
+    <v-row
+      v-for="video in videos"
+      :key="video.id"
+      style="padding: 0 20px 0 20px"
+    >
+      <v-col cols="5">
         <vue-plyr>
           <video poster="poster.png">
             <source
@@ -34,13 +27,34 @@
             />
           </video>
         </vue-plyr>
-        <div class="videoTitle" style="text-align:center;" @click="moveToVideoDetail(video.id)">동영상 제목{{video.id}}</div>
+      </v-col>
+      <v-col cols="6" style="margin-left: 7px">
+        <h2
+          class="video-info"
+          @click="moveToVideoDetail"
+          style="margin-bottom: 10px"
+        >
+          {{ video.title }}
+        </h2>
+        <p style="color: gray; font-size: 0.7rem; margin-bottom: 10px">
+          조회수 1109만회 | {{ video.date }}
+        </p>
+        <!-- content 제한된 글자 수 이내로 표시-->
+        <p
+          class="video-info"
+          @click="moveToVideoDetail"
+          style="line-height: 150%"
+        >
+          {{ video.content }}
+        </p>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   data() {
     return {
@@ -48,101 +62,85 @@ export default {
         {
           id: 1,
           video: "video1",
+          title: "video1 title",
+          content:
+            "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.",
+          date: "2020-11-09",
         },
         {
           id: 2,
           video: "video1",
+          title: "video2 title",
+          content:
+            "video2 content content yayayayayayayyoyoyoyoyo dhdufuekaishflaldsififi j",
+          date: "2020-11-09",
         },
         {
           id: 3,
           video: "video1",
+          title: "video3 title",
+          content:
+            "video1 content content yayayayayayayyoyoyoyoyo dhdufuekaishflaldsififi j",
+          date: "2020-11-09",
         },
         {
           id: 4,
           video: "video1",
+          title: "video4 title",
+          content:
+            "video1 content content yayayayayayayyoyoyoyoyo dhdufuekaishflaldsififi j",
+          date: "2020-11-09",
         },
         {
           id: 5,
           video: "video1",
+          title: "video5 title",
+          content:
+            "video1 content content yayayayayayayyoyoyoyoyo dhdufuekaishflaldsififi j",
+          date: "2020-11-09",
         },
         {
           id: 6,
           video: "video1",
+          title: "video6 title",
+          content:
+            "video1 content content yayayayayayayyoyoyoyoyo dhdufuekaishflaldsififi j",
+          date: "2020-11-09",
         },
       ],
     };
   },
   methods: {
     moveToVideoDetail(videoIndex) {
-      this.$router.push(
-        {
-          name: 'VideoDetail',
-          params: {
-            videoId: videoIndex
-          }
-        }
-      )
-    }
+      this.$router.push({
+        name: "VideoDetail",
+        params: {
+          videoId: videoIndex,
+        },
+      });
+    },
   },
   mounted() {
-    console.log(1)
-    console.log(this.$refs.plyr.player)
-    
+    console.log(1);
+    console.log(this.$refs.plyr.player);
+  },
+  // created() {
+  //   axios.get()
+  // },
+  methods: {
+    moveToVideoDetail() {
+      console.log("detail gogo");
+      router.push({ name: "VideoDetail" });
+    },
   },
 };
 </script>
 
 <style scoped>
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
-
-.search {
-  width: 40%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin: 20px 0px;
-}
-
-.searchTerm {
-  width: 100%;
-  border: 3px solid rgb(1, 118, 72);
-  border-right: none;
-  padding: 5px;
-  height: 36px;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  color: #9dbfaf;
-  background-color: white;
-  font-size: 13px;
-}
-
-.searchTerm:focus {
-  color: black;
-}
-
-.searchButton {
-  width: 40px;
-  height: 36px;
-  border: 1px solid rgb(1, 118, 72);
-  background: rgb(1, 118, 72);
-  text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-/*Resize the wrap to see the search bar change!*/
-/* .wrap{
-  width: 30%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-} */
-
-div.videoTitle:hover {
+.video-info {
   cursor: pointer;
 }
-
+.video-info:hover {
+  color: #999;
+}
 </style>

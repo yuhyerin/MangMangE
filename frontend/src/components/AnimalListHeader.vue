@@ -84,9 +84,18 @@
           <div v-else><h4>로그아웃</h4></div>
         </v-btn>
       </div>
-      <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn text @click="moveTo('/videos')" width="100%">
-          <div><h3>동영상 게시판</h3></div>
+      <div
+        style="
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+        "
+      >
+        <v-btn text @click="moveTo('/videos')" width="40%">
+          <div><h5>동영상 게시판</h5></div>
+        </v-btn>
+        <v-btn text @click="moveTo('/adoptionlist')" width="40%">
+          <div><h5>입양 신청 목록</h5></div>
         </v-btn>
       </div>
     </div>
@@ -235,7 +244,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .navBtn {
   margin: 2px 5px 2px 5px;
 }

@@ -479,7 +479,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .categoryBtn {
   padding-top: 10px;
   height: 7vh;

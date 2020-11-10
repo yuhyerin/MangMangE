@@ -24,23 +24,23 @@
             ></object>
           </div>
           <div style="width: 50vw">
-            <div
-              style="display:flex; justify-content: center; height: 100%"
-            >
-            <div style="margin-bottom: 15px;">
-              <p style="font-size: xxx-large; color: white;"><strong>아이들을 영상으로</strong></p>
-              <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p>
-              <br>
-              <p style="font-size: large; margin-bottom: 25px; color: white;"><strong>당신을 기다리고 있어요</strong></p>
-              <br>
-              <div @click="moveToVideos">
-                <v-btn
-                  elevation="5"
-                  style="background: black; color: white;"
-                >영상 더보기</v-btn>
+            <div style="display: flex; justify-content: center; height: 100%">
+              <div style="margin-bottom: 15px">
+                <p style="font-size: xxx-large; color: black">
+                  <strong>아이들을 영상으로<br />만나보세요</strong>
+                </p>
+                <!-- <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p> -->
+                <br />
+                <p style="font-size: large; margin-bottom: 30px; color: black">
+                  <strong>당신을 기다리고 있어요</strong>
+                </p>
+                <br />
+                <div @click="moveToVideos">
+                  <v-btn elevation="5" style="background: black; color: white"
+                    >영상 더보기</v-btn
+                  >
+                </div>
               </div>
-            </div>
-
             </div>
           </div>
         </div>
@@ -63,8 +63,8 @@ export default {
   },
   methods: {
     moveToVideos() {
-      this.$router.push('/videos')
-    }
+      this.$router.push("/videos");
+    },
   },
   computed: {
     videoUrl() {
@@ -74,10 +74,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .section.s2 {
-  background: #FFa500;
-  /* background-color: rgba(255, 165, 0, 1); */
+  background-color: rgb(193, 218, 204);
   /* background: darkgray; */
   /* background: #fcf7f0; */
   /* background: #fa8290; */
@@ -95,6 +94,4 @@ export default {
   margin-top: 20px;
   border-radius: 20px;
 }
-
-
 </style>

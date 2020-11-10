@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <Header />
     <v-container style="padding-top: 90px">
       <div
@@ -118,7 +118,7 @@
         </div>
       </div>
     </v-container>
-  </v-app>
+  </div>
 </template>
 
 <script>

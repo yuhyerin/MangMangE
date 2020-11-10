@@ -10,11 +10,12 @@
           <h2 class="first-word">개인정보 처리방침</h2>
         </div>
         <div class="second">
-          <a href='https://www.youtube.com/channel/UCee1MvXr6E8qC_d2WEYTU5g' style="text-decoration: none; color: black;">
-          <img 
-            class="img1"
-            src="../assets/image/mainpage/section4-dog.jpg" />
-          <h2 class="second-word">강아지 정보</h2>
+          <a
+            href="https://www.youtube.com/channel/UCee1MvXr6E8qC_d2WEYTU5g"
+            style="text-decoration: none; color: black"
+          >
+            <img class="img1" src="../assets/image/mainpage/section4-dog.jpg" />
+            <h2 class="second-word">강아지 정보</h2>
           </a>
         </div>
         <div class="third" @click="moveToAdoptionList">
@@ -24,29 +25,29 @@
       </div>
     </div>
     <div class="footer" style="display: flex; justify-content: space-around">
-      <div class="footer-first" style="margin-top: 20px;">
-        <h2 style="margin-bottom: 5px;">CONTACT</h2>
-        <br>
+      <div class="footer-first" style="margin-top: 20px">
+        <h2 style="margin-bottom: 5px">CONTACT</h2>
+        <br />
         <p>MYLITTLE@DANG.COM</p>
         <p>010-1234-5678</p>
       </div>
-      <div class="footer-second" style="margin-top: 20px;">
-        <h2 style="margin-bottom: 5px;">오시는길</h2>
-        
-        <br>
+      <div class="footer-second" style="margin-top: 20px">
+        <h2 style="margin-bottom: 5px">오시는길</h2>
+
+        <br />
         <p>대전시 유성구 동서대로</p>
         <p>5번길 19-1 (구암동)</p>
       </div>
-      <div class="footer-third" style="margin-top: 20px;">
-        <h2 style="margin-bottom: 5px;">영업시간</h2>
-        <br>
+      <div class="footer-third" style="margin-top: 20px">
+        <h2 style="margin-bottom: 5px">영업시간</h2>
+        <br />
         <p>09시 00분</p>
         <p>~</p>
         <p>18시 00분</p>
       </div>
-      <div class="footer-fourth" style="margin-top: 20px;">
-        <h2 style="margin-bottom: 5px;">개발자</h2>
-        <br>
+      <div class="footer-fourth" style="margin-top: 20px">
+        <h2 style="margin-bottom: 5px">개발자</h2>
+        <br />
         <p>유혜린 박경수</p>
         <p>정현희 고소영</p>
         <p>김승환 최규식</p>
@@ -60,21 +61,21 @@ export default {
   name: "Section4",
   methods: {
     moveToPrivacyPolicy() {
-      this.$router.push('/privacypolicy')
+      this.$router.push("/privacypolicy");
     },
 
     moveToAdoptionList() {
       if (this.$cookies.get("accessToken")) {
-        this.$router.push('/adoptionlist')  
+        this.$router.push("/adoptionlist");
       } else {
-        alert('로그인해주세요')
+        alert("로그인해주세요");
       }
     },
-  }
-}
+  },
+};
 </script>
 
-<style>
+<style scoped>
 .section.s3 {
   background-color: white;
   padding-top: 75px;
@@ -120,7 +121,9 @@ div.third {
   box-sizing: border-box;
 }
 
-div.first:hover, div.second:hover, div.third:hover {
+div.first:hover,
+div.second:hover,
+div.third:hover {
   text-decoration: None;
   padding: 3px;
 }
