@@ -97,12 +97,14 @@ export default {
 }
 
 a.moveToSection2 {
-  color: black;
+  border-bottom: 2px solid black;
+  text-decoration: none;
+  /* color: black;
   text-decoration: none;
   background: black;
   border: 5px solid black;
   color: white;
-  border-radius: 5px;
+  border-radius: 5px; */
 }
 
 a.moveToSection2:link {

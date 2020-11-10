@@ -90,6 +90,9 @@ export default {
   mounted() {
     console.log(this.$refs.plyr.player);
   },
+  // created() {
+  //   axios.get()
+  // },
   methods: {
     moveToVideoDetail() {
       console.log('detail gogo')
