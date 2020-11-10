@@ -4,45 +4,47 @@
     <div class="container" 
       style="
           margin-top: 75px; 
-          background-color: rgb(244, 236, 225);
       "
     >
+      <div style="margin-top: 20px;">
+        <h3 style="color: gray; text-align: center;">
+          동물과 사람이 함께하는 삶을 위해 세상을 바꾸는 실천에 함께 해주세요
+        </h3>
+      </div>
+      <div style="width: 70%; height: 50%; margin: 20px auto 0 auto;">
+        <vue-plyr>
+          <video poster="poster.png">
+            <source :src="require(`@/assets/videos/${video.v}.mp4`)" type="video/mp4">
+            <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
+          </video>  
+        </vue-plyr>
+      </div>
       <div 
         style="
-          margin: 30px auto 30px auto;
+          margin: 0 auto;
           width: 70%;
           height: 100%;
-          border: 5px solid rgb(1,118,72);
-          border-radius: 15px;
           background: white
         "
       >
         <div style="
           display: flex; 
           justify-content: space-between;
+          margin-top: 10px;
           padding: 0 5px;
           "
         >
-          <h2>쪼꼬미의 하루</h2>
-          <h4>2020-11-08</h4>
+          <div>
+            <h2>쪼꼬미의 하루</h2>
+            <h4>2020-11-08</h4>
+          </div>
+          <div class="kakaopaySupport" style="display: flex; text-align: center; margin-bottom: 5px;" @click="moveToSupport">
+            <h4 style="margin: auto 0px;">후원하기</h4>
+            <img src="../assets/image/kakaopay/kakaopay.png">
+          </div>
         </div>
-        <div style="width: 100%; height: 400px; margin: 20px auto;">
-          <vue-plyr>
-            <video poster="poster.png">
-              <source :src="require(`@/assets/videos/${video.v}.mp4`)" type="video/mp4">
-              <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
-            </video>  
-          </vue-plyr>
-        </div>
-        <div style="border: 1px solid green; border-radius: 5px;">
-          <h3 style="text-align: center;">
-            동물과 사람이 함께하는 삶을 위해 세상을 바꾸는 실천에 함께 해주세요
-          </h3>
-        </div>
-      </div>
-      <div style="text-align: center;" @click="moveToSupport">
-        <h3>후원하기</h3>
-        <img src="../assets/image/kakaopay/kakaopay.png">
+        <hr style="background-color: green;">
+
       </div>
     </div>
   </div>
@@ -106,48 +108,18 @@ export default {
     }
   },
   methods: {
+    moveToMainpage() {
+      this.$router.push('/videos')
+    },
+
     moveToSupport() {
       // window.open("https://mockup-pg-web.kakao.com/v1/67644e3f16977c805c14ac769708eaac628bba819995a98cc1d13d11b459fe1d/info", 
       // 'window_name','width=430,height=500,location=no,status=no,scrollbars=yes')
-
-
-      axios.post(SERVER.KakaopayURL,{
-        form: {
-          cid: "TC0ONETIME",
-          partner_order_id: "123",
-          partner_user_id: "kakaodev",
-          item_name : "item_name",
-          quantity: 1,
-          total_amount: 10000,
-          tax_free_amount: 0,
-          approval_url: "http://localhost:3000",
-          cancel_url: "http://localhost:3000",
-          fail_url: "http://localhost:3000",
-        }
-      }, 
+      axios.post(SERVER.URL + '/newuser/KakaoPay', {
+        videoid: 1,
+      },
       {
-        headers : {
-          Authorization: "KakaoAK edbe89645b8d959181873871c2018383",
-          "Content-type": "application/x-www-form-urlencoded;charset=utf-8", }
-      }
-        // data,
-        // config
-      )
-      //   params,
-      //   {
-      //     headers: {
-      //       "Authorization": "KakaoAK edbe89645b8d959181873871c2018383",
-      //       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-      //     }
-      //   }
-      // )
-      .then((res) => {
-        console.log(res.data)
-      }
-      )
-      .catch((err) => {
-        console.log(1)
-        console.log(err)
+      
       }
       )
     },
@@ -160,6 +132,10 @@ export default {
 </script>
 
 <style>
+.kakaopaySupport {
+  cursor: pointer;
+}
+
 .selectMoney {
   border: 1px solid green;
 }
