@@ -52,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
       
    }
+   
+   
 
 
 //   @Autowired

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
   URL: 'http://localhost:8080',
-  // URL: 'http://k3b306.p.ssafy.io:8080',
+  // URL: 'https://k3b306.p.ssafy.io:8080',
   KakaopayURL: 'https://kapi.kakao.com/v1/payment/ready',
   ROUTES: {
     submitSurvey: '/user/survey/create',

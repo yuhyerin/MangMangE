@@ -25,6 +25,8 @@ export default {
     return {
         socket: null,
 
+        room: 'testroom',
+
         isChannelReady: false,
         isInitiator: false,
         isStarted: false,
@@ -36,7 +38,7 @@ export default {
             offerToReceiveAudio: true,
             offerToReceiveVideo: true
         },
-        room: 'ttt',
+        
 
         localPeerConnection:null,
         remotePeerConnection:null,
@@ -77,7 +79,8 @@ export default {
         },
         roomOpen(){
             // window.room = prompt("Enter room name:");
-            this.socket = io.connect('http://localhost:8002');
+            // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+            this.socket = io.connect('https://localhost:8002');
             alert("시작")
 
             if (this.room !== '') {
@@ -109,7 +112,7 @@ export default {
                 console.log.apply('>>>>>>> 프론트 : ',console, array);
             }));
 
-            this.socket.on('message',((message) => { 
+            this.socket.on('message',((message) => {
                 console.log('>>>>>>> 프론트 : Client received message:', message);
                 if (message === 'got user media') {
                     this.maybeStart();
@@ -181,21 +184,20 @@ export default {
         
 
         createPeerConnection(){
+            var pcConfig = {
+                'iceServers':[
+                    {
+                        urls: 'stun:stun.l.google.com:19302'
+                    },
+                    {
+                        urls: "turn:numb.viagenie.ca",
+                        credential: "muazkh",
+                        username: "webrtc@live.com"
+                    }
+                ]
+            }
             try {
-                // pcConfig 값으로 peerconnection(pc)를 만들어 준다.
-                // pcConfig에는 stun, turn 서버를 적는다. 얘는 rtc중계가 끊어질 것을 대비한 임시 서버라고 보면 됨.
-                // var pcConfig = {
-                //     'iceServer':[{
-                //         urls: 'stun:stun.l.google.com:19302'
-                //     },
-                //     {
-                //         urls: "turn:numb.viagenie.ca",
-                //         credential: "muazkh",
-                //         username: "webrtc@live.com"
-                //     }]
-                // }
-                // this.pc = new RTCPeerConnection(pcConfig);
-                this.pc = new RTCPeerConnection(null);
+                this.pc = new RTCPeerConnection(pcConfig);
                 // pc에 icecandidate, addstream, removestream 이벤트를 등록해준다. 
                 this.pc.onicecandidate = this.handleIceCandidate; // icecandidate는 서로 통신채널을 확립하기 위한 방법.
                 this.pc.onaddstream = this.handleRemoteStreamAdded; // onaddstream은 remote 스트림이 들어오면 발생하는 이벤트. 
