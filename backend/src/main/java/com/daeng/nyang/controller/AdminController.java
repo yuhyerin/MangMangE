@@ -37,6 +37,9 @@ public class AdminController {
 	public ResponseEntity<HashMap<String, Object>> checkNO(
 			@RequestParam Long desertion_no){
 		HashMap<String, Object> map = adminService.findNO(desertion_no);
+		if((boolean)map.get("success"))
+			return new ResponseEntity<>(map, HttpStatus.OK);
+		return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping(path="/admin/upload/checkFile")
