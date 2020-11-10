@@ -8,14 +8,13 @@
             src="../assets/image/mainpage/section4-notice.jpg"
           />
           <h2 class="second-word">개인정보 처리방침</h2>
-          <p></p>
         </div>
         <div class="second">
           <a href='https://www.youtube.com/channel/UCee1MvXr6E8qC_d2WEYTU5g' style="text-decoration: none; color: black;">
           <img 
             class="img1"
             src="../assets/image/mainpage/section4-dog.jpg" />
-          <h2 class="first-word" @click="moveToKang">강아지 정보</h2>
+          <h2 class="first-word">강아지 정보</h2>
           </a>
         </div>
         <div class="third" @click="moveToAdoptionList">
@@ -157,7 +156,7 @@ div.footer {
   width: 100%;
   height: 30vh;
   /* background: #ccc; */
-  background: black;
+  background: gray;
   margin: 0;
 }
 
