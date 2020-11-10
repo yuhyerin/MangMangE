@@ -1,7 +1,5 @@
 package com.daeng.nyang.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -21,19 +19,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daeng.nyang.dto.Account;
 import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
-import com.daeng.nyang.dto.Video;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.email.EmailService;
 import com.daeng.nyang.service.signup.SignupService;
 import com.daeng.nyang.service.user.AccountService;
+import com.daeng.nyang.service.user.AdminService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -59,6 +55,9 @@ public class AccountController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private AdminService adminService;
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -149,12 +148,12 @@ public class AccountController {
 	}
 
 	// 회원
-	@PostMapping(path = "/user/changepw")
-	@ApiOperation("비밀번호 변경")
-	public ResponseEntity<HashMap<String, Object>> findUserId(@RequestBody Account account) {
-		HashMap<String, Object> map = accountService.changPW(account);
-		return new ResponseEntity<>(map, HttpStatus.OK);
-	}
+//	@PostMapping(path = "/user/changepw")
+//	@ApiOperation("비밀번호 변경")
+//	public ResponseEntity<HashMap<String, Object>> findUserId(@RequestBody Account account) {
+//		HashMap<String, Object> map = accountService.changPW(account);
+//		return new ResponseEntity<>(map, HttpStatus.OK);
+//	}
 
 	@PostMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
@@ -254,44 +253,30 @@ public class AccountController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/admin/uploadVideo")
-	public ResponseEntity<HashMap<String, Object>> findUSERID(HttpServletRequest request) {
-		System.out.println("CONTROLLER START ");
-		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
-		if (user == null)
-			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-		String user_id = user.getAccount().getUser_id();
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("user_id", user_id);
-		return new ResponseEntity<>(map, HttpStatus.OK);
-	}
-
 	@PostMapping(path = "/admin/uploadVideo")
-	public ResponseEntity<HashMap<String, Object>> uploadVideo(@RequestParam MultipartFile mfile,
+	public ResponseEntity<HashMap<String, Object>> uploadDBVideo(
+			@RequestBody Map<String, Object> video,
 			HttpServletRequest request) {
-		System.out.println(mfile.toString());
-		String file_name = mfile.getOriginalFilename();
-		System.out.println(file_name);
-		try {
-			mfile.transferTo(new File("C:/SSAFY/git/s03p31b306/frontend/src/assets/videos/" + file_name));
-		} catch (IllegalStateException | IOException e) {
-			System.out.println("ERROR다 ERROR!!!! ERROR ERROR");
-			e.printStackTrace();
-		}
-		return null;
+		System.out.println("CONTROLLER START");
+		System.out.println(video.toString());
+		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+		HashMap<String, Object> map = adminService.uploadVideo(video, user.getAccount().getUser_id());
+		if((boolean)map.get("success"))	// success 가 true이면 db에 저장 완료 false 이면 db에 저장 안됨
+			return new ResponseEntity<>(map, HttpStatus.OK);
+		return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
 	}
 
 	@PostMapping(path = "/admin/upload")
-	public ResponseEntity<HashMap<String, Object>> upload(@RequestParam MultipartFile mfile,
+	public ResponseEntity<HashMap<String, Object>> upload(
+			@RequestParam MultipartFile mfile,
 			HttpServletRequest request) {
 		System.out.println("CONTROLLER START");
-		if (mfile == null)
-			System.out.println("MFILE is EMPTY");
-		System.out.println("token : " + request.getHeader("Authorization"));
-		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
-		System.out.println(user.toString());
-		String writer = user.getAccount().getRole();
-		System.out.println("WRITER : " + writer);
-		return null;
+		HashMap<String, Object> map = new HashMap<>();
+		if (mfile == null) {
+			map.put("msg", "영상정보가 없습니다.");
+			return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+		}
+		map = adminService.uploadVideo(request.getHeader("Authorization"), mfile);
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 }

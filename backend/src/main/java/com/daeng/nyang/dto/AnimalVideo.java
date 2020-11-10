@@ -1,10 +1,14 @@
 package com.daeng.nyang.dto;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +35,8 @@ public class AnimalVideo {
 	private String content;
 	@Column
 	private String writer;
+	@CreationTimestamp
+	private Date regtime;
 	
 
 }

@@ -1,0 +1,17 @@
+package com.daeng.nyang.repo;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.daeng.nyang.dto.AnimalVideo;
+
+public interface AnimalVideoRepo extends JpaRepository<AnimalVideo, String>{
+	
+	@Query(value="select * from animal_video av where av.desertion_no=:desertion_no and av.title=:title", nativeQuery=true)
+	public Optional<AnimalVideo> findByDesertionNoAndTitle(Long desertion_no, String title);
+
+	@Query(value="select * from animal_video av where av.uid=:uid", nativeQuery=true)
+	public AnimalVideo findByUid(Long uid);
+}
