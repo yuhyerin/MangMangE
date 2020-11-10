@@ -69,19 +69,19 @@ export default {
     },
     upload(){
       console.log('upload 시작')
-      this.progress=0;
         var formData = new FormData();
         formData.append("mfile", this.file[0]);
-        axios.post(SERVER.URL+'/admin/upload',
-        {
-          "desertion_no" : this.desertionNo,
-          "title" : this.title,
-          "content" : this.content,
-          "file" : formData
-        },
+        formData.append("desertion_no",this.desertionNo);
+        formData.append("title",this.title);
+        formData.append("content",this.content);
+        for(var value of formData.values()){
+          console.log(value)
+        }
+        axios.post(SERVER.URL+'/admin/upload',formData,
         {
           headers: {
               "Authorization" : this.$cookies.get("accessToken"),
+              "content-Type" : "multipart/form-data; charset=utf-8; boundary='calculated when request is sent';"
           }
         })
         .then((res)=>{

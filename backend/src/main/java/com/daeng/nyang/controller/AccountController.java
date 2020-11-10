@@ -241,72 +241,57 @@ public class AccountController {
 		else
 			return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
-	@GetMapping(path="/user/userId")
-	public ResponseEntity<HashMap<String, Object>> userID(HttpServletRequest request){
+
+	@GetMapping(path = "/user/userId")
+	public ResponseEntity<HashMap<String, Object>> userID(HttpServletRequest request) {
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
 		HashMap<String, Object> map = new HashMap<>();
-		if(user.getAccount().getUser_id().contains("admin")) {
-			map.put("success",true);
+		if (user.getAccount().getUser_id().contains("admin")) {
+			map.put("success", true);
 			return new ResponseEntity<>(map, HttpStatus.OK);
 		}
 		map.put("success", false);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
-	
-	@GetMapping(path="/admin/uploadVideo")
-	public ResponseEntity<HashMap<String, Object>> findUSERID(HttpServletRequest request){
+
+	@GetMapping(path = "/admin/uploadVideo")
+	public ResponseEntity<HashMap<String, Object>> findUSERID(HttpServletRequest request) {
 		System.out.println("CONTROLLER START ");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
-		if(user==null)
+		if (user == null)
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		String user_id = user.getAccount().getUser_id();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("user_id", user_id);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
-	
-	@PostMapping(path="/admin/uploadVideo")
-	public ResponseEntity<HashMap<String, Object>> uploadVideo(@RequestParam MultipartFile mfile, 
-			HttpServletRequest request){
+
+	@PostMapping(path = "/admin/uploadVideo")
+	public ResponseEntity<HashMap<String, Object>> uploadVideo(@RequestParam MultipartFile mfile,
+			HttpServletRequest request) {
 		System.out.println(mfile.toString());
 		String file_name = mfile.getOriginalFilename();
 		System.out.println(file_name);
 		try {
-			mfile.transferTo(new File("C:/SSAFY/git/s03p31b306/frontend/src/assets/videos/"+file_name));
+			mfile.transferTo(new File("C:/SSAFY/git/s03p31b306/frontend/src/assets/videos/" + file_name));
 		} catch (IllegalStateException | IOException e) {
 			System.out.println("ERROR다 ERROR!!!! ERROR ERROR");
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	@GetMapping(path="/admin/upload")
-	public ResponseEntity<HashMap<String, Object>> upload (
-			@RequestParam MultipartFile[] mfile,
-			HttpServletRequest request){
+
+	@PostMapping(path = "/admin/upload")
+	public ResponseEntity<HashMap<String, Object>> upload(@RequestParam MultipartFile mfile,
+			HttpServletRequest request) {
 		System.out.println("CONTROLLER START");
-		if(mfile==null) {
+		if (mfile == null)
 			System.out.println("MFILE is EMPTY");
-		} else if(mfile.length==0) {
-			System.out.println("MFILE SIZE 0");
-		}
-		System.out.println("token : "+request.getHeader("Authorization"));
-		TotToken user = (TotToken)redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+		System.out.println("token : " + request.getHeader("Authorization"));
+		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
 		System.out.println(user.toString());
 		String writer = user.getAccount().getRole();
-		System.out.println("WRITER : "+writer);
+		System.out.println("WRITER : " + writer);
 		return null;
-	}
-	
-	@PostMapping(path="/admin/upload")
-	public ResponseEntity<HashMap<String, Object>> uploadPOST(
-			@RequestBody Video video, HttpServletRequest request){
-		System.out.println(video.toString());
-		MultipartHttpServletRequest multirequest = (MultipartHttpServletRequest) request;
-		MultipartFile file = multirequest.getFile("file");
-		TotToken user = (TotToken)redisTemplate.opsForValue().get(request.getHeader("Authorization"));
-		System.out.println(user.getAccount().getRole());
-		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 }
