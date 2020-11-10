@@ -13,10 +13,12 @@
         <v-row>
           <div style="font-size: 30px; padding-bottom: 5px">동영상 타이틀</div>
           <v-spacer></v-spacer>
-          <v-btn @click="uploadVideo" small outlined class="ma-2 upload-btn">
-            Upload
-            <v-icon right dark> mdi-cloud-upload </v-icon>
-          </v-btn>
+          <div v-show="upload">
+            <v-btn @click="uploadVideo" small outlined class="ma-2 upload-btn">
+              Upload
+              <v-icon right dark> mdi-cloud-upload </v-icon>
+            </v-btn>
+          </div>
         </v-row>
         <v-row>
           <div style="padding-left: 5px; line-height: 150%">
@@ -61,6 +63,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      upload: '',
       videos: [
         {
           id: 1,
@@ -78,15 +81,38 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$refs.plyr.player);
+    // console.log(this.$refs.plyr.player);
+  },
+  created() {
+    if (this.$cookies.get("accessToken") != null) {
+      axios
+        .get(SERVER.URL + "/user/userId", {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"), //the token is a variable which holds the token
+          },
+        })
+        .then((res) => {
+          console.log(res.data)
+          if(res.data.success)
+            this.upload = true;
+          else
+            this.upload=false;
+          console.log(this.upload)
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+    }
+    else{
+      this.upload= false;
+    }
   },
   methods: {
     videoSeeMore() {
       this.$emit("changeVideo", 2);
     },
     uploadVideo() {
-      console.log("클릭");
-      router.push({ name: "UploadVideo" });
+      this.$router.push("/videos/upload");
     },
     moveToVideoDetail(videoIndex) {
       this.$router.push(

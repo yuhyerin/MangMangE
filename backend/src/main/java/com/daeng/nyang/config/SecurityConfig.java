@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.daeng.nyang.jwt.JwtAuthenticationEntryPoint;
 import com.daeng.nyang.jwt.JwtRequestFilter;
@@ -77,4 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    public void configure(WebSecurity web) throws Exception {
       
    }
+   
+//   @Bean
+//   public MultipartResolver multipartResolver() {
+//       CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+//       multipartResolver.setMaxUploadSize(2000000000);
+//       return multipartResolver;
+//   }
 }

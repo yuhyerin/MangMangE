@@ -68,8 +68,6 @@ export default {
         id: this.$route.params.videoId,
         v: "video1"
       },
-      selected: '',
-      items: [1000, 5000, 10000, 30000, 50000]
     }
   },
   methods: {
@@ -80,12 +78,18 @@ export default {
     moveToSupport() {
       axios.post(SERVER.URL+'/newuser/kakaoPay',
         {
-          videoid:1
+          videoid: 1
         },  
       )
       .then((res) => {
         console.log('요청성공', res.data)
-        window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
+        async function openPopup() {
+          window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
+          await function() {
+            window.close("http://localhost:3000/video/0")
+          }
+        }
+        openPopup()
       }
       )
       .catch((err) => {

@@ -77,7 +77,9 @@ export default {
 
 <style scoped>
 .section.s3 {
-  background-color: white;
+  /* background: black; */
+  background: rgb(58, 58, 58);
+  /* background-color: #ccc; */
   padding-top: 75px;
 }
 
@@ -132,6 +134,7 @@ div.third:hover {
 .second-word,
 .third-word {
   text-align: center;
+  color: white;
 }
 
 div.footer {
@@ -139,8 +142,8 @@ div.footer {
   bottom: 0;
   width: 100%;
   height: 30vh;
-  /* background: #ccc; */
-  background: rgb(58, 57, 57);
+  background: white;
+  /* background: rgb(58, 57, 57); */
   margin: 0;
 }
 
@@ -165,6 +168,5 @@ div.footer-second,
 div.footer-third,
 div.footer-fourth {
   text-align: center;
-  color: white;
 }
 </style>
