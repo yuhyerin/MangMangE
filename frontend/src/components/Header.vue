@@ -9,7 +9,7 @@
       height: 75px;
       padding: 1rem;
       color: black;
-      background: white;
+      background: none;
       font-weight: bold;
       display: flex;
       justify-content: space-between;
@@ -18,7 +18,6 @@
       left: 0;
       right: 0;
       z-index: 5;
-      border-bottom: 1px solid gray;
     "
   >
     <div
@@ -47,23 +46,23 @@
           font-size: 10px;
         "
       >
-        <v-btn x-small text color="black" @click="register">
+        <v-btn x-small text color="white" @click="register">
           <div>회원가입</div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
-        <v-btn x-small text @click="moveToLogin">
+        <v-btn x-small text color="white" @click="moveToLogin">
           <div v-if="isUser == false">로그인</div>
           <div v-else>로그아웃</div>
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn text @click="countDownTimer">
+        <v-btn color="white" text @click="countDownTimer">
           <div>버어튼</div>
         </v-btn>
-        <v-btn text @click="moveTo('/animals')">
+        <v-btn color="white" text @click="moveTo('/animals')">
           <div>동물 보기</div>
         </v-btn>
-        <v-btn text @click="moveTo('/videos')">
+        <v-btn color="white" text @click="moveTo('/videos')">
           <div>동영상 게시판</div>
         </v-btn>
       </div>

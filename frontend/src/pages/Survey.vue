@@ -40,7 +40,6 @@
             @click="goPage(4)"
             :complete="survey[3] !== 0"
             step="4"
-            color="rgb(1, 118, 72)"
             style="cursor: pointer"
           >
           </v-stepper-step>
@@ -164,11 +163,6 @@ import Question8 from "../components/survey/Question8";
 import Question9 from "../components/survey/Question9";
 
 export default {
-  // data() {
-  //   return {
-  //     step: {cursor: none}
-  //   }
-  // },
   components: {
     Question1,
     Question2,
