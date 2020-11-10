@@ -1,20 +1,20 @@
 <template>
   <div class="quiz-box">
-    <v-row style="position: absolute; top: 4%; left: 48%;">
+    <v-row style="position: absolute; top: 3%; left: 48%;">
     <v-avatar color="rgb(1,118,72)" size="50">
       <h3 style="color: white">Q1</h3>
     </v-avatar>
     </v-row>
-    <v-row class="quiz-header" style="display: flex; justify-content: space-around; ">
-      <h2 style="margin-top:20px; padding: 5px;">내 MBTI를 선택해주세요.</h2>
+    <div class="quiz-header1" style="text-align: center; padding-top: 25px;">
+      <h2>내 MBTI를 선택해주세요.</h2>
       <p>
-        만약 내 MBTI를 모른다면
+        만약 MBTI를 모른다면
         <a href="https://www.16personalities.com/ko/" target="_blank">여기</a>를
         눌러주세요
       </p>
-    </v-row>
-    <v-row class="quiz-img" style="display: flex; justify-content: space-around; margin-top:0">
-      <img style="margin:10px; width:25%" src="@/assets/survey/question.png" alt=""/>
+    </div>
+    <v-row class="quiz-img" style="display: flex; justify-content: space-around; padding: 7px">
+      <img style="margin: 10px; width: 25%" src="@/assets/survey/Q1.png" alt=""/>
     </v-row>
     <v-row style="margin:0 10px 0 10px; padding:0 10px 0 10px">
       <v-col v-for="(mbti, index) in mbtiList" :key="mbti.id" cols="3">
@@ -72,6 +72,12 @@ export default {
   border-radius: 15px;
   cursor: pointer;
   background-color: #eee;
+}
+.select-mbti:hover{
+  opacity: 0.8;
+}
+.quiz-header {
+  margin-top: 20px;
 }
 .quiz-box {
   width: 50%; 

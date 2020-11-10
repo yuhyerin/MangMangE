@@ -51,10 +51,10 @@
               style="display:flex; justify-content: center; height: 100%"
             >
             <div style="margin-bottom: 15px;">
-              <p style="font-size: xxx-large; color: white;"><strong>아이들을 영상으로</strong></p>
-              <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p>
+              <p style="font-size: xxx-large; color: black;"><strong>아이들을 영상으로<br>만나보세요</strong></p>
+              <!-- <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p> -->
               <br>
-              <p style="font-size: large; margin-bottom: 30px; color: white;"><strong>당신을 기다리고 있어요</strong></p>
+              <p style="font-size: large; margin-bottom: 30px; color: black;"><strong>당신을 기다리고 있어요</strong></p>
               <br>
               <!-- <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p> -->
               <div @click="moveToVideos">
@@ -100,7 +100,7 @@ export default {
 
 <style>
 .section.s2 {
-  background-color: rgba(255, 165, 0, 1);
+  background-color: rgb(193, 218, 204);
   /* background: darkgray; */
   /* background: #fcf7f0; */
   /* background: #fa8290; */
