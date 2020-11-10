@@ -136,6 +136,7 @@ export default {
 }
 .more-videos:hover {
   color: silver;
+  cursor: pointer;
 }
 .upload-btn {
   font-weight: bold;

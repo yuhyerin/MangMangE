@@ -49,7 +49,6 @@ public class AnimalDetailController {
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
-			
 		HashMap<String, Object> map = null;
 		AnimalListFE animal = animalService.animalDetail(user_id, desertion_no); // animal 정보
 		if (animal != null) {
@@ -65,6 +64,4 @@ public class AnimalDetailController {
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
-	
-
 }

@@ -5,16 +5,12 @@
         class="section2-dog"
         src="../assets/image/mainpage/section2-dog.png"
       />
-      <div 
-        style="height: 15vh;"
-      >
-        <h1 class="howitworks-h1" style="color: white;">
-          <strong>
-            HOW IT WORKS?
-          </strong>
+      <div style="height: 15vh">
+        <h1 class="howitworks-h1" style="color: white">
+          <strong> HOW IT WORKS? </strong>
         </h1>
       </div>
-      
+
       <div
         style="
           display: flex;
@@ -27,14 +23,14 @@
             class="section2-mbti"
             src="../assets/image/mainpage/section2-mbti.png"
           />
-          <h1 class="left" style="color: white;"><strong>나의 MBTI</strong></h1>
-          <br>
-          <div style="color: white;">
+          <h1 class="left" style="color: white"><strong>나의 MBTI</strong></h1>
+          <br />
+          <div style="color: white">
             <strong>
-            <p>원하는 동물을 찾아보기 이전에 먼저</p>
-            <p>MBTI를 통해 자신의 성격을 이해해요</p>
-            <p>자신을 잘 아는게 자신에게 맞는</p>
-            <p>강아지를 찾는데 큰 도움이 돼요</p>
+              <p>원하는 동물을 찾아보기 이전에 먼저</p>
+              <p>MBTI를 통해 자신의 성격을 이해해요</p>
+              <p>자신을 잘 아는게 자신에게 맞는</p>
+              <p>강아지를 찾는데 큰 도움이 돼요</p>
             </strong>
           </div>
         </div>
@@ -45,13 +41,13 @@
             src="../assets/image/mainpage/section2-survey.png"
           />
           <h1 class="left"><strong>설문</strong></h1>
-          <br>
-          <div style="color: white;">
+          <br />
+          <div style="color: white">
             <strong>
-            <p>설문을 통해 자신에게 어떤 성격의</p>
-            <p>강아지가 맞는지 파악해봐요</p>
-            <p>성격이 맞는 강아지를 입양해서</p>
-            <p>파양률을 낮출 수 있어요</p>
+              <p>설문을 통해 자신에게 어떤 성격의</p>
+              <p>강아지가 맞는지 파악해봐요</p>
+              <p>성격이 맞는 강아지를 입양해서</p>
+              <p>파양률을 낮출 수 있어요</p>
             </strong>
           </div>
         </div>
@@ -62,13 +58,13 @@
             src="../assets/image/mainpage/section2-recommendation.png"
           />
           <h1 class="right"><strong>추천리스트</strong></h1>
-          <br>
-          <div style="color: white;">
+          <br />
+          <div style="color: white">
             <strong>
-            <p>MBTI와 설문을 거쳐서 자신의 성향에</p> 
-            <p>맞는 강아지를 추천 받아보세요</p>
-            <p>자신과 가장 잘 맞을 강아지를</p>
-            <p>입양신청해서 가족으로 맞이하세요</p>
+              <p>MBTI와 설문을 거쳐서 자신의 성향에</p>
+              <p>맞는 강아지를 추천 받아보세요</p>
+              <p>자신과 가장 잘 맞을 강아지를</p>
+              <p>입양신청해서 가족으로 맞이하세요</p>
             </strong>
           </div>
         </div>
@@ -83,14 +79,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .s1 {
   /* background: #4267B3; */
   /* background: #00022e; */
   /* background: rgb(255,183, 51); */
   /* background-color: orange; */
   /* background: linear-gradient(#FF9900, #FFBB74); */
-  background: #FF9900;
+  background: #ff9900;
   padding-top: 75px;
 }
 
@@ -150,12 +146,16 @@ h1.right {
   color: white;
 }
 
-div.section2-left, div.section2-middle, div.section2-right {
+div.section2-left,
+div.section2-middle,
+div.section2-right {
   padding: 20px;
   transition: box-shadow 0.3s;
 }
 
-div.section2-left:hover, div.section2-middle:hover, div.section2-right:hover {
+div.section2-left:hover,
+div.section2-middle:hover,
+div.section2-right:hover {
   box-shadow: 0 0 50px rgba(33, 33, 33, 0.2);
 }
 
