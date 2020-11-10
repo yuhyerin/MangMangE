@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,28 @@ public class AdminService {
 
 	@Autowired
 	private AnimalVideoRepo animalVideoRepo;
+	
+	public HashMap<String, Object> findNO(Long desertion_no){
+		HashMap<String, Object> map = new HashMap<>();
+		Optional<AnimalVideo> result = animalVideoRepo.findByDesertionNo(desertion_no);
+		if(result.isPresent())	// 있으면 true
+			map.put("success", true);
+		else map.put("success", false);	// 없으면 false
+		
+		return map;
+			
+	}
+	
+	public HashMap<String, Object> findFile(String file){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		Optional<AnimalVideo> test = animalVideoRepo.findByFilepath(file);
+		if(test.isPresent())
+			map.put("success", true);
+		else map.put("success", false);
+		return map;
+	}
 
+	
 	public HashMap<String, Object> uploadVideo(Map<String, Object> video, String user_id) {
 		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<>();
@@ -36,7 +58,6 @@ public class AdminService {
 		else
 			map.put("success", false);
 		return map;
-
 	}
 
 	public HashMap<String, Object> uploadVideo(String accessToken, MultipartFile mfile) {

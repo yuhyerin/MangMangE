@@ -55,9 +55,6 @@ public class AccountController {
 
 	@Autowired
 	private EmailService emailService;
-	
-	@Autowired
-	private AdminService adminService;
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -253,30 +250,4 @@ public class AccountController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/admin/uploadVideo")
-	public ResponseEntity<HashMap<String, Object>> uploadDBVideo(
-			@RequestBody Map<String, Object> video,
-			HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
-		System.out.println(video.toString());
-		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
-		HashMap<String, Object> map = adminService.uploadVideo(video, user.getAccount().getUser_id());
-		if((boolean)map.get("success"))	// success 가 true이면 db에 저장 완료 false 이면 db에 저장 안됨
-			return new ResponseEntity<>(map, HttpStatus.OK);
-		return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
-	}
-
-	@PostMapping(path = "/admin/upload")
-	public ResponseEntity<HashMap<String, Object>> upload(
-			@RequestParam MultipartFile mfile,
-			HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
-		HashMap<String, Object> map = new HashMap<>();
-		if (mfile == null) {
-			map.put("msg", "영상정보가 없습니다.");
-			return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
-		}
-		map = adminService.uploadVideo(request.getHeader("Authorization"), mfile);
-		return new ResponseEntity<>(map, HttpStatus.OK);
-	}
 }
