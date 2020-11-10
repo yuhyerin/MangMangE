@@ -205,52 +205,49 @@ public class AnimalController {
 		}
 	}
 
-	@PostMapping(path = "/user/animal/animalLike")
-	@ApiOperation(value = "동물 좋아요")
+	@PostMapping(path = "user/animal/animalLike")
+	@ApiOperation(value = "좋아요기능생성")
 	public ResponseEntity<HashMap<String, Object>> animalLike(@RequestBody AnimalLike animalLike,
 			HttpServletRequest request) {
-		String token = request.getHeader("Authorization"); // 토큰받기
+		// 프론트에서 토큰과 함께 좋아요 버튼을 누른 강아지의 desertion_no를 받아온다.
+		System.out.println("CONTROLLER ANIMALLIKE");
+		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
-		HashMap<String, Object> map = new HashMap<>();
-//
-//		// 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
-		try {
-			animalLike.setUser_id(user_id); // 여기에 토큰으로 받아온 유저 아이디를 대신 넣는다.
-//			// 그럼 이제 유저 아이디와, 프론트에서 유저가 고른 강아지의 desertion_no가 받아진 것이다.
-//			// 좋아요는 1번 누르면 생성. 다시 누르면 삭제이기 때문에.
-//			// 이제 해당 유저 아이디로 등록되어있는 desertion_no가 기존에 있는지 검색해서 없으면 생성, 있다면 삭제를 한다.
-//
-//			// 우선 있는지 확인
-			AnimalLike new_animalLike = animalService.findAnimalLike(animalLike.getUser_id(),
-					animalLike.getDesertion_no());
-//			// 있다면 null이 아닐 것이고 없다면 null일 것이다.
-			if (new_animalLike != null) { // 있는 경우 [삭제]
-//				System.out.println("삭제");
-				animalService.deleteAnimalLike(new_animalLike.getUser_id(), new_animalLike.getDesertion_no());
-				map.put("like", false);
-			} else { // 없는 경우 [생성]
-//				System.out.println("생성");
-				new_animalLike = animalService.join(animalLike);
-				if (new_animalLike == null) {
-					return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-				} else {
-					map.put("like", true);
+
+		if (animalLike == null) { // 프론트에서 값을 제대로 못받은경우
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		} else {
+			// 토큰으로 유저 아이디 받아오는 구문
+			System.out.println("user_id : " + user_id); // 확인
+
+			// 토큰을 통해 아이디를 가져오면 null이 아닐 것이다.
+			try {
+				HashMap<String, Object> map = new HashMap<>();
+				animalLike.setUser_id(user_id); // 여기에 토큰으로 받아온 유저 아이디를 대신 넣는다.
+
+				// 그럼 이제 유저 아이디와, 프론트에서 유저가 고른 강아지의 desertion_no가 받아진 것이다.
+				// 좋아요는 1번 누르면 생성. 다시 누르면 삭제이기 때문에.
+				// 이제 해당 유저 아이디로 등록되어있는 desertion_no가 기존에 있는지 검색해서 없으면 생성, 있다면 삭제를 한다.
+
+				// 우선 있는지 확인
+				// 있다면 null이 아닐 것이고 없다면 null일 것이다.
+				AnimalLike new_animalLike = animalService.findAnimalLike(animalLike.getUser_id(), animalLike.getDesertion_no());
+				if (new_animalLike == null) { // 없는
+					new_animalLike = animalService.join(animalLike);
+					System.out.println(new_animalLike+" 저장");
+//					map.put("message", "좋아요 생성");
+					map.put("new_animalLike", new_animalLike);
+				} else { // 있는 경우 [삭제]
+					System.out.println(new_animalLike.toString());
+					animalService.deleteAnimalLike(animalLike.getUser_id(), animalLike.getDesertion_no());
+					map.put("message", "좋아요 삭제");
 				}
-//				map.put("message", "좋아요 생성");
-//				map.put("new_animalLike", new_animalLike);
-			}
-			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-		} catch (NullPointerException e) {
-			System.out.println("NULLPOINTER");
-			e.printStackTrace();
-			AnimalLike new_animalLike = null;
-			new_animalLike = animalService.join(animalLike);
-			if (new_animalLike == null) {
-				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-			} else {
-				map.put("like", true);
 				return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+			} catch (Exception e) {
+				System.out.println("error : " + e);
+
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			}
 		}
 	}

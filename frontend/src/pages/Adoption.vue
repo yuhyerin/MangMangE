@@ -4,9 +4,9 @@
     <div class="container" style="height: 710px; margin-top: 65px">
       <div class="row">
         <div class="application col-lg-10 col-md-10 col-sm-10">
-          <h4 class="application-title">입양신청서</h4>
+          <h3 class="application-title">입양신청서</h3>
           <div class="selfcheck">
-            <h5 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h5>
+            <h4 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h4>
             <ul class="selfchecklist">
               <li>입양에 필요한 비용을 감당하실 수 있나요?</li>
               <li>정기적인 검진에 따른 비용을 감당하실 수 있나요?</li>
@@ -24,7 +24,7 @@
             </ul>
           </div>
           <hr class="dog-information-startline" />
-          <h5>유기동물 정보</h5>
+          <h4>유기동물 정보</h4>
           <div class="flex">
             <div class="dog-information">
               <div class="row dog-information-serial">
@@ -81,7 +81,7 @@
           </div>
           <hr class="dog-information-endline" />
 
-          <h5>입양희망자 정보</h5>
+          <h4>입양희망자 정보</h4>
           <div class="adopter-information">
             <div class="row adopter-information-name">
               <div class="col-2">
@@ -171,22 +171,22 @@
                   >
                 </div>
               </div>
-              <div class="row adopter-information-email">
-                <div class="col-2">
-                  <label>4. 이메일</label>
-                </div>
-                <div class="col-10">
-                  <input
-                    style="border: 0.5px solid #bbb"
-                    v-model="personEmail"
-                    placeholder="ex> naver@naver.com"
-                  />
-                  <label
-                    v-if="checkPersonEmail === 0"
-                    style="color: red; font-size: small"
-                    >이메일을 확인해주세요</label
-                  >
-                </div>
+            </div>
+            <div class="row adopter-information-email">
+              <div class="col-2">
+                <label>4. 이메일</label>
+              </div>
+              <div class="col-10">
+                <input
+                  style="border: 0.5px solid #bbb"
+                  v-model="personEmail"
+                  placeholder="ex> naver@naver.com"
+                />
+                <label
+                  v-if="checkPersonEmail === 0"
+                  style="color: red; font-size: small"
+                  >이메일을 확인해주세요</label
+                >
               </div>
             </div>
             <div class="row adopter-information-personal">
@@ -318,72 +318,26 @@ export default {
         "FE input Form : ",
         this.firstNum + "-" + this.middleNum + "-" + this.lastNum
       );
-
-      axios
-        .get(SERVER.URL + "/user/adopt/create", {
-          params: {
-            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
-          },
-          headers: {
-            Authorization: this.$cookies.get("accessToken"),
-            refreshToken: this.$cookies.get("refreshToken"),
-          },
-        })
-        .then((res) => {
-          console.log("then res : ", res.data);
-          this.pressedAuthenticationBtn = 1;
-          this.personNumberAuthentication = res.data.number;
-        })
-        .catch((err) => {
-          console.log("catch err : ", err);
-          if (err.response.status == 401) {
-            axios
-              .post(
-                SERVER.URL + "/newuser/refresh",
-                {},
-                {
-                  headers: {
-                    accessToken: this.$cookies.get("accessToken"),
-                    refreshToken: this.$cookies.get("refreshToken"),
-                  },
-                }
-              )
-              .then((res) => {
-                console.log(res.data);
-                if (res.data.success) {
-                  this.$cookies.set("accessToken", res.data.accessToken);
-                  console.log(this.$cookies.get("accessToken"));
-
-                  axios
-                    .get(SERVER.URL + "/user/adopt/create", {
-                      params: {
-                        phone:
-                          this.firstNum +
-                          "-" +
-                          this.middleNum +
-                          "-" +
-                          this.lastNum,
-                      },
-                      headers: {
-                        Authorization: this.$cookies.get("accessToken"),
-                        refreshToken: this.$cookies.get("refreshToken"),
-                      },
-                    })
-                    .then((res) => {
-                      console.log("then res : ", res.data);
-                      this.pressedAuthenticationBtn = 1;
-                      this.personNumberAuthentication = res.data.number;
-                    })
-                    .catch((err) => {
-                      console.log("catch err : ", err);
-                    });
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .get(SERVER.URL + "/user/adopt/create", {
+            params: {
+              phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+            },
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+            },
+          })
+          .then((res) => {
+            console.log("then res : ", res.data);
+            this.pressedAuthenticationBtn = 1;
+            this.personNumberAuthentication = res.data.number;
+          })
+          .catch((err) => {
+            console.log("catch err : ", err);
+            SERVER.RefreshToken(err);
+          });
+      });
     },
 
     adoptionCheck() {
@@ -450,55 +404,57 @@ export default {
         " ",
         this.personTitle
       );
-
-      axios
-        .post(
-          SERVER.URL + "/user/adopt/create",
-          {
-            ani_num: this.dogSerial,
-            user_name: this.personName,
-            user_phone:
-              this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
-            user_email: this.personEmail,
-            title: this.personTitle,
-          },
-          {
-            headers: {
-              Authorization: this.$cookies.get("accessToken"),
+      SERVER.tokenCheck(() => {
+        axios
+          .post(
+            SERVER.URL + "/user/adopt/create",
+            {
+              ani_num: this.dogSerial,
+              user_name: this.personName,
+              user_phone:
+                this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+              user_email: this.personEmail,
+              title: this.personTitle,
             },
-          }
-        )
-        .then((res) => {
-          console.log("then res : ", res.data);
-          this.$router.push("/adoptionlist");
-        })
-        .catch((err) => {
-          console.log("catch err : ", err);
-          if (err.response.status == 401) {
-            //accessToken만료
-            axios
-              .post(
-                SERVER.URL + "/newuser/refresh",
-                {},
-                {
-                  headers: {
-                    accessToken: this.$cookies.get("accessToken"),
-                    refreshToken: this.$cookies.get("refreshToken"),
-                  },
-                }
-              )
-              .then((res) => {
-                console.log(res);
-                if (res.data.success) {
-                  this.$cookies.set("accessToken", res.data.accessToken);
-                  console.log(this.$cookies.get("accessToken"));
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        });
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res) => {
+            console.log("then res : ", res.data);
+            this.$router.push("/adoptionlist");
+          })
+          .catch((err) => {
+            console.log("catch err : ", err);
+            SERVER.RefreshToken(err);
+            // if (err.response.status == 401) {
+
+            //   axios
+            //     .post(
+            //       SERVER.URL + "/newuser/refresh",
+            //       {},
+            //       {
+            //         headers: {
+            //           accessToken: this.$cookies.get("accessToken"),
+            //           refreshToken: this.$cookies.get("refreshToken"),
+            //         },
+            //       }
+            //     )
+            //     .then((res) => {
+            //       console.log(res);
+            //       if (res.data.success) {
+            //         this.$cookies.set("accessToken", res.data.accessToken);
+            //         console.log(this.$cookies.get("accessToken"));
+            //       }
+            //     })
+            //     .catch((err) => {
+            //       console.log(err);
+            //     });
+            // }
+          });
+      });
     },
   },
   watch: {
@@ -551,30 +507,6 @@ export default {
       }
     },
 
-    personGender() {
-      if (this.personGender === 0) {
-        this.checkPersonGender = 0;
-      } else {
-        this.checkPersonGender = 1;
-      }
-    },
-
-    personBirthday() {
-      if (this.personBirthday.length === 0) {
-        this.checkPersonBirthday = 0;
-      } else {
-        this.checkPersonBirthday = 1;
-      }
-    },
-
-    personAddress() {
-      if (this.personAddress.length === 0) {
-        this.checkPersonAddress = 0;
-      } else {
-        this.checkPersonAddress = 1;
-      }
-    },
-
     personCheck() {
       if (this.personCheck === false) {
         this.checkPersonCheck = 0;
@@ -584,57 +516,57 @@ export default {
     },
   },
   created() {
-    console.log("여기");
-    axios
-      .get(SERVER.URL + "/newuser/animal/detail", {
-        params: {
-          desertion_no: 430364202000067,
-        },
-        // {
-        //   headers: {
-        //     Authorization: this.$cookies.get("accessToken")
-        //   }
-        // }
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.dogSerial = res.data.animalList.desertion_no;
-        this.dogAge = 2020 - res.data.animalList.age + "살";
-        this.dogBreed = res.data.animalList.kind_c;
-        if (res.data.animalList.sex_cd == "M") {
-          this.dogGender = "남";
-        } else {
-          this.dogGender = "여";
-        }
-        this.dogFur = res.data.animalList.color_cd;
-      })
-      .catch((err) => {
-        console.log(err.response);
-        if (err.response.status == 401) {
-          //accessToken만료
-          axios
-            .post(
-              SERVER.URL + "/newuser/refresh",
-              {},
-              {
-                headers: {
-                  accessToken: this.$cookies.get("accessToken"),
-                  refreshToken: this.$cookies.get("refreshToken"),
-                },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-              if (res.data.success) {
-                this.$cookies.set("accessToken", res.data.accessToken);
-                console.log(this.$cookies.get("accessToken"));
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      });
+    SERVER.tokenCheck(() => {
+      axios
+        .get(SERVER.URL + "/user/animal/detail", {
+          params: {
+            desertion_no: this.$route.params.animalID,
+          },
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.dogSerial = res.data.animalList.desertion_no;
+          this.dogAge = 2020 - res.data.animalList.age + "살";
+          this.dogBreed = res.data.animalList.kind_c;
+          if (res.data.animalList.sex_cd == "M") {
+            this.dogGender = "남";
+          } else {
+            this.dogGender = "여";
+          }
+          this.dogFur = res.data.animalList.color_cd;
+        })
+        .catch((err) => {
+          console.log(err.response);
+          SERVER.RefreshToken(err);
+          // if (err.response.status == 401) {
+
+          //   axios
+          //     .post(
+          //       SERVER.URL + "/newuser/refresh",
+          //       {},
+          //       {
+          //         headers: {
+          //           accessToken: this.$cookies.get("accessToken"),
+          //           refreshToken: this.$cookies.get("refreshToken"),
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       console.log(res);
+          //       if (res.data.success) {
+          //         this.$cookies.set("accessToken", res.data.accessToken);
+          //         console.log(this.$cookies.get("accessToken"));
+          //       }
+          //     })
+          //     .catch((err) => {
+          //       console.log(err);
+          //     });
+          // }
+        });
+    });
   },
 };
 </script>
@@ -657,7 +589,7 @@ hr.dog-information-startline {
 
 div.selfcheck {
   background: rgb(244, 236, 225);
-  padding: 12px 12px 5px 12px;
+  padding: 12px 12px 12px 12px;
 }
 
 .selfcheckstart {
@@ -673,7 +605,7 @@ ul.selfchecklist {
 div.list {
   background: rgb(244, 236, 225);
   /* background: #d9edf7; */
-  padding: 12px 12px 1px 12px;
+  padding: 12px 12px 12px 12px;
 }
 
 button.check-number {

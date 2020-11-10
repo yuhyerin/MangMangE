@@ -1,14 +1,18 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import axios from 'axios'
 import SERVER from '@/api/url'
 import VueRouter from 'vue-router'
 import router from '@/router'
+import createPersistedState from "vuex-persistedstate";
+
 // import { $cookies } from 'vue/types/umd'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
+
   state: {
     page: 1,
     userMbti: '',
@@ -17,6 +21,7 @@ export default new Vuex.Store({
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     address: '',
     findUserId: '',
+    userSurveyCheck: false,
 
     // 1: survey to animalList, 2: main to animalList
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
@@ -42,11 +47,15 @@ export default new Vuex.Store({
 
     whatIsDogMbti(state, payload) {
       state.survey[payload.idx] = payload.answer
-      state.survey[1] > 0 ? state.dogMbtiArr[0] = 'E' : state.dogMbtiArr[0] += 'Q';
+      state.survey[1] > 0 ? state.dogMbtiArr[0] = 'E' : state.dogMbtiArr[0] = 'Q';
       state.survey[2] + state.survey[5] + state.survey[8] > 0 ? state.dogMbtiArr[2] = 'S' : state.dogMbtiArr[2] = 'I';
       state.survey[3] + state.survey[4] + state.survey[6] > 0 ? state.dogMbtiArr[3] = 'W' : state.dogMbtiArr[3] = 'A';
       state.survey[7] > 0 ? state.dogMbtiArr[1] = 'F' : state.dogMbtiArr[1] = 'C';
 
+    },
+
+    resetSurvey(state, payload) {
+      state.survey = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
 
     goPage(state, pageNum) {
@@ -59,14 +68,19 @@ export default new Vuex.Store({
       state.address = address
       console.log(state.address)
     },
-    
+
     setEventListener(state, payload) {
       state.eventListener = payload
     },
 
     setFindUserId(state, payload) {
       state.findUserId = payload
-    }
+    },
+
+    setUserSurveyCheck(state, payload) {
+      state.userSurveyCheck = payload
+    },
+
   },
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
@@ -80,27 +94,30 @@ export default new Vuex.Store({
       }
 
       console.log('설문조사 결과:', state.userMbti, state.dogMbti)
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
-          {
-            "mbti": state.userMbti,
-            "answer": state.dogMbti,
-          },
-          {
-            headers: {
-              Authorization: $cookies.get("accessToken")
+      SERVER.tokenCheck(() => {
+        axios
+          .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
+            {
+              "mbti": state.userMbti,
+              "answer": state.dogMbti,
+            },
+            {
+              headers: {
+                Authorization: $cookies.get("accessToken")
+              }
             }
-          }
-        )
-        .then(res => {
-          console.log('userMbit & dogMbti = ', res.data)
-          state.eventListener = 1
-          router.push({ name: 'Animals' })
-        })
-        .catch(err => {
-          console.log('MBTI XXX', err)
-          SERVER.RefreshToken(err);
-        })
+          )
+          .then(res => {
+            console.log('userMbit & dogMbti = ', res.data)
+            state.eventListener = 1
+            commit('setUserSurveyCheck', true)
+            router.push({ name: 'Animals' })
+          })
+          .catch(err => {
+            console.log('MBTI XXX', err)
+            SERVER.RefreshToken(err);
+          })
+      })
     },
 
   },

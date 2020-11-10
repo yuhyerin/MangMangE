@@ -172,16 +172,7 @@ export default {
         this.likeTrigger = !this.likeTrigger;
       }
       console.log("this.animalInfo.desertion_no : " + this.animalInfo.desertion_no);
-      axios.post(SERVER.URL + "/user/animal/animalLike",{
-            "desertion_no": this.animalInfo.desertion_no,
-          },
-          {
-            headers: {
-              Authorization: $cookies.get("accessToken")
-            }
-          }).then((res) => {
-          console.log(res.data.new_animalLike);
-        });
+     
     },
     setMoveTrigger() {
       this.moveTrigger = !this.moveTrigger;

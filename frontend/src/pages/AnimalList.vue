@@ -1,122 +1,260 @@
 <template>
   <v-app>
-    <Header />
+    <AnimalListHeader @changeComponents="componentChange" />
     <div class="loading" v-if="loadingTrigger">
       <!-- <i class="fas fa-spinner fa-10x fa-spin"></i> -->
       <img src="@/assets/image/loading.gif" alt="loading" />
     </div>
     <v-main>
-      <v-container style="padding-top: 75px">
+      <div style="padding-top: 75px; display: flex; justify-content: center">
+        <div>
+          <v-btn @click="changeViewStyle(false)">
+            <v-icon>mdi-format-align-right</v-icon>
+          </v-btn>
+          <v-btn @click="changeViewStyle(true)">
+            <v-icon>mdi-format-align-justify</v-icon>
+          </v-btn>
+        </div>
         <div style="display: flex; min-height: 87vh">
           <div
+            v-if="viewStyle == false"
             style="
-              width: 20vw;
-              max-height: 88vh;
-              display: flex;
+              width: 80vw;
+              border-radius: 20px;
+              margin: 10px;
+              align-text: center;
               justify-content: center;
             "
           >
             <div
-              style="
-                background-color: rgb(244, 236, 225);
-                border-radius: 20px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                position: fixed;
-                height: 87vh;
-                margin: 5px;
-              "
-            >
-              <div>
-                <div class="categoryBtn">
-                  <v-btn text color="black" @click="setTrigger(0)">
-                    모든 아이들 보기 &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 0" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-                <div class="categoryBtn">
-                  <v-btn text color="black" @click="setTrigger(1)">
-                    나와 맞는 아이는? &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 1" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-                <div class="categoryBtn" style="">
-                  <v-btn text color="black" @click="setTrigger(2)">
-                    즐겨 찾는 아이들 &nbsp;
-                  </v-btn>
-                  <v-icon v-if="trigger == 2" large color="black">
-                    mdi-paw-outline
-                  </v-icon>
-                </div>
-              </div>
-              <div style="text-align: center">
-                <div>
-                  <input
-                    type="checkbox"
-                    id="checkbox"
-                    v-model="checked[0]"
-                    true-value="F"
-                    false-value="no"
-                    checked
-                    @change="changeValue"
-                  />
-                  <label for="checkbox">암컷</label>
-                  <input
-                    type="checkbox"
-                    id="checkbox"
-                    v-model="checked[1]"
-                    true-value="M"
-                    false-value="no"
-                    checked
-                    @change="changeValue"
-                  />
-                  <label for="checkbox">수컷</label>
-                </div>
-                <img
-                  v-if="testTrigger == false"
-                  src="../assets/image/1wait.gif"
-                  alt="멍멍"
-                  @click="test"
-                />
-                <img
-                  v-if="testTrigger == true"
-                  src="../assets/image/1pop.gif"
-                  alt="멍멍"
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            style="
-              width: 80vw;
-              background-color: rgb(244, 236, 225);
-              border-radius: 20px;
-              margin: 5px;
-              align-text: center;
-            "
-          >
-            <div
+              v-if="trigger == 0"
               style="display: flex; flex-wrap: wrap; justify-content: center"
             >
-              <AllAnimals
-                v-if="trigger == 0"
+              <!-- <AnimalInfo
+                v-for="(data, index) in this.allDatas"
+                :key="index"
+                :animalInfo="data"
+              /> -->
+              <AnimalCard
                 v-for="(data, index) in this.allDatas"
                 :key="index"
                 :animalInfo="data"
               />
-              <AllAnimals
-                v-if="trigger == 1"
-                v-for="(data, index) in this.matchedDatas"
+            </div>
+            <div v-if="trigger == 1">
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AnimalCard
+                    v-for="data in this.perfectDatas"
+                    :key="data.desertion_no"
+                    :animalInfo="data"
+                  />
+                </div>
+              </div>
+              <br />
+              <v-divider></v-divider>
+              <br />
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 0.2px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AnimalCard
+                    v-for="data in this.goodDatas"
+                    :key="data.desertion_no"
+                    :animalInfo="data"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="trigger == 2"
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalCard
+                v-for="(data, index) in this.likedDatas"
                 :key="index"
                 :animalInfo="data"
               />
-              <AllAnimals
-                v-if="trigger == 2"
+            </div>
+          </div>
+
+          <!-- **************************페이지 표시 구분************************* -->
+          <div
+            v-if="viewStyle == true"
+            style="
+              width: 80vw;
+              border-radius: 20px;
+              margin: 10px;
+              align-text: center;
+              justify-content: center;
+            "
+          >
+            <div
+              v-if="trigger == 0"
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalInfo
+                v-for="(data, index) in this.allDatas"
+                :key="index"
+                :animalInfo="data"
+              />
+            </div>
+            <div v-if="trigger == 1">
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AnimalInfo
+                    v-for="(data, index) in this.perfectDatas"
+                    :key="index"
+                    :animalInfo="data"
+                  />
+                </div>
+              </div>
+              <br />
+              <v-divider></v-divider>
+              <br />
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 0.2px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AnimalInfo
+                    v-for="(data, index) in this.goodDatas"
+                    :key="index"
+                    :animalInfo="data"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="trigger == 2"
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalInfo
                 v-for="(data, index) in this.likedDatas"
                 :key="index"
                 :animalInfo="data"
@@ -124,16 +262,16 @@
             </div>
           </div>
         </div>
-      </v-container>
+      </div>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import AllAnimals from "../components/AllAnimals.vue";
-import Header from "../components/Header.vue";
+import AnimalCard from "../components/AnimalCard.vue";
+import AnimalInfo from "../components/AnimalInfo.vue";
+import AnimalListHeader from "../components/AnimalListHeader.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
-// import data from "../assets/data/animal.json";
 
 import SERVER from "@/api/url";
 import axios from "axios";
@@ -146,16 +284,22 @@ export default {
       testTrigger: false,
       allDatas: "",
       matchedDatas: [],
+      perfectDatas: [],
+      goodDatas: [],
       likedDatas: [],
       checked: ["F", "M"],
       tmpArr: [],
-      userFinishedSurvey: "",
+      userFinishedSurvey: false,
       loadingTrigger: false,
+      perfectLength: 0,
+      goddLength: 0,
+      viewStyle: false,
     };
   },
   components: {
-    AllAnimals,
-    Header,
+    AnimalCard,
+    AnimalListHeader,
+    AnimalInfo,
   },
   watch: {
     trigger(newValue, oldValue) {
@@ -164,20 +308,22 @@ export default {
         console.log("All Animals");
         if (this.$cookies.get("accessToken") != null) {
           this.loadingTrigger = true;
-          axios
-            .get(SERVER.URL + "/user/animal/allread", {
-              headers: {
-                Authorization: this.$cookies.get("accessToken"),
-              },
-            })
-            .then((res) => {
-              this.allDatas = res.data.animalList;
-              this.loadingTrigger = false;
-            })
-            .catch((err) => {
-              // SERVER.RefreshToken(err);
-              this.loadingTrigger = false;
-            });
+          SERVER.tokenCheck(() => {
+            axios
+              .get(SERVER.URL + "/user/animal/allread", {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              })
+              .then((res) => {
+                this.allDatas = res.data.animalList;
+                this.loadingTrigger = false;
+              })
+              .catch((err) => {
+                // SERVER.RefreshToken(err);
+                this.loadingTrigger = false;
+              });
+          });
         } else {
           this.loadingTrigger = true;
           axios
@@ -195,43 +341,52 @@ export default {
       } else if (newValue == 1) {
         this.matchedDatas = [];
         this.loadingTrigger = true;
-        axios
-          .get(SERVER.URL + "/user/animal/matchlist", {
-            headers: {
-              Authorization: $cookies.get("accessToken"),
-            },
-          })
-          .then((res) => {
-            this.matchedDatas = [];
-            this.matchedDatas = [...res.data.perfect, ...res.data.good];
-            this.userFinishedSurvey = true;
-            this.loadingTrigger = false;
-          })
-          .catch((err) => {
-            SERVER.RefreshToken(err);
-            this.loadingTrigger = false;
-          });
+        SERVER.tokenCheck(() => {
+          axios
+            .get(SERVER.URL + "/user/animal/matchlist", {
+              headers: {
+                Authorization: $cookies.get("accessToken"),
+              },
+            })
+            .then((res) => {
+              console.log(res.data.perfect.length, res.data.good.length);
+              this.perfectDatas = [];
+              this.goodDatas = [];
+              this.perfectDatas = [...res.data.perfect];
+              this.goodDatas = [...res.data.good];
+              this.matchedDatas = [];
+              this.matchedDatas = [...res.data.perfect, ...res.data.good];
+              this.loadingTrigger = false;
+            })
+            .catch((err) => {
+              console.log("error message", err);
+              // SERVER.RefreshToken(err);
+            });
+        });
       } else {
         // console.log("like animals");
         this.likedDatas = [];
         if (this.$cookies.get("accessToken") != null) {
           this.loadingTrigger = true;
-          axios
-            .get(SERVER.URL + "/user/animal/like", {
-              headers: {
-                Authorization: this.$cookies.get("accessToken"),
-              },
-            })
-            .then((res) => {
-              this.likedDatas = [];
-              this.likedDatas = [...res.data.animalList];
-              this.loadingTrigger = false;
-            })
-            .catch((err) => {
-              console.log(err);
-              // SERVER.RefreshToken(err);
-              this.loadingTrigger = false;
-            });
+          SERVER.tokenCheck(() => {
+            axios
+              .get(SERVER.URL + "/user/animal/like", {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              })
+              .then((res) => {
+                console.log(res.data.animalList);
+                this.likedDatas = [];
+                this.likedDatas = [...res.data.animalList];
+                this.loadingTrigger = false;
+              })
+              .catch((err) => {
+                console.log(err);
+                // SERVER.RefreshToken(err);
+                this.loadingTrigger = false;
+              });
+          });
         } else {
           alert("로그인이 필요한 서비스 입니다.");
           this.$router.push("/login");
@@ -246,42 +401,28 @@ export default {
   },
 
   async created() {
+    this.userFinishedSurvey = false;
     var data = null;
+
     if (this.$cookies.get("accessToken") != null) {
       this.loadingTrigger = true;
-      await axios
-        .get(SERVER.URL + "/user/animal/allread", {
-          headers: {
-            Authorization: this.$cookies.get("accessToken"),
-          },
-        })
-        .then((res) => {
-          this.allDatas = res.data.animalList;
-          this.loadingTrigger = false;
-          // console.log(res.data);
-        })
-        .catch((err) => {
-          SERVER.RefreshToken(err);
-          this.loadingTrigger = false;
-        });
-
-      await axios
-        .get(SERVER.URL + "/user/animal/surveyread", {
-          headers: {
-            Authorization: $cookies.get("accessToken"),
-          },
-        })
-        .then((res) => {
-          if (res.data.survey.answer != null) {
-            this.userFinishedSurvey = true;
-          } else {
-            this.userFinishedSurvey = false;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          SERVER.RefreshToken(err);
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .get(SERVER.URL + "/user/animal/allread", {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+            },
+          })
+          .then((res) => {
+            this.allDatas = res.data.animalList;
+            this.loadingTrigger = false;
+            // console.log(res.data);
+          })
+          .catch((err) => {
+            // SERVER.RefreshToken(err);
+            this.loadingTrigger = false;
+          });
+      });
 
       if (this.eventListener == 1) {
         // console.log(this.dogMbti);
@@ -291,7 +432,7 @@ export default {
       }
     } else {
       this.loadingTrigger = true;
-      await axios
+      axios
         .get(SERVER.URL + "/newuser/animal/allread")
         .then((res) => {
           this.allDatas = res.data.animalList;
@@ -321,6 +462,9 @@ export default {
         }
       }
     },
+    changeViewStyle(value) {
+      this.viewStyle = value;
+    },
 
     test() {
       this.testTrigger = true;
@@ -329,14 +473,8 @@ export default {
       }, 3300);
     },
 
-    changeValue() {
-      this.tmpArr.length = 0;
-      for (var i = 0; i < data.animal.length; i++) {
-        if (this.checked.includes(data.animal[i].sex_cd)) {
-          this.tmpArr.push(data.animal[i]);
-        }
-      }
-      console.log(this.tmpArr);
+    componentChange(value) {
+      this.trigger = value;
     },
   },
 };
