@@ -1,7 +1,7 @@
 <template>
   <div class="video-detail">
     <Header />
-      <v-container fluid style="margin-top: 70px; padding-left: 70px;">
+      <v-container fluid style="margin-top: 70px; padding-left: 100px;">
         <v-layout col wrap>
           <v-col cols="8">
             <div class="video-play">
@@ -139,7 +139,13 @@ export default {
       )
     },
     moveToAnimal(animalID) {
-      this.$router.push("/animalDetail" + `/${animalID}`)
+      this.$router.push(
+        {
+          name: 'AnimalDetail',
+          params: {
+            desertion_no: animalID
+          }
+        })
     },
     getVideo() {
       axios
@@ -155,7 +161,7 @@ export default {
     getVideoList() {
       axios.get(SERVER.URL + SERVER.ROUTES.getAllVideos)
       .then(res => {
-        this.nextVideoList = res.data.VideoList
+        this.nextVideoList = [...res.data.VideoList, ...res.data.VideoList, ...res.data.VideoList]
         this.nextVideoList.forEach(function(val){
          console.log(val.uid)
         })

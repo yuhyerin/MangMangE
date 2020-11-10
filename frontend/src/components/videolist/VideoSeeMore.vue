@@ -4,7 +4,7 @@
       <h2>총 동영상 {{ videos_cnt }}개</h2>
     </v-row>
     <v-row v-for="video in videos" :key="video.id" style="padding: 0 20px 0 20px">
-        <v-col cols="5">
+        <v-col cols="6">
           <vue-plyr>
             <video poster="poster.png">
               <source
@@ -21,19 +21,19 @@
             </video>
           </vue-plyr>
         </v-col>
-        <v-col cols="5" style="margin-left: 10px">
+        <v-col cols="5" style="margin-left: 15px">
           <h2 class="video-info" @click="moveToVideoDetail(video.uid)" style="margin-bottom: 10px;">{{ video.title }}</h2>
           <p style="color: gray; font-size: 0.8rem; margin-bottom: 10px">{{ video.writer }} | {{ video.regtime }}</p>
           <!-- content 제한된 글자 수 이내로 표시-->
           <p class="video-info" @click="moveToVideoDetail(video.uid)" style="line-height: 150%;">{{ video.content }}</p>
         </v-col>
     </v-row>
-    <!-- <v-btn class="mx-2" fab dark small color="blue-gray" @click="scrollToTop" style="position: fixed; bottom: 70px; right: 15px;">
+    <v-btn class="mx-2" fab dark small color="rgb(1, 118, 72)" @click="scrollToTop" style="position: fixed; bottom: 70px; right: 55px;">
       <v-icon dark>mdi-chevron-up</v-icon>
     </v-btn>
     <infinite-loading @infinite="infiniteHandler" :identifier="tag" spinner="circles">
       <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
-    </infinite-loading> -->
+    </infinite-loading>
   </div>
 </template>
 

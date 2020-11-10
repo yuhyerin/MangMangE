@@ -44,7 +44,7 @@
             />
           </video>
         </vue-plyr>
-        <h3 class="videoTitle" style="text-align: center;" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
+        <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
       <div class="more-videos">
         <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x"></i>
@@ -113,7 +113,8 @@ export default {
       axios
         .get(SERVER.URL + "/newuser/video/allvideo")
         .then((res) => {
-          this.videos = res.data.VideoList.slice(-3)
+          this.videos = [...res.data.VideoList, ...res.data.VideoList]
+          // .slice(-3)
           console.log('videos', this.videos)
         })
   },

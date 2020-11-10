@@ -8,7 +8,7 @@
         <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo"/>
         <!--스트리밍 X-->
         <NoneStreamingVideo v-if="pageTrigger == 1" @changeVideo="changeVideo" />
-        <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo" style="margin-left: 100px"/>
+        <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo" style="margin-left: 70px"/>
       </div>
     </v-container>
   </div>
