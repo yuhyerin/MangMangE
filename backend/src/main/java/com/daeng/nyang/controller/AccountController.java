@@ -21,12 +21,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.daeng.nyang.dto.Account;
 import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
+import com.daeng.nyang.dto.Video;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.email.EmailService;
 import com.daeng.nyang.service.signup.SignupService;
@@ -276,5 +279,34 @@ public class AccountController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@GetMapping(path="/admin/upload")
+	public ResponseEntity<HashMap<String, Object>> upload (
+			@RequestParam MultipartFile[] mfile,
+			HttpServletRequest request){
+		System.out.println("CONTROLLER START");
+		if(mfile==null) {
+			System.out.println("MFILE is EMPTY");
+		} else if(mfile.length==0) {
+			System.out.println("MFILE SIZE 0");
+		}
+		System.out.println("token : "+request.getHeader("Authorization"));
+		TotToken user = (TotToken)redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+		System.out.println(user.toString());
+		String writer = user.getAccount().getRole();
+		System.out.println("WRITER : "+writer);
+		return null;
+	}
+	
+	@PostMapping(path="/admin/upload")
+	public ResponseEntity<HashMap<String, Object>> uploadPOST(
+			@RequestBody Video video, HttpServletRequest request){
+		System.out.println(video.toString());
+		MultipartHttpServletRequest multirequest = (MultipartHttpServletRequest) request;
+		MultipartFile file = multirequest.getFile("file");
+		TotToken user = (TotToken)redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+		System.out.println(user.getAccount().getRole());
+		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 }

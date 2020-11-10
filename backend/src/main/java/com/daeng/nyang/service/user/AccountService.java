@@ -121,11 +121,11 @@ public class AccountService {
 		System.out.println("ACK : " + accessToken);
 		System.out.println("REF : " + refreshToken);
 		// generate Token and save in redis
-
+		Account user = accountRepo.findAccountByUserId(id);
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
 		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
-		Account ac = Account.builder().user_id(id).build();
+		Account ac = Account.builder().user_id(id).role(user.getRole()).build();
 		retok = TotToken.builder().account(ac).build();
 		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		map.put("success", true);
@@ -236,8 +236,9 @@ public class AccountService {
 			if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
 				final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
 				String new_accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+				Account user = accountRepo.findAccountByUserId(user_id);
 				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-				Account ac = Account.builder().user_id(user_id).build();
+				Account ac = Account.builder().user_id(user_id).role(user.getRole()).build();
 				TotToken token = TotToken.builder().account(ac).build();
 				vop.set(new_accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
 				response.put("success", true);

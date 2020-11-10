@@ -113,7 +113,6 @@ export default {
         headers:{
           Authorization: this.$cookies.get("accessToken"),
           "Content-Type": "multipart/form-data",
-          "boundary" : "AaB03x"
         }
       })
       .then((res)=>{

@@ -26,7 +26,7 @@ import Header from "../components/Header.vue";
 import StreamingVideo from "../components/videolist/StreamingVideo";
 import NoneStreamingVideo from "../components/videolist/NoneStreamingVideo";
 import VideoSeeMore from "../components/videolist/VideoSeeMore";
-import UploadVideo from "../components/UploadVideo.vue"
+// import UploadVideo from "../components/UploadVideo.vue"
 
 
 
@@ -36,7 +36,7 @@ export default {
     StreamingVideo,
     NoneStreamingVideo,
     VideoSeeMore,
-    UploadVideo
+    // UploadVideo
   },
   data() {
     return {
