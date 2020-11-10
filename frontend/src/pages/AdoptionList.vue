@@ -6,7 +6,7 @@
         <div class="adoption-list-div col-lg-10 col-md-10 col-sm-10">
           <h3 class="adoption-list"><strong>입양신청목록</strong></h3>
           <div style="display: flex; justify-content: flex-end">
-            <v-btn @click="showMyList" style="background: green; color: white">
+            <v-btn @click="showMyList" style="background: black; color: white">
               <strong>내글보기</strong>
             </v-btn>
           </div>

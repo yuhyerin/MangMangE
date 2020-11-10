@@ -19,6 +19,7 @@ import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 import Live from '../pages/Live.vue'
+import VideoDetailPopup from '../pages/VideoDetailPopup'
 
 Vue.use(VueRouter)
 
@@ -112,6 +113,12 @@ const routes = [
     name: 'Live',
     component: Live
   },
+  {
+    path: '/videos/0',
+    name: 'VideoDetailPopup',
+    component: VideoDetailPopup,
+    props: (route) => ({ query: route.query.q })
+  }
 ]
 
 const router = new VueRouter({
