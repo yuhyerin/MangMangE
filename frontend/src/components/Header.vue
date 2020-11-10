@@ -33,9 +33,9 @@
       "
     >
       <img
-        src="../assets/image/logo3.png"
+        src="../assets/image/logo4.png"
         alt="logo"
-        style="height: 75px; width: 120px"
+        style="height: 70%; padding-left: 20px"
       />
     </div>
     <div>
@@ -141,9 +141,45 @@ export default {
     //     });
     // },
     countDownTimer() {
-      window.setTimeout(() => {
-        alert("확인");
-      }, 2000);
+      // let today = new Date();
+      // let expireTime =
+      //   this.$cookies.get("expireTime").substring(11, 13) * 3600 +
+      //   this.$cookies.get("expireTime").substring(14, 16) * 60 +
+      //   this.$cookies.get("expireTime").substring(17, 19) * 1;
+      // let userTime =
+      //   today.getHours() * 3600 +
+      //   today.getMinutes() * 60 +
+      //   today.getSeconds() * 1;
+      // if (expireTime > 85800) {
+      //   expireTime -= 86400;
+      //   userTime -= 86400;
+      // }
+      // if (expireTime <= userTime) {
+      //   axios
+      //     .post(
+      //       SERVER.URL + "/newuser/refresh",
+      //       {},
+      //       {
+      //         headers: {
+      //           accessToken: this.$cookies.get("accessToken"),
+      //           refreshToken: this.$cookies.get("refreshToken"),
+      //         },
+      //       }
+      //     )
+      //     .then((res) => {
+      //       console.log(res);
+      //       if (res.data.success) {
+      //         this.$cookies.set("accessToken", res.data.accessToken);
+      //         this.$cookies.set("expireTime", res.data.expireTime);
+      //       }
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
+      //     });
+      // }
+      // window.setTimeout(() => {
+      //   alert("확인");
+      // }, 2000);
     },
 
     logout() {
@@ -161,6 +197,7 @@ export default {
           console.log(res);
           this.$cookies.remove("accessToken");
           this.$cookies.remove("refreshToken");
+          this.$cookies.remove("expireTime");
           this.setUserSurveyCheck(false);
           location.href = "/";
         })

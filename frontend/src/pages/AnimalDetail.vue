@@ -12,24 +12,14 @@
         <div
           style="
             display: flex;
-            position: absolute;
-            z-index: 1;
-            right: 13%;
-            top: 95px;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
           "
-          @click="setLiked"
         >
-          <v-icon x-large v-if="likeTrigger == false" color="rgb(255,0,0)">
-            mdi-heart-outline
-          </v-icon>
-          <v-icon x-large v-if="likeTrigger == true" color="rgb(255,0,0)">
-            mdi-heart
-          </v-icon>
-        </div>
-        <div style="display: flex">
-          <div>
+          <!-- <div>
             <v-icon color="black"> mdi-arrow-left </v-icon>
-          </div>
+          </div> -->
           <div
             style="
               display: flex;
@@ -37,6 +27,9 @@
               align-items: center;
               overflow: hidden;
               width: 30vw;
+              height: 90%;
+              margin-right: 2%;
+              margin-left: 2%;
             "
           >
             <img
@@ -46,8 +39,29 @@
             />
           </div>
           <div style="width: 70vw; height: 35vh; margin: 10px">
-            <div style="height: 20%">제목</div>
-            <div style="height: 60%">
+            <div
+              style="
+                width: 100%;
+                height: 20%;
+                padding-left: 2%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <div style="width: 90%">제목</div>
+              <div style="display: flex; width: 10%" @click="setLiked">
+                <v-icon large v-if="likeTrigger == false" color="rgb(255,0,0)">
+                  mdi-heart-outline
+                </v-icon>
+                <transition name="bounce">
+                  <v-icon large v-if="likeTrigger == true" color="rgb(255,0,0)">
+                    mdi-heart
+                  </v-icon>
+                </transition>
+              </div>
+            </div>
+            <div style="height: 60%; padding-left: 2%">
               <table>
                 <tr>
                   <td>종 / 품종</td>
@@ -56,12 +70,12 @@
                 <tr>
                   <td>성별(중성화)</td>
                   <td>
-                    {{ this.animalInfo.sex_cd == "M" ? "수컷" : "암컷" }}
+                    {{ animalSex }}
                   </td>
                 </tr>
                 <tr>
                   <td>나이</td>
-                  <td>{{ this.animalInfo.age }}</td>
+                  <td>{{ animalAge }}</td>
                 </tr>
                 <tr>
                   <td>몸무게</td>
@@ -73,7 +87,7 @@
                 </tr>
                 <tr>
                   <td>성격</td>
-                  <td>{{ this.animalInfo.mbti }}</td>
+                  <td>{{ animalTag }}</td>
                 </tr>
               </table>
             </div>
@@ -118,6 +132,37 @@ export default {
       adoptionBtn: "",
     };
   },
+  computed: {
+    animalTag() {
+      var tag = "";
+      for (let i = 0; i < this.animalInfo.personality.length; i++) {
+        tag += "#" + this.animalInfo.personality[i] + " ";
+      }
+      return tag;
+    },
+
+    animalAge() {
+      var d = new Date();
+      var n = d.getFullYear();
+      var age = n - this.animalInfo.age * 1;
+      if (age < 1) {
+        return "1년 미만";
+      } else {
+        return age + "살";
+      }
+    },
+
+    animalSex() {
+      if (this.animalInfo.sex_cd == "M") {
+        return "수컷";
+      } else if (this.animalInfo.sex_cd == "F") {
+        return "암컷";
+      } else {
+        return "알수없음";
+      }
+    },
+  },
+
   created() {
     this.animalInfo = "";
     this.likeTrigger = false;
@@ -129,48 +174,52 @@ export default {
     }
 
     if (this.$cookies.get("accessToken") != null) {
-      axios
-        .get(SERVER.URL + "/newuser/animal/detail", {
-          params: {
-            desertion_no: this.$route.params.animalID,
-          },
-        })
-        .then((res) => {
-          this.animalInfo = res.data.animalList;
-          this.adoptionBtn = false;
-          // console.log(res.data.animalList);
-        })
-        .catch((err) => {
-          // console.log("user/animal/detail 요청 막힘");
-          console.log(err);
-          // axios
-          //   .get(SERVER.URL + "/newuser/animal/detail", {
-          //     params: {
-          //       desertion_no: this.$route.params.animalID,
-          //     },
-          //   })
-          //   .then((res) => {
-          //     console.log(res.data);
-          //     this.animalInfo = res.data.animalList;
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //   });
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .get(SERVER.URL + "/newuser/animal/detail", {
+            params: {
+              desertion_no: this.$route.params.animalID,
+            },
+          })
+          .then((res) => {
+            this.animalInfo = res.data.animalList;
+            this.adoptionBtn = false;
+            // console.log(res.data.animalList);
+          })
+          .catch((err) => {
+            // console.log("user/animal/detail 요청 막힘");
+            console.log(err);
+            // axios
+            //   .get(SERVER.URL + "/newuser/animal/detail", {
+            //     params: {
+            //       desertion_no: this.$route.params.animalID,
+            //     },
+            //   })
+            //   .then((res) => {
+            //     console.log(res.data);
+            //     this.animalInfo = res.data.animalList;
+            //   })
+            //   .catch((err) => {
+            //     console.log(err);
+            //   });
+          });
+      });
     } else {
-      axios
-        .get(SERVER.URL + "/newuser/animal/detail", {
-          params: {
-            desertion_no: this.$route.params.animalID,
-          },
-        })
-        .then((res) => {
-          this.animalInfo = res.data.animalList;
-          this.adoptionBtn = true;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .get(SERVER.URL + "/newuser/animal/detail", {
+            params: {
+              desertion_no: this.$route.params.animalID,
+            },
+          })
+          .then((res) => {
+            this.animalInfo = res.data.animalList;
+            this.adoptionBtn = true;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
     }
   },
   methods: {
@@ -181,45 +230,49 @@ export default {
         if (this.likeTrigger == true) {
           // 좋아요 해제
           console.log("false");
-          axios
-            .post(
-              SERVER.URL + "/user/animal/animalLike",
-              {
-                desertion_no: this.animalInfo.desertion_no,
-              },
-              {
-                headers: {
-                  Authorization: this.$cookies.get("accessToken"),
+          SERVER.tokenCheck(() => {
+            axios
+              .post(
+                SERVER.URL + "/user/animal/animalLike",
+                {
+                  desertion_no: this.animalInfo.desertion_no,
                 },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+                {
+                  headers: {
+                    Authorization: this.$cookies.get("accessToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
         } else {
           // 좋아요 등록
           console.log("true");
-          axios
-            .post(
-              SERVER.URL + "/user/animal/animalLike",
-              {
-                desertion_no: this.animalInfo.desertion_no,
-              },
-              {
-                headers: {
-                  Authorization: this.$cookies.get("accessToken"),
+          SERVER.tokenCheck(() => {
+            axios
+              .post(
+                SERVER.URL + "/user/animal/animalLike",
+                {
+                  desertion_no: this.animalInfo.desertion_no,
                 },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+                {
+                  headers: {
+                    Authorization: this.$cookies.get("accessToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
         }
         this.likeTrigger = !this.likeTrigger;
       }
@@ -262,4 +315,22 @@ export default {
 </script>
 
 <style>
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+  z-index: -5;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 </style>	

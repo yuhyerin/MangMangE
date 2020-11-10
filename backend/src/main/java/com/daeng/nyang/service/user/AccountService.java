@@ -1,5 +1,6 @@
 package com.daeng.nyang.service.user;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -126,7 +127,11 @@ public class AccountService {
 		map.put("success", true);
 		map.put("accessToken", accessToken);
 		map.put("refreshToken", refreshToken);
-		map.put("expireTime", new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000) );
+		Date expireTime =  new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000);
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+		String expireTime_fotmat1 = format1.format(expireTime);
+		System.out.println(expireTime_fotmat1);
+		map.put("expireTime", expireTime_fotmat1);
 		return map;
 	}
 	
@@ -237,6 +242,11 @@ public class AccountService {
 				vop.set(new_accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
 				response.put("success", true);
 				response.put("accessToken", new_accessToken);
+				Date expireTime =  new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000);
+				SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+				String expireTime_fotmat1 = format1.format(expireTime);
+				System.out.println(expireTime_fotmat1);
+				response.put("expireTime", expireTime_fotmat1);
 				System.out.println("new_accessToken : " + new_accessToken);
 
 			} else {

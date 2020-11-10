@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <v-container>
-      <v-stepper v-model="page" style="box-shadow: 0 0 black">
+      <v-stepper v-model="page" style="box-shadow: 0 0 black; height: 90vh">
         <v-stepper-header style="box-shadow: 0 0 black">
           <v-stepper-step
             @click="goPage(1)"
@@ -100,8 +100,9 @@
             <!-- Name of step 3 -->
           </v-stepper-step>
         </v-stepper-header>
-        <v-stepper-items class="survey-items"
-          style="display: flex; text-align: center; align-items:center;"
+        <v-stepper-items
+          class="survey-items"
+          style="display: flex; text-align: center; align-items: center"
         >
           <v-stepper-content step="1">
             <Question1 />
@@ -111,9 +112,7 @@
             <Question2 />
           </v-stepper-content>
 
-          <v-stepper-content
-            step="3"
-          >
+          <v-stepper-content step="3">
             <Question3 />
           </v-stepper-content>
 
@@ -142,6 +141,11 @@
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
+      <div style="width: 100%; display: flex; justify-content: flex-end">
+        <div style="font-weight: bold; color: red" @click="cancelSurvey">
+          다음에 하기
+        </div>
+      </div>
     </v-container>
   </v-app>
 </template>
@@ -162,8 +166,8 @@ import Question9 from "../components/survey/Question9";
 export default {
   data() {
     return {
-      step: {cursor: none}
-    }
+      step: { cursor: none },
+    };
   },
   components: {
     Question1,
@@ -181,9 +185,12 @@ export default {
   },
   methods: {
     ...mapMutations(["goPage"]),
-
+    ...mapMutations(["resetSurvey"]),
+    cancelSurvey() {
+      this.resetSurvey(null);
+      location.href = "/";
+    },
   },
-
 };
 </script>
 

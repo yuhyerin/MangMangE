@@ -1,15 +1,15 @@
 <template>
   <div style="display: flex" @click="setLiked">
-    <!-- <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
+    <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
       mdi-heart-outline
     </v-icon>
     <transition name="bounce">
       <v-icon v-if="likeTrigger == true" color="rgb(255,0,0)">
         mdi-heart
       </v-icon>
-    </transition> -->
+    </transition>
 
-    <img
+    <!-- <img
       v-if="likeTrigger == false"
       src="../assets/image/unlike1.png"
       alt="좋아요"
@@ -22,7 +22,7 @@
         alt="좋아요"
         style="width: 45px"
       />
-    </transition>
+    </transition> -->
   </div>
 </template>
 
@@ -46,45 +46,49 @@ export default {
         if (this.likeTrigger == true) {
           // 좋아요 해제
           console.log("false");
-          axios
-            .post(
-              SERVER.URL + "/user/animal/animalLike",
-              {
-                desertion_no: this.desertion_no,
-              },
-              {
-                headers: {
-                  Authorization: this.$cookies.get("accessToken"),
+          SERVER.tokenCheck(() => {
+            axios
+              .post(
+                SERVER.URL + "/user/animal/animalLike",
+                {
+                  desertion_no: this.desertion_no,
                 },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+                {
+                  headers: {
+                    Authorization: this.$cookies.get("accessToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
         } else {
           // 좋아요 등록
           console.log("true");
-          axios
-            .post(
-              SERVER.URL + "/user/animal/animalLike",
-              {
-                desertion_no: this.desertion_no,
-              },
-              {
-                headers: {
-                  Authorization: this.$cookies.get("accessToken"),
+          SERVER.tokenCheck(() => {
+            axios
+              .post(
+                SERVER.URL + "/user/animal/animalLike",
+                {
+                  desertion_no: this.desertion_no,
                 },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+                {
+                  headers: {
+                    Authorization: this.$cookies.get("accessToken"),
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
         }
         this.likeTrigger = !this.likeTrigger;
       }

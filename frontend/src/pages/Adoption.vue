@@ -318,25 +318,26 @@ export default {
         "FE input Form : ",
         this.firstNum + "-" + this.middleNum + "-" + this.lastNum
       );
-
-      axios
-        .get(SERVER.URL + "/user/adopt/create", {
-          params: {
-            phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
-          },
-          headers: {
-            Authorization: this.$cookies.get("accessToken"),
-          },
-        })
-        .then((res) => {
-          console.log("then res : ", res.data);
-          this.pressedAuthenticationBtn = 1;
-          this.personNumberAuthentication = res.data.number;
-        })
-        .catch((err) => {
-          console.log("catch err : ", err);
-          SERVER.RefreshToken(err);
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .get(SERVER.URL + "/user/adopt/create", {
+            params: {
+              phone: this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+            },
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+            },
+          })
+          .then((res) => {
+            console.log("then res : ", res.data);
+            this.pressedAuthenticationBtn = 1;
+            this.personNumberAuthentication = res.data.number;
+          })
+          .catch((err) => {
+            console.log("catch err : ", err);
+            SERVER.RefreshToken(err);
+          });
+      });
     },
 
     adoptionCheck() {
@@ -403,56 +404,57 @@ export default {
         " ",
         this.personTitle
       );
-
-      axios
-        .post(
-          SERVER.URL + "/user/adopt/create",
-          {
-            ani_num: this.dogSerial,
-            user_name: this.personName,
-            user_phone:
-              this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
-            user_email: this.personEmail,
-            title: this.personTitle,
-          },
-          {
-            headers: {
-              Authorization: this.$cookies.get("accessToken"),
+      SERVER.tokenCheck(() => {
+        axios
+          .post(
+            SERVER.URL + "/user/adopt/create",
+            {
+              ani_num: this.dogSerial,
+              user_name: this.personName,
+              user_phone:
+                this.firstNum + "-" + this.middleNum + "-" + this.lastNum,
+              user_email: this.personEmail,
+              title: this.personTitle,
             },
-          }
-        )
-        .then((res) => {
-          console.log("then res : ", res.data);
-          this.$router.push("/adoptionlist");
-        })
-        .catch((err) => {
-          console.log("catch err : ", err);
-          SERVER.RefreshToken(err);
-          // if (err.response.status == 401) {
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res) => {
+            console.log("then res : ", res.data);
+            this.$router.push("/adoptionlist");
+          })
+          .catch((err) => {
+            console.log("catch err : ", err);
+            SERVER.RefreshToken(err);
+            // if (err.response.status == 401) {
 
-          //   axios
-          //     .post(
-          //       SERVER.URL + "/newuser/refresh",
-          //       {},
-          //       {
-          //         headers: {
-          //           accessToken: this.$cookies.get("accessToken"),
-          //           refreshToken: this.$cookies.get("refreshToken"),
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       console.log(res);
-          //       if (res.data.success) {
-          //         this.$cookies.set("accessToken", res.data.accessToken);
-          //         console.log(this.$cookies.get("accessToken"));
-          //       }
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //     });
-          // }
-        });
+            //   axios
+            //     .post(
+            //       SERVER.URL + "/newuser/refresh",
+            //       {},
+            //       {
+            //         headers: {
+            //           accessToken: this.$cookies.get("accessToken"),
+            //           refreshToken: this.$cookies.get("refreshToken"),
+            //         },
+            //       }
+            //     )
+            //     .then((res) => {
+            //       console.log(res);
+            //       if (res.data.success) {
+            //         this.$cookies.set("accessToken", res.data.accessToken);
+            //         console.log(this.$cookies.get("accessToken"));
+            //       }
+            //     })
+            //     .catch((err) => {
+            //       console.log(err);
+            //     });
+            // }
+          });
+      });
     },
   },
   watch: {
@@ -514,55 +516,57 @@ export default {
     },
   },
   created() {
-    axios
-      .get(SERVER.URL + "/user/animal/detail", {
-        params: {
-          desertion_no: this.$route.params.animalID,
-        },
-        headers: {
-          Authorization: this.$cookies.get("accessToken"),
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.dogSerial = res.data.animalList.desertion_no;
-        this.dogAge = 2020 - res.data.animalList.age + "살";
-        this.dogBreed = res.data.animalList.kind_c;
-        if (res.data.animalList.sex_cd == "M") {
-          this.dogGender = "남";
-        } else {
-          this.dogGender = "여";
-        }
-        this.dogFur = res.data.animalList.color_cd;
-      })
-      .catch((err) => {
-        console.log(err.response);
-        SERVER.RefreshToken(err);
-        // if (err.response.status == 401) {
+    SERVER.tokenCheck(() => {
+      axios
+        .get(SERVER.URL + "/user/animal/detail", {
+          params: {
+            desertion_no: this.$route.params.animalID,
+          },
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.dogSerial = res.data.animalList.desertion_no;
+          this.dogAge = 2020 - res.data.animalList.age + "살";
+          this.dogBreed = res.data.animalList.kind_c;
+          if (res.data.animalList.sex_cd == "M") {
+            this.dogGender = "남";
+          } else {
+            this.dogGender = "여";
+          }
+          this.dogFur = res.data.animalList.color_cd;
+        })
+        .catch((err) => {
+          console.log(err.response);
+          SERVER.RefreshToken(err);
+          // if (err.response.status == 401) {
 
-        //   axios
-        //     .post(
-        //       SERVER.URL + "/newuser/refresh",
-        //       {},
-        //       {
-        //         headers: {
-        //           accessToken: this.$cookies.get("accessToken"),
-        //           refreshToken: this.$cookies.get("refreshToken"),
-        //         },
-        //       }
-        //     )
-        //     .then((res) => {
-        //       console.log(res);
-        //       if (res.data.success) {
-        //         this.$cookies.set("accessToken", res.data.accessToken);
-        //         console.log(this.$cookies.get("accessToken"));
-        //       }
-        //     })
-        //     .catch((err) => {
-        //       console.log(err);
-        //     });
-        // }
-      });
+          //   axios
+          //     .post(
+          //       SERVER.URL + "/newuser/refresh",
+          //       {},
+          //       {
+          //         headers: {
+          //           accessToken: this.$cookies.get("accessToken"),
+          //           refreshToken: this.$cookies.get("refreshToken"),
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       console.log(res);
+          //       if (res.data.success) {
+          //         this.$cookies.set("accessToken", res.data.accessToken);
+          //         console.log(this.$cookies.get("accessToken"));
+          //       }
+          //     })
+          //     .catch((err) => {
+          //       console.log(err);
+          //     });
+          // }
+        });
+    });
   },
 };
 </script>
