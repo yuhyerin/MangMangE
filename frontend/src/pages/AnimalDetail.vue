@@ -79,7 +79,7 @@
                 </tr>
                 <tr>
                   <td>몸무게</td>
-                  <td>{{ this.animalInfo.weight }}</td>
+                  <td>{{ this.animalInfo.weight }} kg</td>
                 </tr>
                 <tr>
                   <td>털색</td>

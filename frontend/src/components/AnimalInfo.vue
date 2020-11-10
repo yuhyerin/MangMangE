@@ -63,7 +63,16 @@
           />
         </div>
       </div>
-      <div style="width: 100%; height: 50%">{{ animalTag }}</div>
+      <div
+        style="
+          width: 100%;
+          height: 50%;
+          font-family: singleDay;
+          font-size: 25px;
+        "
+      >
+        {{ animalTag }}
+      </div>
       <div style="width: 100%; height: 15%">
         {{ this.animalInfo.kind_c }} | {{ animalSex }} | {{ animalAge }}
       </div>
@@ -152,7 +161,7 @@ export default {
 };
 </script>
 
-<style scoped >
+<style scoped>
 .outLine {
   padding: 20px;
   border: 2px solid rgba(0, 0, 0, 0.12);
@@ -176,5 +185,10 @@ export default {
   -ms-transform: scale(1.2);
   -o-transform: scale(1.2);
   transform: scale(1.2);
+}
+
+@font-face {
+  font-family: "singleDay";
+  src: url("../assets/font/SingleDay-Regular.ttf") format("truetype");
 }
 </style>
