@@ -17,7 +17,9 @@ import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
+import UploadVideo from '../pages/UploadVideo.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
+// import UploadTest from '../pages/UploadTest.vue'
 import Live from '../pages/Live.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
 
@@ -92,7 +94,7 @@ const routes = [
   {
     path: '/test',
     component: Test,
-  },
+  },  
   {
     path: '/privacypolicy',
     name: 'PrivacyPolicy',
@@ -104,10 +106,20 @@ const routes = [
     component: VideoDetail,
   },
   {
+   path: '/videos/upload',
+   name:'UploadVideo',
+   component:UploadVideo 
+  },
+  {
     path: '/privacypolicy',
     name: 'PrivacyPolicy',
     component: PrivacyPolicy
   },
+  // {
+  //   path : '/video/upload',
+  //   name:'UploadVideo',
+  //   component: UploadTest
+  // },
   {
     path: '/live',
     name: 'Live',
