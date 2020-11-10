@@ -1,25 +1,40 @@
 <template>
-  <div v-infinite-scroll="loadMore"
+  <div
+    v-infinite-scroll="loadMore"
     infinite-scroll-disabled="loading"
-    infinite-scroll-distance="6">
-    <v-row style="display: flex; justify-content: center;">
-    <div class="search">
-      <input type="text" class="searchTerm" placeholder="검색어를 입력하세요.">
-      <button type="submit" @click="searchButton" class="searchButton">
-        <i class="fa fa-search"></i>
-      </button>
-    </div>
+    infinite-scroll-distance="6"
+  >
+    <v-row style="display: flex; justify-content: center">
+      <div class="search">
+        <input
+          type="text"
+          class="searchTerm"
+          placeholder="검색어를 입력하세요."
+        />
+        <button type="submit" @click="searchButton" class="searchButton">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
     </v-row>
-    <hr>
+    <hr />
     <v-row v-for="video in videos" :key="video">
-      <v-col v-for="n in 3" :key="n" style="padding-bottom: 30px;">
+      <v-col v-for="n in 3" :key="n" style="padding-bottom: 30px">
         <vue-plyr>
           <video poster="poster.png">
-            <source :src="require(`@/assets/videos/${video.video}.mp4`)" type="video/mp4">
-            <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
-          </video>  
+            <source
+              :src="require(`@/assets/videos/${video.video}.mp4`)"
+              type="video/mp4"
+            />
+            <track
+              kind="captions"
+              label="English"
+              srclang="en"
+              src="captions-en.vtt"
+              default
+            />
+          </video>
         </vue-plyr>
-        <div style="text-align:center;">동영상 제목{{video.id}}</div>
+        <div style="text-align: center">동영상 제목{{ video.id }}</div>
       </v-col>
     </v-row>
   </div>
@@ -32,36 +47,35 @@ export default {
       videos: [
         {
           id: 1,
-          video: "video1"
+          video: "video1",
         },
         {
           id: 2,
-          video: "video1"
+          video: "video1",
         },
         {
           id: 3,
-          video: "video1"
+          video: "video1",
         },
         {
           id: 4,
-          video: "video1"
+          video: "video1",
         },
-                {
+        {
           id: 5,
-          video: "video1"
+          video: "video1",
         },
-                {
+        {
           id: 6,
-          video: "video1"
+          video: "video1",
         },
-      ]
-    }
+      ],
+    };
   },
   mounted() {
-    console.log(this.$refs.plyr.player)
+    console.log(this.$refs.plyr.player);
   },
-
-}
+};
 </script>
 
 <style scoped>
@@ -72,7 +86,7 @@ export default {
   position: relative;
   display: flex;
   justify-content: center;
-  margin: 20px 0px
+  margin: 20px 0px;
 }
 
 .searchTerm {
@@ -83,20 +97,20 @@ export default {
   height: 36px;
   border-radius: 5px 0 0 5px;
   outline: none;
-  color: #9DBFAF;
+  color: #9dbfaf;
   background-color: white;
   font-size: 13px;
 }
 
-.searchTerm:focus{
-  color:black;
+.searchTerm:focus {
+  color: black;
 }
 
 .searchButton {
   width: 40px;
   height: 36px;
   border: 1px solid rgb(1, 118, 72);
-  background:rgb(1, 118, 72);
+  background: rgb(1, 118, 72);
   text-align: center;
   color: #fff;
   border-radius: 0 5px 5px 0;

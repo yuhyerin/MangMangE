@@ -21,7 +21,23 @@
       border-bottom: 1px solid gray;
     "
   >
-    <div @click="moveToMain" style="width: 10vw">로고</div>
+    <div
+      @click="moveToMain"
+      class="logo"
+      style="
+        height: 75px;
+        width: 10vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <img
+        src="../assets/image/logo4.png"
+        alt="logo"
+        style="height: 70%; padding-left: 20px"
+      />
+    </div>
     <div style="width: 80vw; display: flex; justify-content: space-around">
       <v-btn
         text
@@ -124,6 +140,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setEventListener"]),
+    ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
       location.href = "/";
     },
@@ -177,6 +194,13 @@ export default {
       }
     },
 
+    moveTo(page) {
+      if (page == "/animals") {
+        this.setEventListener(2);
+      }
+      this.$router.push(page);
+    },
+
     countDownTimer() {
       if (this.countDown > 0) {
         setTimeout(() => {
@@ -192,7 +216,7 @@ export default {
           {},
           {
             headers: {
-              accessToken: this.$cookies.get("accessToken"),
+              Authorization: this.$cookies.get("accessToken"),
             },
           }
         )
@@ -200,6 +224,7 @@ export default {
           console.log(res);
           this.$cookies.remove("accessToken");
           this.$cookies.remove("refreshToken");
+          this.$cookies.remove("expireTime");
           this.setUserSurveyCheck(false);
           location.href = "/";
         })

@@ -19,6 +19,18 @@
           @mouseout="setMoveTrigger"
           @click="setLiked"
         >
+          <!-- <img
+            v-if="likeTrigger == false"
+            src="../assets/image/unlike1.png"
+            alt="좋아요"
+            style="width: 30px"
+          />
+          <img
+            v-if="likeTrigger == true"
+            src="../assets/image/like1-1.png"
+            alt="좋아요"
+            style="width: 30px"
+          /> -->
           <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
             mdi-heart-outline
           </v-icon>
@@ -58,6 +70,7 @@
             mdi-heart
           </v-icon>
         </div>
+
         <h2>{{ animalInfo.kind_cd }}</h2>
         <p>일련번호 : {{ animalInfo.desertion_no }}</p>
         <br />
@@ -66,8 +79,67 @@
         <p>{{ animalInfo.weight }} kg (추정)</p>
       </div>
     </div>
-    <div style="font-weight: bold">
-      {{ this.animalTag }}
+    <div
+      style="display: flex; justify-content: center; align-items: flex-start; flex; flex-direction: column; width: 100%"
+    >
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+        "
+      >
+        <div
+          :style="
+            this.animalInfo.personality[0].length > 5
+              ? 'font-size: 15px'
+              : 'font-size: 15px'
+          "
+          style="width: 100%"
+        >
+          # {{ this.animalInfo.personality[0] }}
+        </div>
+        <div
+          :style="
+            this.animalInfo.personality[0].length > 5
+              ? 'font-size: 15px'
+              : 'font-size: 15px'
+          "
+          style="width: 100%"
+        >
+          # {{ this.animalInfo.personality[1] }}
+        </div>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+        "
+      >
+        <div
+          :style="
+            this.animalInfo.personality[0].length > 5
+              ? 'font-size: 15px'
+              : 'font-size: 15px'
+          "
+          style="width: 100%"
+        >
+          # {{ this.animalInfo.personality[2] }}
+        </div>
+        <div
+          :style="
+            this.animalInfo.personality[0].length > 5
+              ? 'font-size: 15px'
+              : 'font-size: 15px'
+          "
+          style="width: 100%"
+        >
+          # {{ this.animalInfo.personality[3] }}
+        </div>
+      </div>
     </div>
     <!-- <div style="display: flex; align-items: center">
       <v-icon> mdi-hail </v-icon>
@@ -158,45 +230,49 @@ export default {
           if (this.likeTrigger == true) {
             // 좋아요 해제
             console.log("false");
-            axios
-              .post(
-                SERVER.URL + "/user/animal/animalLike",
-                {
-                  desertion_no: this.animalInfo.desertion_no,
-                },
-                {
-                  headers: {
-                    Authorization: this.$cookies.get("accessToken"),
+            SERVER.tokenCheck(() => {
+              axios
+                .post(
+                  SERVER.URL + "/user/animal/animalLike",
+                  {
+                    desertion_no: this.animalInfo.desertion_no,
                   },
-                }
-              )
-              .then((res) => {
-                console.log(res);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+                  {
+                    headers: {
+                      Authorization: this.$cookies.get("accessToken"),
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
           } else {
             // 좋아요 등록
             console.log("true");
-            axios
-              .post(
-                SERVER.URL + "/user/animal/animalLike",
-                {
-                  desertion_no: this.animalInfo.desertion_no,
-                },
-                {
-                  headers: {
-                    Authorization: this.$cookies.get("accessToken"),
+            SERVER.tokenCheck(() => {
+              axios
+                .post(
+                  SERVER.URL + "/user/animal/animalLike",
+                  {
+                    desertion_no: this.animalInfo.desertion_no,
                   },
-                }
-              )
-              .then((res) => {
-                console.log(res);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+                  {
+                    headers: {
+                      Authorization: this.$cookies.get("accessToken"),
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
           }
           this.likeTrigger = !this.likeTrigger;
         }

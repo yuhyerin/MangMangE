@@ -41,7 +41,7 @@ public class AnimalDetailController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
-	// 회원
+	// 회원 : 동물 상세 정보 조회
 	@GetMapping("/user/animal/detail")
 	public ResponseEntity<HashMap<String, Object>> animalDetailUser(@RequestParam Long desertion_no,
 			HttpServletRequest request) {
@@ -49,20 +49,22 @@ public class AnimalDetailController {
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
-		
-		if(animalService.findApply(desertion_no, user_id))
-			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-		
+			
 		HashMap<String, Object> map = null;
 		AnimalListFE animal = animalService.animalDetail(user_id, desertion_no); // animal 정보
 		if (animal != null) {
 			map = new HashMap<String, Object>();
 			map.put("animalList", animal);
 		}
+		if(animalService.findApply(desertion_no, user_id))
+			map.put("adoptCheck", true);
+		else
+			map.put("adoptCheck", false);
 		System.out.println(map.toString());
 		if (map.size() == 0)
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
+	
 
 }
