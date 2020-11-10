@@ -81,14 +81,14 @@ const routes = [
   {
     path: '/test',
     component: Test,
-  },
+  },  
   {
     path: '/video/:videoID',
     name: 'VideoDetail',
     component: VideoDetail,
   },
   {
-   path: '/video/upload',
+   path: '/videos/upload',
    name:'UploadVideo',
    component:UploadVideo 
   },

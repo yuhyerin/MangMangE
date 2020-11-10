@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-top: 80px">
     <v-row>
       <v-col>
         <video
@@ -81,7 +81,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$refs.plyr.player);
+    // console.log(this.$refs.plyr.player);
   },
   created() {
     if (this.$cookies.get("accessToken") != null) {
@@ -112,7 +112,7 @@ export default {
       this.$emit("changeVideo", 2);
     },
     uploadVideo() {
-      router.push({ name: "UploadVideo" });
+      this.$router.push("/videos/upload");
     },
   },
 };

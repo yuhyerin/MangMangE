@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div  style="padding-top: 80px" >
     <Header/>
     <v-container
       style="padding-top: 90px; background-color: rgb(244, 236, 225)"
