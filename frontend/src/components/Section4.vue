@@ -14,7 +14,7 @@
           <img 
             class="img1"
             src="../assets/image/mainpage/section4-dog.jpg" />
-          <h2 class="first-word" @click="moveToKang">강아지 정보</h2>
+          <h2 class="first-word">강아지 정보</h2>
           </a>
         </div>
         <div class="third" @click="moveToAdoptionList">

@@ -19,7 +19,7 @@
             <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
           </video>  
         </vue-plyr>
-        <div style="text-align:center;">동영상 제목{{video.id}}</div>
+        <div class="videoTitle" style="text-align:center;" @click="moveToVideoDetail(video.id)">동영상 제목{{video.id}}</div>
       </v-col>
     </v-row>
   </div>
@@ -57,8 +57,22 @@ export default {
       ]
     }
   },
+  methods: {
+    moveToVideoDetail(videoIndex) {
+      this.$router.push(
+        {
+          name: 'VideoDetail',
+          params: {
+            videoId: videoIndex
+          }
+        }
+      )
+    }
+  },
   mounted() {
+    console.log(1)
     console.log(this.$refs.plyr.player)
+    
   },
 
 }
@@ -112,4 +126,9 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 } */
+
+div.videoTitle:hover {
+  cursor: pointer;
+}
+
 </style>

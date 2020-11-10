@@ -100,7 +100,7 @@ export default {
 
 <style>
 .section.s2 {
-  background-color: rgba(255, 165, 0, 1);
+  background-color: rgba(255, 165, 0, 0.7);
   /* background: darkgray; */
   /* background: #fcf7f0; */
   /* background: #fa8290; */
