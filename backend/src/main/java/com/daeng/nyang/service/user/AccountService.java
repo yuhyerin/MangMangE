@@ -1,7 +1,9 @@
 package com.daeng.nyang.service.user;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -125,12 +127,44 @@ public class AccountService {
 		map.put("success", true);
 		map.put("accessToken", accessToken);
 		map.put("refreshToken", refreshToken);
+		Date expireTime =  new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000);
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+		String expireTime_fotmat1 = format1.format(expireTime);
+		System.out.println(expireTime_fotmat1);
+		map.put("expireTime", expireTime_fotmat1);
 		return map;
+	}
+	
+	public HashMap<String, Object> changPW(Account account){
+		String e_password = bcryptEncoder.encode(account.getUser_password());
+		account.setUser_password(e_password);
+		accountRepo.updateUserPasswordWithUserid(account.getUser_id(), account.getUser_password());
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		Account temp=accountRepo.findAccountByUserId(account.getUser_id());
+		if(temp.getUser_password().equals(e_password)) {
+			result.put("success", true);
+		} else {
+			result.put("success", false);
+		}
+		return result;
 	}
 
 	public HashMap<String, Object> createApply(String user_id, Apply apply) {
 		System.out.println("accountService 입장");
 		System.out.println(apply.toString());
+		apply.setUser_id(user_id);
+		System.out.println(apply.toString());
+		Apply app = applyRepo.save(apply);
+		HashMap<String, Object> map = new HashMap<>();
+		if (app == null)
+			map.put("success", false);
+		else
+			map.put("success", true);
+		return map;
+	}
+	
+	public HashMap<String, Object> updateApply(String user_id, Apply apply) {
+		System.out.println("SERVICE START");
 		apply.setUser_id(user_id);
 		System.out.println(apply.toString());
 		Apply app = applyRepo.save(apply);
@@ -208,6 +242,11 @@ public class AccountService {
 				vop.set(new_accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
 				response.put("success", true);
 				response.put("accessToken", new_accessToken);
+				Date expireTime =  new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000);
+				SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+				String expireTime_fotmat1 = format1.format(expireTime);
+				System.out.println(expireTime_fotmat1);
+				response.put("expireTime", expireTime_fotmat1);
 				System.out.println("new_accessToken : " + new_accessToken);
 
 			} else {
