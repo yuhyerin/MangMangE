@@ -84,9 +84,8 @@ export default {
         },  
       )
       .then((res) => {
-        console.log('요청성공',res.data)
+        console.log('요청성공', res.data)
         window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
-
       }
       )
       .catch((err) => {
