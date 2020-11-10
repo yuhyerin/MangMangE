@@ -1,14 +1,14 @@
 <template>
     <div>
         <div style="margin: 50px">
-            <!-- <button id="startButton" @click="roomOpen" style="float: left">Start버튼</button>
+            <button id="startButton" @click="roomOpen" style="float: left">Start버튼</button>
             <button id="callButton" @click="doCall" style="margin-left: 100px">Call버튼</button>
-            <button id="hangupButton" @click="hangup" style="margin-left: 200px">Hang Up버튼</button> -->
+            <button id="hangupButton" @click="hangup" style="margin-left: 200px">Hang Up버튼</button>
         </div>
-        <!-- <div>
+        <div>
             <h1> local Video </h1>
             <video id="localVideo" autoplay playsinline></video>
-        </div> -->
+        </div>
         <div>
             <h2> remote Video </h2>
             <video id="remoteVideo" autoplay playsinline></video>
@@ -23,12 +23,12 @@ import io from 'socket.io-client'
 export default {
   data(){
     return {
-        room: 'hyerin',
-
         socket: null,
-        isChannelReady: false,
-        isStarted: false,
 
+        isChannelReady: false,
+        isInitiator: false,
+        isStarted: false,
+        localStream: null,
         remoteStream:null,
         pc:null,
         turnReady:null,
@@ -36,11 +36,13 @@ export default {
             offerToReceiveAudio: true,
             offerToReceiveVideo: true
         },
+        room: 'ttt',
 
         localPeerConnection:null,
         remotePeerConnection:null,
         peerConnection:null,
 
+        localVideo:null,
         remoteVideo:null,
 
         startButton:null,
@@ -56,34 +58,41 @@ export default {
     }
   },
   mounted(){
-      this.roomOpen()
-  },
-  created(){
       
   },
   methods:{
         maybeStart(){
 
-            console.log('>>>>>>> 프론트 : maybeStart()호출  isStarted : ', this.isStarted,'isChannelReady : ', this.isChannelReady);
-            if (!this.isStarted && this.isChannelReady) {
+            console.log('>>>>>>> 프론트 : maybeStart()호출  isStarted: ', this.isStarted,'  localStream : ', this.localStream,'isChannelReady : ', this.isChannelReady);
+            if (!this.isStarted && typeof this.localStream !== 'undefined' && this.isChannelReady) {
                 console.log('>>>>>>> 프론트 : creating peer connection');
-                this.createPeerConnection(); // createPeerConnection함수로 peerconnection 을 만들어준다.
+                this.createPeerConnection(); // createPeerConnection함수로 peerconnection 을 만들어준다. 
+                this.pc.addStream(this.localStream); // 나의 peerconnection에 localstream을 붙인다.
                 this.isStarted = true;
-                
-            }else if(!this.isStarted && this.isChannelReady){
-                alert("maybeStart에서 else if!!! ")
+                console.log('>>>>>>> 프론트 : isInitiator(방을만든사람인가요?) ', this.isInitiator);
+                if (this.isInitiator) { //방을 만든사람이면 
+                    this.doCall(); // doCall함수로 같은 방에 있는 client에게 rtc 요청
+                }
             }
         },
         roomOpen(){
             // window.room = prompt("Enter room name:");
             this.socket = io.connect('http://localhost:8002');
-            alert("접속시도")
+            alert("시작")
 
             if (this.room !== '') {
                 this.socket.emit('create or join', this.room);
-                this.socket.emit('role', 'User')
-                console.log('>>>>>>> 프론트 : 일반사용자가 방에 참여하려고 요청합니다. ', this.room);
+                console.log('>>>>>>> 프론트 : Attempted to create or  join room', this.room);
             }
+
+            this.socket.on('created', ((room)=>{
+                console.log('>>>>>>> 프론트 : Created room ' + room);
+                this.isInitiator = true;
+            }));
+
+            this.socket.on('full', ((room)=> {
+                console.log('>>>>>>> 프론트 : Room ' + room + ' is full');
+            }));
 
             this.socket.on('join', ((room)=>{
                 console.log('>>>>>>> 프론트 : Another peer made a request to join room ' + room);
@@ -104,21 +113,22 @@ export default {
                 console.log('>>>>>>> 프론트 : Client received message:', message);
                 if (message === 'got user media') {
                     this.maybeStart();
+                    
                 } else if (message.type === 'offer') {
-                    alert('message.type이 offer!!!!')
-                    if (!this.isStarted) {
+                    if (!this.isInitiator && !this.isStarted) {
                         this.maybeStart();
                     }
                     this.pc.setRemoteDescription(new RTCSessionDescription(message));
                     this.doAnswer();
+
                 } else if (message.type === 'answer' && this.isStarted) {
-                    alert('message.type이 answer!!!!')
                     this.pc.setRemoteDescription(new RTCSessionDescription(message));
+                    
                 } else if (message.type === 'candidate' && this.isStarted) {
-                    alert('message.type이 candidate!!!!')
+                    console.log("else if로 진입! ")
                     var candidate = new RTCIceCandidate({
-                        sdpMLineIndex: message.label,
-                        candidate: message.candidate
+                    sdpMLineIndex: message.label,
+                    candidate: message.candidate
                     });
                     this.pc.addIceCandidate(candidate);
                 } else if (message === 'bye' && this.isStarted) {
@@ -128,34 +138,63 @@ export default {
 
             alert("끝!")
             // element들 가져오기 
+            this.localVideo = document.getElementById('localVideo');
             this.remoteVideo = document.getElementById('remoteVideo');
+            this.startButton = document.getElementById('startButton');
+            this.callButton = document.getElementById('callButton');
+            this.hangupButton = document.getElementById('hangupButton');
 
-            // 이벤트리스너 등록
+            // 이벤트리스너 등록 
+            this.localVideo.addEventListener("loadedmetadata",( ()=> {
+                // console.log('left: gotStream with width and height:', this.localVideo.videoWidth, this.localVideo.videoHeight);
+                console.log('>>>>>>> 프론트 : left: gotStream with width and height:');
+            }));
 
             this.remoteVideo.addEventListener("loadedmetadata", ( ()=> {
+                // console.log('right: gotStream with width and height:', this.remoteVideo.videoWidth, this.remoteVideo.videoHeight);
                 console.log('>>>>>>> 프론트 : right: gotStream with width and height:');
             }));
 
             this.remoteVideo.addEventListener('resize', (() => {
+                // console.log(`Remote video size changed to ${this.remoteVideo.videoWidth}x${this.remoteVideo.videoHeight}`);
                 console.log('>>>>>>> 프론트 : Remote video size changed to');
             }));
 
-            //  navigator.mediaDevices.getUserMedia(this.mediaStreamConstraints)
-            // .then(this.gotLocalMediaStream)
-            // .catch();
+             navigator.mediaDevices.getUserMedia(this.mediaStreamConstraints)
+            .then(this.gotLocalMediaStream)
+            .catch();
 
         },
-
+      
         gotLocalMediaStream(mediaStream) {
             console.log(">>>>>>> 프론트 : gotLocalMediaStream : Adding local stream. ")
+            this.localStream = mediaStream;
+            this.localVideo.srcObject = mediaStream;
             this.sendMessage('got user media');
-            
+            this.callButton.disabled = false;  // Enable call button.
+            // 방을 최초로 만든 사람인 경우 isInitiator는 true
+            if(this.isInitiator){
+                console.log(">>>>>>> 프론트 : 최초 방만든 사람임 ")
+                this.maybeStart();
+            }
         },
         
 
         createPeerConnection(){
             try {
-                
+                // pcConfig 값으로 peerconnection(pc)를 만들어 준다.
+                // pcConfig에는 stun, turn 서버를 적는다. 얘는 rtc중계가 끊어질 것을 대비한 임시 서버라고 보면 됨.
+                // var pcConfig = {
+                //     'iceServer':[{
+                //         urls: 'stun:stun.l.google.com:19302'
+                //     },
+                //     {
+                //         urls: "turn:numb.viagenie.ca",
+                //         credential: "muazkh",
+                //         username: "webrtc@live.com"
+                //     }]
+                // }
+                // this.pc = new RTCPeerConnection(pcConfig);
                 this.pc = new RTCPeerConnection(null);
                 // pc에 icecandidate, addstream, removestream 이벤트를 등록해준다. 
                 this.pc.onicecandidate = this.handleIceCandidate; // icecandidate는 서로 통신채널을 확립하기 위한 방법.
@@ -208,6 +247,7 @@ export default {
         handleRemoteHangup(){
             console.log('>>>>>>> 프론트 : Session terminated.');
             this.stop();
+            this.isInitiator = false;
         },
 
         //
@@ -237,6 +277,7 @@ export default {
         //
         sendMessage(message) {
             console.log('>>>>>>> 프론트 : Client sending message: ', message);
+            console.log('>>>>>>> 프론트 : ',this.socket)
             this.socket.emit('message', message);
         },
 

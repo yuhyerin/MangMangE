@@ -96,7 +96,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%"
+          style="width: 100%; font-weight: bold;"
         >
           # {{ this.animalInfo.personality[0] }}
         </div>
@@ -106,7 +106,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%"
+          style="width: 100%; font-weight: bold;"
         >
           # {{ this.animalInfo.personality[1] }}
         </div>
@@ -125,7 +125,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%"
+          style="width: 100%; font-weight: bold;"
         >
           # {{ this.animalInfo.personality[2] }}
         </div>
@@ -135,7 +135,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%"
+          style="width: 100%; font-weight: bold;"
         >
           # {{ this.animalInfo.personality[3] }}
         </div>

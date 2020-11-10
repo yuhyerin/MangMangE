@@ -10,6 +10,8 @@ import AdoptionList from '../pages/AdoptionList.vue'
 // import VideoList from '../pages/VideoList.vue'
 // import UploadVideo from '../pages/UploadVideo.vue'
 import Streaming from '../pages/StreamingHR.vue'
+import StreamingTest from '../pages/StreamingTest.vue'
+import StreamingFinal from '../pages/StreamingFinal.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
@@ -72,6 +74,16 @@ const routes = [
     component: Streaming
   },
   {
+    path: '/streamingTest',
+    name: 'StreamingTest',
+    component: StreamingTest
+  },
+  {
+    path: '/streamingFinal',
+    name: 'StreamingFinal',
+    component: StreamingFinal
+  },
+  {
     path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
     component: AdoptionUpdate,
@@ -81,7 +93,12 @@ const routes = [
     component: Test,
   },
   {
-    path: '/video/:videoID',
+    path: '/privacypolicy',
+    name: 'PrivacyPolicy',
+    component: PrivacyPolicy,
+  },
+  {
+    path: '/video/:videoId',
     name: 'VideoDetail',
     component: VideoDetail,
   },
