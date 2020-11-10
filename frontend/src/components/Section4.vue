@@ -10,7 +10,7 @@
           <h2 class="first-word">개인정보 처리방침</h2>
         </div>
         <div class="second">
-          <a href='https://www.youtube.com/channel/UCee1MvXr6E8qC_d2WEYTU5g' style="text-decoration: none; color: black;">
+          <a href='https://www.youtube.com/channel/UCee1MvXr6E8qC_d2WEYTU5g' target="_blank" style="text-decoration: none; color: black;">
           <img 
             class="img1"
             src="../assets/image/mainpage/section4-dog.jpg" />
