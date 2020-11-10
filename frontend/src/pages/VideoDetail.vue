@@ -57,41 +57,6 @@ import axios from "axios"
 import qs from 'qs'
 
 const ADMIN_KEY = process.env.kakaopay_admin_key
-// const qs = require('querystring')
-
-const data = qs.stringify({
-  "cid": "TC0ONETIME",
-  "partner_order_id": "123",
-  "partner_user_id": "kakaodev",
-  "item_name": "item_name",
-  "quantity": 1,
-  "total_amount": 10000,
-  "tax_free_amount": 0,
-  "approval_url": "https://www.example.com",
-  "fail_url": "https://www.example.com",
-  "cancel_url": "https://www.example.com",
-})
-
-const config = {
-  headers: {
-    'Authorization': 'KakaoAK edbe89645b8d959181873871c2018383',
-    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-  }
-}
-
-// const params = new URLSearchParams();
-
-// params.append("cid", "TC0ONETIME")
-// params.append("partner_order_id", "123")
-// params.append("partner_user_id", "kakaodev")
-// params.append("item_name", "applepie")
-// params.append("quantity", 1)
-// params.append("total_amount", 123)
-// params.append("tax_free_amount", 0)
-// params.append("approval_url", "http://localhost:3000")
-// params.append("fail_url", "http://localhost:3000")
-// params.append("tax_free_amount", "http://localhost:3000")
-
 
 export default {
   components: {
@@ -113,13 +78,21 @@ export default {
     },
 
     moveToSupport() {
-      // window.open("https://mockup-pg-web.kakao.com/v1/67644e3f16977c805c14ac769708eaac628bba819995a98cc1d13d11b459fe1d/info", 
-      // 'window_name','width=430,height=500,location=no,status=no,scrollbars=yes')
-      axios.post(SERVER.URL + '/newuser/KakaoPay', {
-        videoid: 1,
-      },
-      {
-      
+      axios.post(SERVER.URL+'/newuser/kakaoPay',
+        {
+          videoid:1
+        },  
+      )
+      .then((res) => {
+        console.log('요청성공',res.data)
+        window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
+
+      }
+      )
+      .catch((err) => {
+        console.log(1)
+        console.log(err)
+        console.log('요청실패')
       }
       )
     },
