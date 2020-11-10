@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@updivision/vue2-multi-uploader": "^1.6.2",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.18.1",
