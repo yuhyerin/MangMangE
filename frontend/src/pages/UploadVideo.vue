@@ -68,30 +68,46 @@ export default {
       this.selectedFiles = true;
     },
     upload(){
-      console.log('upload 시작')
         var formData = new FormData();
-        formData.append("mfile", this.file[0]);
-        formData.append("desertion_no",this.desertionNo);
-        formData.append("title",this.title);
-        formData.append("content",this.content);
-        for(var value of formData.values()){
-          console.log(value)
-        }
+        console.log(this.file[0].name)
+        // formData.append("mfile", this.file[0], this.desertionNo+"_"+this.file[0].name);
         SERVER.tokenCheck(()=>{
-          axios.post(SERVER.URL+'/admin/upload',formData,
-          {
-            headers: {
+          axios.post(SERVER.URL + '/admin/uploadVideo',
+            {
+              "desertion_no" : this.desertionNo,
+              "title" : this.title,
+              "content" : this.content,
+            },
+            {
+              headers:{
                 "Authorization" : this.$cookies.get("accessToken"),
-                "content-Type" : "multipart/form-data; charset=utf-8; boundary='calculated when request is sent';"
+                "contentType": 'application/json'
+              }
+            }
+          )
+          .then((res)=>{
+            console.log(res.data)
+            formData.append("mfile", this.file[0], res.data.uid+"_"+this.file[0].name);
+            if(res.data.success==true){
+              axios.post(SERVER.URL+'/admin/upload',formData,
+            {
+              headers: {
+                  "Authorization" : this.$cookies.get("accessToken"),
+                  "content-Type" : "multipart/form-data; charset=utf-8; boundary='calculated when request is sent';"
+              }
+            })
+            .then((res)=>{
+              console.log('RES : ',res)
+            })
+            .catch((err)=>{
+              console.log('ERROR : ',err)
+            })
             }
           })
-          .then((res)=>{
-            console.log('RES : ',res)
-          })
           .catch((err)=>{
-            console.log('ERROR : ',err)
+            console.log('ERRORERROR : ',err)
           })
-        })
+        });
     }
 }
     

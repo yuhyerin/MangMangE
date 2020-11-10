@@ -24,33 +24,33 @@ export default {
   // }
   // ,
   // Token 만료시 갱신 함수 -> SERVER.RefreshToken(err) 로 사용 가능
-  RefreshToken: function (err) {
-    if (err.response.status == 401) {
-      //accessToken만료
-      axios
-        .post(
-          this.URL + "/newuser/refresh",
-          {},
-          {
-            headers: {
-              accessToken: $cookies.get("accessToken"),
-              refreshToken: $cookies.get("refreshToken"),
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.success) {
-            $cookies.set("accessToken", res.data.accessToken);
-            alert("세션이 만료되어 메인페이지로 이동합니다.");
-            location.href = "/"
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  },
+  // RefreshToken: function (err) {
+  //   if (err.response.status == 401) {
+  //     //accessToken만료
+  //     axios
+  //       .post(
+  //         this.URL + "/newuser/refresh",
+  //         {},
+  //         {
+  //           headers: {
+  //             accessToken: $cookies.get("accessToken"),
+  //             refreshToken: $cookies.get("refreshToken"),
+  //           },
+  //         }
+  //       )
+  //       .then((res) => {
+  //         console.log(res);
+  //         if (res.data.success) {
+  //           $cookies.set("accessToken", res.data.accessToken);
+  //           alert("세션이 만료되어 메인페이지로 이동합니다.");
+  //           location.href = "/"
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // },
 
   tokenCheck: function (toDoFunc) {
     let today = new Date();
