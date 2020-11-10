@@ -82,6 +82,7 @@ public class AnimalService {
 		List<Animal> animalList = animalRepo.findAnimalAll();
 		List<Ptag> personalityList = ptagRepo.findAll();
 		Long[] likeList = (Long[]) animalLikeRepo.findDesertionNoByUserId(user_id);
+		System.out.println(Arrays.toString(likeList));
 		List<AnimalListFE> result = new ArrayList<>();
 		for (int i = 0; i < animalList.size(); i++) {
 			Animal animal = animalList.get(i);
@@ -94,6 +95,7 @@ public class AnimalService {
 				if (tagDN == aniDN)
 					personalList.add(tag.getTagname());
 			}
+			
 			// 3. 좋아요 여부
 			boolean like = false;
 			for (int k = 0; k < likeList.length; k++) {
@@ -102,6 +104,7 @@ public class AnimalService {
 					break;
 				}
 			}
+			
 			String[] personality = new String[personalList.size()];
 			for (int z = 0; z < personality.length; z++)
 				personality[z] = personalList.get(z);

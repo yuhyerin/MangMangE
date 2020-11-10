@@ -1,6 +1,6 @@
 <template>
   <div class="quiz-box">
-    <v-row style="position: absolute; top: 2%; left: 48%;">
+    <v-row style="position: absolute; top: 3%; left: 48%;">
     <v-avatar color="rgb(1,118,72)" size="50">
       <h3 style="color: white">Q1</h3>
     </v-avatar>
@@ -13,8 +13,8 @@
         눌러주세요
       </p>
     </div>
-    <v-row class="quiz-img" style="display: flex; justify-content: space-around; margin-top:0">
-      <img style="margin:10px; width:25%" src="@/assets/survey/Q1.png" alt=""/>
+    <v-row class="quiz-img" style="display: flex; justify-content: space-around; padding: 7px">
+      <img style="margin: 10px; width: 25%" src="@/assets/survey/Q1.png" alt=""/>
     </v-row>
     <v-row style="margin:0 10px 0 10px; padding:0 10px 0 10px">
       <v-col v-for="(mbti, index) in mbtiList" :key="mbti.id" cols="3">

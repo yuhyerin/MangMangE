@@ -10,9 +10,18 @@
       <v-col cols="5">
         <vue-plyr>
           <video poster="poster.png">
-            <source :src="require(`@/assets/videos/${video.video}.mp4`)" type="video/mp4">
-            <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
-          </video>  
+            <source
+              :src="require(`@/assets/videos/${video.video}.mp4`)"
+              type="video/mp4"
+            />
+            <track
+              kind="captions"
+              label="English"
+              srclang="en"
+              src="captions-en.vtt"
+              default
+            />
+          </video>
         </vue-plyr>
       </v-col>
       <v-col cols="6" style="margin-left: 7px">
@@ -26,6 +35,8 @@
 </template>
 
 <script>
+import router from '@/router'
+
 export default {
   data() {
     return {
@@ -59,29 +70,30 @@ export default {
           content: "video1 content content yayayayayayayyoyoyoyoyo dhdufuekaishflaldsififi j",
           date: "2020-11-09"
         },
-                {
+        {
           id: 5,
           video: "video1",
           title: "video5 title",
           content: "video1 content content yayayayayayayyoyoyoyoyo dhdufuekaishflaldsififi j",
           date: "2020-11-09"
         },
-                {
+        {
           id: 6,
           video: "video1",
           title: "video6 title",
           content: "video1 content content yayayayayayayyoyoyoyoyo dhdufuekaishflaldsififi j",
           date: "2020-11-09"
         },
-      ]
-    }
+      ],
+    };
   },
   mounted() {
-    console.log(this.$refs.plyr.player)
+    console.log(this.$refs.plyr.player);
   },
   methods: {
     moveToVideoDetail() {
       console.log('detail gogo')
+      router.push({name: 'VideoDetail'})
     }
   }
 
