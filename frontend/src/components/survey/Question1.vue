@@ -73,6 +73,9 @@ export default {
   cursor: pointer;
   background-color: #eee;
 }
+.select-mbti:hover{
+  opacity: 0.8;
+}
 .quiz-header {
   margin-top: 20px;
 }

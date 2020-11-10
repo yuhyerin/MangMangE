@@ -2,14 +2,7 @@
   <div>
     <Header/>
     <v-container style="padding-top: 90px">
-      <div
-        style="
-          height: 80vh;
-          background-color: rgb(244, 236, 225);
-          border-radius: 15px;
-          padding: 0px 20px 20px 20px;
-        "
-      >
+      <div>
       <!-- <UploadVideo /> -->
         <!--만약 스트리밍중이면-->
         <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo"/>

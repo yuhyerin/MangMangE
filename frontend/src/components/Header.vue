@@ -182,5 +182,6 @@ export default {
 }
 .logo {
   background-image: url("../assets/image/logo.png");
+  cursor: pointer;
 }
 </style>

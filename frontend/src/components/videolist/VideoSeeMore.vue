@@ -3,15 +3,6 @@
     infinite-scroll-disabled="loading"
     infinite-scroll-distance="6"> -->
   <div>
-    <v-row style="display: flex; justify-content: center;">
-    <div class="search">
-      <input type="text" class="searchTerm" placeholder="검색어를 입력하세요.">
-      <button type="submit" @click="clickedsearchBtn" class="searchButton">
-        <i class="fa fa-search"></i>
-      </button>
-    </div>
-    </v-row>
-    <hr>
     <v-row style="margin: 10px 0 5px 20px">
       <h3>총 동영상 ??개</h3>
     </v-row>
@@ -25,10 +16,10 @@
         </vue-plyr>
       </v-col>
       <v-col cols="6" style="margin-left: 7px">
-        <h2 style="margin-bottom: 10px">{{ video.title }}</h2>
+        <h2 class="video-info" @click="moveToVideoDetail" style="margin-bottom: 10px;">{{ video.title }}</h2>
         <p style="color: gray; font-size: 0.7rem; margin-bottom: 10px">조회수 1109만회 | {{ video.date }}</p>
         <!-- content 제한된 글자 수 이내로 표시-->
-        <p style="line-height: 150%">{{ video.content }}</p>
+        <p class="video-info" @click="moveToVideoDetail" style="line-height: 150%;">{{ video.content }}</p>
       </v-col>
     </v-row>
   </div>
@@ -89,8 +80,8 @@ export default {
     console.log(this.$refs.plyr.player)
   },
   methods: {
-    clickedsearchBtn() {
-      console.log('SEARCH')
+    moveToVideoDetail() {
+      console.log('detail gogo')
     }
   }
 
@@ -98,51 +89,10 @@ export default {
 </script>
 
 <style scoped>
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
-
-.search {
-  width: 40%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin: 20px 0px
-}
-
-.searchTerm {
-  width: 100%;
-  border: 3px solid rgb(1, 118, 72);
-  border-right: none;
-  padding: 5px;
-  height: 36px;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  color: #9DBFAF;
-  background-color: white;
-  font-size: 13px;
-}
-
-.searchTerm:focus{
-  color:black;
-}
-
-.searchButton {
-  width: 40px;
-  height: 36px;
-  border: 1px solid rgb(1, 118, 72);
-  background:rgb(1, 118, 72);
-  text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
+.video-info {
   cursor: pointer;
-  font-size: 20px;
 }
-
-/*Resize the wrap to see the search bar change!*/
-/* .wrap{
-  width: 30%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-} */
+.video-info:hover {
+  color: #999
+}
 </style>

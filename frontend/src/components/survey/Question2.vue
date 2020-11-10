@@ -32,7 +32,7 @@ export default {
     return {
       answerImg1: {
         border: 'hidden',
-        borderRadius: '0'
+        borderRadius: '0',
       },
       answerImg2: {
         borderStyle: 'hidden',
@@ -40,7 +40,7 @@ export default {
       },
       answer1: {
         color: 'black',
-        backgroundColor: '#eee'
+        backgroundColor: '#eee',
       },
       answer2: {
         color: 'black',
