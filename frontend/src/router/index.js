@@ -10,6 +10,8 @@ import AdoptionList from '../pages/AdoptionList.vue'
 // import VideoList from '../pages/VideoList.vue'
 // import UploadVideo from '../pages/UploadVideo.vue'
 import Streaming from '../pages/StreamingHR.vue'
+import StreamingTest from '../pages/StreamingTest.vue'
+import StreamingFinal from '../pages/StreamingFinal.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
@@ -19,6 +21,7 @@ import UploadVideo from '../pages/UploadVideo.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 // import UploadTest from '../pages/UploadTest.vue'
 import Live from '../pages/Live.vue'
+import VideoDetailPopup from '../pages/VideoDetailPopup'
 
 Vue.use(VueRouter)
 
@@ -74,6 +77,16 @@ const routes = [
     component: Streaming
   },
   {
+    path: '/streamingTest',
+    name: 'StreamingTest',
+    component: StreamingTest
+  },
+  {
+    path: '/streamingFinal',
+    name: 'StreamingFinal',
+    component: StreamingFinal
+  },
+  {
     path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
     component: AdoptionUpdate,
@@ -83,7 +96,12 @@ const routes = [
     component: Test,
   },  
   {
-    path: '/video/:videoID',
+    path: '/privacypolicy',
+    name: 'PrivacyPolicy',
+    component: PrivacyPolicy,
+  },
+  {
+    path: '/video/:videoId',
     name: 'VideoDetail',
     component: VideoDetail,
   },
@@ -106,6 +124,12 @@ const routes = [
     path: '/live',
     name: 'Live',
     component: Live
+  },
+  {
+    path: '/videos/0',
+    name: 'VideoDetailPopup',
+    component: VideoDetailPopup,
+    props: (route) => ({ query: route.query.q })
   }
 ]
 

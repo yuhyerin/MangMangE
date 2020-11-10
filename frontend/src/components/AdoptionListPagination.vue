@@ -2,7 +2,8 @@
   <div>
     <table class="pagination-table">
       <thead>
-        <tr style="background: rgb(244, 236, 225)">
+        <tr style="background: orange;">
+        <!-- <tr style="background: rgb(244, 236, 225)"> -->
           <th style="width: 20%">NO</th>
           <th style="width: 55%">제목</th>
           <th style="width: 15%">아이디</th>
@@ -23,37 +24,6 @@
         </tr>
       </tbody>
     </table>
-    <!-- <v-card
-      v-for="p in paginatedData"
-      :key="p.no"
-      style="margin-bottom: 10px;"
-      @click="showMyApply(p)"
-    >
-      <v-card-title>
-        <strong>{{ p.title }}</strong>
-      </v-card-title>
-
-      <v-card-subtitle>
-        <strong>{{ p.user_id }}</strong>
-      </v-card-subtitle>
-
-      <v-card-actions>
-        <v-btn
-          class="ma-2"
-          outlined
-          style="background: green; color: white;"
-        >
-          <strong>{{ p.uid }}</strong>
-        </v-btn>
-        <v-btn
-          class="ma-2"
-          outlined
-          style="color: green;"
-        >
-          <strong>{{ p.regtime.slice(0, 10) }}</strong>
-        </v-btn>
-      </v-card-actions>
-    </v-card> -->
     <div class="btn-cover">
       <v-btn
         class="mx-2"
@@ -110,7 +80,6 @@ export default {
       this.pageNum -= 1;
     },
     showMyApply(item) {
-      console.log(this.userId);
       if (item.user_id === this.userId) {
         this.$router.push({
           name: "AdoptionUpdate",

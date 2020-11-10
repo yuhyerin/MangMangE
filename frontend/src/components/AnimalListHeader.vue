@@ -18,7 +18,6 @@
       left: 0;
       right: 0;
       z-index: 5;
-      border-bottom: 1px solid gray;
     "
   >
     <div
@@ -46,7 +45,7 @@
         :style="btnChecked1 == true ? 'background-color:rgb(33,150,243)' : null"
         width="10vw"
       >
-        <div>모든 동물 보기</div>
+        <div><h3>모든 동물 보기</h3></div>
       </v-btn>
       <v-btn
         text
@@ -55,7 +54,7 @@
         :style="btnChecked2 == true ? 'background-color:rgb(33,150,243)' : null"
         width="10vw"
       >
-        <div>나와 맞는 동물은?</div>
+        <div><h3>나와 맞는 동물은?</h3></div>
       </v-btn>
       <v-btn
         text
@@ -64,7 +63,7 @@
         :style="btnChecked3 == true ? 'background-color:rgb(33,150,243)' : null"
         width="10vw "
       >
-        <div>즐겨 찾는 동물들</div>
+        <div><h3>즐겨 찾는 동물들</h3></div>
       </v-btn>
     </div>
     <div style="width: 10vw">
@@ -77,17 +76,17 @@
         "
       >
         <v-btn x-small text color="black" @click="register">
-          <div>회원가입</div>
+          <div><h4>회원가입</h4></div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
         <v-btn x-small text @click="moveToLogin">
-          <div v-if="isUser == false">로그인</div>
-          <div v-else>로그아웃</div>
+          <div v-if="isUser == false"><h4>로그인</h4></div>
+          <div v-else><h4>로그아웃</h4></div>
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
         <v-btn text @click="moveTo('/videos')" width="100%">
-          <div>동영상 게시판</div>
+          <div><h3>동영상 게시판</h3></div>
         </v-btn>
       </div>
     </div>

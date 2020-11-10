@@ -47,7 +47,7 @@
             />
           </video>
         </vue-plyr>
-        <div style="text-align: center">동영상 제목{{ video.id }}</div>
+        <div class="videoTitle" style="text-align: center" @click="moveToVideoDetail(video.id)">동영상 제목{{ video.id }}</div>
       </v-col>
       <div class="more-videos">
         <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x"></i>
@@ -114,6 +114,16 @@ export default {
     uploadVideo() {
       this.$router.push("/videos/upload");
     },
+    moveToVideoDetail(videoIndex) {
+      this.$router.push(
+        {
+          name: 'VideoDetail',
+          params: {
+            videoId: videoIndex
+          }
+        }
+      )
+    },
   },
 };
 </script>
@@ -131,5 +141,9 @@ export default {
 .upload-btn {
   font-weight: bold;
   color: rgb(1, 118, 72);
+}
+
+div.videoTitle:hover {
+  cursor: pointer;
 }
 </style>

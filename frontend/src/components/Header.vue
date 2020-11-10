@@ -47,23 +47,23 @@
         "
       >
         <v-btn x-small text color="white" @click="register">
-          <div>회원가입</div>
+          <div><h4>회원가입</h4></div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
         <v-btn x-small text color="white" @click="moveToLogin">
-          <div v-if="isUser == false">로그인</div>
-          <div v-else>로그아웃</div>
+          <div v-if="isUser == false"><h4>로그인</h4></div>
+          <div v-else><h4>로그아웃</h4></div>
         </v-btn>
       </div>
-      <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn color="white" text @click="countDownTimer">
-          <div>버어튼</div>
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <v-btn text color="white" @click="countDownTimer">
+          <div><h3>버어튼</h3></div>
         </v-btn>
-        <v-btn color="white" text @click="moveTo('/animals')">
-          <div>동물 보기</div>
+        <v-btn text color="white" @click="moveTo('/animals')">
+          <div><h3>동물 보기</h3></div>
         </v-btn>
-        <v-btn color="white" text @click="moveTo('/videos')">
-          <div>동영상 게시판</div>
+        <v-btn text color="white" @click="moveTo('/videos')">
+          <div><h3>동영상 게시판</h3></div>
         </v-btn>
       </div>
     </div>

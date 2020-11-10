@@ -47,8 +47,22 @@ export default {
       videos_cnt: 0
     };
   },
+  methods: {
+    moveToVideoDetail(videoIndex) {
+      this.$router.push(
+        {
+          name: 'VideoDetail',
+          params: {
+            videoId: videoIndex
+          }
+        }
+      )
+    }
+  },
   mounted() {
-    console.log(this.$refs.plyr.player);
+    console.log(1)
+    console.log(this.$refs.plyr.player)
+    
   },
   // created() {
   //   axios.get()
