@@ -54,6 +54,10 @@ export default new Vuex.Store({
 
     },
 
+    resetSurvey(state, payload) {
+      state.survey = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+
     goPage(state, pageNum) {
       if (state.survey[pageNum - 1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
@@ -90,28 +94,30 @@ export default new Vuex.Store({
       }
 
       console.log('설문조사 결과:', state.userMbti, state.dogMbti)
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
-          {
-            "mbti": state.userMbti,
-            "answer": state.dogMbti,
-          },
-          {
-            headers: {
-              Authorization: $cookies.get("accessToken")
+      SERVER.tokenCheck(() => {
+        axios
+          .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
+            {
+              "mbti": state.userMbti,
+              "answer": state.dogMbti,
+            },
+            {
+              headers: {
+                Authorization: $cookies.get("accessToken")
+              }
             }
-          }
-        )
-        .then(res => {
-          console.log('userMbit & dogMbti = ', res.data)
-          state.eventListener = 1
-          commit('setUserSurveyCheck', true)
-          router.push({ name: 'Animals' })
-        })
-        .catch(err => {
-          console.log('MBTI XXX', err)
-          SERVER.RefreshToken(err);
-        })
+          )
+          .then(res => {
+            console.log('userMbit & dogMbti = ', res.data)
+            state.eventListener = 1
+            commit('setUserSurveyCheck', true)
+            router.push({ name: 'Animals' })
+          })
+          .catch(err => {
+            console.log('MBTI XXX', err)
+            SERVER.RefreshToken(err);
+          })
+      })
     },
 
   },

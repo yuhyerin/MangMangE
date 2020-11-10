@@ -1,0 +1,1 @@
+2020/11/06 13:45:43 [error] 2797#2797: *411 connect() failed (111: Connection refused) while connecting to upstream, client: 119.203.225.30, server: k3b306.p.ssafy.io, request: "GET /newuser/animal/allread HTTP/1.1", upstream: "http://127.0.0.1:8080/newuser//animal/allread", host: "k3b306.p.ssafy.io", referrer: "http://k3b306.p.ssafy.io/animals"

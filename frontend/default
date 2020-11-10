@@ -1,0 +1,48 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /var/www/html/dist;
+	index index.html index.htm;
+	server_name k3b306.p.ssafy.io;
+
+	location / {
+		try_files $uri $uri/ /index.html;
+	}
+
+	location /newuser {
+	    proxy_pass http://localhost:8080/newuser/ ;
+        proxy_redirect off;
+        charset utf-8;
+
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-NginX-Proxy true;
+	}
+
+	location /user {
+    	    proxy_pass http://localhost:8080/user/ ;
+            proxy_redirect off;
+            charset utf-8;
+
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-NginX-Proxy true;
+    }
+
+    location /admin {
+        	    proxy_pass http://localhost:8080/admin/ ;
+                proxy_redirect off;
+                charset utf-8;
+
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-NginX-Proxy true;
+    }
+
+}
+
+
