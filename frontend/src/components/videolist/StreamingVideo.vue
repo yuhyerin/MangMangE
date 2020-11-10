@@ -1,5 +1,5 @@
 <template>
-  <div style="padding-top: 80px">
+  <div>
     <v-row>
       <v-col>
         <video
