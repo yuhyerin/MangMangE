@@ -8,22 +8,18 @@
     >
       <h2 style="text-align: center; padding-bottom: 12px;">동영상 업로드</h2>
       <label v-if="desertionNoCheck">일련번호를 확인해주세요</label>
-      <div style="display: flex">
+      <div style="display: flex; justify-content: center; align-items: center">
         <img :src="image" alt="이미지" style="height: 75px; margin: 0 1% 1% 0; border-radius: 30px;">
           <v-text-field
             label="일련번호"
             v-model="desertionNo"
             outlined
+            style="margin: 0; padding: 0;"
           ></v-text-field>
-          <v-btn 
-            small
-            elevation="0"
-            style="padding: 0; background: rgba(255, 255, 255, 0);"
-          >
-            <v-icon style="color: green" :disabled="desertionNo.length < 1 || desertionNoCheck === 0">
+            <v-icon style="color: green" 
+            :disabled="desertionNo.length < 1">
               mdi-checkbox-marked-circle
             </v-icon>
-          </v-btn>
       </div>
 
       <div style="display: flex">
@@ -46,7 +42,7 @@
 
       <label v-if="selectedFileCheck">이미 업로드된 파일입니다</label>
       <div style="display: flex; padding-bottom: 12px;">
-        <input type="file" ref="file" @change="selectFile" style="border: 1px solid gray; border-radius: 3px;" />
+        <input type="file" ref="file" @change="selectFile"/>
         <v-btn
           class="mx-2"
           small
