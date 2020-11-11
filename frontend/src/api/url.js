@@ -11,8 +11,6 @@ export default {
   },
 
 
-
-
   EXPIRETIME: 600,
 
   RefreshToken: function (err) {
