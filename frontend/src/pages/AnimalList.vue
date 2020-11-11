@@ -7,7 +7,12 @@
     </div>
     <v-main>
       <div style="padding-top: 75px; display: flex; justify-content: center">
-        <div style="padding-top: 10px">
+        <div
+          style="padding-top: 10px; width: 10vw; position: fixed; top: 13vh"
+          :style="
+            viewStyle == false && trigger == 1 ? 'left: 0.5vw;' : 'left: 1vw;'
+          "
+        >
           <v-btn @click="changeViewStyle(false)">
             <v-icon>mdi-view-grid</v-icon>
           </v-btn>
@@ -15,7 +20,7 @@
             <v-icon>mdi-format-align-justify</v-icon>
           </v-btn>
         </div>
-        <div style="display: flex; min-height: 87vh">
+        <div style="display: flex; min-height: 87vh; width: 80vw">
           <div
             v-if="viewStyle == false"
             style="
@@ -30,11 +35,6 @@
               v-if="trigger == 0"
               style="display: flex; flex-wrap: wrap; justify-content: center"
             >
-              <!-- <AnimalInfo
-                v-for="(data, index) in this.allDatas"
-                :key="index"
-                :animalInfo="data"
-              /> -->
               <AnimalCard
                 v-for="(data, index) in this.allDatas"
                 :key="index"
@@ -201,6 +201,7 @@
                     v-for="(data, index) in this.perfectDatas"
                     :key="index"
                     :animalInfo="data"
+                    :matched="100"
                   />
                 </div>
               </div>
@@ -245,6 +246,7 @@
                     v-for="(data, index) in this.goodDatas"
                     :key="index"
                     :animalInfo="data"
+                    :matched="75"
                   />
                 </div>
               </div>
@@ -432,7 +434,11 @@ export default {
     } else {
       this.loadingTrigger = true;
       axios
-        .get(SERVER.URL + "/newuser/animal/allread")
+        .get(SERVER.URL + "/newuser/animal/allread", {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
         .then((res) => {
           this.allDatas = res.data.animalList;
           this.loadingTrigger = false;

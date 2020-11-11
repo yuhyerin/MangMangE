@@ -2,6 +2,7 @@ package com.daeng.nyang.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,6 +32,11 @@ public class VideoController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
 			List<AnimalVideo> videoList = videoService.allVideo();
+			for(int i=0;i<videoList.size();i++) {
+				AnimalVideo av = videoList.get(i);
+				av.setFilepath(av.getFilepath().substring(16, av.getFilepath().length()-4));
+				System.out.println(av.getFilepath());
+			}
 			map.put("VideoList", videoList);
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
@@ -45,8 +51,9 @@ public class VideoController {
 		System.out.println("CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
-			AnimalVideo animalVideo = videoService.detailvideo(uid);
-			map.put("VideoDetail", animalVideo);
+			AnimalVideo av = videoService.detailvideo(uid);
+			av.setFilepath(av.getFilepath().substring(16, av.getFilepath().length()-4));
+			map.put("VideoDetail", av);
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

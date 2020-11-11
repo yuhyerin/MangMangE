@@ -5,9 +5,16 @@
         <v-layout col wrap>
           <v-col cols="8">
             <div class="video-play">
+              <!-- :src="require(`@/assets/videos/${video.video}.mp4`)" -->
+              <!-- <video
+          :src="require(`@/assets/videos/${video.filepath}.mp4`)"
+          type="video/mp4"
+          controls
+          style="width: 100%"
+        ></video> -->
               <vue-plyr>
-                <video poster="poster.png">
-                  <source :src="video.filepath" type="video/mp4"/>
+                <video>
+                  <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
                   <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
                 </video>  
               </vue-plyr>
@@ -35,6 +42,12 @@
               <p style="font-size: 1.1rem">다음 동영상</p>
               <v-row v-for="nextvideo in nextVideoList" :key="nextvideo.uid">
                 <v-col>
+                  <!-- <vue-plyr>
+                    <video poster="poster.png">
+                      <source :src="require(`@/assets/videos/${nextvideo.filepath}.mp4`)" type="video/mp4"/>
+                      <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
+                    </video>  
+                  </vue-plyr> -->
                   <div style="background-color: black; height: 100px;">썸네일</div>
                 </v-col>
                 <v-col>
@@ -42,47 +55,11 @@
                   <p style="color: darkgray; font-family: 'Do Hyeon';">{{ nextvideo.regtime }}</p>
                 </v-col>
               </v-row>
-              <!-- <ul v-for="nextVideo in nextVideoList" :key="nextVideo.uid">
-                <li>
-                  {{ nextVideo.title }}
-                </li>
-              </ul> -->
             </div>
           </v-col>
 
         </v-layout>
       </v-container>
-    <!-- <div class="container" style="margin-top: 75px;">
-      <div style="margin-top: 20px;">
-        <h3 style="color: gray; text-align: center;">
-          동물과 사람이 함께하는 삶을 위해 세상을 바꾸는 실천에 함께 해주세요
-        </h3>
-      </div>
-      <div style="width: 70%; height: 50%; margin: 20px auto 0 auto;">
-        <vue-plyr>
-          <video poster="poster.png">
-            <source :src="video.filepath" type="video/mp4"/>
-            <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
-          </video>  
-        </vue-plyr>
-      </div>
-
-      <div style="margin: 0 auto; width: 70%; height: 100%; background: white">
-        <div style="display: flex; justify-content: space-between; margin-top: 10px; padding: 0 5px;">
-          <div>
-            <h2>{{ video.title }}</h2>
-            <h4>{{ video.regtime }}</h4>
-            <p>{{ video.content }}</p>
-          </div>
-          <div class="kakaopaySupport" style="display: flex; text-align: center; margin-bottom: 5px;" @click="moveToSupport">
-            <h4 style="margin: auto 0px;">후원하기</h4>
-            <img src="../assets/image/kakaopay/kakaopay.png">
-          </div>
-        </div>
-        <hr style="background-color: green;">
-
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -103,7 +80,7 @@ export default {
     return {
       videoID: this.$route.params.videoId,
       video: [],
-      nextVideoList: []
+      nextVideoList: [],
     }
   },
   created() {
@@ -139,13 +116,7 @@ export default {
       )
     },
     moveToAnimal(animalID) {
-      this.$router.push(
-        {
-          name: 'AnimalDetail',
-          params: {
-            desertion_no: animalID
-          }
-        })
+      this.$router.push(`/animaldetail/${animalID}`)
     },
     getVideo() {
       axios

@@ -60,7 +60,7 @@
         <label v-if="selectedFileCheck" style="color: orange;">이미 업로드된 파일입니다</label>
       </div>
 
-      <div style="display: flex; padding-top: 12px;">
+      <div style="display: flex; padding-top: 12px; height: 190px;">
         <v-textarea
           :counter="300"
           outlined
@@ -75,17 +75,24 @@
           elevation="0"
           style="margin-top: 10px; padding-top: 24px; background: rgba(255, 255, 255, 0);"
         >
-          <v-icon style="color: green" :disabled="content.length < 1">
+          <v-icon style="color: green" :disabled="content.length < 1 || contentCheck === 1">
             mdi-checkbox-marked-circle
           </v-icon>
         </v-btn>
-        <label v-if="contentCheck" style="color: orange;">이미 업로드된 파일입니다</label>
       </div>
-      <div style="padding-top: 0px;">
+      <label v-if="contentCheck" style="color: orange;">300자 이하로 입력해주세요</label>
+      <div style="padding-top: 20px;">
         <v-btn 
           outlined
           rounded
-          :disabled="!selectedFiles || desertionNo.length < 1 || title.length < 1 || content.length < 1"
+          :disabled="!selectedFiles ||
+                    selectedFileCheck === 1||
+                    desertionNo.length < 1 ||
+                    desertionNoCheck === 1 ||
+                    desertionNoExist === 1 ||
+                    title.length < 1 ||
+                    content.length < 1 ||
+                    contentCheck === 1"
           @click="upload"
         >등록하기</v-btn>
       </div>
@@ -110,13 +117,15 @@ export default {
       file: undefined,
       content:'',
       selectedFiles: 0,
-      desertionNoCheck: 0,
       selectedFileCheck: 0,
+      desertionNoCheck: 0,
       desertionNoExist: 0,
+      contentCheck: 0,
       err:{
         message:'',
         fileMessage:''
       },
+      image: require(`@/assets/image/merong1.png`)
     }
   },
   watch: {
@@ -126,7 +135,10 @@ export default {
         this.desertionNoExist = 0
       } else {
         this.desertionNoCheck = 0
-        console.log(this.desertionNo)
+      }
+      console.log(this.desertionNo)
+      this.image = require(`@/assets/image/merong1.png`)
+      if(this.desertionNo.length==15){
         SERVER.tokenCheck(() => {
         axios.get(SERVER.URL+'/admin/upload/checkNO',{
           params:{
@@ -142,6 +154,9 @@ export default {
             console.log(res)
             this.err.message = '없는 번호입니다.'
             this.desertionNoExist = 1
+          }
+          else{
+            this.image = res.data.image;
           }
         })
         .catch((err)=>{
@@ -178,6 +193,13 @@ export default {
       });
     },
 
+    content() {
+      if (this.content.length <= 300) {
+        this.contentCheck = 0
+      } else {
+        this.contentCheck = 1
+      }
+    }
   },
 
   methods:{
@@ -222,6 +244,8 @@ export default {
             })
             .then((res)=>{
               console.log('RES : ',res)
+              alert('등록되었습니다')
+              this.$router.push("/videos")
             })
             .catch((err)=>{
               console.log('ERROR : ',err)

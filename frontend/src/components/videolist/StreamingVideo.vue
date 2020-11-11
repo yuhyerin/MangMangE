@@ -33,8 +33,8 @@
     <v-row>
       <v-col v-for="video in videos" :key="video.uid">
         <vue-plyr>
-          <video poster="poster.png">
-            <source :src="video.filepath" type="video/mp4"/>
+          <video>
+            <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
             <track
               kind="captions"
               label="English"
