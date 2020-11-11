@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,10 +17,35 @@ import com.daeng.nyang.repo.AnimalVideoRepo;
 
 @Service
 public class AdminService {
-
+	
 	@Autowired
 	private AnimalVideoRepo animalVideoRepo;
+	
+	@Value("${filePath}")
+	private String filePath;
+	
+	public HashMap<String, Object> findNO(Long desertion_no){
+		HashMap<String, Object> map = new HashMap<>();
+		Optional<AnimalVideo> result = animalVideoRepo.findByDesertionNo(desertion_no);
+		if(result.isPresent())	// 있으면 true
+			map.put("success", true);
+		else map.put("success", false);	// 없으면 false
+		
+		return map;
+			
+	}
+	
+	public HashMap<String, Object> findFile(String fileName){
+		String file = filePath + fileName;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		Optional<AnimalVideo> test = animalVideoRepo.findByFilepath(file);
+		if(test.isPresent())
+			map.put("success", true);
+		else map.put("success", false);
+		return map;
+	}
 
+	
 	public HashMap<String, Object> uploadVideo(Map<String, Object> video, String user_id) {
 		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<>();
@@ -36,7 +63,6 @@ public class AdminService {
 		else
 			map.put("success", false);
 		return map;
-
 	}
 
 	public HashMap<String, Object> uploadVideo(String accessToken, MultipartFile mfile) {
@@ -50,7 +76,7 @@ public class AdminService {
 		try {
 			String dest = "C:/SSAFY/git/s03p31b306/frontend/src/assets/videos/" + av.getDesertion_no()+"_"+filename;
 			mfile.transferTo(new File(dest));
-			av.setFilepath(dest);
+			av.setFilepath(filePath + av.getDesertion_no() +"_" + filename);
 			animalVideoRepo.save(av);
 			System.out.println(animalVideoRepo.findByUid(uid).toString());
 			map.put("success", true);
