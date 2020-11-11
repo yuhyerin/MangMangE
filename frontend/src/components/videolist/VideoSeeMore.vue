@@ -76,8 +76,17 @@ export default {
 
     getAllVideos() {
       axios.get(SERVER.URL + SERVER.ROUTES.getAllVideos).then((res) => {
-        this.videos = [...res.data.VideoList, ...res.data.VideoList];
+        this.videos = res.data.VideoList
         this.videos_cnt = this.videos.length;
+        for (let i = 0; i < this.videos.length; i++) {
+          var item = this.videos[i]
+          var someday = new Date(item.regtime)
+          var year = someday.getFullYear()
+          var month = someday.getMonth() + 1
+          var date = someday.getDate()
+          var regTime = year + '-' + month + '-' + date
+          item.regtime = regTime
+        }
       });
     },
 

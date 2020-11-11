@@ -113,9 +113,8 @@ export default {
       axios
         .get(SERVER.URL + "/newuser/video/allvideo")
         .then((res) => {
-          this.videos = [...res.data.VideoList, ...res.data.VideoList]
-          // .slice(-3)
-          console.log('videos', this.videos)
+          this.videos = res.data.VideoList.slice(-3)
+        
         })
   },
   }

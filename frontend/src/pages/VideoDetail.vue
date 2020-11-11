@@ -29,7 +29,7 @@
             </v-row>
             <div class="video-info" style="padding-left: 5px;">
               <p style="color: darkgray; padding-bottom: 10px">
-                <img src="@/assets/image/play.png" alt="" style="width: 10px; margin-right: 3px;">203,202 | 2020.11.10
+                <img src="@/assets/image/play.png" alt="" style="width: 10px; margin-right: 3px;">203,202 | {{ video.regtime }}
               </p>
               <p style="padding-bottom: 10px">{{ video.content }}</p>
               <hr>
@@ -176,7 +176,6 @@ export default {
           var date = someday.getDate()
           var regTime = year + '-' + month + '-' + date
           this.video.regtime = regTime
-          console.log(this.video)
         })
     },
     getVideoList() {
@@ -187,7 +186,16 @@ export default {
         //     this.nextVideoList = item
         //     console.log('filter?', this.nextVideoList)
         //   }
-        this.nextVideoList = [...res.data.VideoList, ...res.data.VideoList, ...res.data.VideoList]
+        this.nextVideoList = res.data.VideoList
+        for (let i = 0; i < this.nextVideoList.length; i++) {
+          var item = this.nextVideoList[i]
+          var someday = new Date(item.regtime)
+          var year = someday.getFullYear()
+          var month = someday.getMonth() + 1
+          var date = someday.getDate()
+          var regTime = year + '-' + month + '-' + date
+          item.regtime = regTime
+        }
         // })
         // console.log('다음 영상?', this.nextVideoList)
       })
