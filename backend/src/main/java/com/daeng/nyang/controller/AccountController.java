@@ -20,17 +20,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.daeng.nyang.dto.Account;
-import com.daeng.nyang.dto.AnimalListFE;
 import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.email.EmailService;
 import com.daeng.nyang.service.signup.SignupService;
 import com.daeng.nyang.service.user.AccountService;
+import com.daeng.nyang.service.user.AdminService;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -71,6 +71,17 @@ public class AccountController {
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.OK);
 		else
 			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping(path = "/newuser/signup/{user_id}")
+	@ApiOperation("아이디 중복 검사")
+	public ResponseEntity<HashMap<String, Object>> checkID(@PathVariable String user_id) {
+		System.out.println("CONTROLLER START");
+		if (accountService.checkID(user_id)) // 없으면 true
+			return new ResponseEntity<>(HttpStatus.OK);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("msg", "duplicated");
+		return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping(path = "/newuser/signup")
@@ -134,12 +145,12 @@ public class AccountController {
 	}
 
 	// 회원
-	@PostMapping(path = "/user/changepw")
-	@ApiOperation("비밀번호 변경")
-	public ResponseEntity<HashMap<String, Object>> findUserId(@RequestBody Account account) {
-		HashMap<String, Object> map = accountService.changPW(account);
-		return new ResponseEntity<>(map, HttpStatus.OK);
-	}
+//	@PostMapping(path = "/user/changepw")
+//	@ApiOperation("비밀번호 변경")
+//	public ResponseEntity<HashMap<String, Object>> findUserId(@RequestBody Account account) {
+//		HashMap<String, Object> map = accountService.changPW(account);
+//		return new ResponseEntity<>(map, HttpStatus.OK);
+//	}
 
 	@PostMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
@@ -225,6 +236,18 @@ public class AccountController {
 			return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
 		else
 			return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping(path = "/user/userId")
+	public ResponseEntity<HashMap<String, Object>> userID(HttpServletRequest request) {
+		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+		HashMap<String, Object> map = new HashMap<>();
+		if (user.getAccount().getUser_id().contains("admin")) {
+			map.put("success", true);
+			return new ResponseEntity<>(map, HttpStatus.OK);
+		}
+		map.put("success", false);
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
 }

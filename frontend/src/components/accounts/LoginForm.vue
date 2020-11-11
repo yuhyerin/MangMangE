@@ -11,6 +11,9 @@
       justify-content: center;
     "
   >
+    <div class="loading" v-if="loadingTrigger">
+      <i class="fas fa-spinner fa-10x fa-spin"></i>
+    </div>
     <v-col lg="10">
       <v-col align="align">
         <div style="display: flex; justify-content: center; align-item: center">
@@ -43,6 +46,7 @@
             :append-icon="showpassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showpassword ? 'text' : 'password'"
             @click:append="showpassword = !showpassword"
+            @keyup.enter="login"
           ></v-text-field>
         </div>
       </v-col>
@@ -80,8 +84,10 @@ export default {
       id: "",
       password: "",
       showpassword: "",
+      loadingTrigger: false,
     };
   },
+
   computed: {
     ...mapState(["userSurveyCheck"]),
   },
@@ -99,7 +105,7 @@ export default {
     },
 
     login() {
-      const proxyurl = "https://cors-anywhere.herokuapp.com/";
+      this.loadingTrigger = true;
       axios
         .post(SERVER.URL + "/newuser/login/",
         {
@@ -112,7 +118,7 @@ export default {
           console.log(res);
           this.$cookies.set("accessToken", res.data.accessToken);
           this.$cookies.set("refreshToken", res.data.refreshToken);
-          this.$cookies.set("expireTime", res.data.refreshToken);
+          this.$cookies.set("expireTime", res.data.expireTime);
           axios
             .get(SERVER.URL + "/user/animal/surveyread", {
               headers: {
@@ -120,6 +126,7 @@ export default {
               },
             })
             .then((res) => {
+              this.loadingTrigger = false;
               if (res.data.survey != null) {
                 this.setUserSurveyCheck(true);
               } else if (res.data.survey == null) {
@@ -127,6 +134,7 @@ export default {
               }
             })
             .catch((err) => {
+              this.loadingTrigger = false;
               console.log(err);
               if (err.response != undefined) {
                 SERVER.RefreshToken(err);
@@ -136,6 +144,7 @@ export default {
         })
         .catch((err) => {
           alert("아이디 또는 비밀번호를 확인해 주세요.");
+          this.loadingTrigger = false;
           return;
         });
     },
@@ -151,5 +160,21 @@ export default {
 .find-pw:hover {
   cursor: pointer;
   font-weight: bold;
+}
+
+.loading {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  /* background-image: linear-gradient(
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.4)
+  ); */
 }
 </style>

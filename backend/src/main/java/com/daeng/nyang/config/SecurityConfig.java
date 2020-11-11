@@ -20,7 +20,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
 
 import com.daeng.nyang.jwt.JwtAuthenticationEntryPoint;
 import com.daeng.nyang.jwt.JwtRequestFilter;
@@ -35,12 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
    @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+   
+   final String corsOrigin = "*";
 
    @Override
    protected void configure(HttpSecurity http) throws Exception {
-	   System.out.println("여긴 들어옴 ");
-	   final String corsOrigin="http://localhost:8081";
-	   CorsFilter corsFilter = new CorsFilter(corsConfigurationSource(corsOrigin));
       http
       .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).
       httpBasic().disable().   // 기본적으로 제공되는 loginForm() disable
@@ -62,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       
    }
    
-   @Bean
+   
    public CorsConfigurationSource corsConfigurationSource(String corsOrigin) {
 	    CorsConfiguration configuration = new CorsConfiguration();
 	    configuration.addAllowedOrigin("*");
@@ -112,4 +113,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    public void configure(WebSecurity web) throws Exception {
       
    }
+   
+//   @Bean
+//   public MultipartResolver multipartResolver() {
+//       CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+//       multipartResolver.setMaxUploadSize(2000000000);
+//       return multipartResolver;
+//   }
 }

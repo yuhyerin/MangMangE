@@ -1,11 +1,11 @@
 package com.daeng.nyang.service.user;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONObject;
@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -89,6 +87,14 @@ public class AccountService {
 		System.out.println("SERVICE END");
 		return map;
 	}
+	
+	//아이디 중복 검사
+	public boolean checkID(String user_id) {
+		Account acc = accountRepo.findAccountByUserId(user_id);
+		if(acc==null)
+			return true;
+		return false;
+	}
 
 	// 로그인
 	public HashMap<String, Object> login(String id, String pwd) {
@@ -116,17 +122,21 @@ public class AccountService {
 		System.out.println("ACK : " + accessToken);
 		System.out.println("REF : " + refreshToken);
 		// generate Token and save in redis
-
+		Account user = accountRepo.findAccountByUserId(id);
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
 		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
-		Account ac = Account.builder().user_id(id).build();
+		Account ac = Account.builder().user_id(id).role(user.getRole()).build();
 		retok = TotToken.builder().account(ac).build();
 		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		map.put("success", true);
 		map.put("accessToken", accessToken);
 		map.put("refreshToken", refreshToken);
-		map.put("expireTime", new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000) );
+		Date expireTime =  new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000);
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+		String expireTime_fotmat1 = format1.format(expireTime);
+		System.out.println(expireTime_fotmat1);
+		map.put("expireTime", expireTime_fotmat1);
 		return map;
 	}
 	
@@ -231,12 +241,18 @@ public class AccountService {
 			if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
 				final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
 				String new_accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+				Account user = accountRepo.findAccountByUserId(user_id);
 				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-				Account ac = Account.builder().user_id(user_id).build();
+				Account ac = Account.builder().user_id(user_id).role(user.getRole()).build();
 				TotToken token = TotToken.builder().account(ac).build();
 				vop.set(new_accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
 				response.put("success", true);
 				response.put("accessToken", new_accessToken);
+				Date expireTime =  new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000);
+				SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+				String expireTime_fotmat1 = format1.format(expireTime);
+				System.out.println(expireTime_fotmat1);
+				response.put("expireTime", expireTime_fotmat1);
 				System.out.println("new_accessToken : " + new_accessToken);
 
 			} else {

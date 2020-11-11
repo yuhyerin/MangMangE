@@ -6,24 +6,12 @@ export default {
   KakaopayURL: 'https://kapi.kakao.com/v1/payment/ready',
   ROUTES: {
     submitSurvey: '/user/survey/create',
-    // updateSurvey: '/survey/update',
+    getAllVideos: '/newuser/video/allvideo',
+    getVideo: '/newuser/video/detailvideo',
   },
 
   EXPIRETIME: 600,
 
-  // setTimer: function (value) {
-  //   console.log("call timer")
-  //   console.log("timer payload", value)
-  //   if (value > 0) {
-  //     console.log(value)
-  //     setTimeout(() => {
-  //       value -= 1;
-  //       this.setTimer(value)
-  //     }, 1000);
-  //   }
-  // }
-  // ,
-  // Token 만료시 갱신 함수 -> SERVER.RefreshToken(err) 로 사용 가능
   RefreshToken: function (err) {
     if (err.response.status == 401) {
       //accessToken만료
@@ -49,6 +37,58 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    }
+  },
+
+  tokenCheck: function (toDoFunc) {
+    let today = new Date();
+    let expireTime =
+      $cookies.get("expireTime").substring(11, 13) * 3600 +
+      $cookies.get("expireTime").substring(14, 16) * 60 +
+      $cookies.get("expireTime").substring(17, 19) * 1;
+
+    let userTime =
+      today.getHours() * 3600 +
+      today.getMinutes() * 60 +
+      today.getSeconds() * 1;
+
+    if (expireTime > 85800) {
+      expireTime -= 86400;
+      userTime -= 86400;
+    }
+
+    console.log("expireTime", expireTime);
+    console.log("userTime", userTime);
+    if (expireTime <= userTime) {
+      axios
+        .post(
+          this.URL + "/newuser/refresh",
+          {},
+          {
+            headers: {
+              accessToken: $cookies.get("accessToken"),
+              refreshToken: $cookies.get("refreshToken"),
+            },
+          }
+        )
+        .then((res) => {
+          console.log('엑세스 토큰 재발급 성공', res);
+          if (res.data.success) {
+            $cookies.set("accessToken", res.data.accessToken);
+            $cookies.set("expireTime", res.data.expireTime);
+            toDoFunc()
+          }
+        })
+        .catch((err) => {
+          alert('권한이 만료되었습니다. 다시 로그인 해주세요.');
+          location.href = "/"
+          $cookies.remove('refreshToken');
+          $cookies.remove('accessToken');
+          $cookies.remove('expireTime');
+          console.log(err);
+        });
+    } else {
+      toDoFunc()
     }
   }
 

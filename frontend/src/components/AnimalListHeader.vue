@@ -18,60 +18,148 @@
       left: 0;
       right: 0;
       z-index: 5;
-      border-bottom: 1px solid gray;
     "
   >
-    <div @click="moveToMain" style="width: 10vw">로고</div>
-    <div style="width: 80vw; display: flex; justify-content: space-around">
-      <v-btn
-        text
-        :color="btnChecked1 == true ? 'white' : 'black'"
-        @click="moveToAllAnimals"
-        :style="btnChecked1 == true ? 'background-color:rgb(33,150,243)' : null"
-        width="10vw"
-      >
-        <div>모든 동물 보기</div>
-      </v-btn>
-      <v-btn
-        text
-        :color="btnChecked2 == true ? 'white' : 'black'"
-        @click="moveToMatchedAnimals"
-        :style="btnChecked2 == true ? 'background-color:rgb(33,150,243)' : null"
-        width="10vw"
-      >
-        <div>나와 맞는 동물은?</div>
-      </v-btn>
-      <v-btn
-        text
-        :color="btnChecked3 == true ? 'white' : 'black'"
-        @click="moveToLikedAnimals"
-        :style="btnChecked3 == true ? 'background-color:rgb(33,150,243)' : null"
-        width="10vw "
-      >
-        <div>즐겨 찾는 동물들</div>
-      </v-btn>
+    <div
+      @click="moveToMain"
+      class="logo"
+      style="
+        height: 75px;
+        width: 15vw;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+      "
+    >
+      <img
+        src="../assets/image/logo4.png"
+        alt="logo"
+        style="height: 70%; padding-left: 20px"
+      />
     </div>
-    <div style="width: 10vw">
+    <div style="width: 70vw; display: flex; justify-content: space-around">
       <div
         style="
+          width: 100%;
           display: flex;
+          flex-direction: column;
           justify-content: center;
+          align-items: center;
+        "
+      >
+        <v-btn
+          text
+          @click="moveToAllAnimals"
+          :style="
+          "
+          width="10vw"
+        >
+          <div><h3>모든 동물 보기</h3></div>
+        </v-btn>
+        <div
+          style="width: 100%"
+          :style="
+            btnChecked1 == true
+              ? 'border-bottom: 7px solid rgb(250,174,95)'
+              : null
+          "
+        ></div>
+      </div>
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <v-btn
+          text
+          @click="moveToMatchedAnimals"
+          :style="
+          "
+          width="10vw"
+        >
+          <div><h3>나와 맞는 동물은?</h3></div>
+        </v-btn>
+        <div
+          style="width: 100%"
+          :style="
+            btnChecked2 == true
+              ? 'border-bottom: 7px solid rgb(250,174,95)'
+              : null
+          "
+        ></div>
+      </div>
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <v-btn
+          text
+          @click="moveToLikedAnimals"
+          :style="
+          "
+          width="10vw "
+        >
+          <div><h3>즐겨 찾는 동물들</h3></div>
+        </v-btn>
+        <div
+          style="width: 100%"
+          :style="
+            btnChecked3 == true
+              ? 'border-bottom: 7px solid rgb(250,174,95)'
+              : null
+          "
+        ></div>
+      </div>
+    </div>
+    <div
+      style="
+        width: 15vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
           align-items: center;
           font-size: 10px;
         "
       >
         <v-btn x-small text color="black" @click="register">
-          <div>회원가입</div>
+          <div><h4>회원가입</h4></div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
         <v-btn x-small text @click="moveToLogin">
-          <div v-if="isUser == false">로그인</div>
-          <div v-else>로그아웃</div>
+          <div v-if="isUser == false"><h4>로그인</h4></div>
+          <div v-else><h4>로그아웃</h4></div>
         </v-btn>
       </div>
-      <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn text @click="moveTo('/videos')" width="100%">
-          <div>동영상 게시판</div>
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+        "
+      >
+        <v-btn text @click="moveTo('/videos')" width="40%">
+          <div><h5>동영상 게시판</h5></div>
+        </v-btn>
+        <v-btn text @click="moveTo('/adoptionlist')" width="40%">
+          <div><h5>입양 신청 목록</h5></div>
         </v-btn>
       </div>
     </div>
@@ -124,6 +212,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setEventListener"]),
+    ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
       location.href = "/";
     },
@@ -177,6 +266,13 @@ export default {
       }
     },
 
+    moveTo(page) {
+      if (page == "/animals") {
+        this.setEventListener(2);
+      }
+      this.$router.push(page);
+    },
+
     countDownTimer() {
       if (this.countDown > 0) {
         setTimeout(() => {
@@ -192,7 +288,7 @@ export default {
           {},
           {
             headers: {
-              accessToken: this.$cookies.get("accessToken"),
+              Authorization: this.$cookies.get("accessToken"),
             },
           }
         )
@@ -200,6 +296,7 @@ export default {
           console.log(res);
           this.$cookies.remove("accessToken");
           this.$cookies.remove("refreshToken");
+          this.$cookies.remove("expireTime");
           this.setUserSurveyCheck(false);
           location.href = "/";
         })
@@ -211,7 +308,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .navBtn {
   margin: 2px 5px 2px 5px;
 }

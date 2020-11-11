@@ -13,10 +13,12 @@
         <v-row>
           <div style="font-size: 30px; padding-bottom: 5px">동영상 타이틀</div>
           <v-spacer></v-spacer>
-          <v-btn @click="uploadVideo" small outlined class="ma-2 upload-btn">
-            Upload
-            <v-icon right dark> mdi-cloud-upload </v-icon>
-          </v-btn>
+          <div v-show="upload">
+            <v-btn @click="uploadVideo" small outlined class="ma-2 upload-btn">
+              Upload
+              <v-icon right dark> mdi-cloud-upload </v-icon>
+            </v-btn>
+          </div>
         </v-row>
         <v-row>
           <div style="padding-left: 5px; line-height: 150%">
@@ -29,13 +31,10 @@
     </v-row>
     <hr />
     <v-row>
-      <v-col v-for="video in videos" :key="video.id">
+      <v-col v-for="video in videos" :key="video.uid">
         <vue-plyr>
-          <video poster="poster.png">
-            <source
-              :src="require(`@/assets/videos/${video.video}.mp4`)"
-              type="video/mp4"
-            />
+          <video>
+            <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
             <track
               kind="captions"
               label="English"
@@ -45,7 +44,7 @@
             />
           </video>
         </vue-plyr>
-        <div class="videoTitle" style="text-align: center" @click="moveToVideoDetail(video.id)">동영상 제목{{ video.id }}</div>
+        <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
       <div class="more-videos">
         <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x"></i>
@@ -61,32 +60,44 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      videos: [
-        {
-          id: 1,
-          video: "video1",
-        },
-        {
-          id: 2,
-          video: "video1",
-        },
-        {
-          id: 3,
-          video: "video1",
-        },
-      ],
+      upload: '',
+      videos: [],
     };
   },
   mounted() {
-    console.log(this.$refs.plyr.player);
+    // console.log(this.$refs.plyr.player);
+  },
+  created() {
+    if (this.$cookies.get("accessToken") != null) {
+      axios
+        .get(SERVER.URL + "/user/userId", {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"), //the token is a variable which holds the token
+          },
+        })
+        .then((res) => {
+          console.log(res.data)
+          if(res.data.success)
+            this.upload = true;
+          else
+            this.upload=false;
+          console.log(this.upload)
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+    }
+    else{
+      this.upload= false;
+    }
+    this.getVideos()
   },
   methods: {
     videoSeeMore() {
       this.$emit("changeVideo", 2);
     },
     uploadVideo() {
-      console.log("클릭");
-      router.push({ name: "UploadVideo" });
+      this.$router.push("/videos/upload");
     },
     moveToVideoDetail(videoIndex) {
       this.$router.push(
@@ -98,8 +109,17 @@ export default {
         }
       )
     },
+    getVideos() {
+      axios
+        .get(SERVER.URL + "/newuser/video/allvideo")
+        .then((res) => {
+          this.videos = [...res.data.VideoList, ...res.data.VideoList]
+          // .slice(-3)
+          console.log('videos', this.videos)
+        })
   },
-};
+  }
+}
 </script>
 
 <style scoped>
@@ -110,6 +130,7 @@ export default {
 }
 .more-videos:hover {
   color: silver;
+  cursor: pointer;
 }
 .upload-btn {
   font-weight: bold;

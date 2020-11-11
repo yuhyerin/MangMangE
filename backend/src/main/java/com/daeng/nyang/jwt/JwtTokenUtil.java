@@ -82,6 +82,7 @@ public class JwtTokenUtil implements Serializable {
         Map<String, Object> claims = new HashMap<>();
         List<String> li = new ArrayList<>();
         for (GrantedAuthority a: userDetails.getAuthorities()) {
+        	
             li.add(a.getAuthority());
         }
 

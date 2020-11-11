@@ -7,8 +7,22 @@
     </div>
     <v-main>
       <div style="padding-top: 75px; display: flex; justify-content: center">
-        <div style="display: flex; min-height: 87vh">
+        <div
+          style="padding-top: 10px; width: 10vw; position: fixed; top: 13vh"
+          :style="
+            viewStyle == false && trigger == 1 ? 'left: 0.5vw;' : 'left: 1vw;'
+          "
+        >
+          <v-btn @click="changeViewStyle(false)">
+            <v-icon>mdi-view-grid</v-icon>
+          </v-btn>
+          <v-btn @click="changeViewStyle(true)">
+            <v-icon>mdi-format-align-justify</v-icon>
+          </v-btn>
+        </div>
+        <div style="display: flex; min-height: 87vh; width: 80vw">
           <div
+            v-if="viewStyle == false"
             style="
               width: 80vw;
               border-radius: 20px;
@@ -32,7 +46,6 @@
                 <div
                   style="
                     width: 100%;
-                    height: 5vh;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -126,6 +139,129 @@
               />
             </div>
           </div>
+
+          <!-- **************************페이지 표시 구분************************* -->
+          <div
+            v-if="viewStyle == true"
+            style="
+              width: 80vw;
+              border-radius: 20px;
+              margin: 10px;
+              align-text: center;
+              justify-content: center;
+            "
+          >
+            <div
+              v-if="trigger == 0"
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalInfo
+                v-for="(data, index) in this.allDatas"
+                :key="index"
+                :animalInfo="data"
+              />
+            </div>
+            <div v-if="trigger == 1">
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AnimalInfo
+                    v-for="(data, index) in this.perfectDatas"
+                    :key="index"
+                    :animalInfo="data"
+                    :matched="100"
+                  />
+                </div>
+              </div>
+              <br />
+              <v-divider></v-divider>
+              <br />
+              <div style="border: 1px solid rgba(0, 0, 0, 0.12)">
+                <div
+                  style="
+                    width: 100%;
+                    height: 5vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 10%;
+                  "
+                >
+                  <div
+                    style="
+                      margin: 20px 0 20px 0;
+                      display: flex;
+                      justiy-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                    <v-icon x-large color="yellow"> mdi-star</v-icon>
+                  </div>
+                  <hr
+                    style="width: 90%; border: 0.2px solid rgba(0, 0, 0, 0.12)"
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                  "
+                >
+                  <AnimalInfo
+                    v-for="(data, index) in this.goodDatas"
+                    :key="index"
+                    :animalInfo="data"
+                    :matched="75"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="trigger == 2"
+              style="display: flex; flex-wrap: wrap; justify-content: center"
+            >
+              <AnimalInfo
+                v-for="(data, index) in this.likedDatas"
+                :key="index"
+                :animalInfo="data"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </v-main>
@@ -134,6 +270,7 @@
 
 <script>
 import AnimalCard from "../components/AnimalCard.vue";
+import AnimalInfo from "../components/AnimalInfo.vue";
 import AnimalListHeader from "../components/AnimalListHeader.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 
@@ -157,11 +294,13 @@ export default {
       loadingTrigger: false,
       perfectLength: 0,
       goddLength: 0,
+      viewStyle: false,
     };
   },
   components: {
     AnimalCard,
     AnimalListHeader,
+    AnimalInfo,
   },
   watch: {
     trigger(newValue, oldValue) {
@@ -170,20 +309,22 @@ export default {
         console.log("All Animals");
         if (this.$cookies.get("accessToken") != null) {
           this.loadingTrigger = true;
-          axios
-            .get(SERVER.URL + "/user/animal/allread", {
-              headers: {
-                Authorization: this.$cookies.get("accessToken"),
-              },
-            })
-            .then((res) => {
-              this.allDatas = res.data.animalList;
-              this.loadingTrigger = false;
-            })
-            .catch((err) => {
-              SERVER.RefreshToken(err);
-              this.loadingTrigger = false;
-            });
+          SERVER.tokenCheck(() => {
+            axios
+              .get(SERVER.URL + "/user/animal/allread", {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              })
+              .then((res) => {
+                this.allDatas = res.data.animalList;
+                this.loadingTrigger = false;
+              })
+              .catch((err) => {
+                // SERVER.RefreshToken(err);
+                this.loadingTrigger = false;
+              });
+          });
         } else {
           this.loadingTrigger = true;
           axios
@@ -201,48 +342,52 @@ export default {
       } else if (newValue == 1) {
         this.matchedDatas = [];
         this.loadingTrigger = true;
-        axios
-          .get(SERVER.URL + "/user/animal/matchlist", {
-            headers: {
-              Authorization: $cookies.get("accessToken"),
-            },
-          })
-          .then((res) => {
-            console.log(res.data.perfect.length, res.data.good.length);
-            this.perfectDatas = [];
-            this.goodDatas = [];
-            this.perfectDatas = [...res.data.perfect];
-            this.goodDatas = [...res.data.good];
-            this.matchedDatas = [];
-            this.matchedDatas = [...res.data.perfect, ...res.data.good];
-            this.loadingTrigger = false;
-          })
-          .catch((err) => {
-            console.log("error message", err);
-            SERVER.RefreshToken(err);
-          });
+        SERVER.tokenCheck(() => {
+          axios
+            .get(SERVER.URL + "/user/animal/matchlist", {
+              headers: {
+                Authorization: $cookies.get("accessToken"),
+              },
+            })
+            .then((res) => {
+              console.log(res.data.perfect.length, res.data.good.length);
+              this.perfectDatas = [];
+              this.goodDatas = [];
+              this.perfectDatas = [...res.data.perfect];
+              this.goodDatas = [...res.data.good];
+              this.matchedDatas = [];
+              this.matchedDatas = [...res.data.perfect, ...res.data.good];
+              this.loadingTrigger = false;
+            })
+            .catch((err) => {
+              console.log("error message", err);
+              // SERVER.RefreshToken(err);
+            });
+        });
       } else {
         // console.log("like animals");
         this.likedDatas = [];
         if (this.$cookies.get("accessToken") != null) {
           this.loadingTrigger = true;
-          axios
-            .get(SERVER.URL + "/user/animal/like", {
-              headers: {
-                Authorization: this.$cookies.get("accessToken"),
-              },
-            })
-            .then((res) => {
-              console.log(res.data.animalList);
-              this.likedDatas = [];
-              this.likedDatas = [...res.data.animalList];
-              this.loadingTrigger = false;
-            })
-            .catch((err) => {
-              console.log(err);
-              SERVER.RefreshToken(err);
-              this.loadingTrigger = false;
-            });
+          SERVER.tokenCheck(() => {
+            axios
+              .get(SERVER.URL + "/user/animal/like", {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              })
+              .then((res) => {
+                console.log(res.data.animalList);
+                this.likedDatas = [];
+                this.likedDatas = [...res.data.animalList];
+                this.loadingTrigger = false;
+              })
+              .catch((err) => {
+                console.log(err);
+                // SERVER.RefreshToken(err);
+                this.loadingTrigger = false;
+              });
+          });
         } else {
           alert("로그인이 필요한 서비스 입니다.");
           this.$router.push("/login");
@@ -262,21 +407,23 @@ export default {
 
     if (this.$cookies.get("accessToken") != null) {
       this.loadingTrigger = true;
-      await axios
-        .get(SERVER.URL + "/user/animal/allread", {
-          headers: {
-            Authorization: this.$cookies.get("accessToken"),
-          },
-        })
-        .then((res) => {
-          this.allDatas = res.data.animalList;
-          this.loadingTrigger = false;
-          // console.log(res.data);
-        })
-        .catch((err) => {
-          SERVER.RefreshToken(err);
-          this.loadingTrigger = false;
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .get(SERVER.URL + "/user/animal/allread", {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+            },
+          })
+          .then((res) => {
+            this.allDatas = res.data.animalList;
+            this.loadingTrigger = false;
+            // console.log(res.data);
+          })
+          .catch((err) => {
+            // SERVER.RefreshToken(err);
+            this.loadingTrigger = false;
+          });
+      });
 
       if (this.eventListener == 1) {
         // console.log(this.dogMbti);
@@ -286,8 +433,12 @@ export default {
       }
     } else {
       this.loadingTrigger = true;
-      await axios
-        .get(SERVER.URL + "/newuser/animal/allread")
+      axios
+        .get(SERVER.URL + "/newuser/animal/allread", {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
         .then((res) => {
           this.allDatas = res.data.animalList;
           this.loadingTrigger = false;
@@ -316,6 +467,9 @@ export default {
         }
       }
     },
+    changeViewStyle(value) {
+      this.viewStyle = value;
+    },
 
     test() {
       this.testTrigger = true;
@@ -331,7 +485,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .categoryBtn {
   padding-top: 10px;
   height: 7vh;

@@ -22,6 +22,9 @@ export default new Vuex.Store({
     address: '',
     findUserId: '',
     userSurveyCheck: false,
+    videoID: 0,
+    videos: [],
+    videos_cnt: 0,
 
     // 1: survey to animalList, 2: main to animalList
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
@@ -54,6 +57,10 @@ export default new Vuex.Store({
 
     },
 
+    resetSurvey(state, payload) {
+      state.survey = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+
     goPage(state, pageNum) {
       if (state.survey[pageNum - 1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
@@ -76,7 +83,6 @@ export default new Vuex.Store({
     setUserSurveyCheck(state, payload) {
       state.userSurveyCheck = payload
     },
-
   },
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
@@ -89,31 +95,42 @@ export default new Vuex.Store({
         state.dogMbti += state.dogMbtiArr[i];
       }
 
-      console.log('설문조사 결과:', state.userMbti, state.dogMbti)
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
-          {
-            "mbti": state.userMbti,
-            "answer": state.dogMbti,
-          },
-          {
-            headers: {
-              Authorization: $cookies.get("accessToken")
+      SERVER.tokenCheck(() => {
+        axios
+          .post(SERVER.URL + SERVER.ROUTES.submitSurvey,
+            {
+              "mbti": state.userMbti,
+              "answer": state.dogMbti,
+            },
+            {
+              headers: {
+                Authorization: $cookies.get("accessToken")
+              }
             }
-          }
-        )
+          )
+          .then(res => {
+            state.eventListener = 1
+            commit('setUserSurveyCheck', true)
+            router.push({ name: 'Animals' })
+          })
+          .catch(err => {
+            SERVER.RefreshToken(err);
+          })
+      })
+    },
+    getAllVideos(state) {
+      axios
+        .get(SERVER.URL + SERVER.ROUTES.getAllVideos)
         .then(res => {
-          console.log('userMbit & dogMbti = ', res.data)
-          state.eventListener = 1
-          commit('setUserSurveyCheck', true)
-          router.push({ name: 'Animals' })
-        })
-        .catch(err => {
-          console.log('MBTI XXX', err)
-          SERVER.RefreshToken(err);
+          state.videos = [...res.data.VideoList, ...res.data.VideoList]
+          state.videos_cnt = state.videos.length
         })
     },
-
+    moveToVideoDetail(state, idx) {
+      state.videoID = idx
+      console.log('videoID=', idx)
+      router.push("/video" + `/${idx}`)
+    },
   },
   modules: {
   }

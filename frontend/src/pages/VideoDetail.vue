@@ -1,50 +1,65 @@
 <template>
-  <div>
+  <div class="video-detail">
     <Header />
-    <div class="container" 
-      style="
-          margin-top: 75px; 
-          background-color: rgb(244, 236, 225);
-      "
-    >
-      <div 
-        style="
-          margin: 30px auto 30px auto;
-          width: 70%;
-          height: 100%;
-          border: 5px solid rgb(1,118,72);
-          border-radius: 15px;
-          background: white
-        "
-      >
-        <div style="
-          display: flex; 
-          justify-content: space-between;
-          padding: 0 5px;
-          "
-        >
-          <h2>쪼꼬미의 하루</h2>
-          <h4>2020-11-08</h4>
-        </div>
-        <div style="width: 100%; height: 400px; margin: 20px auto;">
-          <vue-plyr>
-            <video poster="poster.png">
-              <source :src="require(`@/assets/videos/${video.v}.mp4`)" type="video/mp4">
-              <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
-            </video>  
-          </vue-plyr>
-        </div>
-        <div style="border: 1px solid green; border-radius: 5px;">
-          <h3 style="text-align: center;">
-            동물과 사람이 함께하는 삶을 위해 세상을 바꾸는 실천에 함께 해주세요
-          </h3>
-        </div>
-      </div>
-      <div style="text-align: center;" @click="moveToSupport">
-        <h3>후원하기</h3>
-        <img src="../assets/image/kakaopay/kakaopay.png">
-      </div>
-    </div>
+      <v-container fluid style="margin-top: 70px; padding-left: 100px;">
+        <v-layout col wrap>
+          <v-col cols="8">
+            <div class="video-play">
+              <!-- :src="require(`@/assets/videos/${video.video}.mp4`)" -->
+              <!-- <video
+          :src="require(`@/assets/videos/${video.filepath}.mp4`)"
+          type="video/mp4"
+          controls
+          style="width: 100%"
+        ></video> -->
+              <vue-plyr>
+                <video>
+                  <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
+                  <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
+                </video>  
+              </vue-plyr>
+            </div>
+            <v-row>
+              <v-col style="padding-bottom: 0">
+                <h2 style="padding-left: 5px;">{{ video.title }}</h2>
+              </v-col>
+              <v-col style="display: flex; justify-content: flex-end">
+                  <img @click="moveToSupport" src="@/assets/image/kakaoBtn.png" alt="" style="width: 150px; cursor: pointer">
+              </v-col>
+            </v-row>
+            <div class="video-info" style="padding-left: 5px;">
+              <p style="color: darkgray; padding-bottom: 10px">
+                <img src="@/assets/image/play.png" alt="" style="width: 10px; margin-right: 3px;">203,202 | 2020.11.10
+              </p>
+              <p style="padding-bottom: 10px">{{ video.content }}</p>
+              <hr>
+              <p class="animal-info" @click="moveToAnimal(video.desertion_no)"># {{ video.desertion_no }}</p>
+            </div>
+          </v-col>
+          
+          <v-col cols="3" style="padding-left: 30px;">
+            <div class="next-videolist">
+              <p style="font-size: 1.1rem">다음 동영상</p>
+              <v-row v-for="nextvideo in nextVideoList" :key="nextvideo.uid">
+                <v-col>
+                  <!-- <vue-plyr>
+                    <video poster="poster.png">
+                      <source :src="require(`@/assets/videos/${nextvideo.filepath}.mp4`)" type="video/mp4"/>
+                      <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
+                    </video>  
+                  </vue-plyr> -->
+                  <div style="background-color: black; height: 100px;">썸네일</div>
+                </v-col>
+                <v-col>
+                  <h3>{{ nextvideo.title }}</h3>
+                  <p style="color: darkgray; font-family: 'Do Hyeon';">{{ nextvideo.regtime }}</p>
+                </v-col>
+              </v-row>
+            </div>
+          </v-col>
+
+        </v-layout>
+      </v-container>
   </div>
 </template>
 
@@ -53,43 +68,9 @@ import Header from "../components/Header.vue"
 import SERVER from "@/api/url"
 import axios from "axios"
 import qs from 'qs'
+import { mapActions } from 'vuex'
 
 const ADMIN_KEY = process.env.kakaopay_admin_key
-// const qs = require('querystring')
-
-const data = qs.stringify({
-  "cid": "TC0ONETIME",
-  "partner_order_id": "123",
-  "partner_user_id": "kakaodev",
-  "item_name": "item_name",
-  "quantity": 1,
-  "total_amount": 10000,
-  "tax_free_amount": 0,
-  "approval_url": "https://www.example.com",
-  "fail_url": "https://www.example.com",
-  "cancel_url": "https://www.example.com",
-})
-
-const config = {
-  headers: {
-    'Authorization': 'KakaoAK edbe89645b8d959181873871c2018383',
-    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-  }
-}
-
-// const params = new URLSearchParams();
-
-// params.append("cid", "TC0ONETIME")
-// params.append("partner_order_id", "123")
-// params.append("partner_user_id", "kakaodev")
-// params.append("item_name", "applepie")
-// params.append("quantity", 1)
-// params.append("total_amount", 123)
-// params.append("tax_free_amount", 0)
-// params.append("approval_url", "http://localhost:3000")
-// params.append("fail_url", "http://localhost:3000")
-// params.append("tax_free_amount", "http://localhost:3000")
-
 
 export default {
   components: {
@@ -97,51 +78,34 @@ export default {
   },
   data() {
     return {
-      video: {
-        id: this.$route.params.videoId,
-        v: "video1"
-      },
-      selected: '',
-      items: [1000, 5000, 10000, 30000, 50000]
+      videoID: this.$route.params.videoId,
+      video: [],
+      nextVideoList: [],
     }
   },
+  created() {
+    this.getVideo()
+    this.getVideoList()
+  },
   methods: {
+    moveToMainpage() {
+      this.$router.push('/videos')
+    },
     moveToSupport() {
-      // window.open("https://mockup-pg-web.kakao.com/v1/67644e3f16977c805c14ac769708eaac628bba819995a98cc1d13d11b459fe1d/info", 
-      // 'window_name','width=430,height=500,location=no,status=no,scrollbars=yes')
-
-
-      // axios.post(SERVER.KakaopayURL,
-      //   {
-      //     form: {
-      //       cid: "TC0ONETIME",
-      //       partner_order_id: "123",
-      //       partner_user_id: "kakaodev",
-      //       item_name : "item_name",
-      //       quantity: 1,
-      //       total_amount: 10000,
-      //       tax_free_amount: 0,
-      //       approval_url: "http://localhost:3000",
-      //       cancel_url: "http://localhost:3000",
-      //       fail_url: "http://localhost:3000",
-      //     }
-      //   }, 
-      //   {
-      //     headers : {
-      //       Authorization: "KakaoAK edbe89645b8d959181873871c2018383",
-      //       "Content-type": "application/x-www-form-urlencoded;charset=utf-8", }
-      //   } 
-      // )
-
       axios.post(SERVER.URL+'/newuser/kakaoPay',
         {
-          videoid:1
+          videoid: 1
         },  
       )
       .then((res) => {
-        console.log('요청성공',res.data)
-        window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
-
+        console.log('요청성공', res.data)
+        async function openPopup() {
+          window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
+          await function() {
+            window.close("http://localhost:3000/video/0")
+          }
+        }
+        openPopup()
       }
       )
       .catch((err) => {
@@ -151,16 +115,54 @@ export default {
       }
       )
     },
-  },
-
-  created() {
-    console.log(this.$route.params.videoId)
+    moveToAnimal(animalID) {
+      this.$router.push(`/animaldetail/${animalID}`)
+    },
+    getVideo() {
+      axios
+        .get(SERVER.URL + SERVER.ROUTES.getVideo, {
+          params: {
+            uid: this.videoID
+          }
+        })
+        .then(res => {
+          this.video = res.data.VideoDetail
+        })
+    },
+    getVideoList() {
+      axios.get(SERVER.URL + SERVER.ROUTES.getAllVideos)
+      .then(res => {
+        // res.data.VideoList.forEach(item => {
+        //   if(item.uid !== Number(this.videoID)) {
+        //     this.nextVideoList = item
+        //     console.log('filter?', this.nextVideoList)
+        //   }
+        this.nextVideoList = [...res.data.VideoList, ...res.data.VideoList, ...res.data.VideoList]
+        // })
+        // console.log('다음 영상?', this.nextVideoList)
+      })
+        // console.log('nextvideo', this.nextVideoList)
+        // this.nextVideoList.forEach(function(val){
+        //   if (val.uid == this.videoID) {
+        //     this.nextVideoList.pop()
+        //   }
+        // })
+    }
   },
 }
 </script>
 
 <style>
+.kakaopaySupport {
+  cursor: pointer;
+}
+
 .selectMoney {
   border: 1px solid green;
+}
+.animal-info {
+  cursor: pointer;
+  color: red; 
+  font-size: 1.2rem
 }
 </style>
