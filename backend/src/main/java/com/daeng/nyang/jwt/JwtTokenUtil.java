@@ -34,24 +34,18 @@ public class JwtTokenUtil implements Serializable {
 
 	//retrieve username from jwt token
     public String getUsernameFromToken(String token) {
-    	System.out.println("JwtTokenUtil : getUsernameFromToken");
     	String result = getClaimFromToken(token, Claims::getSubject);
-    	System.out.println("getUsernameFromToken : "+result);
         return result;
 
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-    	System.out.println("JwtTokenUtil : getClaimFromToken");
         final Claims claims = getAllClaimsFromToken(token);
-        System.out.println(claims.toString());
         return claimsResolver.apply(claims);
     }
 
     public Map<String, Object> getUserParseInfo(String token) {
-    	System.out.println("JwtTokenUtil : getUserParseInfo");
         Claims parseInfo = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-        System.out.println(parseInfo.toString());
         Map<String, Object> result = new HashMap<>();
         result.put("user_id", parseInfo.getSubject());
         result.put("role", parseInfo.get("role", List.class));
@@ -60,28 +54,25 @@ public class JwtTokenUtil implements Serializable {
     }
     
     private Claims getAllClaimsFromToken(String token) {
-    	System.out.println("JwtTokenUtil - getAllClaimsFromToken()호출 : JWT파싱하는 함수");
     	return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
     public Boolean isTokenExpired(String token) {
-    	System.out.println("JwtTokenUtil : isTokenExpired");
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
     public Date getExpirationDateFromToken(String token) {
-    	System.out.println("JwtTokenUtil : getExpirationDateFromToken");
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
     
     /** AccessToken 생성. */
     public String generateAccessToken(UserDetails userDetails) {
-    	System.out.println("JwtTokenUtil : generateAccessToken");
         Map<String, Object> claims = new HashMap<>();
         List<String> li = new ArrayList<>();
         for (GrantedAuthority a: userDetails.getAuthorities()) {
+        	
             li.add(a.getAuthority());
         }
 
@@ -92,7 +83,6 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateRefreshToken() {
-    	System.out.println("JwtTokenUtil : generateRefreshToken");
         return Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
@@ -101,7 +91,6 @@ public class JwtTokenUtil implements Serializable {
 
     //validate tokens
     public Boolean validateToken(String token, UserDetails userDetails) {
-    	System.out.println("JwtTokenUtil : validateToken");
         final String user_id = getUsernameFromToken(token);
         return (user_id.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

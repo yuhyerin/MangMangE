@@ -37,7 +37,6 @@ public class FindUserIdAndPasswordController {
 		String user_name = User.get("user_name");
 		String user_email = User.get("user_email");
 		String user_id = findUserIdService.findUserId(user_name, user_email);
-		System.out.println(user_id);
 		resultMap.put("user_id", user_id);
 
 		return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);

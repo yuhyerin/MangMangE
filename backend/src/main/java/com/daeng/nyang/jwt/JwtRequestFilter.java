@@ -32,23 +32,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
    @Autowired
    private JwtTokenUtil jwtTokenUtil;
 
-//   @Autowired
-//   JwtTokenUtil jtu;
-
    @Autowired
    RedisTemplate<String, Object> redisTemplate;
 
-   @Autowired
-   private JwtUserDetailService jwtUserDetailService;
+//   @Autowired
+//   private JwtUserDetailService jwtUserDetailService;
 
    public Authentication getAuthentication(String token) {
       System.out.println("getAuthentication : " + token);
       Map<String, Object> parseInfo = jwtTokenUtil.getUserParseInfo(token);
-//        System.out.println("parseinfo: " + parseInfo);
       List<String> rs = (List) parseInfo.get("role");
-//      String rs = (String)parseInfo.get("role");
       Collection<GrantedAuthority> tmp = new ArrayList<>();
-//      GrantedAuthority temp = new SimpleGrantedAuthority(rs);
       for (String a : rs) {
          tmp.add(new SimpleGrantedAuthority(a));
       }
@@ -94,7 +88,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
          System.out.println(authen.toString());
          // 만든 authentication 객체로 매번 인증받기
          SecurityContextHolder.getContext().setAuthentication(authen);
+         response.setHeader("Access-Control-Allow-Origin", "*");
+         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+         response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, enctype");
+         response.setHeader("Access-Control-Max-Age", "3600");
          response.setHeader("username", userid);
+         
       }
       chain.doFilter(request, response);
    }

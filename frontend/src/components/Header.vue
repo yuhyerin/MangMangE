@@ -1,15 +1,11 @@
 <template>
-  <!-- <v-app-bar id="app-toolbar" app color="white">
-    <v-icon>mdi-view-list</v-icon>
-    <v-spacer />
-  </v-app-bar> -->
   <div
     style="
       position: fixed;
       height: 75px;
       padding: 1rem;
       color: black;
-      background: white;
+      background-color: rgba(255, 255, 255, 0.5);
       font-weight: bold;
       display: flex;
       justify-content: space-between;
@@ -18,7 +14,6 @@
       left: 0;
       right: 0;
       z-index: 5;
-      border-bottom: 1px solid gray;
     "
   >
     <div
@@ -33,9 +28,9 @@
       "
     >
       <img
-        src="../assets/image/logo3.png"
+        src="../assets/image/logofinal.png"
         alt="logo"
-        style="height: 75px; width: 120px"
+        style="height: 70%; padding-left: 20px"
       />
     </div>
     <div>
@@ -47,24 +42,33 @@
           font-size: 10px;
         "
       >
-        <v-btn x-small text color="black" @click="register">
-          <div>회원가입</div>
+        <v-btn x-small text @click="register">
+          <div><h4>회원가입</h4></div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
         <v-btn x-small text @click="moveToLogin">
-          <div v-if="isUser == false">로그인</div>
-          <div v-else>로그아웃</div>
+          <div v-if="isUser == false"><h4>로그인</h4></div>
+          <div v-else><h4>로그아웃</h4></div>
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn text @click="countDownTimer">
-          <div>버어튼</div>
-        </v-btn>
+        <!-- <v-btn text color="white" @click="countDownTimer">
+          <div><h3>버어튼</h3></div>
+        </v-btn> -->
         <v-btn text @click="moveTo('/animals')">
-          <div>동물 보기</div>
+          <div>
+            <h3>동물 보기</h3>
+          </div>
         </v-btn>
         <v-btn text @click="moveTo('/videos')">
-          <div>동영상 게시판</div>
+          <div>
+            <h3>동영상 게시판</h3>
+          </div>
+        </v-btn>
+        <v-btn text @click="moveTo('/adoptionlist')">
+          <div>
+            <h3>입양 신청 목록</h3>
+          </div>
         </v-btn>
       </div>
     </div>
@@ -122,6 +126,9 @@ export default {
       if (page == "/animals") {
         this.setEventListener(2);
       }
+      if (this.$router.history.current.path == page) {
+        location.reload(true);
+      }
       this.$router.push(page);
     },
     // test() {
@@ -141,9 +148,45 @@ export default {
     //     });
     // },
     countDownTimer() {
-      window.setTimeout(() => {
-        alert("확인");
-      }, 2000);
+      // let today = new Date();
+      // let expireTime =
+      //   this.$cookies.get("expireTime").substring(11, 13) * 3600 +
+      //   this.$cookies.get("expireTime").substring(14, 16) * 60 +
+      //   this.$cookies.get("expireTime").substring(17, 19) * 1;
+      // let userTime =
+      //   today.getHours() * 3600 +
+      //   today.getMinutes() * 60 +
+      //   today.getSeconds() * 1;
+      // if (expireTime > 85800) {
+      //   expireTime -= 86400;
+      //   userTime -= 86400;
+      // }
+      // if (expireTime <= userTime) {
+      //   axios
+      //     .post(
+      //       SERVER.URL + "/newuser/refresh",
+      //       {},
+      //       {
+      //         headers: {
+      //           accessToken: this.$cookies.get("accessToken"),
+      //           refreshToken: this.$cookies.get("refreshToken"),
+      //         },
+      //       }
+      //     )
+      //     .then((res) => {
+      //       console.log(res);
+      //       if (res.data.success) {
+      //         this.$cookies.set("accessToken", res.data.accessToken);
+      //         this.$cookies.set("expireTime", res.data.expireTime);
+      //       }
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
+      //     });
+      // }
+      // window.setTimeout(() => {
+      //   alert("확인");
+      // }, 2000);
     },
 
     logout() {
@@ -161,6 +204,7 @@ export default {
           console.log(res);
           this.$cookies.remove("accessToken");
           this.$cookies.remove("refreshToken");
+          this.$cookies.remove("expireTime");
           this.setUserSurveyCheck(false);
           location.href = "/";
         })
@@ -172,7 +216,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .navBtn {
   margin: 2px 5px 2px 5px;
 }
@@ -182,5 +226,6 @@ export default {
 }
 .logo {
   background-image: url("../assets/image/logo.png");
+  cursor: pointer;
 }
 </style>

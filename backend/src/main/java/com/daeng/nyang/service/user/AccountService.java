@@ -1,11 +1,11 @@
 package com.daeng.nyang.service.user;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONObject;
@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -67,7 +65,6 @@ public class AccountService {
 
 	// 회원가입
 	public HashMap<String, Object> signup(Account account) {
-		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<>();
 		String user_id = account.getUser_id();
 		if (accountRepo.findByUserid(user_id) == null) {
@@ -78,55 +75,55 @@ public class AccountService {
 				account.setRole("ROLE_USER");
 			}
 			account.setUser_password(bcryptEncoder.encode(account.getUser_password()));
-			System.out.println(account.toString());
 			accountRepo.save(account);
 			map.put("success", true);
 		} else {
 			map.put("success", false);
 			map.put("message", "duplicated user_id");
 		}
-		System.out.println(map.toString());
-		System.out.println("SERVICE END");
 		return map;
+	}
+	
+	//아이디 중복 검사
+	public boolean checkID(String user_id) {
+		Account acc = accountRepo.findAccountByUserId(user_id);
+		if(acc==null)
+			return true;
+		return false;
 	}
 
 	// 로그인
 	public HashMap<String, Object> login(String id, String pwd) {
-		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
-			System.out.println("id : " + id + "\t password : " + pwd);
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(id, pwd));
-			System.out.println("TRY END");
 		} catch (Exception e) {
 			e.printStackTrace();
 			map.put("success", false);
 			map.put("message", "authenticate ERROR");
-			System.out.println("authenticate error");
 			map.put("success", false);
 			return map;
 		}
 
 		UserDetails userDetails = jwtUserDetailService.loadUserByUsername(id);
-		System.out.println(userDetails.toString());
 		Collection<? extends GrantedAuthority> c = userDetails.getAuthorities();
-		System.out.println(c.toString());
 		String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
 		String refreshToken = jwtTokenUtil.generateRefreshToken();
-		System.out.println("ACK : " + accessToken);
-		System.out.println("REF : " + refreshToken);
 		// generate Token and save in redis
-
+		Account user = accountRepo.findAccountByUserId(id);
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
 		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
-		Account ac = Account.builder().user_id(id).build();
+		Account ac = Account.builder().user_id(id).role(user.getRole()).build();
 		retok = TotToken.builder().account(ac).build();
 		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		map.put("success", true);
 		map.put("accessToken", accessToken);
 		map.put("refreshToken", refreshToken);
-		map.put("expireTime", new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000) );
+		Date expireTime =  new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000);
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+		String expireTime_fotmat1 = format1.format(expireTime);
+		map.put("expireTime", expireTime_fotmat1);
 		return map;
 	}
 	
@@ -145,10 +142,7 @@ public class AccountService {
 	}
 
 	public HashMap<String, Object> createApply(String user_id, Apply apply) {
-		System.out.println("accountService 입장");
-		System.out.println(apply.toString());
 		apply.setUser_id(user_id);
-		System.out.println(apply.toString());
 		Apply app = applyRepo.save(apply);
 		HashMap<String, Object> map = new HashMap<>();
 		if (app == null)
@@ -159,9 +153,7 @@ public class AccountService {
 	}
 	
 	public HashMap<String, Object> updateApply(String user_id, Apply apply) {
-		System.out.println("SERVICE START");
 		apply.setUser_id(user_id);
-		System.out.println(apply.toString());
 		Apply app = applyRepo.save(apply);
 		HashMap<String, Object> map = new HashMap<>();
 		if (app == null)
@@ -173,8 +165,6 @@ public class AccountService {
 
 	public HashMap<String, Object> checkPhone(String phone, int number) {
 		HashMap<String, Object> map = new HashMap<>();
-		System.out.println("apiKey : " + apiKey);
-		System.out.println("apiSecret : " + apiSecret);
 		Message coolSMS = new Message(apiKey, apiSecret);
 
 		HashMap<String, String> params = new HashMap<String, String>();
@@ -183,18 +173,15 @@ public class AccountService {
 		params.put("type", "SMS");
 		params.put("text", "[마.리.댕] 인증번호는" + "[" + number + "]" + "입니다.");
 		params.put("app_version", "test app 1.2"); // application name and version
-		System.out.println(params.toString());
 		try {
 			JSONObject obj = (JSONObject) coolSMS.send(params);
 			long result = (long) obj.get("success_count");
-			System.out.println(result);
 			if (result == 1) {
 				map.put("success", true);
 				map.put("number", number);
 			} else {
 				map = null;
 			}
-			System.out.println(obj.toString());
 		} catch (CoolsmsException e) {
 			System.out.println(e.getMessage());
 			System.out.println(e.getCode());
@@ -204,15 +191,10 @@ public class AccountService {
 	}
 
 	public HashMap<String, Object> refreshToken(String accessToken, String refreshToken) {
-		System.out.println("service Start");
 		HashMap<String, Object> response = new HashMap<>();
 		String user_id = null, refreshTokenFromDb = null;
-		System.out.println("accessToken : " + accessToken);
-		System.out.println("refreshToken : " + refreshToken);
-
 		try {
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
-			System.out.println(user_id);
 		} catch (IllegalArgumentException e) {
 			System.out.println("IllegalArgumentException");
 		} catch (ExpiredJwtException e) { // expire됐을 때
@@ -224,21 +206,23 @@ public class AccountService {
 				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 				TotToken result = (TotToken) vop.get(user_id); // 얘는 refreshToken
 				refreshTokenFromDb = result.getRefreshToken();
-				System.out.println("refreshTokenFromDB : " + refreshTokenFromDb);
 			} catch (IllegalArgumentException e) {
 			}
 			// 둘이 일치하고 만료도 안됐으면 재발급 해주기.
 			if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
 				final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
 				String new_accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+				Account user = accountRepo.findAccountByUserId(user_id);
 				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-				Account ac = Account.builder().user_id(user_id).build();
+				Account ac = Account.builder().user_id(user_id).role(user.getRole()).build();
 				TotToken token = TotToken.builder().account(ac).build();
 				vop.set(new_accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
 				response.put("success", true);
 				response.put("accessToken", new_accessToken);
-				System.out.println("new_accessToken : " + new_accessToken);
-
+				Date expireTime =  new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000);
+				SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+				String expireTime_fotmat1 = format1.format(expireTime);
+				response.put("expireTime", expireTime_fotmat1);
 			} else {
 				response.put("success", false);
 				response.put("msg", "refresh token is expired.");
@@ -248,7 +232,6 @@ public class AccountService {
 			response.put("msg", "your refresh token does not exist.");
 		}
 
-		System.out.println("service End");
 		return response;
 	}
 

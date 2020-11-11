@@ -1,105 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="bbda9ae7-cf17-42a7-bf87-c95502fa7b9a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/README(backend).md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/AnimalDetailController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/dto/AnimalListFE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/css/vue2Dropzone.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/cork.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/loading.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/logo2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/logo3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/(old) section1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/(old) section2-mbti.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/(old) section2-recommendation.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/(old) section2-survey.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/(old)section1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/(old)section2-dog.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/section2-mbti.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/survey/q6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/survey/question.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/videos/video1.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/AdoptionListPagination.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/AnimalCard.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/AnimalListHeader.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/UploadVideo.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/videolist/NoneStreamingVideo.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/videolist/StreamingVideo.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/videolist/VideoSeeMore.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdoptionReview.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdoptionUpdate.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/PrivacyPolicy.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/VideoBoard.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/VideoDetail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/AnimalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/AnimalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/AnimalOpenAPIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/AnimalOpenAPIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/ChangePasswordController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/SurveyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/controller/SurveyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/dto/AnimalLike.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/dto/AnimalLike.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/dto/Apply.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/dto/Apply.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/AccountRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/AccountRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/AnimalLikeRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/AnimalLikeRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/AnimalRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/AnimalRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/ApplyRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/ApplyRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/PtagRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/PtagRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/SurveyRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/repo/SurveyRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/service/animal/AnimalService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/service/animal/AnimalService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/service/survey/SurveyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/service/survey/SurveyService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/service/user/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/daeng/nyang/service/user/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/api/url.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/url.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/css/Card.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/css/Card.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/css/fonts.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/css/minireset.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/fonts/HoonWhitecatR.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/fonts/hoonwhitecatr.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/fonts/hoonwhitecatr.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/section1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/section1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/section2-dog.png" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/image/mainpage/section2-dog.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/survey/1-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/survey/1-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/survey/1.png" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/survey/1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AllAnimals.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Birthday.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Header.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Section1.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Section1.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Section2.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Section2.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Section3.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Section3.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Section4.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Section4.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/accounts/FindIdForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/accounts/FindIdForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/accounts/FindIdSubmit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/accounts/FindIdSubmit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/accounts/FindPwForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/accounts/FindPwForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/accounts/FindPwSubmit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/accounts/FindPwSubmit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/accounts/LoginForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/accounts/LoginForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/accounts/RegisterFrom.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/accounts/RegisterFrom.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question1.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question1.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question2.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question2.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question3.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question3.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question4.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question4.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question5.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question5.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question6.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question6.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question7.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question7.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question8.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question8.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/survey/Question9.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/survey/Question9.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Adoption.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Adoption.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/AdoptionList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/AdoptionList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/AnimalDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/AnimalDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/AnimalList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/AnimalList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Survey.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Survey.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/UploadVideo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/UploadVideo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/VideoList.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vue.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/videolist/StreamingVideo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/videolist/StreamingVideo.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Live.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Live.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/StreamingViewer.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/StreamingViewer.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,6 +67,11 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="sshConsole" />
+  </component>
+  <component name="SshConsoleOptionsProvider">
+    <option name="myEncoding" value="UTF-8" />
+    <option name="myConnectionType" value="NONE" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -144,12 +85,24 @@
       <updated>1603331502729</updated>
       <workItem from="1603331504146" duration="2000" />
       <workItem from="1603331516947" duration="4547000" />
-      <workItem from="1604671677260" duration="2218000" />
+      <workItem from="1604671677260" duration="5362000" />
+      <workItem from="1604984534002" duration="42200000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
     <state x="623" y="141" key="#Deployment" timestamp="1603331647565">
@@ -160,10 +113,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="393" y="43" key="#SSH_Configurations/0.0.1536.824@0.0.1536.824" timestamp="1603331644112" />
+    <state x="529" y="212" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1605064401643">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="529" y="212" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1605064401643" />
     <state x="811" y="224" key="FileChooserDialogImpl" timestamp="1603331639939">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="811" y="224" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1603331639939" />
+    <state x="294" y="67" key="MergeDialog" timestamp="1605017572169">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="294" y="67" key="MergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1605017572169" />
+    <state x="381" y="104" key="SettingsEditor" timestamp="1605008951784">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="381" y="104" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1605008951784" />
     <state x="628" y="310" key="WebDeployment.AddServerDialog.v.1" timestamp="1603331604287">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

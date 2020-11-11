@@ -2,26 +2,6 @@
   <div class="section s2">
     <div class="container s3">
       <div style="height: 100%">
-        <!-- <div style="text-align: center">
-            <h2>아이들을 영상으로 만나보세요</h2>
-          </div>
-        <div class="more-video-button" style="display: flex; justify-content: flex-end;">
-          <v-btn
-           @click="moveToVideos"
-            elevation="10"
-            style="background: green; color: white; margin-bottom: 5px;"
-          >영상 더보기</v-btn>
-        </div>
-
-        <div>
-          <object
-              type="text/html"
-              width="100%"
-              height="500"
-              data="//www.youtube.com/embed/OR90YT2BtH0"
-              allowFullScreen="true"
-            ></object>
-        </div> -->
         <div
           style="
             margin: 10px;
@@ -44,19 +24,15 @@
             ></object>
           </div>
           <div style="width: 50vw">
-            <!-- <p style="font-size: xxx-large; vertical-align: top;"><strong>아이들을</strong></p>
-            <p style="font-size: xxx-large;"><strong>영상으로</strong></p>
-            <p style="font-size: xxx-large;"><strong>만나보세요</strong></p> -->
             <div
               style="display:flex; justify-content: center; height: 100%"
             >
             <div style="margin-bottom: 15px;">
-              <p style="font-size: xxx-large; color: white;"><strong>아이들을 영상으로</strong></p>
-              <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p>
-              <br>
-              <p style="font-size: large; margin-bottom: 30px; color: white;"><strong>당신을 기다리고 있어요</strong></p>
-              <br>
+              <p style="font-size: xxx-large; color: black;"><strong>아이들을 영상으로<br>만나보세요</strong></p>
               <!-- <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p> -->
+              <br>
+              <p style="font-size: large; margin-bottom: 30px; color: black;"><strong>당신을 기다리고 있어요</strong></p>
+              <br>
               <div @click="moveToVideos">
                 <v-btn
                   elevation="5"
@@ -64,11 +40,10 @@
                 >영상 더보기</v-btn>
               </div>
             </div>
-
-            </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -87,8 +62,8 @@ export default {
   },
   methods: {
     moveToVideos() {
-      this.$router.push('/videos')
-    }
+      this.$router.push("/videos");
+    },
   },
   computed: {
     videoUrl() {
@@ -98,9 +73,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .section.s2 {
-  background-color: rgba(255, 165, 0, 1);
+  background: rgb(1, 118, 72);
+  /* background: #FFa500; */
+  /* background-color: rgba(255, 165, 0, 1); */
+  /* background-color: rgb(193, 218, 204); */
   /* background: darkgray; */
   /* background: #fcf7f0; */
   /* background: #fa8290; */
@@ -118,6 +96,4 @@ export default {
   margin-top: 20px;
   border-radius: 20px;
 }
-
-
 </style>

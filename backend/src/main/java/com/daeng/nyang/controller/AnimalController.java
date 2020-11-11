@@ -38,7 +38,6 @@ public class AnimalController {
 	@GetMapping(path = "/newuser/animal/allread")
 	@ApiOperation(value = "(비회원) 전체동물조회")
 	public ResponseEntity<HashMap<String, Object>> allread() {
-		System.out.println("CONTROLLER START");
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			List<AnimalListFE> animalList = animalService.allAnimalRead();
@@ -53,7 +52,6 @@ public class AnimalController {
 	@GetMapping(path = "/user/animal/allread")
 	@ApiOperation(value = "(회원) 전체동물조회")
 	public ResponseEntity<HashMap<String, Object>> allreadUser(HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
 		try {
 			TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
@@ -61,7 +59,6 @@ public class AnimalController {
 			HashMap<String, Object> map = new HashMap<>();
 			List<AnimalListFE> animalList = animalService.allAnimalRead(user_id);
 			map.put("animalList", animalList);
-			System.out.println(animalList.toString());
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,7 +69,6 @@ public class AnimalController {
 	@GetMapping(path = "/user/animal/like")
 	@ApiOperation("즐겨찾는 동물 조회")
 	public ResponseEntity<HashMap<String, Object>> animalLikeList(HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
@@ -86,7 +82,6 @@ public class AnimalController {
 	@ApiOperation(value = "설문기록여부확인")
 	public ResponseEntity<HashMap<String, Object>> surveyread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 설문기록여부 반환
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
@@ -96,7 +91,7 @@ public class AnimalController {
 				return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 			} else {
 				Survey survey = surveyService.findSurveyByUserid(user_id);
-				if(survey==null)
+				if (survey == null)
 					map.put("survey", null);
 				else
 					map.put("survey", survey);
@@ -111,7 +106,6 @@ public class AnimalController {
 	@GetMapping(path = "/user/animal/matchlist")
 	@ApiOperation(value = "매칭된동물리스트")
 	public ResponseEntity<HashMap<String, Object>> matchlist(HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization"); // 토큰받기
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
@@ -122,12 +116,13 @@ public class AnimalController {
 			} else {
 				Survey survey = null;
 				survey = surveyService.findSurveyByUserid(user_id); // 토큰을 통해 얻은 유저아이디로 이 유저가 설문을 한적있는지 검사.
-				if(survey==null) {
+				if (survey == null) {
 					map.put("survey", null);
 					return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
 				}
 				// 유저의 MBTI
-//				String userMbti = survey.getMbti(); // 설문을 한적 없다면 이 구문에서 에러가 나서 NOT_FOUND상태가 반환됨.
+				// String userMbti = survey.getMbti(); // 설문을 한적 없다면 이 구문에서 에러가 나서 NOT_FOUND상태가
+				// 반환됨.
 
 				// 설문결과 유저에게 어울리는 강아지의 MBTI
 				String userDogMbti = survey.getAnswer();
@@ -155,7 +150,7 @@ public class AnimalController {
 					text2 = userDogMbti.replace('F', 'C');
 				}
 				List<AnimalListFE> goodlist2 = animalService.findAnimalByMbti(user_id, text2);
-//					map.put("good_2", goodlist2);
+				// map.put("good_2", goodlist2);
 
 				// 설문결과 유저에게 어울리는 강아지의 MBTI 중 세번째 글자 불일치 124
 				String text3 = "";
@@ -165,7 +160,7 @@ public class AnimalController {
 					text3 = userDogMbti.replace('I', 'S');
 				}
 				List<AnimalListFE> goodlist3 = animalService.findAnimalByMbti(user_id, text3);
-//					map.put("good_3", goodlist3);
+				// map.put("good_3", goodlist3);
 
 				// 설문결과 유저에게 어울리는 강아지의 MBTI 중 네번째 글자 불일치 123
 				String text4 = "";
@@ -175,7 +170,7 @@ public class AnimalController {
 					text4 = userDogMbti.replace('A', 'W');
 				}
 				List<AnimalListFE> goodlist4 = animalService.findAnimalByMbti(user_id, text4);
-//					map.put("good_4", goodlist4);
+				// map.put("good_4", goodlist4);
 
 				// good 리스트 합쳐서 하나의 good 리스트로 만들기.
 				List<AnimalListFE> goodlist = new ArrayList<>();
@@ -218,7 +213,6 @@ public class AnimalController {
 			}
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (NullPointerException e) {
-			System.out.println("NULLPOINTER");
 			e.printStackTrace();
 			AnimalLike new_animalLike = null;
 			new_animalLike = animalService.join(animalLike);
