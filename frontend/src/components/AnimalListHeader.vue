@@ -214,6 +214,7 @@ export default {
     ...mapMutations(["setEventListener"]),
     ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
+      this.setEventListener(-1);
       location.href = "/";
     },
     register() {

@@ -80,7 +80,7 @@
       </div>
     </div>
     <div
-      style="display: flex; justify-content: center; align-items: flex-start; flex; flex-direction: column; width: 100%"
+      style="display: flex; justify-content: center; align-items: flex-start; flex; flex-direction: column; width: 90%"
     >
       <div
         style="
@@ -96,7 +96,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%; font-weight: bold;"
+          style="width: 100%; font-weight: bold"
         >
           # {{ this.animalInfo.personality[0] }}
         </div>
@@ -106,7 +106,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%; font-weight: bold;"
+          style="width: 100%; font-weight: bold"
         >
           # {{ this.animalInfo.personality[1] }}
         </div>
@@ -125,7 +125,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%; font-weight: bold;"
+          style="width: 100%; font-weight: bold"
         >
           # {{ this.animalInfo.personality[2] }}
         </div>
@@ -135,7 +135,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%; font-weight: bold;"
+          style="width: 100%; font-weight: bold"
         >
           # {{ this.animalInfo.personality[3] }}
         </div>

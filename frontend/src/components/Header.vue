@@ -15,6 +15,11 @@
       right: 0;
       z-index: 5;
     "
+    :style="
+      this.eventListener == -1
+        ? 'background-color: rgba(255, 255, 255, 0.5);'
+        : 'background-color: white'
+    "
   >
     <div
       @click="moveToMain"
@@ -108,6 +113,7 @@ export default {
     ...mapMutations(["setEventListener"]),
     ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
+      this.setEventListener(-1);
       location.href = "/";
     },
     register() {
@@ -125,6 +131,8 @@ export default {
     moveTo(page) {
       if (page == "/animals") {
         this.setEventListener(2);
+      } else {
+        this.setEventListener(11);
       }
       this.$router.push(page);
     },

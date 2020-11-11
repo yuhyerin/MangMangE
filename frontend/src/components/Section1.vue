@@ -41,10 +41,15 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "Section1",
   methods: {
+    ...mapMutations(["setEventListener"]),
     moveTo(page) {
+      if (page == "/animals") {
+        this.setEventListener = 2;
+      }
       this.$router.push(page);
     },
   },

@@ -181,7 +181,7 @@
           v-if="this.animalInfo.special_mark != ','"
           style="width: 70%; height: 100%"
         >
-          {{ this.animalInfo.special_mark }}
+          특징 : {{ this.animalInfo.special_mark }}
         </div>
       </div>
     </div>

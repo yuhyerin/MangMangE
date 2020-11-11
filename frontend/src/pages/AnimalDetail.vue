@@ -117,6 +117,30 @@
           </div>
         </div>
       </div>
+      <div v-for="video in videos" :key="video.uid">
+        <vue-plyr>
+          <video>
+            <source
+              :src="require(`@/assets/videos/${video.filepath}.mp4`)"
+              type="video/mp4"
+            />
+            <track
+              kind="captions"
+              label="English"
+              srclang="en"
+              src="captions-en.vtt"
+              default
+            />
+          </video>
+        </vue-plyr>
+        <h3
+          class="videoTitle"
+          style="text-align: center; cursor: pointer"
+          @click="moveToVideoDetail(video.uid)"
+        >
+          {{ video.title }}
+        </h3>
+      </div>
     </v-container>
   </div>
 </template>
@@ -135,6 +159,7 @@ export default {
       likeTrigger: false,
       animalInfo: "",
       adoptionBtn: "",
+      videos: [],
     };
   },
   computed: {
@@ -214,6 +239,7 @@ export default {
           console.log(err);
         });
     }
+    this.getVideos();
   },
   methods: {
     setLiked() {
@@ -272,6 +298,22 @@ export default {
     },
     moveTo(page) {
       this.$router.push(page + `/${this.$route.params.animalID}`);
+    },
+
+    getVideos() {
+      axios
+        .get(SERVER.URL + "/newuser/video/detailvideo", {
+          params: {
+            uid: this.animalInfo.desertion_no,
+          },
+        })
+        .then((res) => {
+          if (res.data.VideoList.length >= 4) {
+            this.videos = res.data.VideoList.slice(-4);
+          } else {
+            this.videos = res.data.VideoList;
+          }
+        });
     },
   },
 };

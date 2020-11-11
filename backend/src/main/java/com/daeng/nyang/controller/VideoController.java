@@ -48,14 +48,14 @@ public class VideoController {
 	// 특정 비디오
 	@GetMapping("/newuser/video/detailvideo")
 	public ResponseEntity<HashMap<String, Object>> detailvideo(@RequestParam Long uid) {
-		System.out.println("CONTROLLER START");
+		System.out.println("DETAILVIDEO CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
 			AnimalVideo av = videoService.detailvideo(uid);
 			av.setFilepath(av.getFilepath().substring(16, av.getFilepath().length()-4));
 			map.put("VideoDetail", av);
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (Exception e) {	
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		}
