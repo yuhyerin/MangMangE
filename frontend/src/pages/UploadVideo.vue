@@ -7,24 +7,57 @@
       "
     >
       <h2 style="text-align: center; padding-bottom: 12px;">동영상 업로드</h2>
-      <v-col>
-        <v-text-field
+      <label v-if="desertionNoCheck">일련번호를 확인해주세요</label>
+      <div style="display: flex">
+          <v-text-field
             label="일련번호"
             v-model="desertionNo"
             outlined
-        ></v-text-field>
-      </v-col>
-      <v-col>
+          ></v-text-field>
+          <v-btn 
+            small
+            elevation="0"
+            style="padding: 0; background: rgba(255, 255, 255, 0);"
+          >
+            <v-icon style="color: green" :disabled="desertionNo.length < 1 || desertionNoCheck === 0">
+              mdi-checkbox-marked-circle
+            </v-icon>
+          </v-btn>
+      </div>
+
+      <div style="display: flex">
         <v-text-field
           label="제목"
           v-model="title"
           outlined
         ></v-text-field>
-      </v-col>
-      <v-col>
-        <input type="file" ref="file" @change="selectFile" style="padding-bottom: 12px; border: 1px solid gray; border-radius: 3px;"/>
-      </v-col>
-      <v-col>
+        <v-btn
+          class="mx-2"
+          small
+          elevation="0"
+          style="padding: 0; background: rgba(255, 255, 255, 0);"
+        >
+          <v-icon style="color: green" :disabled="title.length < 1">
+            mdi-checkbox-marked-circle
+          </v-icon>
+        </v-btn>
+      </div>
+
+      <label v-if="selectedFileCheck">이미 업로드된 파일입니다</label>
+      <div style="display: flex; padding-bottom: 12px;">
+        <input type="file" ref="file" @change="selectFile" style="border: 1px solid gray; border-radius: 3px;" />
+        <v-btn
+          class="mx-2"
+          small
+          elevation="0"
+          style="padding: 0; background: rgba(255, 255, 255, 0);"
+        >
+          <v-icon style="color: green" :disabled="!selectedFiles">
+            mdi-checkbox-marked-circle
+          </v-icon>
+        </v-btn>
+      </div>
+      <div style="display: flex;">
         <v-textarea
           outlined
           name="input-7-4"
@@ -32,13 +65,24 @@
           label="내용"
           style="padding-top: 24px;"
         ></v-textarea>
-      </v-col>
+        <v-btn
+          class="mx-2"
+          small
+          elevation="0"
+          style="margin-top: 10px; padding-top: 24px; background: rgba(255, 255, 255, 0);"
+        >
+          <v-icon style="color: green" :disabled="content.length < 1">
+            mdi-checkbox-marked-circle
+          </v-icon>
+        </v-btn>
+      </div>
       <v-col style="padding-top: 0px;">
         <v-btn 
           outlined
           rounded
-          :disabled="!selectedFiles"
+          :disabled="!selectedFiles || desertionNo.length < 1 || title.length < 1 || content.length < 1"
           @click="upload"
+          style="margin-left: 35px;"
         >등록하기</v-btn>
         </v-col>
     </v-container>
@@ -59,9 +103,11 @@ export default {
     return{
       desertionNo:'',
       title:'',
-      file:undefined,
+      file: undefined,
       content:'',
-      selectedFiles: false
+      selectedFiles: false,
+      desertionNoCheck: 0,
+      selectedFileCheck: 0,
     }
   },
   methods:{
