@@ -28,7 +28,6 @@ public class VideoController {
 	// 모든 비디오
 	@GetMapping("/newuser/video/allvideo")
 	public ResponseEntity<HashMap<String, Object>> allvideo() {
-		System.out.println("CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
 			List<AnimalVideo> videoList = videoService.allVideo();
@@ -43,7 +42,6 @@ public class VideoController {
 	// 특정 비디오
 	@GetMapping("/newuser/video/detailvideo")
 	public ResponseEntity<HashMap<String, Object>> detailvideo(@RequestParam Long uid) {
-		System.out.println("CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
 			AnimalVideo av = videoService.detailvideo(uid);
@@ -57,11 +55,9 @@ public class VideoController {
 	
 	@GetMapping("/newuser/video/search")
 	public ResponseEntity<HashMap<String, Object>> searchVideo(@RequestParam Long desertion_no){
-		System.out.println("CONTROLLER START");
 		List<AnimalVideo> videoList = videoService.searchVideo(desertion_no);
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("videoList", videoList);
-		System.out.println(map.toString());
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 }

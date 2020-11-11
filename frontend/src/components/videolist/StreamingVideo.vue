@@ -30,11 +30,11 @@
       </v-col>
     </v-row>
     <hr />
-    <v-row>
+    <v-row style="margin-bottom: 20px">
       <v-col v-for="video in videos" :key="video.uid">
         <vue-plyr>
           <video>
-            <source :src="require(`@/assets/videos/${video.filepath}`)"/>
+            <source :src="require(`@/assets/videos/${video.filepath}`)" />
             <track
               kind="captions"
               label="English"
@@ -63,9 +63,6 @@ export default {
       upload: '',
       videos: [],
     };
-  },
-  mounted() {
-    // console.log(this.$refs.plyr.player);
   },
   created() {
     if (this.$cookies.get("accessToken") != null) {
@@ -114,14 +111,15 @@ export default {
         .get(SERVER.URL + "/newuser/video/allvideo")
         .then((res) => {
           if(res.data.VideoList.length >= 4) {
-            this.videos = res.data.VideoList.slice(-4)
+            this.videos = res.data.VideoList.slice(-4).reverse()
+            console.log('this.videos?', this.videos)
           }
           else {
             this.videos = res.data.VideoList
           }
         
         })
-  },
+    },
   }
 }
 </script>

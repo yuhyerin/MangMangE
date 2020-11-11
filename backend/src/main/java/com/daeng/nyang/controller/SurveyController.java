@@ -37,10 +37,9 @@ public class SurveyController {
 	@ApiOperation(value = "설문결과저장")
 	public ResponseEntity<HashMap<String, Object>> surveyCreate(@RequestBody Survey survey,
 			HttpServletRequest request) {
-		System.out.println("설문결과 저장 컨트롤러 진입");
 		String token = request.getHeader("Authorization"); // 토큰받기
-		System.out.println(token); // 받은 토큰 출력, 확인
-		System.out.println(survey.toString()); // 받은 survey값 출력, 확인
+//		System.out.println(token); // 받은 토큰 출력, 확인
+//		System.out.println(survey.toString()); // 받은 survey값 출력, 확인
 		if (token == null) {
 			return null;
 		} else if (jwtTokenUtil.isTokenExpired(token)) {
@@ -49,12 +48,12 @@ public class SurveyController {
 			try {
 				HashMap<String, Object> map = new HashMap<>();
 				// 설문 저장 로직 작성
-				System.out.println("Survey Create Controller");
+//				System.out.println("Survey Create Controller");
 
 				// 토큰으로 유저 아이디 받아오는 구문 필요
 				// no.1
 				String user_id = jwtTokenUtil.getUsernameFromToken(token);
-				System.out.println("user_id : " + user_id);
+//				System.out.println("user_id : " + user_id);
 
 				// no.2
 //			Map<String, Object> now_user = new HashMap<>();

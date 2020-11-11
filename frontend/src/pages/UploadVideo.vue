@@ -8,27 +8,22 @@
       "
     >
       <h2 style="text-align: center; padding-bottom: 12px;">동영상 업로드</h2>
-        <div style="display: flex; height: 60px;">
-          <img :src="image" alt="이미지" style="height: 60px; width: 60px; margin: 0 1% 1% 0; border-radius: 20px;">
-            <v-text-field
-              placeholder="일련번호"
-              v-model="desertionNo"
-              outlined
-            ></v-text-field>
-            <v-btn 
-              small
-              elevation="0"
-              style="padding: 0; background: rgba(255, 255, 255, 0);"
-            >
-              <v-icon style="color: green" :disabled="desertionNoCheck === 0 || desertionNoExist === 0 || desertionNoExist === 2">
-                mdi-checkbox-marked-circle
-              </v-icon>
-            </v-btn>
-        </div>
-      <label v-if="!desertionNoCheck" style="color: orange;">일련번호 길이는 15입니다!</label>
-      <label v-if="!desertionNoExist" style="color: orange;">존재하지 않는 일련번호입니다!</label>
-
-      <div style="display: flex; margin-top: 25px;">
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <img :src="image" alt="이미지" style="height: 75px; margin: 0 1% 1% 0; border-radius: 30px;">
+        <v-text-field
+          label="일련번호"
+          v-model="desertionNo"
+          outlined
+          style="margin: 0; padding: 0;"
+        ></v-text-field>
+        <v-icon style="color: green" 
+          :disabled="desertionNoCheck!=0">
+          mdi-checkbox-marked-circle
+        </v-icon>
+      </div>
+      <p v-if="desertionNoCheck==1" style="color: orange;">일련번호는 15자입니다.</p>
+      <p v-else-if="desertionNoCheck==2" style="color: red;">존재하지 않는 일련번호입니다.</p>
+      <div style="display: flex">
         <v-text-field
           placeholder="제목"
           v-model="title"
@@ -46,22 +41,24 @@
         </v-btn>
       </div>
 
-      <div style="display: flex;">
-        <input type="file" ref="file" @change="selectFile" style="border: 1px solid gray; border-radius: 3px;" :disabled="desertionNoExist === 0 || desertionNoExist === 1" />
+      
+      <div style="display: flex; padding-bottom: 12px;">
+        <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck!=0"/>
         <v-btn
           class="mx-2"
           small
           elevation="0"
           style="padding: 0; background: rgba(255, 255, 255, 0);"
         >
-          <v-icon style="color: green" :disabled="!selectedFiles">
+          <v-icon style="color: green" :disabled="selectedFileCheck!=0">
             mdi-checkbox-marked-circle
           </v-icon>
         </v-btn>
         <label v-if="selectedFileCheck" style="color: orange;">이미 업로드된 파일입니다</label>
       </div>
-
-      <div style="display: flex; padding-top: 12px; height: 190px;">
+      <label v-if="selectedFileCheck==1" style="color:red">이미 업로드된 파일입니다</label>
+      <label v-else-if="selectedFileCheck==2" style="color:red">지원하지 않는 파일 형식입니다.</label>
+      <div style="display: flex;">
         <v-textarea
           :counter="500"
           outlined
@@ -86,16 +83,7 @@
         <v-btn 
           outlined
           rounded
-          :disabled="
-                    desertionNo.length < 1 ||
-                    desertionNoCheck === 1 ||
-                    desertionNoExist === 1 ||
-                    title.length < 1 ||
-                    content.length < 1 ||
-                    contentCheck === 1 ||
-                    !selectedFiles ||
-                    selectedFileCheck === 1
-                    "
+          :disabled="selectedFileCheck!=0 || desertionNoCheck!=0 || title.length < 1 || content.length < 1"
           @click="upload"
         >등록하기</v-btn>
       </div>
@@ -119,29 +107,20 @@ export default {
       title:'',
       file: undefined,
       content:'',
-      desertionNoCheck: 0,
-      desertionNoExist: 1,
-      selectedFiles: 0,
+      selectedFiles: false,
+      desertionNoCheck: 1,
       selectedFileCheck: 0,
-      contentCheck: 0,
-      err:{
-        message:'',
-        fileMessage:''
-      },
-      image: require(`@/assets/image/merong1.png`)
+      image: require(`@/assets/image/merong1.png`),
+      error:{
+        message:'일련번호를 확인해주세요',
+      }
     }
   },
   watch: {
     desertionNo() {
-      if (this.desertionNo.length < 15 || this.desertionNo.length > 15) {
-        this.desertionNoCheck = 0
-        this.desertionNoExist = 1
-      } else {
-        this.desertionNoCheck = 1
-
-      }
-      console.log(this.desertionNo)
       this.image = require(`@/assets/image/merong1.png`)
+      if(this.desertionNo.length<15)
+      this.desertionNoCheck = 1;  // 일련번호는 15자입니다.
       if(this.desertionNo.length==15){
         SERVER.tokenCheck(() => {
         axios.get(SERVER.URL+'/admin/upload/checkNO',{
@@ -156,14 +135,12 @@ export default {
           console.log(res)
           if(res.status==202){
             console.log(res)
-            this.err.message = '없는 번호입니다.'
-            this.desertionNoCheck = 1
-            this.desertionNoExist = 0
+            this.desertionNoCheck=2;  // 존재하지 않는 일련번호입니다.
           }
           else{
             this.image = res.data.image;
-            this.desertionNoCheck = 1
-            this.desertionNoExist = 2
+            this.desertionNoCheck = 0;
+            this.error.message = ''
           }
         })
         .catch((err)=>{
@@ -174,37 +151,32 @@ export default {
     },
 
     file(){
-      SERVER.tokenCheck(() => {
-      axios.get(SERVER.URL+'/admin/upload/checkFile',{
-        params:{
-          fileName : this.desertionNo+"_"+this.file[0].name
-        },
-        headers:{
-          "Authorization" : this.$cookies.get("accessToken")
-        }
-      })
-      .then((res)=>{
-        console.log(res)
-        if(res.status==202){
-          this.err.fileMessage = '이미 존재하는 파일입니다.'
-          this.selectedFiles = 0
-          this.selectedFileCheck = 1
-        } else{
-          this.selectedFiles = 1
-          this.selectedFileCheck = 0
-        }
-      })
-      .catch((err)=>{
-        console.log(err)
+      if(this.file[0].name.slice(-3)=='mp4'){
+        SERVER.tokenCheck(() => {
+        axios.get(SERVER.URL+'/admin/upload/checkFile',{
+          params:{
+            fileName : this.desertionNo+"_"+this.file[0].name
+          },
+          headers:{
+            "Authorization" : this.$cookies.get("accessToken")
+          }
         })
-      });
-    },
-
-    content() {
-      if (this.content.length <= 500) {
-        this.contentCheck = 0
-      } else {
-        this.contentCheck = 1
+        .then((res)=>{
+          console.log(res)
+          if(res.status==202){
+            this.selectedFileCheck = 1;
+          }
+          else{
+            this.selectedFileCheck=0;
+          }
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+        });
+      }
+      else {
+        this.selectedFileCheck = 2; 
       }
     }
   },
@@ -218,13 +190,14 @@ export default {
 
     upload(){
         var formData = new FormData();
-        console.log(this.file[0].name)
+        console.log(this.desertionNo+'_'+this.file[0].name)
         SERVER.tokenCheck(()=>{
           axios.post(SERVER.URL + '/admin/uploadVideo',
             {
               "desertion_no" : this.desertionNo,
               "title" : this.title,
               "content" : this.content,
+              "filepath" : this.desertionNo+'_'+this.file[0].name
             },
             {
               headers:{
