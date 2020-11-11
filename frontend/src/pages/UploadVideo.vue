@@ -20,13 +20,13 @@
               elevation="0"
               style="padding: 0; background: rgba(255, 255, 255, 0);"
             >
-              <v-icon style="color: green" :disabled="desertionNo.length < 1 || desertionNoCheck === 1 || desertionNoExist === 1">
+              <v-icon style="color: green" :disabled="desertionNoCheck === 0 || desertionNoExist === 0 || desertionNoExist === 2">
                 mdi-checkbox-marked-circle
               </v-icon>
             </v-btn>
         </div>
-      <label v-if="desertionNoCheck" style="color: orange;">일련번호 길이는 15입니다!</label>
-      <label v-if="desertionNoExist" style="color: orange;">존재하지 않는 일련번호입니다!</label>
+      <label v-if="!desertionNoCheck" style="color: orange;">일련번호 길이는 15입니다!</label>
+      <label v-if="!desertionNoExist" style="color: orange;">존재하지 않는 일련번호입니다!</label>
 
       <div style="display: flex; margin-top: 25px;">
         <v-text-field
@@ -47,7 +47,7 @@
       </div>
 
       <div style="display: flex;">
-        <input type="file" ref="file" @change="selectFile" style="border: 1px solid gray; border-radius: 3px;" />
+        <input type="file" ref="file" @change="selectFile" style="border: 1px solid gray; border-radius: 3px;" :disabled="desertionNoExist === 0 || desertionNoExist === 1" />
         <v-btn
           class="mx-2"
           small
@@ -63,7 +63,7 @@
 
       <div style="display: flex; padding-top: 12px; height: 190px;">
         <v-textarea
-          :counter="300"
+          :counter="500"
           outlined
           name="input-7-4"
           v-model="content"
@@ -86,14 +86,16 @@
         <v-btn 
           outlined
           rounded
-          :disabled="!selectedFiles ||
-                    selectedFileCheck === 1||
+          :disabled="
                     desertionNo.length < 1 ||
                     desertionNoCheck === 1 ||
                     desertionNoExist === 1 ||
                     title.length < 1 ||
                     content.length < 1 ||
-                    contentCheck === 1"
+                    contentCheck === 1 ||
+                    !selectedFiles ||
+                    selectedFileCheck === 1
+                    "
           @click="upload"
         >등록하기</v-btn>
       </div>
@@ -117,10 +119,10 @@ export default {
       title:'',
       file: undefined,
       content:'',
+      desertionNoCheck: 0,
+      desertionNoExist: 1,
       selectedFiles: 0,
       selectedFileCheck: 0,
-      desertionNoCheck: 0,
-      desertionNoExist: 0,
       contentCheck: 0,
       err:{
         message:'',
@@ -132,10 +134,11 @@ export default {
   watch: {
     desertionNo() {
       if (this.desertionNo.length < 15 || this.desertionNo.length > 15) {
-        this.desertionNoCheck = 1
-        this.desertionNoExist = 0
-      } else {
         this.desertionNoCheck = 0
+        this.desertionNoExist = 1
+      } else {
+        this.desertionNoCheck = 1
+
       }
       console.log(this.desertionNo)
       this.image = require(`@/assets/image/merong1.png`)
@@ -154,11 +157,13 @@ export default {
           if(res.status==202){
             console.log(res)
             this.err.message = '없는 번호입니다.'
-            this.desertionNoExist = 1
+            this.desertionNoCheck = 1
+            this.desertionNoExist = 0
           }
           else{
             this.image = res.data.image;
-            this.desertionNoCheck = false;
+            this.desertionNoCheck = 1
+            this.desertionNoExist = 2
           }
         })
         .catch((err)=>{
@@ -184,6 +189,9 @@ export default {
           this.err.fileMessage = '이미 존재하는 파일입니다.'
           this.selectedFiles = 0
           this.selectedFileCheck = 1
+        } else{
+          this.selectedFiles = 1
+          this.selectedFileCheck = 0
         }
       })
       .catch((err)=>{
@@ -193,7 +201,7 @@ export default {
     },
 
     content() {
-      if (this.content.length <= 300) {
+      if (this.content.length <= 500) {
         this.contentCheck = 0
       } else {
         this.contentCheck = 1

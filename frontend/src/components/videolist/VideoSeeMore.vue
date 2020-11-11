@@ -8,7 +8,7 @@
           <vue-plyr>
             <video>
               <source
-                :src="require(`@/assets/videos/${video.filepath}.mp4`)"
+                :src="require(`@/assets/videos/${video.filepath}`)"
                 type="video/mp4"
               />
               <track
