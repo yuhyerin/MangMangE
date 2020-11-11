@@ -77,7 +77,8 @@ export default {
 <style scoped>
 .section.s3 {
   /* background: black; */
-  background: rgb(58, 58, 58);
+  /* background: rgb(58, 58, 58); */
+  background: #ff9900;
   /* background-color: #ccc; */
   padding-top: 75px;
 }

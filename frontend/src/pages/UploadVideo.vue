@@ -9,8 +9,9 @@
     >
       <h2 style="text-align: center; padding-bottom: 12px;">동영상 업로드</h2>
         <div style="display: flex; height: 60px;">
+          <img :src="image" alt="이미지" style="height: 60px; width: 60px; margin: 0 1% 1% 0; border-radius: 20px;">
             <v-text-field
-              label="일련번호"
+              placeholder="일련번호"
               v-model="desertionNo"
               outlined
             ></v-text-field>
@@ -29,7 +30,7 @@
 
       <div style="display: flex; margin-top: 25px;">
         <v-text-field
-          label="제목"
+          placeholder="제목"
           v-model="title"
           outlined
         ></v-text-field>
@@ -66,7 +67,7 @@
           outlined
           name="input-7-4"
           v-model="content"
-          label="내용"
+          placeholder="내용"
           style="padding-top: 24px;"
         ></v-textarea>
         <v-btn
@@ -183,13 +184,10 @@ export default {
           this.err.fileMessage = '이미 존재하는 파일입니다.'
           this.selectedFiles = 0
           this.selectedFileCheck = 1
-          // alert(this.err.fileMessage)
         }
       })
       .catch((err)=>{
         console.log(err)
-        // this.err.fileMessage = '이미 존재하는 파일입니다.'
-        // alert(this.err.fileMessage)
         })
       });
     },
@@ -204,10 +202,6 @@ export default {
   },
 
   methods:{
-    // validateField () {
-    //     this.$refs.form.validate()
-    // },
-
     selectFile() {
       console.log('selectFILE')
       this.file = this.$refs.file.files;
@@ -217,7 +211,6 @@ export default {
     upload(){
         var formData = new FormData();
         console.log(this.file[0].name)
-        // formData.append("mfile", this.file[0], this.desertionNo+"_"+this.file[0].name);
         SERVER.tokenCheck(()=>{
           axios.post(SERVER.URL + '/admin/uploadVideo',
             {
@@ -264,16 +257,5 @@ export default {
 </script>
 
 <style scoped>
-/* .v-label.theme--light.error--text {
-  left: 0 !important;
-}
 
-.v-label.v-label--active.theme--light {
-  left: -27px !important;
-} */
-
-/* .v-input.v-input--is-focused.theme--light.v-text-field.v-text-field--is-booted.v-text-field--enclosed.v-text-field--outlined.primary--text > .v-input__control > .v-input__slot > fieldset > legend { */
-.v-input--is-focused > .v-input__control > .v-input__slot > fieldset > legend {
-  width: 60px !important;
-}
 </style>
