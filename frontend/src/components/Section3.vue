@@ -24,27 +24,26 @@
             ></object>
           </div>
           <div style="width: 50vw">
-            <div style="display: flex; justify-content: center; height: 100%">
-              <div style="margin-bottom: 15px">
-                <p style="font-size: xxx-large; color: black">
-                  <strong>아이들을 영상으로<br />만나보세요</strong>
-                </p>
-                <!-- <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p> -->
-                <br />
-                <p style="font-size: large; margin-bottom: 30px; color: black">
-                  <strong>당신을 기다리고 있어요</strong>
-                </p>
-                <br />
-                <div @click="moveToVideos">
-                  <v-btn elevation="5" style="background: black; color: white"
-                    >영상 더보기</v-btn
-                  >
-                </div>
+            <div
+              style="display:flex; justify-content: center; height: 100%"
+            >
+            <div style="margin-bottom: 15px;">
+              <p style="font-size: xxx-large; color: black;"><strong>아이들을 영상으로<br>만나보세요</strong></p>
+              <!-- <p style="font-size: xxx-large; color: white;"><strong>만나보세요</strong></p> -->
+              <br>
+              <p style="font-size: large; margin-bottom: 30px; color: black;"><strong>당신을 기다리고 있어요</strong></p>
+              <br>
+              <div @click="moveToVideos">
+                <v-btn
+                  elevation="5"
+                  style="background: black; color: white;"
+                >영상 더보기</v-btn>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>

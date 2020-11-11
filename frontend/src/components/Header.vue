@@ -1,8 +1,4 @@
 <template>
-  <!-- <v-app-bar id="app-toolbar" app color="white">
-    <v-icon>mdi-view-list</v-icon>
-    <v-spacer />
-  </v-app-bar> -->
   <div
     style="
       position: fixed;
