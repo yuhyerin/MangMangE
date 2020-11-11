@@ -101,76 +101,28 @@
           v-for="(tag, index) in this.animalTag"
           :key="index"
         >
-          <div
-            v-if="checkTag(tag) == 'E'"
-            style="
-              color: rgb(232, 99, 100);
-              text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-            "
-          >
+          <div v-if="checkTag(tag) == 'E'" style="color: rgb(232, 99, 100)">
             #{{ tag }}
           </div>
-          <div
-            v-if="checkTag(tag) == 'Q'"
-            style="
-              color: rgb(130, 157, 212);
-              text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-            "
-          >
+          <div v-if="checkTag(tag) == 'Q'" style="color: rgb(130, 157, 212)">
             #{{ tag }}
           </div>
-          <div
-            v-if="checkTag(tag) == 'F'"
-            style="
-              color: rgb(89, 197, 173);
-              text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-            "
-          >
+          <div v-if="checkTag(tag) == 'F'" style="color: rgb(89, 197, 173)">
             #{{ tag }}
           </div>
-          <div
-            v-if="checkTag(tag) == 'C'"
-            style="
-              color: rgb(214, 120, 157);
-              text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-            "
-          >
+          <div v-if="checkTag(tag) == 'C'" style="color: rgb(214, 120, 157)">
             #{{ tag }}
           </div>
-          <div
-            v-if="checkTag(tag) == 'S'"
-            style="
-              color: rgb(238, 158, 85);
-              text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-            "
-          >
+          <div v-if="checkTag(tag) == 'S'" style="color: rgb(238, 158, 85)">
             #{{ tag }}
           </div>
-          <div
-            v-if="checkTag(tag) == 'I'"
-            style="
-              color: rgb(177, 148, 196);
-              text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-            "
-          >
+          <div v-if="checkTag(tag) == 'I'" style="color: rgb(177, 148, 196)">
             #{{ tag }}
           </div>
-          <div
-            v-if="checkTag(tag) == 'A'"
-            style="
-              color: rgb(123, 181, 123);
-              text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-            "
-          >
+          <div v-if="checkTag(tag) == 'A'" style="color: rgb(123, 181, 123)">
             #{{ tag }}
           </div>
-          <div
-            v-if="checkTag(tag) == 'W'"
-            style="
-              color: rgb(251, 202, 84);
-              text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-            "
-          >
+          <div v-if="checkTag(tag) == 'W'" style="color: rgb(251, 202, 84)">
             #{{ tag }}
           </div>
         </div>

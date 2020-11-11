@@ -20,7 +20,7 @@
           <td>{{ p.uid }}</td>
           <td class="td-title">{{ p.title }}</td>
           <td>{{ p.user_id }}</td>
-          <td>{{ p.regtime.slice(0, 10) }}</td>
+          <td>{{ p.regtime }}</td>
         </tr>
       </tbody>
     </table>
@@ -80,7 +80,8 @@ export default {
       this.pageNum -= 1;
     },
     showMyApply(item) {
-      if (item.user_id === this.userId) {
+      const adminList = ["admin", "admin_hee", "admin_so", "admin_rin", "admin_hwan", "admin_kyu"]
+      if (item.user_id === this.userId || adminList.includes(this.userId)) {
         this.$router.push({
           name: "AdoptionUpdate",
           params: {

@@ -434,7 +434,11 @@ export default {
     } else {
       this.loadingTrigger = true;
       axios
-        .get(SERVER.URL + "/newuser/animal/allread")
+        .get(SERVER.URL + "/newuser/animal/allread", {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
         .then((res) => {
           this.allDatas = res.data.animalList;
           this.loadingTrigger = false;
