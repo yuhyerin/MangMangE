@@ -161,11 +161,14 @@ export default {
     getVideoList() {
       axios.get(SERVER.URL + SERVER.ROUTES.getAllVideos)
       .then(res => {
+        // res.data.VideoList.forEach(item => {
+        //   if(item.uid !== Number(this.videoID)) {
+        //     this.nextVideoList = item
+        //     console.log('filter?', this.nextVideoList)
+        //   }
         this.nextVideoList = [...res.data.VideoList, ...res.data.VideoList, ...res.data.VideoList]
-        this.nextVideoList.forEach(function(val){
-         console.log(val.uid)
-        })
-        console.log('다음 영상?', this.nextVideoList)
+        // })
+        // console.log('다음 영상?', this.nextVideoList)
       })
         // console.log('nextvideo', this.nextVideoList)
         // this.nextVideoList.forEach(function(val){
