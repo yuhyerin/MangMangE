@@ -87,41 +87,22 @@ export default {
         this.socket = io.connect('http://localhost:8002');
         alert('방송 시작합니다!')
 
-        if(this.room !== ''){
-          this.socket.emit('create or join', this.room);
+        // 방 만들겠다고 보냄
+        this.socket.emit('create', this.room);
           
-          this.socket.emit('role', 'Admin');
-          console.log('Vue : 관리자가 화상회의 룸을 개설하려고 요청보냄 ')
-        }
-
-        this.socket.on('role', ((role)=>{
-          console.log('Vue : 나의 롤은 ',role,' 입니다')
-        }));
-
+        // 방이 성공적으로 만들어졌다. 
         this.socket.on('created', ((room)=>{
           console.log('Vue : 성공적으로 룸 개설되었습니다.')
         }));
 
-        this.socket.on('full', ((room)=>{
-          console.log('Vue : 방이 꽉찼다고 알림받음. ')
-        }))
-
-        this.socket.on('join', ((room)=>{
-          console.log('Vue : 다른 사용자가 참여하고 싶다고 요청함 ')
-          this.isChannelReady = true;
-        }))
-
-        this.socket.on('joined', ((room)=>{
-          console.log('Vue : 다른 사용자 참여완료 ')
-          this.isChannelReady = true;
-        }))
+       
 
         this.socket.on('log', ((array)=>{
           console.log.apply('Vue : ',console,array);
         }))
 
         this.socket.on('message',((message) => { 
-          console.log('>>>>>>> 프론트 : Client received message:', message);
+          console.log('Vue : 클라이언트가 보낸 message는 ', message);
           if (message === 'got user media') {
             this.maybeStart();
           } else if (message.type === 'offer') {
@@ -143,34 +124,27 @@ export default {
         // element들 가져오기 
         this.localVideo = document.getElementById('localVideo');
 
-        // 이벤트리스너 등록 
-        this.localVideo.addEventListener("loadedmetadata",( ()=> {
-          console.log('Vue : gotStream with width and height');
-        }));
         navigator.mediaDevices.getUserMedia(this.mediaStreamConstraints)
         .then(this.gotLocalMediaStream)
         .catch();
       }else{
-        alert("방송끝!")
+        alert("방송 종료!")
       }
 
       
     },
 
+    // 파라미터 mediaStream는 스트리머의 영상Stream을 의미합니다.
     gotLocalMediaStream(mediaStream) {
       console.log("Vue : gotLocalMediaStream : Adding local stream. ")
       this.localStream = mediaStream;
       this.localVideo.srcObject = mediaStream;
-      this.sendMessage('got user media');
-      // this.callButton.disabled = false;  // Enable call button.
-      
-      console.log("Vue : 스트리머임 ")
-      this.maybeStart();
-      
+      this.socket.emit('message', 'got user media');
+
     },
 
     maybeStart(){
-      console.log('Vue : maybeStart()호출  isStarted: ', this.isStarted,'  localStream : ', this.localStream,'isChannelReady : ', this.isChannelReady);
+      console.log('Vue : maybeStart()호출  isStarted: ', this.isStarted,'  localStream : ', this.localStream,' isChannelReady : ', this.isChannelReady);
       if (!this.isStarted && typeof this.localStream !== 'undefined' && this.isChannelReady) {
         console.log('Vue : creating peer connection');
         this.createPeerConnection(); // createPeerConnection함수로 peerconnection 을 만들어준다. 
