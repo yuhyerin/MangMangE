@@ -43,10 +43,9 @@ public class AdminService {
 	}
 	
 	public HashMap<String, Object> findFile(String fileName){
-		String file = filePath + fileName;
-		System.out.println(file);
+//		System.out.println(fileName);
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		Optional<AnimalVideo> test = animalVideoRepo.findByFilepath(file);
+		Optional<AnimalVideo> test = animalVideoRepo.findByFilepath(fileName);
 		if(test.isPresent())
 			map.put("success", true);
 		else map.put("success", false);
@@ -55,13 +54,14 @@ public class AdminService {
 
 	
 	public HashMap<String, Object> uploadVideo(Map<String, Object> video, String user_id) {
-		System.out.println("SERVICE START");
 		HashMap<String, Object> map = new HashMap<>();
 		String title = (String)video.get("title");
 		String content = (String)video.get("content");
+		String filepath = (String)video.get("filepath");
 		Long desertion_no = Long.parseLong((String)video.get("desertion_no"));
 		AnimalVideo av = AnimalVideo.builder().content(content).desertion_no(desertion_no)
-				.title(title).writer(user_id).build();
+				.title(title).writer(user_id).filepath(filepath).build();
+		System.out.println("AV : "+av.toString());
 		AnimalVideo result = animalVideoRepo.save(av);
 		if (animalVideoRepo.findByDesertionNoAndTitle(desertion_no, title).isPresent()) {
 			map.put("success", true);
@@ -74,20 +74,28 @@ public class AdminService {
 	}
 
 	public HashMap<String, Object> uploadVideo(String accessToken, MultipartFile mfile) {
-		System.out.println("SERVICE START");
 		StringTokenizer originName = new StringTokenizer(mfile.getOriginalFilename(),"_");
 		Long uid = Long.parseLong(originName.nextToken());
 		String filename = originName.nextToken();
-		System.out.println("origin NAME : "+originName);
+//		System.out.println("uid : "+uid+"\t"+"filename : "+filename);
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		AnimalVideo av = animalVideoRepo.findByUid(uid);
 		try {
-			String dest = "C:/SSAFY/git/s03p31b306/frontend/src/assets/videos/" + av.getDesertion_no()+"_"+filename;
+			String dest = filePath + av.getDesertion_no()+"_"+filename;
+			System.out.println("DESTINATION : "+dest);
+//			System.out.println(av.getDesertion_no() +"_" + filename);
 			mfile.transferTo(new File(dest));
-			av.setFilepath(filePath + av.getDesertion_no() +"_" + filename);
-			animalVideoRepo.save(av);
-			System.out.println(animalVideoRepo.findByUid(uid).toString());
-			map.put("success", true);
+//			av.setFilepath(av.getDesertion_no() +"_" + filename);
+//			animalVideoRepo.save(av);
+			if(animalVideoRepo.findByUid(uid).getFilepath()==null) {
+				map.put("success", false);
+				map.put("msg", "영상저장 실패");
+				animalVideoRepo.delete(av);
+			}
+			else {
+				System.out.println(animalVideoRepo.findByUid(uid).toString());
+				map.put("success", true);
+			}
 		} catch (IllegalStateException | IOException e) {
 			e.printStackTrace();
 			map.put("success", false);

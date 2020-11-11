@@ -193,7 +193,6 @@ export default {
 .survey-items {
   height: 85vh;
   transform-origin: center top 0px;
-  /* background-color: rgb(244, 236, 225); */
   border-radius: 50px;
 }
 </style>

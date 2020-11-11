@@ -4,6 +4,7 @@
       class="mx-2"
       fab
       dark
+      x-small
       color="indigo"
       style="margin-bottom: 20px;"
       @click="moveToMainpage"
@@ -145,6 +146,12 @@
         </div>
       </div>
     </div>
+    <div style="text-align: center; margin-top: 20px">
+      <v-btn outlined @click="moveToMainpage">
+        <p style="margin: 0; padding: 0; font-weight: bold">확인</p>
+      </v-btn>
+    </div>
+      
   </div>
 </template>
 

@@ -30,11 +30,17 @@
       </v-col>
     </v-row>
     <hr />
-    <v-row>
+    <v-row style="margin-top: 10px">
       <v-col v-for="video in videos" :key="video.uid">
-        <vue-plyr>
-          <video>
-            <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
+        <video
+          :src="require(`@/assets/videos/${video.filepath}`)"
+          type="video/mp4"
+          controls
+          style="max-height: 150px; width: 100%; height: 100%;"
+        ></video>
+        <!-- <vue-plyr>
+          <video style="max-height:150px; width:auto; height:100%;">
+            <source :src="require(`@/assets/videos/${video.filepath}`)" />
             <track
               kind="captions"
               label="English"
@@ -43,7 +49,7 @@
               default
             />
           </video>
-        </vue-plyr>
+        </vue-plyr> -->
         <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
       <div class="more-videos">
@@ -63,9 +69,6 @@ export default {
       upload: '',
       videos: [],
     };
-  },
-  mounted() {
-    // console.log(this.$refs.plyr.player);
   },
   created() {
     if (this.$cookies.get("accessToken") != null) {
@@ -111,13 +114,17 @@ export default {
     },
     getVideos() {
       axios
-        .get(SERVER.URL + "/newuser/video/allvideo")
+        .get(SERVER.URL + SERVER.ROUTES.getAllVideos)
         .then((res) => {
-          this.videos = [...res.data.VideoList, ...res.data.VideoList]
-          // .slice(-3)
-          console.log('videos', this.videos)
+          if(res.data.VideoList.length > 3) {
+            this.videos = res.data.VideoList.slice(-4).reverse()
+          }
+          else {
+            this.videos = res.data.VideoList
+          }
+        
         })
-  },
+    },
   }
 }
 </script>

@@ -27,14 +27,20 @@
     </v-row>
     <hr>
     <v-row>
-      <v-col v-for="video in videos" :key="video.id">
-        <vue-plyr>
-          <video poster="poster.png">
-            <source :src="require(`@/assets/videos/${video.video}.mp4`)" type="video/mp4">
+      <v-col v-for="video in videos" :key="video.uid">
+        <video
+          :src="require(`@/assets/videos/${video.filepath}`)"
+          type="video/mp4"
+          controls
+          style="max-height: 150px; width: 100%; height: 100%;"
+        ></video>
+    <!-- <vue-plyr>
+          <video>
+            <source :src="require(`@/assets/videos/${video.filepath}`)"/>
             <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
           </video>  
-        </vue-plyr>
-        <div class="videoTitle" style="text-align:center" @click="moveToVideoDetail(video.id)">동영상 제목{{video.id}}</div>
+        </vue-plyr> -->
+        <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
       <div class="more-videos">
         <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x"></i>
@@ -45,36 +51,47 @@
 
 <script>
 import router from '@/router'
+import SERVER from "@/api/url";
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      videos: [
-        {
-          id: 1,
-          video: "video1"
-        },
-        {
-          id: 2,
-          video: "video1"
-        },
-        {
-          id: 3,
-          video: "video1"
-        },
-      ]
-    }
+      upload: '',
+      videos: [],
+    };
   },
-  mounted() {
-    console.log(this.$refs.plyr.player)
+  created() {
+    if (this.$cookies.get("accessToken") != null) {
+      axios
+        .get(SERVER.URL + "/user/userId", {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"), //the token is a variable which holds the token
+          },
+        })
+        .then((res) => {
+          console.log(res.data)
+          if(res.data.success)
+            this.upload = true;
+          else
+            this.upload=false;
+          console.log(this.upload)
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+    }
+    else{
+      this.upload= false;
+    }
+    this.getVideos()
   },
   methods: {
     videoSeeMore() {
       this.$emit("changeVideo", 2);
     },
     uploadVideo() {
-      console.log("클릭")
-      router.push({name: 'UploadVideo'})
+      this.$router.push("/videos/upload");
     },
     moveToVideoDetail(videoIndex) {
       this.$router.push(
@@ -85,6 +102,19 @@ export default {
           }
         }
       )
+    },
+    getVideos() {
+      axios
+        .get(SERVER.URL + SERVER.ROUTES.getAllVideos)
+        .then((res) => {
+          if(res.data.VideoList.length > 3) {
+            this.videos = res.data.VideoList.slice(-4)
+          }
+          else {
+            this.videos = res.data.VideoList
+          }
+        
+        })
     },
   }
 }
@@ -103,7 +133,6 @@ export default {
 .upload-btn {
   font-weight: bold;
   color: rgb(1, 118, 72);
-  float: right;
 }
 
 div.videoTitle:hover {

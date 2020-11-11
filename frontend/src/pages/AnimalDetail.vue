@@ -104,13 +104,16 @@
                 height="70%"
                 color="rgb(1,118,72)"
                 @click="moveTo('/adoption')"
-                :disabled="this.adoptionBtn"
+                :disabled="this.adoptionBtn || this.admin"
               >
-                <div v-if="!this.adoptionBtn" style="color: white">
+                <div v-if="!this.adoptionBtn && !this.admin" style="color: white">
                   입양하기
                 </div>
-                <div v-else style="color: white">
+                <div v-else-if="!this.admin" style="color: white">
                   입양 심사가 진행 중입니다.
+                </div>
+                <div v-else style="color: white">
+                  입양 신청을 할 수 없습니다.
                 </div>
               </v-btn>
             </div>
@@ -135,6 +138,7 @@ export default {
       likeTrigger: false,
       animalInfo: "",
       adoptionBtn: "",
+      admin:false
     };
   },
   computed: {
@@ -193,7 +197,15 @@ export default {
             console.log("유저 정보 있음", res.data);
             this.animalInfo = res.data.animalList;
             this.adoptionBtn = res.data.adoptCheck;
-            // console.log(res.data.animalList);
+            axios.get(SERVER.URL+'/user/userId',{
+              headers:{
+                "Authorization" : this.$cookies.get("accessToken")
+              }
+            })
+            .then((res)=>{
+              this.admin = res.data.success
+              console.log(this.admin)
+            })
           })
           .catch((err) => {
             console.log(err);
