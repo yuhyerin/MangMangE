@@ -262,3 +262,18 @@ export default {
     
 }
 </script>
+
+<style scoped>
+/* .v-label.theme--light.error--text {
+  left: 0 !important;
+}
+
+.v-label.v-label--active.theme--light {
+  left: -27px !important;
+} */
+
+/* .v-input.v-input--is-focused.theme--light.v-text-field.v-text-field--is-booted.v-text-field--enclosed.v-text-field--outlined.primary--text > .v-input__control > .v-input__slot > fieldset > legend { */
+.v-input--is-focused > .v-input__control > .v-input__slot > fieldset > legend {
+  width: 60px !important;
+}
+</style>
