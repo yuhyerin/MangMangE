@@ -12,6 +12,7 @@
         <div class="second">
           <a
             href="https://www.youtube.com/channel/UCee1MvXr6E8qC_d2WEYTU5g"
+            target="_blank"
             style="text-decoration: none; color: black"
           >
             <img class="img1" src="../assets/image/mainpage/section4-dog.jpg" />
