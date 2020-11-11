@@ -5,7 +5,7 @@
       <div class="row">
         <div class="adoption-list-div col-lg-10 col-md-10 col-sm-10">
           <h3 class="adoption-list"><strong>입양신청목록</strong></h3>
-          <div style="display: flex; justify-content: flex-end">
+          <div style="display: flex; justify-content: flex-end" v-show="user">
             <v-btn @click="showMyList" style="background: black; color: white">
               <strong>내글보기</strong>
             </v-btn>
@@ -36,6 +36,7 @@ export default {
       itemsOriginal: [],
       userId: "",
       flag: 0,
+      user: true,
     };
   },
 
@@ -52,10 +53,15 @@ export default {
   watch: {
     flag() {
       if (this.flag === 1) {
+        const adminList = ["admin", "admin_hee", "admin_so", "admin_rin", "admin_hwan", "admin_kyu"]
         var arr = [];
-        for (let i = 0; i < this.items.length - 1; i++) {
-          if (this.items[i].user_id === this.userId) {
-            arr.push(this.items[i]);
+        if (adminList.includes(this.userId)) {
+          arr = this.items
+        } else {
+          for (let i = 0; i < this.items.length - 1; i++) {
+            if (this.items[i].user_id === this.userId) {
+              arr.push(this.items[i]);
+            }
           }
         }
         this.items = arr;
@@ -76,8 +82,19 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.items = res.data.list.reverse();
+          for (let i = 0; i < this.items.length; i++) {
+            var item = this.items[i]
+            var someday = new Date(item.regtime)
+            var year = someday.getFullYear()
+            var month = someday.getMonth() + 1
+            var date = someday.getDate()
+            var regTime = year + '-' + month + '-' + date
+            item.regtime = regTime
+          }
           this.itemsOriginal = this.items;
           this.userId = res.data.user_id;
+          if(this.userId.includes("admin"))
+            this.user = false;
         })
         .catch((err) => {
           console.log("cat");

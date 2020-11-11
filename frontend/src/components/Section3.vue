@@ -40,11 +40,10 @@
                 >영상 더보기</v-btn>
               </div>
             </div>
-
-            </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -63,8 +62,8 @@ export default {
   },
   methods: {
     moveToVideos() {
-      this.$router.push('/videos')
-    }
+      this.$router.push("/videos");
+    },
   },
   computed: {
     videoUrl() {
@@ -74,11 +73,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .section.s2 {
-  background: rgb(1,118,72);
+  background: rgb(1, 118, 72);
   /* background: #FFa500; */
   /* background-color: rgba(255, 165, 0, 1); */
+  /* background-color: rgb(193, 218, 204); */
   /* background: darkgray; */
   /* background: #fcf7f0; */
   /* background: #fa8290; */
@@ -96,6 +96,4 @@ export default {
   margin-top: 20px;
   border-radius: 20px;
 }
-
-
 </style>

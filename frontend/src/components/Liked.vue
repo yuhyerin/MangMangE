@@ -1,10 +1,10 @@
 <template>
   <div style="display: flex" @click="setLiked">
-    <v-icon v-if="likeTrigger == false" color="rgb(255,0,0)">
+    <v-icon x-large v-if="likeTrigger == false" color="rgb(255,0,0)">
       mdi-heart-outline
     </v-icon>
     <transition name="bounce">
-      <v-icon v-if="likeTrigger == true" color="rgb(255,0,0)">
+      <v-icon x-large v-if="likeTrigger == true" color="rgb(255,0,0)">
         mdi-heart
       </v-icon>
     </transition>
@@ -97,7 +97,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .bounce-enter-active {
   animation: bounce-in 0.5s;
 }

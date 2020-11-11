@@ -18,10 +18,16 @@
           <div
             style="display: flex; width: 100%; justify-content: space-around"
           >
-            <v-btn x-large color="rgb(1,118,72)" @click="moveTo('/survey')"
+            <v-btn
+              style="width: 8vw"
+              color="rgb(1,118,72)"
+              @click="moveTo('/survey')"
               ><div style="color: white">동물 매칭하기</div></v-btn
             >
-            <v-btn x-large color="rgba(64,33,22)" @click="moveTo('/animals')"
+            <v-btn
+              style="width: 8vw"
+              color="rgba(64,33,22)"
+              @click="moveTo('/animals')"
               ><div style="color: white">모든 동물 보기</div></v-btn
             >
           </div>
@@ -45,7 +51,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .s0 {
   /* background-image: url("../assets/image/mainpage/section1.jpg"); */
   background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),

@@ -19,9 +19,7 @@ public interface AnimalVideoRepo extends JpaRepository<AnimalVideo, String>{
 	
 	@Query(value="select * from animal_video av where av.filepath=:filepath", nativeQuery=true)
 	public Optional<AnimalVideo> findByFilepath(String filepath);
-	
-	@Query(value="select * from animal_video av where av.desertion_no=:desertion_no", nativeQuery=true)
-	public Optional<AnimalVideo> findByDesertionNo(Long desertion_no);
+
 	@Query(value="select * from animal_video order by uid asc", nativeQuery=true)
 	List<AnimalVideo> findAnimalVideoAll();
 }

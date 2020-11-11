@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
   URL: 'http://localhost:8080',
-  // URL: 'http://k3b306.p.ssafy.io:8080',
+  // URL: 'https://k3b306.p.ssafy.io:8080',
   ROUTES: {
     submitSurvey: '/user/survey/create',
     getAllVideos: '/newuser/video/allvideo',
@@ -56,6 +56,8 @@ export default {
       userTime -= 86400;
     }
 
+    console.log("expireTime", expireTime);
+    console.log("userTime", userTime);
     if (expireTime <= userTime) {
       axios
         .post(

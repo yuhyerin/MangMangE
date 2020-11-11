@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.daeng.nyang.dto.Animal;
 import com.daeng.nyang.dto.AnimalVideo;
+import com.daeng.nyang.repo.AnimalRepo;
 import com.daeng.nyang.repo.AnimalVideoRepo;
 
 @Service
@@ -21,22 +23,28 @@ public class AdminService {
 	@Autowired
 	private AnimalVideoRepo animalVideoRepo;
 	
+	@Autowired
+	private AnimalRepo animalRepo;
+	
 	@Value("${filePath}")
 	private String filePath;
 	
 	public HashMap<String, Object> findNO(Long desertion_no){
 		HashMap<String, Object> map = new HashMap<>();
-		Optional<AnimalVideo> result = animalVideoRepo.findByDesertionNo(desertion_no);
-		if(result.isPresent())	// 있으면 true
+		Animal a = animalRepo.findAnimalByDesertionNo(desertion_no);
+		if(a==null)
+			map.put("success", false);
+		else {
 			map.put("success", true);
-		else map.put("success", false);	// 없으면 false
-		
+			map.put("image", a.getPopfile());
+		}
 		return map;
 			
 	}
 	
 	public HashMap<String, Object> findFile(String fileName){
 		String file = filePath + fileName;
+		System.out.println(file);
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		Optional<AnimalVideo> test = animalVideoRepo.findByFilepath(file);
 		if(test.isPresent())

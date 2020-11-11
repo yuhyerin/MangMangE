@@ -40,6 +40,7 @@
             @click="goPage(4)"
             :complete="survey[3] !== 0"
             step="4"
+            color="rgb(1, 118, 72)"
             style="cursor: pointer"
           >
           </v-stepper-step>

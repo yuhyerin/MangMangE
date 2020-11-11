@@ -25,9 +25,9 @@
       class="logo"
       style="
         height: 75px;
-        width: 10vw;
+        width: 15vw;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
       "
     >
@@ -37,40 +37,103 @@
         style="height: 70%; padding-left: 20px"
       />
     </div>
-    <div style="width: 80vw; display: flex; justify-content: space-around">
-      <v-btn
-        text
-        :color="btnChecked1 == true ? 'white' : 'black'"
-        @click="moveToAllAnimals"
-        :style="btnChecked1 == true ? 'background-color:rgb(33,150,243)' : null"
-        width="10vw"
-      >
-        <div><h3>모든 동물 보기</h3></div>
-      </v-btn>
-      <v-btn
-        text
-        :color="btnChecked2 == true ? 'white' : 'black'"
-        @click="moveToMatchedAnimals"
-        :style="btnChecked2 == true ? 'background-color:rgb(33,150,243)' : null"
-        width="10vw"
-      >
-        <div><h3>나와 맞는 동물은?</h3></div>
-      </v-btn>
-      <v-btn
-        text
-        :color="btnChecked3 == true ? 'white' : 'black'"
-        @click="moveToLikedAnimals"
-        :style="btnChecked3 == true ? 'background-color:rgb(33,150,243)' : null"
-        width="10vw "
-      >
-        <div><h3>즐겨 찾는 동물들</h3></div>
-      </v-btn>
-    </div>
-    <div style="width: 10vw">
+    <div style="width: 70vw; display: flex; justify-content: space-around">
       <div
         style="
+          width: 100%;
           display: flex;
+          flex-direction: column;
           justify-content: center;
+          align-items: center;
+        "
+      >
+        <v-btn
+          text
+          @click="moveToAllAnimals"
+          :style="
+          "
+          width="10vw"
+        >
+          <div><h3>모든 동물 보기</h3></div>
+        </v-btn>
+        <div
+          style="width: 100%"
+          :style="
+            btnChecked1 == true
+              ? 'border-bottom: 7px solid rgb(250,174,95)'
+              : null
+          "
+        ></div>
+      </div>
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <v-btn
+          text
+          @click="moveToMatchedAnimals"
+          :style="
+          "
+          width="10vw"
+        >
+          <div><h3>나와 맞는 동물은?</h3></div>
+        </v-btn>
+        <div
+          style="width: 100%"
+          :style="
+            btnChecked2 == true
+              ? 'border-bottom: 7px solid rgb(250,174,95)'
+              : null
+          "
+        ></div>
+      </div>
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <v-btn
+          text
+          @click="moveToLikedAnimals"
+          :style="
+          "
+          width="10vw "
+        >
+          <div><h3>즐겨 찾는 동물들</h3></div>
+        </v-btn>
+        <div
+          style="width: 100%"
+          :style="
+            btnChecked3 == true
+              ? 'border-bottom: 7px solid rgb(250,174,95)'
+              : null
+          "
+        ></div>
+      </div>
+    </div>
+    <div
+      style="
+        width: 15vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
           align-items: center;
           font-size: 10px;
         "
@@ -84,9 +147,19 @@
           <div v-else><h4>로그아웃</h4></div>
         </v-btn>
       </div>
-      <div style="display: flex; justify-content: center; align-items: center">
-        <v-btn text @click="moveTo('/videos')" width="100%">
-          <div><h3>동영상 게시판</h3></div>
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+        "
+      >
+        <v-btn text @click="moveTo('/videos')" width="40%">
+          <div><h5>동영상 게시판</h5></div>
+        </v-btn>
+        <v-btn text @click="moveTo('/adoptionlist')" width="40%">
+          <div><h5>입양 신청 목록</h5></div>
         </v-btn>
       </div>
     </div>
@@ -235,7 +308,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .navBtn {
   margin: 2px 5px 2px 5px;
 }

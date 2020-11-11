@@ -96,11 +96,6 @@ const routes = [
     component: Test,
   },  
   {
-    path: '/privacypolicy',
-    name: 'PrivacyPolicy',
-    component: PrivacyPolicy,
-  },
-  {
     path: '/video/:videoId',
     name: 'VideoDetail',
     component: VideoDetail,

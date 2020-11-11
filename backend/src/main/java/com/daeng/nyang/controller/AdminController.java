@@ -42,12 +42,10 @@ public class AdminController {
 	@GetMapping(path="/admin/upload/checkFile")
 	public ResponseEntity<HashMap<String, Object>> checkFile(
 			@RequestParam String fileName){
-//		String file = filePath + fileName;
-//		System.out.println(file);
 		HashMap<String, Object> map = adminService.findFile(fileName);
 		if((boolean)map.get("success"))
-			return new ResponseEntity<>(map, HttpStatus.NOT_ACCEPTABLE);
-		return new ResponseEntity<>(map, HttpStatus.OK);
+			return new ResponseEntity<>(map, HttpStatus.ACCEPTED);	//있으면 true
+		return new ResponseEntity<>(map, HttpStatus.OK);	// 없으면 false
 	}
 	
 	@PostMapping(path = "/admin/uploadVideo")
