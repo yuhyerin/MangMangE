@@ -106,7 +106,7 @@
                 @click="moveTo('/adoption')"
                 :disabled="this.adoptionBtn"
               >
-                <div v-if="!this.adoptionBtn" style="color: white">
+                <div v-if="!this.adoptionBtn && !this.admin" style="color: white">
                   입양하기
                 </div>
                 <div v-else style="color: white">
@@ -135,6 +135,7 @@ export default {
       likeTrigger: false,
       animalInfo: "",
       adoptionBtn: "",
+      admin:false
     };
   },
   computed: {
@@ -193,7 +194,15 @@ export default {
             console.log("유저 정보 있음", res.data);
             this.animalInfo = res.data.animalList;
             this.adoptionBtn = res.data.adoptCheck;
-            // console.log(res.data.animalList);
+            axios.get(SERVER.URL+'/user/userId',{
+              headers:{
+                "Authorization" : this.$cookies.get("accessToken")
+              }
+            })
+            .then((res)=>{
+              this.admin = res.data.success
+              console.log(this.admin)
+            })
           })
           .catch((err) => {
             console.log(err);

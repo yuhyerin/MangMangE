@@ -22,4 +22,7 @@ public interface AnimalVideoRepo extends JpaRepository<AnimalVideo, String>{
 
 	@Query(value="select * from animal_video order by uid asc", nativeQuery=true)
 	List<AnimalVideo> findAnimalVideoAll();
+	
+	@Query(value="select * from animal_video where desertion_no=:desertion_no order by uid desc", nativeQuery = true)
+	public List<AnimalVideo> findByDesertionNo(Long desertion_no);
 }
