@@ -5,13 +5,6 @@
         <v-layout col wrap>
           <v-col cols="8">
             <div class="video-play">
-              <!-- :src="require(`@/assets/videos/${video.video}.mp4`)" -->
-              <!-- <video
-          :src="require(`@/assets/videos/${video.filepath}.mp4`)"
-          type="video/mp4"
-          controls
-          style="width: 100%"
-        ></video> -->
               <vue-plyr>
                 <video>
                   <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
@@ -39,20 +32,20 @@
           
           <v-col cols="3" style="padding-left: 30px;">
             <div class="next-videolist">
-              <p style="font-size: 1.1rem">다음 동영상</p>
+              <p style="font-size: 1.1rem">추천 동영상</p>
               <v-row v-for="nextvideo in nextVideoList" :key="nextvideo.uid">
-                <v-col>
-                  <!-- <vue-plyr>
-                    <video poster="poster.png">
-                      <source :src="require(`@/assets/videos/${nextvideo.filepath}.mp4`)" type="video/mp4"/>
+                <v-col style="padding-right: 8px;">
+                  <vue-plyr>
+                    <video>
+                      <source :src="require(`@/assets/videos/${nextvideo.filepath}.mp4`)" type="video/mp4" height="80px"/>
                       <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
                     </video>  
-                  </vue-plyr> -->
-                  <div style="background-color: black; height: 100px;">썸네일</div>
+                  </vue-plyr>
+                  <!-- <div style="background-color: black; height: 100px;">썸네일</div> -->
                 </v-col>
                 <v-col>
-                  <h3>{{ nextvideo.title }}</h3>
-                  <p style="color: darkgray; font-family: 'Do Hyeon';">{{ nextvideo.regtime }}</p>
+                  <h4>{{ nextvideo.title }}</h4>
+                  <p style="color: darkgray; font-size: 0.8rem;">{{ nextvideo.regtime }}</p>
                 </v-col>
               </v-row>
             </div>
@@ -139,30 +132,22 @@ export default {
     getVideoList() {
       axios.get(SERVER.URL + SERVER.ROUTES.getAllVideos)
       .then(res => {
-        // res.data.VideoList.forEach(item => {
-        //   if(item.uid !== Number(this.videoID)) {
-        //     this.nextVideoList = item
-        //     console.log('filter?', this.nextVideoList)
-        //   }
-        this.nextVideoList = res.data.VideoList
-        for (let i = 0; i < this.nextVideoList.length; i++) {
-          var item = this.nextVideoList[i]
-          var someday = new Date(item.regtime)
-          var year = someday.getFullYear()
-          var month = someday.getMonth() + 1
-          var date = someday.getDate()
-          var regTime = year + '-' + month + '-' + date
-          item.regtime = regTime
-        }
-        // })
-        // console.log('다음 영상?', this.nextVideoList)
+        res.data.VideoList.forEach(item => {
+          if(item.uid !== Number(this.videoID)) 
+          {
+            this.nextVideoList = item
+          }
+        // this.nextVideoList = res.data.VideoList
+        // for (let i = 0; i < this.nextVideoList.length; i++) {
+        //   var item = this.nextVideoList[i]
+        //   var someday = new Date(item.regtime)
+        //   var year = someday.getFullYear()
+        //   var month = someday.getMonth() + 1
+        //   var date = someday.getDate()
+        //   var regTime = year + '-' + month + '-' + date
+        //   item.regtime = regTime
+        })
       })
-        // console.log('nextvideo', this.nextVideoList)
-        // this.nextVideoList.forEach(function(val){
-        //   if (val.uid == this.videoID) {
-        //     this.nextVideoList.pop()
-        //   }
-        // })
     }
   },
 }

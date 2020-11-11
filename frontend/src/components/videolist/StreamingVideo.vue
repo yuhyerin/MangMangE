@@ -113,7 +113,12 @@ export default {
       axios
         .get(SERVER.URL + "/newuser/video/allvideo")
         .then((res) => {
-          this.videos = res.data.VideoList.slice(-3)
+          if(res.data.VideoList.length >= 4) {
+            this.videos = res.data.VideoList.slice(-4)
+          }
+          else {
+            this.videos = res.data.VideoList
+          }
         
         })
   },

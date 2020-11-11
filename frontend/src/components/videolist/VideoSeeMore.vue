@@ -39,7 +39,7 @@
     >
       <v-icon dark>mdi-chevron-up</v-icon>
     </v-btn>
-    <infinite-loading
+    <!-- <infinite-loading
       @infinite="infiniteHandler"
       :identifier="tag"
       spinner="circles"
@@ -50,7 +50,7 @@
       >
         목록의 끝입니다 :)
       </div>
-    </infinite-loading>
+    </infinite-loading> -->
   </div>
 </template>
 
