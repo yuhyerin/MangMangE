@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default {
-  URL: 'http://localhost:8080',
+  URL: 'http://localhost:8084',
   // URL: 'https://k3b306.p.ssafy.io:8080',
   ROUTES: {
     submitSurvey: '/user/survey/create',
