@@ -1,6 +1,44 @@
 <template>
   <div>
     <Header />
+    <div style="position: fixed; top: 90px; left: 1%">
+      <div style="display: flex; justify-content: center; height: 50px">
+        <div
+          style="display: flex; justify-content: center; align-items: center"
+        >
+          <v-icon x-large>mdi-arrow-left </v-icon>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+          "
+        >
+          <v-icon style="transform: rotate(-90deg)"> mdi-paw </v-icon>
+        </div>
+        <div
+          style="display: flex; justify-content: center; align-items: flex-end"
+        >
+          <v-icon style="transform: rotate(-90deg)"> mdi-paw </v-icon>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+          "
+        >
+          <v-icon style="transform: rotate(-90deg)"> mdi-paw </v-icon>
+        </div>
+        <div
+          style="display: flex; justify-content: center; align-items: flex-end"
+        >
+          <v-icon style="transform: rotate(-90deg)"> mdi-paw </v-icon>
+        </div>
+      </div>
+      <div>돌아가기</div>
+    </div>
     <v-container style="padding-top: 90px">
       <div
         style="
@@ -106,7 +144,10 @@
                 @click="moveTo('/adoption')"
                 :disabled="this.adoptionBtn"
               >
-                <div v-if="!this.adoptionBtn" style="color: white">
+                <div
+                  v-if="!this.adoptionBtn && !this.admin"
+                  style="color: white"
+                >
                   입양하기
                 </div>
                 <div v-else style="color: white">
@@ -117,29 +158,28 @@
           </div>
         </div>
       </div>
-      <div v-for="video in videos" :key="video.uid">
-        <vue-plyr>
-          <video>
-            <source
-              :src="require(`@/assets/videos/${video.filepath}.mp4`)"
-              type="video/mp4"
-            />
-            <track
-              kind="captions"
-              label="English"
-              srclang="en"
-              src="captions-en.vtt"
-              default
-            />
-          </video>
-        </vue-plyr>
-        <h3
-          class="videoTitle"
-          style="text-align: center; cursor: pointer"
-          @click="moveToVideoDetail(video.uid)"
-        >
-          {{ video.title }}
-        </h3>
+      <div style="width: 100%; background-color: gray">
+        <div v-for="video in videos" :key="video.uid" style="width: 30%">
+          <vue-plyr>
+            <video>
+              <source :src="`${video.filepath}`" type="video/mp4" />
+              <track
+                kind="captions"
+                label="English"
+                srclang="en"
+                src="captions-en.vtt"
+                default
+              />
+            </video>
+          </vue-plyr>
+          <h3
+            class="videoTitle"
+            style="text-align: center; cursor: pointer"
+            @click="moveToVideoDetail(video.uid)"
+          >
+            {{ video.title }}
+          </h3>
+        </div>
       </div>
     </v-container>
   </div>
@@ -160,6 +200,7 @@ export default {
       animalInfo: "",
       adoptionBtn: "",
       videos: [],
+      admin: false,
     };
   },
   computed: {
@@ -193,7 +234,7 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     this.animalInfo = "";
     this.likeTrigger = false;
 
@@ -204,7 +245,7 @@ export default {
     }
 
     if (this.$cookies.get("accessToken") != null) {
-      SERVER.tokenCheck(() => {
+      await SERVER.tokenCheck(() => {
         axios
           .get(SERVER.URL + "/user/animal/detail", {
             params: {
@@ -218,14 +259,23 @@ export default {
             console.log("유저 정보 있음", res.data);
             this.animalInfo = res.data.animalList;
             this.adoptionBtn = res.data.adoptCheck;
-            // console.log(res.data.animalList);
+            axios
+              .get(SERVER.URL + "/user/userId", {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              })
+              .then((res) => {
+                this.admin = res.data.success;
+                console.log(this.admin);
+              });
           })
           .catch((err) => {
             console.log(err);
           });
       });
     } else {
-      axios
+      await axios
         .get(SERVER.URL + "/newuser/animal/detail", {
           params: {
             desertion_no: this.$route.params.animalID,
@@ -239,7 +289,7 @@ export default {
           console.log(err);
         });
     }
-    this.getVideos();
+    await this.getVideos();
   },
   methods: {
     setLiked() {
@@ -301,17 +351,19 @@ export default {
     },
 
     getVideos() {
+      console.log("dNo", this.animalInfo);
       axios
-        .get(SERVER.URL + "/newuser/video/detailvideo", {
+        .get(SERVER.URL + "/newuser/video/search", {
           params: {
-            uid: this.animalInfo.desertion_no,
+            desertion_no: this.$route.params.animalID,
           },
         })
         .then((res) => {
-          if (res.data.VideoList.length >= 4) {
-            this.videos = res.data.VideoList.slice(-4);
+          console.log(res.data.videoList);
+          if (res.data.videoList.length >= 4) {
+            this.videos = res.data.videoList.slice(-4);
           } else {
-            this.videos = res.data.VideoList;
+            this.videos = res.data.videoList;
           }
         });
     },

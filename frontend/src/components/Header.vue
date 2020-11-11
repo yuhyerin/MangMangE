@@ -211,6 +211,7 @@ export default {
           this.$cookies.remove("refreshToken");
           this.$cookies.remove("expireTime");
           this.setUserSurveyCheck(false);
+          alert("로그아웃 되셨습니다.");
           location.href = "/";
         })
         .catch((err) => {

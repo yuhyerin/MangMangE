@@ -34,7 +34,10 @@
       <v-col v-for="video in videos" :key="video.uid">
         <vue-plyr>
           <video>
-            <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
+            <source
+              :src="require(`@/assets/videos/${video.filepath}.mp4`)"
+              type="video/mp4"
+            />
             <track
               kind="captions"
               label="English"
@@ -44,7 +47,13 @@
             />
           </video>
         </vue-plyr>
-        <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
+        <h3
+          class="videoTitle"
+          style="text-align: center; cursor: pointer"
+          @click="moveToVideoDetail(video.uid)"
+        >
+          {{ video.title }}
+        </h3>
       </v-col>
       <div class="more-videos">
         <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x"></i>
@@ -56,11 +65,11 @@
 <script>
 import router from "@/router";
 import SERVER from "@/api/url";
-import axios from 'axios';
+import axios from "axios";
 export default {
   data() {
     return {
-      upload: '',
+      upload: "",
       videos: [],
     };
   },
@@ -76,21 +85,18 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data)
-          if(res.data.success)
-            this.upload = true;
-          else
-            this.upload=false;
-          console.log(this.upload)
+          console.log(res.data);
+          if (res.data.success) this.upload = true;
+          else this.upload = false;
+          console.log(this.upload);
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
         });
+    } else {
+      this.upload = false;
     }
-    else{
-      this.upload= false;
-    }
-    this.getVideos()
+    this.getVideos();
   },
   methods: {
     videoSeeMore() {
@@ -100,30 +106,25 @@ export default {
       this.$router.push("/videos/upload");
     },
     moveToVideoDetail(videoIndex) {
-      this.$router.push(
-        {
-          name: 'VideoDetail',
-          params: {
-            videoId: videoIndex
-          }
-        }
-      )
+      this.$router.push({
+        name: "VideoDetail",
+        params: {
+          videoId: videoIndex,
+        },
+      });
     },
     getVideos() {
-      axios
-        .get(SERVER.URL + "/newuser/video/allvideo")
-        .then((res) => {
-          if(res.data.VideoList.length >= 4) {
-            this.videos = res.data.VideoList.slice(-4)
-          }
-          else {
-            this.videos = res.data.VideoList
-          }
-        
-        })
+      axios.get(SERVER.URL + "/newuser/video/allvideo").then((res) => {
+        console.log("res.data", res.data);
+        if (res.data.VideoList.length >= 4) {
+          this.videos = res.data.VideoList.slice(-4);
+        } else {
+          this.videos = res.data.VideoList;
+        }
+      });
+    },
   },
-  }
-}
+};
 </script>
 
 <style scoped>

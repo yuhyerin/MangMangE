@@ -498,7 +498,7 @@ export default {
 .loading {
   height: 100vh;
   width: 100vw;
-  position: absolute;
+  position: fixed;
   z-index: 5;
   display: flex;
   align-items: center;

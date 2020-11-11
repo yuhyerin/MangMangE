@@ -15,15 +15,17 @@ public class VideoService {
 	private AnimalVideoRepo animalVideoRepo;
 
 	public List<AnimalVideo> allVideo() {
-		System.out.println("SERVICE START");
 		return animalVideoRepo.findAnimalVideoAll();
 	}
 	public AnimalVideo detailvideo(Long uid) {
-		System.out.println("SERVICE START");
 		AnimalVideo animalVideo = animalVideoRepo.findByUid(uid);
-		if (animalVideo != null)
-			System.out.println(animalVideo.toString());
 		return animalVideo;
+	}
+	
+	public List<AnimalVideo> searchVideo(Long desertion_no){
+		System.out.println("SERVICE START");
+		List<AnimalVideo> list = animalVideoRepo.findByDesertionNo(desertion_no);
+		return list;
 	}
 	
 }
