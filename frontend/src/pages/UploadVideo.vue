@@ -42,7 +42,7 @@
 
       <label v-if="selectedFileCheck">이미 업로드된 파일입니다</label>
       <div style="display: flex; padding-bottom: 12px;">
-        <input type="file" ref="file" @change="selectFile"/>
+        <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck"/>
         <v-btn
           class="mx-2"
           small
@@ -107,7 +107,7 @@ export default {
         message:'',
         fileMessage:''
       },
-      desertionNoCheck: 0,
+      desertionNoCheck: true,
       selectedFileCheck: 0,
       image: require(`@/assets/image/merong1.png`)
     }
@@ -135,6 +135,7 @@ export default {
           }
           else{
             this.image = res.data.image;
+            this.desertionNoCheck = false;
           }
         })
         .catch((err)=>{
