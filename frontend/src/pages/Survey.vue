@@ -40,7 +40,6 @@
             @click="goPage(4)"
             :complete="survey[3] !== 0"
             step="4"
-            color="rgb(1, 118, 72)"
             style="cursor: pointer"
           >
           </v-stepper-step>
@@ -142,7 +141,7 @@
         </v-stepper-items>
       </v-stepper>
       <div style="width: 100%; display: flex; justify-content: flex-end">
-        <div style="font-weight: bold; color: red" @click="cancelSurvey">
+        <div style="font-weight: bold; color: red; cursor: pointer" @click="cancelSurvey">
           다음에 하기
         </div>
       </div>
@@ -164,11 +163,6 @@ import Question8 from "../components/survey/Question8";
 import Question9 from "../components/survey/Question9";
 
 export default {
-  data() {
-    return {
-      step: { cursor: none },
-    };
-  },
   components: {
     Question1,
     Question2,

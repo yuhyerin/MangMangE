@@ -1,44 +1,44 @@
 <template>
-    <div  style="padding-top: 80px" >
-    <Header/>
-    <v-container
-      style="padding-top: 90px; background-color: rgb(244, 236, 225)"
-    >
-      <v-col>
-        <v-text-field
-            label="DesertionNO"
-            v-model="desertionNo"
-            placeholder="일련번호를 입력하세요"
-            outlined
-        ></v-text-field>
-      </v-col>
-      <v-col>
-        <v-text-field
-          label="제목"
-          v-model="title"
-          placeholder="제목을 입력하세요"
+  <div  style="padding-top: 80px" >
+  <Header/>
+  <v-container
+    style="padding-top: 90px;"
+  >
+    <v-col>
+      <v-text-field
+          label="DesertionNO"
+          v-model="desertionNo"
+          placeholder="일련번호를 입력하세요"
           outlined
-        ></v-text-field>
+      ></v-text-field>
+    </v-col>
+    <v-col>
+      <v-text-field
+        label="제목"
+        v-model="title"
+        placeholder="제목을 입력하세요"
+        outlined
+      ></v-text-field>
+    </v-col>
+    <v-col>
+      <input type="file" ref="file" @change="selectFile" />
+    </v-col>
+    <v-col>
+      <v-textarea
+        outlined
+        name="input-7-4"
+        label="내용"
+        v-model="content"
+        placeholder="내용을 입력하세요"
+      ></v-textarea>
+    </v-col>
+    <v-col>
+      <v-btn outlined rounded
+      :disabled="!selectedFiles" @click="upload"
+      >등록하기</v-btn>
       </v-col>
-      <v-col>
-        <input type="file" ref="file" @change="selectFile" />
-      </v-col>
-      <v-col>
-        <v-textarea
-          outlined
-          name="input-7-4"
-          label="내용"
-          v-model="content"
-          placeholder="내용을 입력하세요"
-        ></v-textarea>
-      </v-col>
-      <v-col>
-        <v-btn outlined rounded
-        :disabled="!selectedFiles" @click="upload"
-        >등록하기</v-btn>
-        </v-col>
-    </v-container>
-      </div>
+  </v-container>
+    </div>
 </template>
 
 <script>
@@ -47,19 +47,18 @@ import SERVER from "@/api/url"
 import axios from 'axios'
 
 export default {
-
-  components :{
+  components: {
     Header
   },
 
   data(){
-      return{
-        desertionNo:'',
-        title:'',
-        file:undefined,
-        content:'',
-        selectedFiles: false
-      }
+    return{
+      desertionNo:'',
+      title:'',
+      file:undefined,
+      content:'',
+      selectedFiles: false
+    }
   },
   methods:{
     selectFile() {

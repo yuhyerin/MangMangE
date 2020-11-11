@@ -146,7 +146,7 @@
                   @click="phoneAuthentication"
                   style="
                     border: 0.5px solid #bbb;
-                    background: gray;
+                    background: black;
                     color: white;
                   "
                   type="button"
@@ -314,10 +314,6 @@ export default {
     },
 
     phoneAuthentication() {
-      console.log(
-        "FE input Form : ",
-        this.firstNum + "-" + this.middleNum + "-" + this.lastNum
-      );
       SERVER.tokenCheck(() => {
         axios
           .get(SERVER.URL + "/user/adopt/create", {
@@ -329,12 +325,10 @@ export default {
             },
           })
           .then((res) => {
-            console.log("then res : ", res.data);
             this.pressedAuthenticationBtn = 1;
             this.personNumberAuthentication = res.data.number;
           })
           .catch((err) => {
-            console.log("catch err : ", err);
             SERVER.RefreshToken(err);
           });
       });
@@ -390,20 +384,6 @@ export default {
     },
 
     adoptionApply() {
-      console.log("adoptionAPPLY");
-      console.log(
-        this.personName,
-        " ",
-        this.firstNum,
-        "-",
-        this.middleNum,
-        "-",
-        this.lastNum,
-        " ",
-        this.personEmail,
-        " ",
-        this.personTitle
-      );
       SERVER.tokenCheck(() => {
         axios
           .post(
@@ -423,36 +403,10 @@ export default {
             }
           )
           .then((res) => {
-            console.log("then res : ", res.data);
             this.$router.push("/adoptionlist");
           })
           .catch((err) => {
-            console.log("catch err : ", err);
             SERVER.RefreshToken(err);
-            // if (err.response.status == 401) {
-
-            //   axios
-            //     .post(
-            //       SERVER.URL + "/newuser/refresh",
-            //       {},
-            //       {
-            //         headers: {
-            //           accessToken: this.$cookies.get("accessToken"),
-            //           refreshToken: this.$cookies.get("refreshToken"),
-            //         },
-            //       }
-            //     )
-            //     .then((res) => {
-            //       console.log(res);
-            //       if (res.data.success) {
-            //         this.$cookies.set("accessToken", res.data.accessToken);
-            //         console.log(this.$cookies.get("accessToken"));
-            //       }
-            //     })
-            //     .catch((err) => {
-            //       console.log(err);
-            //     });
-            // }
           });
       });
     },
@@ -478,7 +432,6 @@ export default {
       if (
         this.personNumberAuthenticationInput == this.personNumberAuthentication
       ) {
-        console.log("인증 완료");
         this.personNumberAuthenticationFinish = 1;
       }
 
@@ -527,7 +480,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data);
           this.dogSerial = res.data.animalList.desertion_no;
           this.dogAge = 2020 - res.data.animalList.age + "살";
           this.dogBreed = res.data.animalList.kind_c;
@@ -539,32 +491,7 @@ export default {
           this.dogFur = res.data.animalList.color_cd;
         })
         .catch((err) => {
-          console.log(err.response);
           SERVER.RefreshToken(err);
-          // if (err.response.status == 401) {
-
-          //   axios
-          //     .post(
-          //       SERVER.URL + "/newuser/refresh",
-          //       {},
-          //       {
-          //         headers: {
-          //           accessToken: this.$cookies.get("accessToken"),
-          //           refreshToken: this.$cookies.get("refreshToken"),
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       console.log(res);
-          //       if (res.data.success) {
-          //         this.$cookies.set("accessToken", res.data.accessToken);
-          //         console.log(this.$cookies.get("accessToken"));
-          //       }
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //     });
-          // }
         });
     });
   },
@@ -588,7 +515,8 @@ hr.dog-information-startline {
 }
 
 div.selfcheck {
-  background: rgb(244, 236, 225);
+  background: orange;
+  /* background: rgb(244, 236, 225); */
   padding: 12px 12px 12px 12px;
 }
 
@@ -603,7 +531,8 @@ ul.selfchecklist {
 }
 
 div.list {
-  background: rgb(244, 236, 225);
+  background: orange;
+  /* background: rgb(244, 236, 225); */
   /* background: #d9edf7; */
   padding: 12px 12px 12px 12px;
 }
