@@ -38,7 +38,6 @@ public class AnimalController {
 	@GetMapping(path = "/newuser/animal/allread")
 	@ApiOperation(value = "(비회원) 전체동물조회")
 	public ResponseEntity<HashMap<String, Object>> allread() {
-		System.out.println("CONTROLLER START");
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			List<AnimalListFE> animalList = animalService.allAnimalRead();
@@ -53,7 +52,6 @@ public class AnimalController {
 	@GetMapping(path = "/user/animal/allread")
 	@ApiOperation(value = "(회원) 전체동물조회")
 	public ResponseEntity<HashMap<String, Object>> allreadUser(HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
 		try {
 			TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
@@ -61,7 +59,6 @@ public class AnimalController {
 			HashMap<String, Object> map = new HashMap<>();
 			List<AnimalListFE> animalList = animalService.allAnimalRead(user_id);
 			map.put("animalList", animalList);
-			System.out.println(animalList.toString());
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,7 +69,6 @@ public class AnimalController {
 	@GetMapping(path = "/user/animal/like")
 	@ApiOperation("즐겨찾는 동물 조회")
 	public ResponseEntity<HashMap<String, Object>> animalLikeList(HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
@@ -86,7 +82,6 @@ public class AnimalController {
 	@ApiOperation(value = "설문기록여부확인")
 	public ResponseEntity<HashMap<String, Object>> surveyread(HttpServletRequest request) {
 		// 프론트에서 토큰을 받아오면 설문기록여부 반환
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
@@ -111,7 +106,6 @@ public class AnimalController {
 	@GetMapping(path = "/user/animal/matchlist")
 	@ApiOperation(value = "매칭된동물리스트")
 	public ResponseEntity<HashMap<String, Object>> matchlist(HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization"); // 토큰받기
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
@@ -219,7 +213,6 @@ public class AnimalController {
 			}
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (NullPointerException e) {
-			System.out.println("NULLPOINTER");
 			e.printStackTrace();
 			AnimalLike new_animalLike = null;
 			new_animalLike = animalService.join(animalLike);

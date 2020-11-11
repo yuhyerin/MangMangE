@@ -78,7 +78,6 @@ public class AdminService {
 		AnimalVideo av = animalVideoRepo.findByUid(uid);
 		try {
 			String dest = filePath + av.getDesertion_no()+"_"+filename;
-			System.out.println("DESTINATION : "+dest);
 			mfile.transferTo(new File(dest));
 			if(animalVideoRepo.findByUid(uid).getFilepath()==null) {
 				map.put("success", false);
@@ -86,7 +85,6 @@ public class AdminService {
 				animalVideoRepo.delete(av);
 			}
 			else {
-				System.out.println(animalVideoRepo.findByUid(uid).toString());
 				map.put("success", true);
 			}
 		} catch (IllegalStateException | IOException e) {

@@ -7,8 +7,7 @@
       "
     >
       <h2 style="text-align: center; padding-bottom: 12px;">동영상 업로드</h2>
-      <label v-if="desertionNoCheck">일련번호를 확인해주세요</label>
-      <div style="display: flex; justify-content: center; align-items: center">
+      <div style="display: flex; justify-content: center; align-items: center;">
         <img :src="image" alt="이미지" style="height: 75px; margin: 0 1% 1% 0; border-radius: 30px;">
         <v-text-field
           label="일련번호"
@@ -17,11 +16,11 @@
           style="margin: 0; padding: 0;"
         ></v-text-field>
         <v-icon style="color: green" 
-          :disabled="desertionNo.length < 1">
+          :disabled="!desertionNoCheck">
           mdi-checkbox-marked-circle
         </v-icon>
       </div>
-
+      <p v-if="!desertionNoCheck" style="color: red;">{{error.message}}</p>
       <div style="display: flex">
         <v-text-field
           label="제목"
@@ -40,7 +39,7 @@
         </v-btn>
       </div>
 
-      <label v-if="selectedFileCheck">이미 업로드된 파일입니다</label>
+      
       <div style="display: flex; padding-bottom: 12px;">
         <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck"/>
         <v-btn
@@ -54,6 +53,8 @@
           </v-icon>
         </v-btn>
       </div>
+      <label v-if="selectedFileCheck==1" style="color:red">이미 업로드된 파일입니다</label>
+      <label v-else-if="selectedFileCheck==2" style="color:red">제공하지 않는 파일 형식입니다.</label>
       <div style="display: flex;">
         <v-textarea
           outlined
@@ -77,7 +78,7 @@
         <v-btn 
           outlined
           rounded
-          :disabled="!selectedFiles || desertionNo.length < 1 || title.length < 1 || content.length < 1"
+          :disabled="selectedFileCheck!=0 || !desertionNoCheck || title.length < 1 || content.length < 1"
           @click="upload"
           style="margin-left: 35px;"
         >등록하기</v-btn>
@@ -103,18 +104,16 @@ export default {
       file: undefined,
       content:'',
       selectedFiles: false,
-      err:{
-        message:'',
-        fileMessage:''
-      },
-      desertionNoCheck: true,
+      desertionNoCheck: false,
       selectedFileCheck: 0,
-      image: require(`@/assets/image/merong1.png`)
+      image: require(`@/assets/image/merong1.png`),
+      error:{
+        message:'일련번호를 확인해주세요',
+      }
     }
   },
   watch: {
     desertionNo() {
-      console.log(this.desertionNo)
       this.image = require(`@/assets/image/merong1.png`)
       if(this.desertionNo.length==15){
         SERVER.tokenCheck(() => {
@@ -130,12 +129,13 @@ export default {
           console.log(res)
           if(res.status==202){
             console.log(res)
-            this.err.message = '없는 번호입니다.'
-            alert(this.err.message)
+            this.desertionNoCheck=false;
+            this.error.message = '일련번호를 확인해주세요.'
           }
           else{
             this.image = res.data.image;
-            this.desertionNoCheck = false;
+            this.desertionNoCheck = true;
+            this.error.message = ''
           }
         })
         .catch((err)=>{
@@ -145,28 +145,30 @@ export default {
       }
     },
     file(){
-      SERVER.tokenCheck(() => {
-      axios.get(SERVER.URL+'/admin/upload/checkFile',{
-        params:{
-          fileName : this.desertionNo+"_"+this.file[0].name
-        },
-        headers:{
-          "Authorization" : this.$cookies.get("accessToken")
-        }
-      })
-      .then((res)=>{
-        console.log(res)
-        if(res.status==202){
-          this.err.fileMessage = '이미 존재하는 파일입니다.'
-          alert(this.err.fileMessage)
-        }
-      })
-      .catch((err)=>{
-        console.log(err)
-        // this.err.fileMessage = '이미 존재하는 파일입니다.'
-        // alert(this.err.fileMessage)
-      })
-      });
+      if(this.file[0].name.slice(-3)=='mp4'){
+        SERVER.tokenCheck(() => {
+        axios.get(SERVER.URL+'/admin/upload/checkFile',{
+          params:{
+            fileName : this.desertionNo+"_"+this.file[0].name
+          },
+          headers:{
+            "Authorization" : this.$cookies.get("accessToken")
+          }
+        })
+        .then((res)=>{
+          console.log(res)
+          if(res.status==202){
+            this.selectedFileCheck = 1;
+          }
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+        });
+      }
+      else {
+        this.selectedFileCheck = 2; 
+      }
     }
   },
   methods:{

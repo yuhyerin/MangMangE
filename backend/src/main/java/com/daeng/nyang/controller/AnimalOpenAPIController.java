@@ -17,8 +17,6 @@ public class AnimalOpenAPIController {
 	@GetMapping("/apitest")
 	@ApiOperation("오픈API 동물목록 가져오기")
 	public String callApiHttp() {
-		
-		System.out.println("AnimalOpenApi컨트롤러에서 parsingXmlData()호출함");
 		animalService.parsingXmlData();
 		return "OK";
 	}
