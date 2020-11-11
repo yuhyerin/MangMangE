@@ -43,49 +43,17 @@
 
       
       <div style="display: flex; padding-bottom: 12px;">
-        <!-- <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck !=0"/> -->
-        <v-file-input
-          ref="file"
-          color="deep-purple accent-4"
-          counter
-          label="File input"
-          placeholder="Select your files"
-          prepend-icon="mdi-paperclip"
-          outlined
-          :show-size="1000"
-          :change="selectFile"
-          :disabled="desertionNoCheck !=0"
-        >
-    <template v-slot:selection="{ index, text }">
-      <v-chip
-        v-if="index < 2"
-        color="deep-purple accent-4"
-        dark
-        label
-        small
-      >
-        {{ text }}
-      </v-chip>
-
-      <span
-        v-else-if="index === 2"
-        class="overline grey--text text--darken-3 mx-2"
-      >
-        +{{ files.length - 2 }} File(s)
-      </span>
-    </template>
-  </v-file-input>
+        <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck !=0"/>
         <v-btn
           class="mx-2"
           small
           elevation="0"
           style="padding: 0; background: rgba(255, 255, 255, 0);"
         >
-          <v-icon style="color: green" :disabled="selectedFileCheck==0">
+          <v-icon style="color: green" :disabled="selectedFileCheck!=0">
             mdi-checkbox-marked-circle
           </v-icon>
         </v-btn>
-        <label v-if="selectedFileCheck" style="color: orange;">이미 업로드된 파일입니다</label>
       </div>
       <label v-if="selectedFileCheck==1" style="color:red">이미 업로드된 파일입니다</label>
       <label v-else-if="selectedFileCheck==2" style="color:red">지원하지 않는 파일 형식입니다.</label>
@@ -216,8 +184,7 @@ export default {
     selectFile() {
       console.log('selectFILE')
       this.file = this.$refs.file.files;
-      console.log(this.file)
-      console.log(this.file[0].filename)
+      console.log(this.file[0])
       this.selectedFiles = true;
     },
 
