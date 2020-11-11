@@ -16,11 +16,12 @@
           style="margin: 0; padding: 0;"
         ></v-text-field>
         <v-icon style="color: green" 
-          :disabled="!desertionNoCheck">
+          :disabled="desertionNoCheck!=0">
           mdi-checkbox-marked-circle
         </v-icon>
       </div>
-      <p v-if="!desertionNoCheck" style="color: red;">{{error.message}}</p>
+      <p v-if="desertionNoCheck==1" style="color: orange;">일련번호는 15자입니다.</p>
+      <p v-else-if="desertionNoCheck==2" style="color: red;">존재하지 않는 일련번호입니다.</p>
       <div style="display: flex">
         <v-text-field
           label="제목"
@@ -41,20 +42,20 @@
 
       
       <div style="display: flex; padding-bottom: 12px;">
-        <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck"/>
+        <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck!=0"/>
         <v-btn
           class="mx-2"
           small
           elevation="0"
           style="padding: 0; background: rgba(255, 255, 255, 0);"
         >
-          <v-icon style="color: green" :disabled="!selectedFiles">
+          <v-icon style="color: green" :disabled="selectedFileCheck!=0">
             mdi-checkbox-marked-circle
           </v-icon>
         </v-btn>
       </div>
       <label v-if="selectedFileCheck==1" style="color:red">이미 업로드된 파일입니다</label>
-      <label v-else-if="selectedFileCheck==2" style="color:red">제공하지 않는 파일 형식입니다.</label>
+      <label v-else-if="selectedFileCheck==2" style="color:red">지원하지 않는 파일 형식입니다.</label>
       <div style="display: flex;">
         <v-textarea
           outlined
@@ -78,7 +79,7 @@
         <v-btn 
           outlined
           rounded
-          :disabled="selectedFileCheck!=0 || !desertionNoCheck || title.length < 1 || content.length < 1"
+          :disabled="selectedFileCheck!=0 || desertionNoCheck!=0 || title.length < 1 || content.length < 1"
           @click="upload"
           style="margin-left: 35px;"
         >등록하기</v-btn>
@@ -104,7 +105,7 @@ export default {
       file: undefined,
       content:'',
       selectedFiles: false,
-      desertionNoCheck: false,
+      desertionNoCheck: 1,
       selectedFileCheck: 0,
       image: require(`@/assets/image/merong1.png`),
       error:{
@@ -115,6 +116,8 @@ export default {
   watch: {
     desertionNo() {
       this.image = require(`@/assets/image/merong1.png`)
+      if(this.desertionNo.length<15)
+      this.desertionNoCheck = 1;  // 일련번호는 15자입니다.
       if(this.desertionNo.length==15){
         SERVER.tokenCheck(() => {
         axios.get(SERVER.URL+'/admin/upload/checkNO',{
@@ -129,12 +132,11 @@ export default {
           console.log(res)
           if(res.status==202){
             console.log(res)
-            this.desertionNoCheck=false;
-            this.error.message = '일련번호를 확인해주세요.'
+            this.desertionNoCheck=2;  // 존재하지 않는 일련번호입니다.
           }
           else{
             this.image = res.data.image;
-            this.desertionNoCheck = true;
+            this.desertionNoCheck = 0;
             this.error.message = ''
           }
         })
@@ -159,6 +161,9 @@ export default {
           console.log(res)
           if(res.status==202){
             this.selectedFileCheck = 1;
+          }
+          else{
+            this.selectedFileCheck=0;
           }
         })
         .catch((err)=>{
