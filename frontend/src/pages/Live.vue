@@ -46,8 +46,6 @@ export default {
 
       onair: false,
       socket: null,
-      isChannelReady: false,
-      isStarted: false,
       localStream: null,
       remoteStream:null,
       pc:null,
@@ -95,8 +93,6 @@ export default {
           console.log('Vue : 성공적으로 룸 개설되었습니다.')
         }));
 
-       
-
         this.socket.on('log', ((array)=>{
           console.log.apply('Vue : ',console,array);
         }))
@@ -108,16 +104,19 @@ export default {
           } else if (message.type === 'offer') {
             this.pc.setRemoteDescription(new RTCSessionDescription(message));
             this.doAnswer();
-          } else if (message.type === 'answer' && this.isStarted) {
+          } else if (message.type === 'answer') {
             this.pc.setRemoteDescription(new RTCSessionDescription(message));
-          } else if (message.type === 'candidate' && this.isStarted) {
+          } else if (message.type === 'candidate' ) {
             var candidate = new RTCIceCandidate({
               sdpMLineIndex: message.label,
               candidate: message.candidate
             });
             this.pc.addIceCandidate(candidate);
-          } else if (message === 'bye' && this.isStarted) {
+          } else if (message === 'bye' ) {
                       this.handleRemoteHangup();
+          }else if(message ==='iwantsee'){
+            alert('시청자가 당신을 보고싶어 합니다!')
+            this.createPeerConnection();
           }
         }));
 
@@ -144,12 +143,11 @@ export default {
     },
 
     maybeStart(){
-      console.log('Vue : maybeStart()호출  isStarted: ', this.isStarted,'  localStream : ', this.localStream,' isChannelReady : ', this.isChannelReady);
-      if (!this.isStarted && typeof this.localStream !== 'undefined' && this.isChannelReady) {
+      console.log('Vue : maybeStart()호출 localStream : ', this.localStream);
+      if (typeof this.localStream !== 'undefined') {
         console.log('Vue : creating peer connection');
         this.createPeerConnection(); // createPeerConnection함수로 peerconnection 을 만들어준다. 
         this.pc.addStream(this.localStream); // 나의 peerconnection에 localstream을 붙인다.
-        this.isStarted = true;
         
         this.doCall(); // doCall함수로 같은 방에 있는 client에게 rtc 요청
         

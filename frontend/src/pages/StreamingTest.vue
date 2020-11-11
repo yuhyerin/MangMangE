@@ -1,16 +1,17 @@
 <template>
     <div>
+        <h1> 한페이지에 스트리머, 시청자 구현 </h1>
         <div style="margin: 50px">
             <button id="startButton" @click="roomOpen" style="float: left">Start버튼</button>
             <button id="callButton" @click="doCall" style="margin-left: 100px">Call버튼</button>
             <button id="hangupButton" @click="hangup" style="margin-left: 200px">Hang Up버튼</button>
         </div>
         <div>
-            <h1> local Video </h1>
+            <h1> 나  </h1>
             <video id="localVideo" autoplay playsinline></video>
         </div>
         <div>
-            <h2> remote Video </h2>
+            <h2> 상대방 </h2>
             <video id="remoteVideo" autoplay playsinline></video>
         </div>
     </div>
@@ -63,62 +64,57 @@ export default {
       
   },
   methods:{
-        maybeStart(){
 
-            console.log('>>>>>>> 프론트 : maybeStart()호출  isStarted: ', this.isStarted,'  localStream : ', this.localStream,'isChannelReady : ', this.isChannelReady);
+      // RTCPeerConnection을 이용해서 peer connection 하기 
+      // isStarted는 maybeStart 함수가 처음 실행될때 true가 된다.
+        maybeStart(){
             if (!this.isStarted && typeof this.localStream !== 'undefined' && this.isChannelReady) {
-                console.log('>>>>>>> 프론트 : creating peer connection');
-                this.createPeerConnection(); // createPeerConnection함수로 peerconnection 을 만들어준다. 
-                this.pc.addStream(this.localStream); // 나의 peerconnection에 localstream을 붙인다.
                 this.isStarted = true;
-                console.log('>>>>>>> 프론트 : isInitiator(방을만든사람인가요?) ', this.isInitiator);
+                // createPeerConnection함수로 peerconnection 을 만들어준다. 
+                this.createPeerConnection(); 
+                // 나의 peerconnection에 localstream을 붙인다.
+                this.pc.addStream(this.localStream); 
+                
                 if (this.isInitiator) { //방을 만든사람이면 
-                    this.doCall(); // doCall함수로 같은 방에 있는 client에게 rtc 요청
+                // doCall함수로 같은 방에 있는 client에게 rtc 요청
+                    this.doCall(); 
                 }
             }
         },
+
         roomOpen(){
-            // window.room = prompt("Enter room name:");
-            // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
-            this.socket = io.connect('https://localhost:8002');
-            alert("시작")
-
-            if (this.room !== '') {
-                this.socket.emit('create or join', this.room);
-                console.log('>>>>>>> 프론트 : Attempted to create or  join room', this.room);
-            }
-
+            this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+            // this.socket = io.connect('http://localhost:8002');
+            // 방을 만들겠다고 or 참여하겠다고 서버에 알림
+            this.socket.emit('create or join', this.room);
+            
+            // 방을 성공적으로 만들었으면 여기로 
             this.socket.on('created', ((room)=>{
-                console.log('>>>>>>> 프론트 : Created room ' + room);
+                console.log('Vue : Created room [ ',room,' ]');
                 this.isInitiator = true;
             }));
 
-            this.socket.on('full', ((room)=> {
-                console.log('>>>>>>> 프론트 : Room ' + room + ' is full');
-            }));
-
+            // 
             this.socket.on('join', ((room)=>{
-                console.log('>>>>>>> 프론트 : Another peer made a request to join room ' + room);
-                console.log('>>>>>>> 프론트 : This peer is the initiator of room ' + room + '!');
+                console.log('Vue : Another peer made a request to join room ' + room);
                 this.isChannelReady = true;
             }));
 
+            // 방에 성공적으로 참여했으면 여기로 
             this.socket.on('joined', ((room)=> {
                 console.log('>>>>>>> 프론트 : joined: ' + room);
                 this.isChannelReady = true;
             }));
 
-            this.socket.on('log', ((array)=> {
-                console.log.apply('>>>>>>> 프론트 : ',console, array);
-            }));
 
             this.socket.on('message',((message) => {
-                console.log('>>>>>>> 프론트 : Client received message:', message);
+                console.log('message : ', message)
                 if (message === 'got user media') {
                     this.maybeStart();
-                    
                 } else if (message.type === 'offer') {
+                    
                     if (!this.isInitiator && !this.isStarted) {
+                        // 처음 들어온 참여자면 peerConnection부터 생성..
                         this.maybeStart();
                     }
                     this.pc.setRemoteDescription(new RTCSessionDescription(message));
@@ -128,10 +124,9 @@ export default {
                     this.pc.setRemoteDescription(new RTCSessionDescription(message));
                     
                 } else if (message.type === 'candidate' && this.isStarted) {
-                    console.log("else if로 진입! ")
                     var candidate = new RTCIceCandidate({
-                    sdpMLineIndex: message.label,
-                    candidate: message.candidate
+                        sdpMLineIndex: message.label,
+                        candidate: message.candidate
                     });
                     this.pc.addIceCandidate(candidate);
                 } else if (message === 'bye' && this.isStarted) {
@@ -147,37 +142,21 @@ export default {
             this.callButton = document.getElementById('callButton');
             this.hangupButton = document.getElementById('hangupButton');
 
-            // 이벤트리스너 등록 
-            this.localVideo.addEventListener("loadedmetadata",( ()=> {
-                // console.log('left: gotStream with width and height:', this.localVideo.videoWidth, this.localVideo.videoHeight);
-                console.log('>>>>>>> 프론트 : left: gotStream with width and height:');
-            }));
-
-            this.remoteVideo.addEventListener("loadedmetadata", ( ()=> {
-                // console.log('right: gotStream with width and height:', this.remoteVideo.videoWidth, this.remoteVideo.videoHeight);
-                console.log('>>>>>>> 프론트 : right: gotStream with width and height:');
-            }));
-
-            this.remoteVideo.addEventListener('resize', (() => {
-                // console.log(`Remote video size changed to ${this.remoteVideo.videoWidth}x${this.remoteVideo.videoHeight}`);
-                console.log('>>>>>>> 프론트 : Remote video size changed to');
-            }));
-
-             navigator.mediaDevices.getUserMedia(this.mediaStreamConstraints)
+            navigator.mediaDevices.getUserMedia(this.mediaStreamConstraints)
             .then(this.gotLocalMediaStream)
             .catch();
 
         },
       
+        // 전달받은 streamd을 localVideo에 붙인다.
         gotLocalMediaStream(mediaStream) {
-            console.log(">>>>>>> 프론트 : gotLocalMediaStream : Adding local stream. ")
             this.localStream = mediaStream;
             this.localVideo.srcObject = mediaStream;
             this.sendMessage('got user media');
             this.callButton.disabled = false;  // Enable call button.
-            // 방을 최초로 만든 사람인 경우 isInitiator는 true
+            
+            // 방을 최초로 만든 사람인 경우
             if(this.isInitiator){
-                console.log(">>>>>>> 프론트 : 최초 방만든 사람임 ")
                 this.maybeStart();
             }
         },
@@ -197,10 +176,13 @@ export default {
                 ]
             }
             try {
+                // peerconnection을 만든다.
                 this.pc = new RTCPeerConnection(pcConfig);
                 // pc에 icecandidate, addstream, removestream 이벤트를 등록해준다. 
-                this.pc.onicecandidate = this.handleIceCandidate; // icecandidate는 서로 통신채널을 확립하기 위한 방법.
-                this.pc.onaddstream = this.handleRemoteStreamAdded; // onaddstream은 remote 스트림이 들어오면 발생하는 이벤트. 
+                // icecandidate는 서로 통신채널을 확립하기 위한 방법.
+                this.pc.onicecandidate = this.handleIceCandidate; 
+                // onaddstream은 remote 스트림이 들어오면 발생하는 이벤트. 
+                this.pc.onaddstream = this.handleRemoteStreamAdded; 
                 this.pc.onremovestream = this.handleRemoteStreamRemoved;
                 console.log('>>>>>>> 프론트 : Created RTCPeerConnnection');
             } catch (e) {
@@ -227,20 +209,19 @@ export default {
 
         // remoteStream이 들어오면, remoteVideo에 remoteStream을 붙여줍니다.
         handleRemoteStreamAdded(event){
-            console.log('>>>>>>> 프론트 : Remote stream added.');
+            console.log('Remote stream added.');
             this.remoteStream = event.stream;
-            console.log('>>>>>>> 프론트 : ',event);
             this.remoteVideo.srcObject = this.remoteStream;
         },
 
         //
         handleRemoteStreamRemoved(event) {
-            console.log('>>>>>>> 프론트 : Remote stream removed. Event: ', event);
+            console.log('Remote stream removed. Event: ', event);
         },
 
         //
         hangup(){
-            console.log('>>>>>>> 프론트 : Hanging up.');
+            console.log('Hanging up.');
             this.stop();
             this.sendMessage('bye');
         },
@@ -261,7 +242,7 @@ export default {
 
         // pc.createOffer를 통해 통신 요청을 하게 됩니다.
         doCall(){
-            console.log('>>>>>>> 프론트 : Sending offer to peer');
+            console.log('Sending offer to peer');
             this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
         },
 
@@ -278,15 +259,14 @@ export default {
 
         //
         sendMessage(message) {
-            console.log('>>>>>>> 프론트 : Client sending message: ', message);
-            console.log('>>>>>>> 프론트 : ',this.socket)
+            console.log('Client sending message: ', message);
             this.socket.emit('message', message);
         },
 
         //
         setLocalAndSendMessage(sessionDescription){
             this.pc.setLocalDescription(sessionDescription);
-            console.log('>>>>>>> 프론트 : setLocalAndSendMessage sending message', sessionDescription);
+            console.log('setLocalAndSendMessage sending message', sessionDescription);
             this.sendMessage(sessionDescription);
         },
 
