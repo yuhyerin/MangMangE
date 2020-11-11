@@ -31,13 +31,10 @@
     </v-row>
     <hr />
     <v-row>
-      <v-col v-for="video in videos" :key="video.id">
+      <v-col v-for="video in videos" :key="video.uid">
         <vue-plyr>
           <video poster="poster.png">
-            <source
-              :src="require(`@/assets/videos/${video.video}.mp4`)"
-              type="video/mp4"
-            />
+            <source :src="video.filepath" type="video/mp4"/>
             <track
               kind="captions"
               label="English"
@@ -47,7 +44,7 @@
             />
           </video>
         </vue-plyr>
-        <div class="videoTitle" style="text-align: center" @click="moveToVideoDetail(video.id)">동영상 제목{{ video.id }}</div>
+        <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
       <div class="more-videos">
         <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x"></i>
@@ -64,20 +61,7 @@ export default {
   data() {
     return {
       upload: '',
-      videos: [
-        {
-          id: 1,
-          video: "video1",
-        },
-        {
-          id: 2,
-          video: "video1",
-        },
-        {
-          id: 3,
-          video: "video1",
-        },
-      ],
+      videos: [],
     };
   },
   mounted() {
@@ -106,6 +90,7 @@ export default {
     else{
       this.upload= false;
     }
+    this.getVideos()
   },
   methods: {
     videoSeeMore() {
@@ -124,8 +109,17 @@ export default {
         }
       )
     },
+    getVideos() {
+      axios
+        .get(SERVER.URL + "/newuser/video/allvideo")
+        .then((res) => {
+          this.videos = [...res.data.VideoList, ...res.data.VideoList]
+          // .slice(-3)
+          console.log('videos', this.videos)
+        })
   },
-};
+  }
+}
 </script>
 
 <style scoped>

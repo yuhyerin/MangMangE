@@ -5,6 +5,8 @@ export default {
   // URL: 'http://k3b306.p.ssafy.io:8080',
   ROUTES: {
     submitSurvey: '/user/survey/create',
+    getAllVideos: '/newuser/video/allvideo',
+    getVideo: '/newuser/video/detailvideo',
   },
 
   EXPIRETIME: 600,

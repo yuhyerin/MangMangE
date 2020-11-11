@@ -51,19 +51,18 @@ import SERVER from "@/api/url"
 import axios from 'axios'
 
 export default {
-
-  components :{
+  components: {
     Header
   },
 
   data(){
-      return{
-        desertionNo:'',
-        title:'',
-        file:undefined,
-        content:'',
-        selectedFiles: false
-      }
+    return{
+      desertionNo:'',
+      title:'',
+      file:undefined,
+      content:'',
+      selectedFiles: false
+    }
   },
   methods:{
     selectFile() {
