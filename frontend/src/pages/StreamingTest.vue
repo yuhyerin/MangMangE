@@ -71,7 +71,7 @@ export default {
             if (!this.isStarted && typeof this.localStream !== 'undefined' && this.isChannelReady) {
                 this.isStarted = true;
                 // createPeerConnection함수로 peerconnection 을 만들어준다. 
-                this.createPeerConnection(); 
+                this.createPeerConnection();
                 // 나의 peerconnection에 localstream을 붙인다.
                 this.pc.addStream(this.localStream); 
                 
@@ -83,8 +83,8 @@ export default {
         },
 
         roomOpen(){
-            this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
-            // this.socket = io.connect('http://localhost:8002');
+            // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+            this.socket = io.connect('http://localhost:8002');
             // 방을 만들겠다고 or 참여하겠다고 서버에 알림
             this.socket.emit('create or join', this.room);
             
