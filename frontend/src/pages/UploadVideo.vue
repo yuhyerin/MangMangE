@@ -1,5 +1,5 @@
 <template>
-    <div style="padding-top: 75px" >
+  <div style="padding-top: 75px" >
     <Header/>
     <v-container
       style="
@@ -11,51 +11,60 @@
       <div style="display: flex; height: 60px;">
         <img :src="image" alt="이미지" style="height: 60px; margin: 0 1% 1% 0; border-radius: 20px; width: 60px;">
         <v-text-field
-          label="일련번호"
+          placeholder="일련번호"
           v-model="desertionNo"
           outlined
         ></v-text-field>
+        <!-- <v-btn 
+          small
+          elevation="0"
+          style="padding: 0; background: rgba(255, 255, 255, 0);"
+        > -->
         <v-icon style="color: green; padding: 0;"
           elevation="0"
           :disabled="desertionNoCheck!=0">
           mdi-checkbox-marked-circle
         </v-icon>
+        <!-- </v-btn> -->
       </div>
       <p v-if="desertionNoCheck==1" style="color: orange;">일련번호는 15자입니다.</p>
       <p v-else-if="desertionNoCheck==2" style="color: red;">존재하지 않는 일련번호입니다.</p>
-      <div style="display: flex; margin-top: 25px;">
+      
+      <div style="display: flex; margin-top: 25px; height: 60px;">
         <v-text-field
           placeholder="제목"
           v-model="title"
           outlined
+          style="padding: 0;"
         ></v-text-field>
-        <v-btn
+        <!-- <v-btn
           class="mx-2"
           small
           elevation="0"
           style="padding: 0; background: rgba(255, 255, 255, 0);"
-        >
-          <v-icon style="color: green" :disabled="title.length < 1">
+        > -->
+          <v-icon style="color: green; padding: 0;" 
+            elevation="0"
+            :disabled="title.length < 1">
             mdi-checkbox-marked-circle
           </v-icon>
-        </v-btn>
+        <!-- </v-btn> -->
       </div>
 
-      
-      <div style="display: flex;">
-        <!-- <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck !=0"/> -->
-        <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck != 0"/>
-        <v-btn
+      <div style="display: flex; margin-top: 25px; padding-bottom: 12px;">
+        <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck !=0"/>
+        <!-- <v-btn
           class="mx-2"
           small
           elevation="0"
           style="padding: 0; background: rgba(255, 255, 255, 0);"
-        >
-          <v-icon style="color: green" :disabled="selectedFileCheck==0">
+        > -->
+          <v-icon
+            style="color: green;" 
+            :disabled="selectedFileCheck!=3">
             mdi-checkbox-marked-circle
           </v-icon>
-        </v-btn>
-        <label v-if="selectedFileCheck" style="color: orange;">이미 업로드된 파일입니다</label>
+        <!-- </v-btn> -->
       </div>
       <label v-if="selectedFileCheck==1" style="color:red">이미 업로드된 파일입니다</label>
       <label v-else-if="selectedFileCheck==2" style="color:red">지원하지 않는 파일 형식입니다.</label>
@@ -68,28 +77,28 @@
           placeholder="내용"
           style="padding-top: 24px;"
         ></v-textarea>
-        <v-btn
+        <!-- <v-btn
           class="mx-2"
           small
           elevation="0"
           style="margin-top: 10px; padding-top: 24px; background: rgba(255, 255, 255, 0);"
-        >
+        > -->
           <v-icon style="color: green" :disabled="content.length < 1 || contentCheck === 1">
             mdi-checkbox-marked-circle
           </v-icon>
-        </v-btn>
+        <!-- </v-btn> -->
       </div>
-      <label v-if="contentCheck" style="color: orange;">300자 이하로 입력해주세요</label>
+      <label v-if="contentCheck" style="color: orange;">500자 이하로 입력해주세요</label>
       <div style="padding-top: 20px;">
         <v-btn 
           outlined
           rounded
-          :disabled="selectedFileCheck!=0 || desertionNoCheck!=0 || title.length < 1 || content.length < 1"
+          :disabled="selectedFileCheck!=3 || desertionNoCheck!=0 || title.length < 1 || content.length < 1 || contentCheck === 1"
           @click="upload"
         >등록하기</v-btn>
       </div>
     </v-container>
-      </div>
+  </div>
 </template>
 
 <script>
@@ -114,15 +123,17 @@ export default {
       image: require(`@/assets/image/merong1.png`),
       error:{
         message:'일련번호를 확인해주세요',
-      }
+      },
+      contentCheck: 0,
     }
   },
   watch: {
     desertionNo() {
       this.image = require(`@/assets/image/merong1.png`)
-      if(this.desertionNo.length<15)
+      console.log(this.desertionNo.length)
+      if (this.desertionNo.length < 15)
       this.desertionNoCheck = 1;  // 일련번호는 15자입니다.
-      if(this.desertionNo.length==15){
+      if (this.desertionNo.length == 15) {
         SERVER.tokenCheck(() => {
         axios.get(SERVER.URL+'/admin/upload/checkNO',{
           params:{
@@ -151,7 +162,7 @@ export default {
       }
     },
 
-    file(){
+    file() {
       if(this.file[0].name.slice(-3)=='mp4'){
         SERVER.tokenCheck(() => {
         axios.get(SERVER.URL+'/admin/upload/checkFile',{
@@ -168,7 +179,7 @@ export default {
             this.selectedFileCheck = 1;
           }
           else{
-            this.selectedFileCheck=0;
+            this.selectedFileCheck = 3;
           }
         })
         .catch((err)=>{
@@ -179,15 +190,22 @@ export default {
       else {
         this.selectedFileCheck = 2; 
       }
-    }
+    },
+
+    content() {
+      if (this.content.length <= 500) {
+        this.contentCheck = 0
+      } else {
+        this.contentCheck = 1
+      }
+    },
   },
 
   methods:{
     selectFile() {
       console.log('selectFILE')
       this.file = this.$refs.file.files;
-      console.log(this.file)
-      console.log(this.file[0].filename)
+      console.log(this.file[0])
       this.selectedFiles = true;
     },
 
@@ -235,7 +253,7 @@ export default {
           })
         });
     }
-  },
+    },
     
 }
 </script>
