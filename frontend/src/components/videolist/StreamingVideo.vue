@@ -34,7 +34,7 @@
       <v-col v-for="video in videos" :key="video.uid">
         <vue-plyr>
           <video>
-            <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
+            <source :src="require(`@/assets/videos/${video.filepath}`)"/>
             <track
               kind="captions"
               label="English"
@@ -57,7 +57,6 @@
 import router from "@/router";
 import SERVER from "@/api/url";
 import axios from 'axios';
-
 export default {
   data() {
     return {
@@ -112,6 +111,7 @@ export default {
         .get(SERVER.URL + "/newuser/video/allvideo")
         .then((res) => {
           if(res.data.VideoList.length >= 4) {
+
             this.videos = res.data.VideoList.slice(-4)
           }
           else {

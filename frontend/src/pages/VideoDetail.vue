@@ -7,7 +7,7 @@
             <div class="video-play">
               <vue-plyr>
                 <video>
-                  <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
+                  <source :src="require(`@/assets/videos/${video.filepath}`)"/>
                   <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
                 </video>  
               </vue-plyr>
@@ -38,7 +38,7 @@
                 <v-col style="padding-right: 8px;">
                   <vue-plyr>
                     <video>
-                      <source :src="require(`@/assets/videos/${rec.filepath}.mp4`)" type="video/mp4" height="80px"/>
+                      <source :src="require(`@/assets/videos/${rec.filepath}`)" height="80px"/>
                       <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
                     </video>  
                   </vue-plyr>
