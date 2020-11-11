@@ -142,7 +142,7 @@
                 height="70%"
                 color="rgb(1,118,72)"
                 @click="moveTo('/adoption')"
-                :disabled="this.adoptionBtn"
+                :disabled="this.adoptionBtn || this.admin"
               >
                 <div
                   v-if="!this.adoptionBtn && !this.admin"
@@ -150,8 +150,11 @@
                 >
                   입양하기
                 </div>
-                <div v-else style="color: white">
+                <div v-else-if="!this.admin" style="color: white">
                   입양 심사가 진행 중입니다.
+                </div>
+                <div v-else style="color: white">
+                  입양 신청을 할 수 없습니다.
                 </div>
               </v-btn>
             </div>

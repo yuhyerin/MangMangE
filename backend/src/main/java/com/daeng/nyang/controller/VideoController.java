@@ -32,11 +32,6 @@ public class VideoController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
 			List<AnimalVideo> videoList = videoService.allVideo();
-			for(int i=0;i<videoList.size();i++) {
-				AnimalVideo av = videoList.get(i);
-				av.setFilepath(av.getFilepath().substring(16, av.getFilepath().length()-4));
-				System.out.println(av.getFilepath());
-			}
 			map.put("VideoList", videoList);
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
@@ -52,7 +47,6 @@ public class VideoController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
 			AnimalVideo av = videoService.detailvideo(uid);
-			av.setFilepath(av.getFilepath().substring(16, av.getFilepath().length()-4));
 			map.put("VideoDetail", av);
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {	
