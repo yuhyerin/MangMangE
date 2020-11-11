@@ -8,22 +8,22 @@
       "
     >
       <h2 style="text-align: center; padding-bottom: 12px;">동영상 업로드</h2>
-      <div style="display: flex; justify-content: center; align-items: center;">
-        <img :src="image" alt="이미지" style="height: 75px; margin: 0 1% 1% 0; border-radius: 30px;">
+      <div style="display: flex; height: 60px;">
+        <img :src="image" alt="이미지" style="height: 60px; margin: 0 1% 1% 0; border-radius: 20px; width: 60px;">
         <v-text-field
           label="일련번호"
           v-model="desertionNo"
           outlined
-          style="margin: 0; padding: 0;"
         ></v-text-field>
-        <v-icon style="color: green" 
+        <v-icon style="color: green; padding: 0;"
+          elevation="0"
           :disabled="desertionNoCheck!=0">
           mdi-checkbox-marked-circle
         </v-icon>
       </div>
       <p v-if="desertionNoCheck==1" style="color: orange;">일련번호는 15자입니다.</p>
       <p v-else-if="desertionNoCheck==2" style="color: red;">존재하지 않는 일련번호입니다.</p>
-      <div style="display: flex">
+      <div style="display: flex; margin-top: 25px;">
         <v-text-field
           placeholder="제목"
           v-model="title"
@@ -42,39 +42,9 @@
       </div>
 
       
-      <div style="display: flex; padding-bottom: 12px;">
+      <div style="display: flex;">
         <!-- <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck !=0"/> -->
-        <v-file-input
-          ref="file"
-          color="deep-purple accent-4"
-          counter
-          label="File input"
-          placeholder="Select your files"
-          prepend-icon="mdi-paperclip"
-          outlined
-          :show-size="1000"
-          :change="selectFile"
-          :disabled="desertionNoCheck !=0"
-        >
-    <template v-slot:selection="{ index, text }">
-      <v-chip
-        v-if="index < 2"
-        color="deep-purple accent-4"
-        dark
-        label
-        small
-      >
-        {{ text }}
-      </v-chip>
-
-      <span
-        v-else-if="index === 2"
-        class="overline grey--text text--darken-3 mx-2"
-      >
-        +{{ files.length - 2 }} File(s)
-      </span>
-    </template>
-  </v-file-input>
+        <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck != 0"/>
         <v-btn
           class="mx-2"
           small
@@ -89,7 +59,7 @@
       </div>
       <label v-if="selectedFileCheck==1" style="color:red">이미 업로드된 파일입니다</label>
       <label v-else-if="selectedFileCheck==2" style="color:red">지원하지 않는 파일 형식입니다.</label>
-      <div style="display: flex;">
+      <div style="display: flex; padding-top: 12px;">
         <v-textarea
           :counter="500"
           outlined
