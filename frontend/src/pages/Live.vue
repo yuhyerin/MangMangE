@@ -116,7 +116,7 @@ export default {
                       this.handleRemoteHangup();
           }else if(message ==='iwantsee'){
             alert('시청자가 당신을 보고싶어 합니다!')
-            this.maybeStart();
+            this.createPeerConnection();
           }
         }));
 
