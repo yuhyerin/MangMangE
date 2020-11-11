@@ -177,14 +177,14 @@ export default {
     },
     upload(){
         var formData = new FormData();
-        console.log(this.file[0].name)
-        // formData.append("mfile", this.file[0], this.desertionNo+"_"+this.file[0].name);
+        console.log(this.desertionNo+'_'+this.file[0].name)
         SERVER.tokenCheck(()=>{
           axios.post(SERVER.URL + '/admin/uploadVideo',
             {
               "desertion_no" : this.desertionNo,
               "title" : this.title,
               "content" : this.content,
+              "filepath" : this.desertionNo+'_'+this.file[0].name
             },
             {
               headers:{
