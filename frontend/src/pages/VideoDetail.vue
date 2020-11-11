@@ -120,7 +120,7 @@ export default {
         })
         .then(res => {
           this.video = res.data.VideoDetail
-          // var item = this.video
+          var item = this.video
           var someday = new Date(this.video.regtime)
           var year = someday.getFullYear()
           var month = someday.getMonth() + 1
@@ -132,21 +132,22 @@ export default {
     getVideoList() {
       axios.get(SERVER.URL + SERVER.ROUTES.getAllVideos)
       .then(res => {
-        res.data.VideoList.forEach(item => {
-          if(item.uid !== Number(this.videoID)) 
-          {
-            this.nextVideoList = item
-          }
-        // this.nextVideoList = res.data.VideoList
-        // for (let i = 0; i < this.nextVideoList.length; i++) {
-        //   var item = this.nextVideoList[i]
-        //   var someday = new Date(item.regtime)
-        //   var year = someday.getFullYear()
-        //   var month = someday.getMonth() + 1
-        //   var date = someday.getDate()
-        //   var regTime = year + '-' + month + '-' + date
-        //   item.regtime = regTime
-        })
+        // res.data.VideoList.forEach(item => {
+          // if(item.uid !== Number(this.videoID)) 
+          // {
+          //   this.nextVideoList = item
+          // }
+        this.nextVideoList = res.data.VideoList
+        for (let i = 0; i < this.nextVideoList.length; i++) {
+          var item = this.nextVideoList[i]
+          var someday = new Date(item.regtime)
+          var year = someday.getFullYear()
+          var month = someday.getMonth() + 1
+          var date = someday.getDate()
+          var regTime = year + '-' + month + '-' + date
+          item.regtime = regTime
+        
+        }
       })
     }
   },
