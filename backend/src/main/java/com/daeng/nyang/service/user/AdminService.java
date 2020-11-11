@@ -34,8 +34,10 @@ public class AdminService {
 		Animal a = animalRepo.findAnimalByDesertionNo(desertion_no);
 		if(a==null)
 			map.put("success", false);
-		else
+		else {
 			map.put("success", true);
+			map.put("image", a.getPopfile());
+		}
 		return map;
 			
 	}
