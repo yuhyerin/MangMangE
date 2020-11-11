@@ -5,7 +5,7 @@
         <div>
             <h2> 저는 시청자 입니다. remote Video </h2>
             <video id="remoteVideo" autoplay playsinline></video>
-            <button @click="LDJ">날 눌러줘</button>
+            <button @click="StartBtn">날 눌러줘</button>
         </div>
     </div>
 </template>
@@ -26,19 +26,20 @@ export default {
     }
   },
   mounted(){
-    // this.LDJ();
   },
   created(){
       
   },
   methods:{
-    LDJ(){
+    StartBtn(){
       this.connectSocket();
       this.addListener();
       this.onair = !this.onair;
     },
     connectSocket(){
       this.socket = io.connect('http://localhost:8002');
+      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      
       alert('방송 봅니다!')
       this.socket.emit('join', this.room);
       this.enteringRoom();

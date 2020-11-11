@@ -28,7 +28,7 @@
       "
     >
       <img
-        src="../assets/image/logo4.png"
+        src="../assets/image/logofinal.png"
         alt="logo"
         style="height: 70%; padding-left: 20px"
       />
