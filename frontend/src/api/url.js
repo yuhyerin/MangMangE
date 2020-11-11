@@ -10,6 +10,9 @@ export default {
     getVideo: '/newuser/video/detailvideo',
   },
 
+
+
+
   EXPIRETIME: 600,
 
   RefreshToken: function (err) {
