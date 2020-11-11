@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1> 한페이지에 스트리머, 시청자 구현 </h1>
         <div style="margin: 50px">
             <button id="startButton" @click="roomOpen" style="float: left">Start버튼</button>
             <button id="callButton" @click="doCall" style="margin-left: 100px">Call버튼</button>
@@ -80,7 +81,7 @@ export default {
         roomOpen(){
             // window.room = prompt("Enter room name:");
             // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
-            this.socket = io.connect('https://localhost:8002');
+            this.socket = io.connect('http://localhost:8002');
             alert("시작")
 
             if (this.room !== '') {

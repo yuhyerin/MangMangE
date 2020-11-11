@@ -99,12 +99,14 @@ export default {
     },
 
     login() {
+      const proxyurl = "https://cors-anywhere.herokuapp.com/";
       axios
         .post(SERVER.URL + "/newuser/login/",
         {
           user_id: this.id,
           user_password: this.password,
         },
+        
         )
         .then((res) => {
           console.log(res);
