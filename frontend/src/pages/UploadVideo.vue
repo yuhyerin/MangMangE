@@ -205,6 +205,8 @@ export default {
             })
             .then((res)=>{
               console.log('RES : ',res)
+              alert('등록되었습니다')
+              this.$router.push("/videos")
             })
             .catch((err)=>{
               console.log('ERROR : ',err)
