@@ -157,6 +157,7 @@ export default {
           }
           else{
             this.image = res.data.image;
+            this.desertionNoCheck = false;
           }
         })
         .catch((err)=>{
@@ -258,33 +259,6 @@ export default {
         });
     }
   },
-  computed: {
-    // rules () {
-    //   const rules = []
-
-    //   if (this.desertionNo) {
-    //     const rule =
-    //       v => (v || '').length === 15 ||
-    //         `일련번호 길이는 15입니다`
-    //     rules.push(rule)
-    //   }
-
-    //   if (this.desertionNoCheck) {
-    //     console.log(1)
-    //     const rule =
-    //       v => v === 1 || `존재하지 않는 일련번호 입니다`
-    //     rules.push(rule)
-    //   }
-
-    //   if (this.selectedFiles) {
-    //     const rule =
-    //       v => v === 1 || '영상을 삽입해주세요'
-    //   }
-    //   return rules
-    // }
-    
-  },
-
     
 }
 </script>
