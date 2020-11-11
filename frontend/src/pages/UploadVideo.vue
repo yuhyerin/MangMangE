@@ -1,44 +1,48 @@
 <template>
-  <div  style="padding-top: 80px" >
-  <Header/>
-  <v-container
-    style="padding-top: 90px;"
-  >
-    <v-col>
-      <v-text-field
-          label="DesertionNO"
-          v-model="desertionNo"
-          placeholder="일련번호를 입력하세요"
-          outlined
-      ></v-text-field>
-    </v-col>
-    <v-col>
-      <v-text-field
-        label="제목"
-        v-model="title"
-        placeholder="제목을 입력하세요"
-        outlined
-      ></v-text-field>
-    </v-col>
-    <v-col>
-      <input type="file" ref="file" @change="selectFile" />
-    </v-col>
-    <v-col>
-      <v-textarea
-        outlined
-        name="input-7-4"
-        label="내용"
-        v-model="content"
-        placeholder="내용을 입력하세요"
-      ></v-textarea>
-    </v-col>
-    <v-col>
-      <v-btn outlined rounded
-      :disabled="!selectedFiles" @click="upload"
-      >등록하기</v-btn>
+    <div style="padding-top: 75px" >
+    <Header/>
+    <v-container
+      style="
+        padding-top: 30px;
+      "
+    >
+      <h2 style="text-align: center; padding-bottom: 12px;">동영상 업로드</h2>
+      <v-col>
+        <v-text-field
+            label="일련번호"
+            v-model="desertionNo"
+            outlined
+        ></v-text-field>
       </v-col>
-  </v-container>
-    </div>
+      <v-col>
+        <v-text-field
+          label="제목"
+          v-model="title"
+          outlined
+        ></v-text-field>
+      </v-col>
+      <v-col>
+        <input type="file" ref="file" @change="selectFile" style="padding-bottom: 12px; border: 1px solid gray; border-radius: 3px;"/>
+      </v-col>
+      <v-col>
+        <v-textarea
+          outlined
+          name="input-7-4"
+          v-model="content"
+          label="내용"
+          style="padding-top: 24px;"
+        ></v-textarea>
+      </v-col>
+      <v-col style="padding-top: 0px;">
+        <v-btn 
+          outlined
+          rounded
+          :disabled="!selectedFiles"
+          @click="upload"
+        >등록하기</v-btn>
+        </v-col>
+    </v-container>
+      </div>
 </template>
 
 <script>

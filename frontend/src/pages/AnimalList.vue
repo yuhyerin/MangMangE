@@ -7,9 +7,9 @@
     </div>
     <v-main>
       <div style="padding-top: 75px; display: flex; justify-content: center">
-        <div>
+        <div style="padding-top: 10px">
           <v-btn @click="changeViewStyle(false)">
-            <v-icon>mdi-format-align-right</v-icon>
+            <v-icon>mdi-view-grid</v-icon>
           </v-btn>
           <v-btn @click="changeViewStyle(true)">
             <v-icon>mdi-format-align-justify</v-icon>
@@ -46,7 +46,6 @@
                 <div
                   style="
                     width: 100%;
-                    height: 5vh;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -480,7 +479,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .categoryBtn {
   padding-top: 10px;
   height: 7vh;

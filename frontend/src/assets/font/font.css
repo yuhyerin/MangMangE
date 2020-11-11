@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'singleDay';
+    src: url('./SingleDay-Regular.ttf') format('truetype')
+}

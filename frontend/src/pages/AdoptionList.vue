@@ -52,10 +52,15 @@ export default {
   watch: {
     flag() {
       if (this.flag === 1) {
+        const adminList = ["admin", "admin_hee", "admin_so", "admin_rin", "admin_hwan", "admin_kyu"]
         var arr = [];
-        for (let i = 0; i < this.items.length - 1; i++) {
-          if (this.items[i].user_id === this.userId) {
-            arr.push(this.items[i]);
+        if (adminList.includes(this.userId)) {
+          arr = this.items
+        } else {
+          for (let i = 0; i < this.items.length - 1; i++) {
+            if (this.items[i].user_id === this.userId) {
+              arr.push(this.items[i]);
+            }
           }
         }
         this.items = arr;
@@ -76,6 +81,15 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.items = res.data.list.reverse();
+          for (let i = 0; i < this.items.length; i++) {
+            var item = this.items[i]
+            var someday = new Date(item.regtime)
+            var year = someday.getFullYear()
+            var month = someday.getMonth() + 1
+            var date = someday.getDate()
+            var regTime = year + '-' + month + '-' + date
+            item.regtime = regTime
+          }
           this.itemsOriginal = this.items;
           this.userId = res.data.user_id;
         })

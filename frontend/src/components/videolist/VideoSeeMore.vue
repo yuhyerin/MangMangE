@@ -97,6 +97,6 @@ export default {
   cursor: pointer;
 }
 .video-info:hover {
-  color: #999
+  color: #999;
 }
 </style>

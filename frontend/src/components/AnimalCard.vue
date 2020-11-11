@@ -199,21 +199,6 @@ export default {
     } else {
       this.likeTrigger = true;
     }
-
-    // axios
-    //   .get(SERVER.URL + "/newuser/animal/detail", {
-    //     params: {
-    //       desertion_no: this.animalInfo.desertion_no,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     for (let i = 0; i < res.data.personality.length; i++) {
-    //       this.animalTag += "#" + res.data.personality[i] + " ";
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   },
 
   methods: {
