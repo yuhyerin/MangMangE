@@ -57,15 +57,13 @@
 import router from "@/router";
 import SERVER from "@/api/url";
 import axios from 'axios';
+
 export default {
   data() {
     return {
       upload: '',
       videos: [],
     };
-  },
-  mounted() {
-    // console.log(this.$refs.plyr.player);
   },
   created() {
     if (this.$cookies.get("accessToken") != null) {
@@ -121,7 +119,7 @@ export default {
           }
         
         })
-  },
+    },
   }
 }
 </script>
