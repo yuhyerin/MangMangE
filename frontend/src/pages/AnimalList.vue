@@ -433,13 +433,8 @@ export default {
       }
     } else {
       this.loadingTrigger = true;
-      console.log("요청");
       axios
-        .get(SERVER.URL + "/newuser/animal/allread", {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
+        .get(SERVER.URL + "/newuser/animal/allread")
         .then((res) => {
           this.allDatas = res.data.animalList;
           this.loadingTrigger = false;
@@ -498,7 +493,7 @@ export default {
 .loading {
   height: 100vh;
   width: 100vw;
-  position: fixed;
+  position: absolute;
   z-index: 5;
   display: flex;
   align-items: center;

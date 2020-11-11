@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 export default {
-  URL: 'https://localhost:8084',
-  // URL: 'https://k3b306.p.ssafy.io:8080',
+  // URL: 'https://localhost:8084',
+  URL: 'https://k3b306.p.ssafy.io:8080',
   KakaopayURL: 'https://kapi.kakao.com/v1/payment/ready',
   ROUTES: {
     submitSurvey: '/user/survey/create',
@@ -81,11 +81,11 @@ export default {
           }
         })
         .catch((err) => {
-          alert('권한이 만료되었습니다. 다시 로그인 해주세요.');
-          location.href = "/"
-          $cookies.remove('refreshToken');
-          $cookies.remove('accessToken');
-          $cookies.remove('expireTime');
+          // alert('권한이 만료되었습니다. 다시 로그인 해주세요.');
+          // location.href = "/"
+          // $cookies.remove('refreshToken');
+          // $cookies.remove('accessToken');
+          // $cookies.remove('expireTime');
           console.log(err);
         });
     } else {

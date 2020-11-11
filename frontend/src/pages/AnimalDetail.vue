@@ -165,7 +165,7 @@
         <div v-for="video in videos" :key="video.uid" style="width: 30%">
           <vue-plyr>
             <video>
-              <source :src="`${video.filepath}`" type="video/mp4" />
+              <source :src="require(`@/assets/videos/${video.filepath}`)" />
               <track
                 kind="captions"
                 label="English"
