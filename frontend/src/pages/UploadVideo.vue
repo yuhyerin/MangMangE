@@ -10,16 +10,16 @@
       <label v-if="desertionNoCheck">일련번호를 확인해주세요</label>
       <div style="display: flex; justify-content: center; align-items: center">
         <img :src="image" alt="이미지" style="height: 75px; margin: 0 1% 1% 0; border-radius: 30px;">
-          <v-text-field
-            label="일련번호"
-            v-model="desertionNo"
-            outlined
-            style="margin: 0; padding: 0;"
-          ></v-text-field>
-            <v-icon style="color: green" 
-            :disabled="desertionNo.length < 1">
-              mdi-checkbox-marked-circle
-            </v-icon>
+        <v-text-field
+          label="일련번호"
+          v-model="desertionNo"
+          outlined
+          style="margin: 0; padding: 0;"
+        ></v-text-field>
+        <v-icon style="color: green" 
+          :disabled="desertionNo.length < 1">
+          mdi-checkbox-marked-circle
+        </v-icon>
       </div>
 
       <div style="display: flex">

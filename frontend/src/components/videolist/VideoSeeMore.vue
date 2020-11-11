@@ -28,11 +28,28 @@
           <p class="video-info" @click="moveToVideoDetail(video.uid)" style="line-height: 150%;">{{ video.content }}</p>
         </v-col>
     </v-row>
-    <v-btn class="mx-2" fab dark small color="rgb(1, 118, 72)" @click="scrollToTop" style="position: fixed; bottom: 70px; right: 55px;">
+    <v-btn
+      class="mx-2"
+      fab
+      dark
+      small
+      color="rgb(1, 118, 72)"
+      @click="scrollToTop"
+      style="position: fixed; bottom: 70px; right: 55px"
+    >
       <v-icon dark>mdi-chevron-up</v-icon>
     </v-btn>
-    <infinite-loading @infinite="infiniteHandler" :identifier="tag" spinner="circles">
-      <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+    <infinite-loading
+      @infinite="infiniteHandler"
+      :identifier="tag"
+      spinner="circles"
+    >
+      <div
+        slot="no-more"
+        style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px"
+      >
+        목록의 끝입니다 :)
+      </div>
     </infinite-loading>
   </div>
 </template>
@@ -51,23 +68,21 @@ export default {
   data() {
     return {
       videos: [],
-      videos_cnt: 0
+      videos_cnt: 0,
     };
   },
   methods: {
     ...mapActions(["moveToVideoDetail"]),
 
     getAllVideos() {
-      axios
-        .get(SERVER.URL + SERVER.ROUTES.getAllVideos)
-        .then(res => {
-          this.videos = [...res.data.VideoList, ...res.data.VideoList]
-          this.videos_cnt = this.videos.length
-        })
+      axios.get(SERVER.URL + SERVER.ROUTES.getAllVideos).then((res) => {
+        this.videos = [...res.data.VideoList, ...res.data.VideoList];
+        this.videos_cnt = this.videos.length;
+      });
     },
 
     scrollToTop() {
-      scroll(0, 0)
+      scroll(0, 0);
     },
 
   },
