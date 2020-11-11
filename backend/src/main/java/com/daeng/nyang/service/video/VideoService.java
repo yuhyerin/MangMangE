@@ -23,7 +23,6 @@ public class VideoService {
 	}
 	
 	public List<AnimalVideo> searchVideo(Long desertion_no){
-		System.out.println("SERVICE START");
 		List<AnimalVideo> list = animalVideoRepo.findByDesertionNo(desertion_no);
 		return list;
 	}

@@ -36,7 +36,6 @@ public class AnimalService {
 
 	// (비회원) 모든동물조회
 	public List<AnimalListFE> allAnimalRead() {
-		System.out.println("SERVICE START");
 		// 1. 동물리스트
 		List<Animal> animalList = animalRepo.findAll();
 		List<Ptag> personalityList = ptagRepo.findAll();
@@ -82,7 +81,6 @@ public class AnimalService {
 		List<Animal> animalList = animalRepo.findAnimalAll();
 		List<Ptag> personalityList = ptagRepo.findAll();
 		Long[] likeList = (Long[]) animalLikeRepo.findDesertionNoByUserId(user_id);
-		System.out.println(Arrays.toString(likeList));
 		List<AnimalListFE> result = new ArrayList<>();
 		for (int i = 0; i < animalList.size(); i++) {
 			Animal animal = animalList.get(i);
@@ -108,7 +106,6 @@ public class AnimalService {
 			String[] personality = new String[personalList.size()];
 			for (int z = 0; z < personality.length; z++)
 				personality[z] = personalList.get(z);
-			System.out.println(Arrays.toString(personality));
 			result.add(AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
 					kind_c(animal.getKind_c()). // 하위 품종
 					color_cd(animal.getColor_cd()). // 털색
@@ -131,21 +128,18 @@ public class AnimalService {
 	
 	// (회원) 입양신청정보 조회
 	public boolean findApply(long desertion_no, String user_id) {
-		System.out.println("SERVICE START");
 		Optional<Apply> app = applyRepo.findApplyByDesertionNoAndUserId(desertion_no, user_id);
 		return app.isPresent();
 	}
 	
 	// (회원) 즐겨찾는 동물 조회
 	public List<AnimalListFE> animalLikeList(String user_id) {
-		System.out.println("SERVICE START");
 		List<AnimalListFE> result = new ArrayList<>();
 		List<Animal> animals = animalRepo.findAll();
 		List<Ptag> personalities = ptagRepo.findAll();
 
 		// 1. animalLike 테이블에서 desertion_no 리스트 가져오기
 		Long[] desertion_no = animalLikeRepo.findDesertionNoByUserId(user_id);
-		System.out.println(Arrays.toString(desertion_no));
 		// 2. animal 테이블에서 desertion_no로 animal 정보 가져오기
 		for (int i = 0; i < desertion_no.length; i++) {
 			List<String> personalList = new ArrayList<>();
@@ -223,35 +217,27 @@ public class AnimalService {
 
 	// 좋아요 저장
 	public AnimalLike join(AnimalLike animalLike) {
-		System.out.println("AnimalLike Create Service");
-		System.out.println(animalLike.toString());
 		AnimalLike result = animalLikeRepo.save(animalLike);
-		System.out.println("RESULT : " + result.toString());
 		return result;
 	}
 
 	// 유저 아이디를 통해 좋아요 정보 가져오기.
 	public List<AnimalLike> findAnimalLikeByUserid(String user_id) {
-		System.out.println("find AnimalLike By Userid Service");
 		return animalLikeRepo.findAnimalLikeByUserid(user_id);
 	}
 
 	// 유저 아이디와 desertion_no를 통해 좋아요 정보 가져오기.
 	public AnimalLike findAnimalLike(String user_id, Long desertion_no) {
 		AnimalLike animalLike = animalLikeRepo.findAnimalLike(user_id, desertion_no);
-		if (animalLike != null)
-			System.out.println(animalLike.toString());
 		return animalLike;
 	}
 
 	// 좋아요 삭제
 	public void deleteAnimalLike(String user_id, Long desertion_no) {
-		System.out.println("Delete AnimalLike Service");
 		animalLikeRepo.deleteAnimalLike(user_id, desertion_no);
 	}
 
 	public AnimalListFE animalDetail(Long desertion_no) {
-		System.out.println("SERVICE START");
 		Animal animal = animalRepo.findAnimalByDesertionNo(desertion_no);
 		String[] personality = animalPersonality(desertion_no);
 		AnimalListFE result = AnimalListFE.builder().desertion_no(animal.getDesertion_no()). // 유기번호
@@ -273,7 +259,6 @@ public class AnimalService {
 	}
 
 	public AnimalListFE animalDetail(String user_id, Long desertion_no) {
-		System.out.println("SERVICE START");
 		Animal animal = animalRepo.findAnimalByDesertionNo(desertion_no);
 		String[] personality = animalPersonality(desertion_no);
 		boolean like = animalLikeRepo.findAnimalLikeByUserIdAndDesertionNo(user_id, desertion_no).isPresent();
@@ -296,10 +281,7 @@ public class AnimalService {
 	}
 
 	public String[] animalPersonality(Long desertion_no) {
-		System.out.println("SERVICE START");
 		String[] personality = ptagRepo.findTagNameByDesertionNo(desertion_no);
-		System.out.println(personality.toString());
-		System.out.println("SERVICE END");
 		return personality;
 	}
 

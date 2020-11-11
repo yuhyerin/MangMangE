@@ -33,7 +33,7 @@ public class KakaoApiController {
 
 	@PostMapping("/newuser/kakaoPay")
 	public String kakaoPay(@RequestBody Map<String, String> video) {
-		System.out.println("kakaoPay post............................................");
+//		System.out.println("kakaoPay post............................................");
 		RestTemplate restTemplate = new RestTemplate();
 
 		int videoid = Integer.parseInt(video.get("videoid"));
@@ -63,7 +63,7 @@ public class KakaoApiController {
 			kakaoPayReadyVO = restTemplate.postForObject(new URI(HOST + "/v1/payment/ready"), body,
 					KakaoPayReadyVO.class);
 
-			System.out.println("" + kakaoPayReadyVO);
+//			System.out.println("" + kakaoPayReadyVO);
 
 			return kakaoPayReadyVO.getNext_redirect_pc_url();
 
