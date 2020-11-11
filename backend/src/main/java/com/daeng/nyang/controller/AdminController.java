@@ -52,7 +52,6 @@ public class AdminController {
 	public ResponseEntity<HashMap<String, Object>> uploadDBVideo(
 			@RequestBody Map<String, Object> video,
 			HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		System.out.println(video.toString());
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
 		HashMap<String, Object> map = adminService.uploadVideo(video, user.getAccount().getUser_id());
@@ -65,7 +64,6 @@ public class AdminController {
 	public ResponseEntity<HashMap<String, Object>> upload(
 			@RequestParam MultipartFile mfile,
 			HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<>();
 		if (mfile == null) {
 			map.put("msg", "영상정보가 없습니다.");
