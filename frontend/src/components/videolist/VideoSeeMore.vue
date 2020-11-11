@@ -70,22 +70,8 @@ export default {
       scroll(0, 0)
     },
 
-    // moveToVideoDetail(videoIndex) {
-    //   this.$router.push(
-    //     {
-    //       name: 'VideoDetail',
-    //       params: {
-    //         videoId: videoIndex
-    //       }
-    //     }
-    //   )
-    // }
   },
-  // mounted() {
-  //   console.log(1)
-  //   console.log(this.$refs.plyr.player)
-    
-  // },
+
   created() {
     this.getAllVideos()
   },

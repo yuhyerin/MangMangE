@@ -78,6 +78,7 @@ export default {
   background: rgb(1,118,72);
   /* background: #FFa500; */
   /* background-color: rgba(255, 165, 0, 1); */
+  /* background-color: rgb(193, 218, 204); */
   /* background: darkgray; */
   /* background: #fcf7f0; */
   /* background: #fa8290; */
