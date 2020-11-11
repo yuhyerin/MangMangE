@@ -5,9 +5,16 @@
         <v-layout col wrap>
           <v-col cols="8">
             <div class="video-play">
+              <!-- :src="require(`@/assets/videos/${video.video}.mp4`)" -->
+              <!-- <video
+          :src="require(`@/assets/videos/${video.filepath}.mp4`)"
+          type="video/mp4"
+          controls
+          style="width: 100%"
+        ></video> -->
               <vue-plyr>
-                <video poster="poster.png">
-                  <source :src="video.filepath" type="video/mp4"/>
+                <video>
+                  <source :src="require(`@/assets/videos/${video.filepath}.mp4`)" type="video/mp4"/>
                   <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
                 </video>  
               </vue-plyr>
@@ -35,6 +42,12 @@
               <p style="font-size: 1.1rem">다음 동영상</p>
               <v-row v-for="nextvideo in nextVideoList" :key="nextvideo.uid">
                 <v-col>
+                  <!-- <vue-plyr>
+                    <video poster="poster.png">
+                      <source :src="require(`@/assets/videos/${nextvideo.filepath}.mp4`)" type="video/mp4"/>
+                      <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
+                    </video>  
+                  </vue-plyr> -->
                   <div style="background-color: black; height: 100px;">썸네일</div>
                 </v-col>
                 <v-col>
@@ -103,7 +116,7 @@ export default {
     return {
       videoID: this.$route.params.videoId,
       video: [],
-      nextVideoList: []
+      nextVideoList: [],
     }
   },
   created() {

@@ -6,9 +6,9 @@
     <v-row v-for="video in videos" :key="video.id" style="padding: 0 20px 0 20px">
         <v-col cols="6">
           <vue-plyr>
-            <video poster="poster.png">
+            <video>
               <source
-                :src="video.filepath"
+                :src="require(`@/assets/videos/${video.filepath}.mp4`)"
                 type="video/mp4"
               />
               <track
@@ -61,6 +61,7 @@ export default {
       axios
         .get(SERVER.URL + SERVER.ROUTES.getAllVideos)
         .then(res => {
+          console.log('videolist data=', res.data.VideoList)
           this.videos = [...res.data.VideoList, ...res.data.VideoList]
           this.videos_cnt = this.videos.length
         })
