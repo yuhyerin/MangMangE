@@ -60,4 +60,14 @@ public class VideoController {
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		}
 	}
+	
+	@GetMapping("/newuser/video/search")
+	public ResponseEntity<HashMap<String, Object>> searchVideo(@RequestParam Long desertion_no){
+		System.out.println("CONTROLLER START");
+		List<AnimalVideo> videoList = videoService.searchVideo(desertion_no);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("videoList", videoList);
+		System.out.println(map.toString());
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
 }
