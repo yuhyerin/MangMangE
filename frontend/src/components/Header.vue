@@ -129,6 +129,9 @@ export default {
       }
     },
     moveTo(page) {
+      if (this.$router.history.current.path == page) {
+        location.reload(true);
+      }
       if (page == "/animals") {
         this.setEventListener(2);
       } else {

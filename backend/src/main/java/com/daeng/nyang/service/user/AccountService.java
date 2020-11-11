@@ -128,6 +128,7 @@ public class AccountService {
 		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		Account ac = Account.builder().user_id(id).role(user.getRole()).build();
 		retok = TotToken.builder().account(ac).build();
+		System.out.println("JWT_ACCESS_TOKEN_VALIDITY : " + JWT_ACCESS_TOKEN_VALIDITY);
 		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		map.put("success", true);
 		map.put("accessToken", accessToken);

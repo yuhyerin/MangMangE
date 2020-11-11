@@ -81,11 +81,11 @@ export default {
           }
         })
         .catch((err) => {
-          // alert('권한이 만료되었습니다. 다시 로그인 해주세요.');
-          // location.href = "/"
-          // $cookies.remove('refreshToken');
-          // $cookies.remove('accessToken');
-          // $cookies.remove('expireTime');
+          alert('권한이 만료되었습니다. 다시 로그인 해주세요.');
+          location.href = "/"
+          $cookies.remove('refreshToken');
+          $cookies.remove('accessToken');
+          $cookies.remove('expireTime');
           console.log(err);
         });
     } else {
