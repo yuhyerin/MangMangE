@@ -169,6 +169,14 @@ export default {
         })
         .then(res => {
           this.video = res.data.VideoDetail
+          // var item = this.video
+          var someday = new Date(this.video.regtime)
+          var year = someday.getFullYear()
+          var month = someday.getMonth() + 1
+          var date = someday.getDate()
+          var regTime = year + '-' + month + '-' + date
+          this.video.regtime = regTime
+          console.log(this.video)
         })
     },
     getVideoList() {
