@@ -111,8 +111,8 @@ export default {
         .get(SERVER.URL + "/newuser/video/allvideo")
         .then((res) => {
           if(res.data.VideoList.length >= 4) {
-
-            this.videos = res.data.VideoList.slice(-4)
+            this.videos = res.data.VideoList.slice(-4).reverse()
+            console.log('this.videos?', this.videos)
           }
           else {
             this.videos = res.data.VideoList
