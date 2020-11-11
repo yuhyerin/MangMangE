@@ -30,11 +30,11 @@
       </v-col>
     </v-row>
     <hr />
-    <v-row>
+    <v-row style="margin-bottom: 20px">
       <v-col v-for="video in videos" :key="video.uid">
         <vue-plyr>
           <video>
-            <source :src="require(`@/assets/videos/${video.filepath}`)"/>
+            <source :src="require(`@/assets/videos/${video.filepath}`)" />
             <track
               kind="captions"
               label="English"

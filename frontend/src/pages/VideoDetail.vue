@@ -33,6 +33,7 @@
           
           <v-col cols="3" style="padding-left: 20px;">
             <div class="next-videolist">
+              <!--랜덤으로 5개-->
               <p style="font-size: 1.1rem">추천 동영상</p>
               <v-row v-for="rec in recommendVideoList" :key="rec.uid">
                 <v-col style="padding-right: 8px;">
