@@ -61,7 +61,63 @@ export default {
       title:'',
       file:undefined,
       content:'',
-      selectedFiles: false
+      selectedFiles: false,
+      err:{
+        message:'',
+        fileMessage:''
+      }
+    }
+  },
+  watch: {
+    desertionNo() {
+      console.log(this.desertionNo)
+      if(this.desertionNo.length==15){
+        SERVER.tokenCheck(() => {
+        axios.get(SERVER.URL+'/admin/upload/checkNO',{
+          params:{
+            desertion_no : this.desertionNo
+          },
+          headers:{
+            "Authorization" : this.$cookies.get("accessToken")
+          }
+        })
+        .then((res)=>{
+          console.log(res)
+          if(res.status==202){
+            console.log(res)
+            this.err.message = '없는 번호입니다.'
+            alert(this.err.message)
+          }
+        })
+        .catch((err)=>{
+          console.log(err)
+        });
+        });
+      }
+    },
+    file(){
+      SERVER.tokenCheck(() => {
+      axios.get(SERVER.URL+'/admin/upload/checkFile',{
+        params:{
+          fileName : this.desertionNo+"_"+this.file[0].name
+        },
+        headers:{
+          "Authorization" : this.$cookies.get("accessToken")
+        }
+      })
+      .then((res)=>{
+        console.log(res)
+        if(res.status==202){
+          this.err.fileMessage = '이미 존재하는 파일입니다.'
+          alert(this.err.fileMessage)
+        }
+      })
+      .catch((err)=>{
+        console.log(err)
+        // this.err.fileMessage = '이미 존재하는 파일입니다.'
+        // alert(this.err.fileMessage)
+      })
+      });
     }
   },
   methods:{
