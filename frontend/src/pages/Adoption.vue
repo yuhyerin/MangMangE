@@ -24,7 +24,7 @@
             </ul>
           </div>
           <hr class="dog-information-startline" />
-          <h4>유기동물 정보</h4>
+          <h3>유기동물 정보</h3>
           <div class="flex">
             <div class="dog-information">
               <div class="row dog-information-serial">
@@ -32,7 +32,8 @@
                   <label>1. 일련번호</label>
                 </div>
                 <div class="col-10">
-                  <p class="serial-p" style="border: 0.5px solid #bbb">
+                  <!-- <p class="serial-p" style="border: 0.5px solid #bbb"> -->
+                  <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
                     {{ dogSerial }}
                   </p>
                 </div>
@@ -42,7 +43,8 @@
                   <label>2. 추정나이</label>
                 </div>
                 <div class="col-10">
-                  <p class="age-p" style="border: 0.5px solid #bbb">
+                  <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
+                  <!-- <p class="age-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogAge }}
                   </p>
                 </div>
@@ -52,7 +54,8 @@
                   <label>3. 종류</label>
                 </div>
                 <div class="col-10">
-                  <p class="breed-p" style="border: 0.5px solid #bbb">
+                  <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
+                  <!-- <p class="breed-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogBreed }}
                   </p>
                 </div>
@@ -62,7 +65,8 @@
                   <label>4. 성별</label>
                 </div>
                 <div class="col-10">
-                  <p class="gender-p" style="border: 0.5px solid #bbb">
+                  <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
+                  <!-- <p class="gender-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogGender }}
                   </p>
                 </div>
@@ -72,7 +76,8 @@
                   <label>5. 털색</label>
                 </div>
                 <div class="col-10">
-                  <p class="fur-p" style="border: 0.5px solid #bbb">
+                  <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
+                  <!-- <p class="fur-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogFur }}
                   </p>
                 </div>
