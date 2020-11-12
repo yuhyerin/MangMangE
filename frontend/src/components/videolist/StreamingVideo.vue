@@ -176,16 +176,16 @@ export default {
       this.socket.emit('message', message);
     },
     async setLocalAndSendMessage(sessionDescription){
-      console.log("Create offer Start");
+      console.log("Create offer/answer Start");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer End");
+      console.log("Create offer/answer End");
     },
     handleCreateOfferError(event){
       console.log('[Error]\n', event);
     },
     onCreateSessionDescriptionError(error){
-      trace('Failed to create session description: ' + error.toString());
+      console.log('Failed to create session description: ' + error.toString());
     },
     doCall(){
       console.log('createOffer 호출');
@@ -217,11 +217,11 @@ export default {
       this.pc = new RTCPeerConnection(null);
       this.pc.onicecandidate = this.handleIceCandidate;
       this.pc.onaddstream = this.handleRemoteStreamAdded;
-      // this.pc.onaddstream = null;
       this.pc.onremovestream = this.handleRemoteStreamRemoved;
+      // this.pc.onaddstream = null;
       // this.pc.onremovestream = null;
       // this.pc.addStream(this.localStream);
-      console.log('peer 생성');
+      console.log('enteringRoom : peerConnection 생성');
       this.doCall();
     },
     handleRemoteStreamAdded(event){
@@ -229,6 +229,8 @@ export default {
     },
     handleRemoteStreamRemoved(event) {
       console.log('Remote stream removed. Event: ', event);
+      this.onair = !this.onair;
+
     },
     moveToSupport() {
       axios.post(SERVER.URL+'/newuser/kakaoPay',
