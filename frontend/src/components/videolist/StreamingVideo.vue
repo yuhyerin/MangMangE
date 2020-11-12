@@ -3,15 +3,15 @@
     <v-row>
       <v-col>
         <video
-          src="@/assets/videos/video1.mp4"
-          type="video/mp4"
-          controls
+          id="remoteVideo"
+          autoplay playsinline
           style="width: 100%"
         ></video>
+        <button @click="StartBtn">라이브 보기</button>
       </v-col>
       <v-col style="padding: 15px">
         <v-row>
-          <div style="font-size: 30px; padding-bottom: 5px">동영상 타이틀</div>
+          <div style="font-size: 30px; padding-bottom: 5px">라이브 스트리밍 중 </div>
           <v-spacer></v-spacer>
           <div v-show="upload">
             <v-btn @click="uploadVideo" small outlined class="ma-2 upload-btn">
@@ -22,18 +22,25 @@
         </v-row>
         <v-row>
           <div style="padding-left: 5px; line-height: 150%">
-            왼쪽에 있는 동영상은 2차 프로젝트 UCC 애니메이션입니다. <br />밑에
-            있는 것들도 마찬가지입니다. <br />모두 다 같은 동영상 <br />스트리밍
-            동영상 자리
+            실시간 라이브 중입니다 :) <br />
+            새로온 댕수를 만나러 오세요 ~ <br />
+            ^^ <br />
+            <br/>
           </div>
         </v-row>
       </v-col>
     </v-row>
     <hr />
-    <v-row style="margin-bottom: 20px">
+    <v-row style="margin-top: 10px">
       <v-col v-for="video in videos" :key="video.uid">
-        <vue-plyr>
-          <video>
+        <video
+          :src="require(`@/assets/videos/${video.filepath}`)"
+          type="video/mp4"
+          controls
+          style="max-height: 150px; width: 100%; height: 100%;"
+        ></video>
+        <!-- <vue-plyr>
+          <video style="max-height:150px; width:auto; height:100%;">
             <source :src="require(`@/assets/videos/${video.filepath}`)" />
             <track
               kind="captions"
@@ -43,7 +50,7 @@
               default
             />
           </video>
-        </vue-plyr>
+        </vue-plyr> -->
         <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
       <div class="more-videos">
@@ -57,11 +64,19 @@
 import router from "@/router";
 import SERVER from "@/api/url";
 import axios from 'axios';
+import io from 'socket.io-client'
+
 export default {
   data() {
     return {
       upload: '',
       videos: [],
+      room: 'hyerin',
+      socket: null,
+      remoteVideo:null,
+      remoteStream:null,
+      pc: null,
+      onair: null,
     };
   },
   created() {
@@ -88,8 +103,14 @@ export default {
       this.upload= false;
     }
     this.getVideos()
+    // setTimeout(function() {
+    //   // alert('5초끝!')
+    //   // this.StartBtn();
+    // }, 5000);
+    
   },
   methods: {
+    
     videoSeeMore() {
       this.$emit("changeVideo", 2);
     },
@@ -108,17 +129,104 @@ export default {
     },
     getVideos() {
       axios
-        .get(SERVER.URL + "/newuser/video/allvideo")
+        .get(SERVER.URL + SERVER.ROUTES.getAllVideos)
         .then((res) => {
-          if(res.data.VideoList.length >= 4) {
+          if(res.data.VideoList.length > 3) {
             this.videos = res.data.VideoList.slice(-4).reverse()
-            console.log('this.videos?', this.videos)
           }
           else {
             this.videos = res.data.VideoList
           }
         
         })
+    },
+    StartBtn(){
+      this.connectSocket();
+      this.addListener();
+      this.onair = !this.onair;
+    },
+    connectSocket(){
+      // this.socket = io.connect('http://localhost:8002');
+      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      this.socket.emit('join', this.room);
+      this.enteringRoom();
+    },
+    addListener(){
+      // After
+      this.socket.on('message',((message) => {
+        if (message.type === 'offer') {
+          this.pc.setRemoteDescription(new RTCSessionDescription(message));
+          this.doAnswer();
+        } 
+        else if (message.type === 'answer' && this.pc) {
+          this.pc.setRemoteDescription(new RTCSessionDescription(message));
+        } 
+        else if (message.type === 'candidate' && this.pc){
+          this.pc.addIceCandidate(new RTCIceCandidate({
+            sdpMLineIndex: message.label,
+            candidate: message.candidate
+          }));
+        }
+      }));
+    },
+    // ******************************** Call me maybe ******************************** //
+    sendMessage(message) {
+      this.socket.emit('message', message);
+    },
+    async setLocalAndSendMessage(sessionDescription){
+      console.log("Create offer Start");
+      await this.pc.setLocalDescription(sessionDescription);
+      this.sendMessage(sessionDescription);
+      console.log("Create offer End");
+    },
+    handleCreateOfferError(event){
+      console.log('[Error]\n', event);
+    },
+    onCreateSessionDescriptionError(error){
+      trace('Failed to create session description: ' + error.toString());
+    },
+    doCall(){
+      console.log('createOffer 호출');
+      this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
+    },
+    doAnswer() {
+      console.log('createAnswer 호출');
+      this.pc.createAnswer()
+      .then(
+        this.setLocalAndSendMessage,
+        this.onCreateSessionDescriptionError
+      );
+    },
+    // ******************************** Ice ******************************** //
+    handleIceCandidate(event){
+      if (event.candidate) {
+        this.sendMessage({
+          type: 'candidate',
+          label: event.candidate.sdpMLineIndex,
+          id: event.candidate.sdpMid,
+          candidate: event.candidate.candidate
+        });
+      } else {
+        console.log('End of candidates');
+      }
+    },
+    // ******************************** Custom ******************************** //
+    enteringRoom(){
+      this.pc = new RTCPeerConnection(null);
+      this.pc.onicecandidate = this.handleIceCandidate;
+      this.pc.onaddstream = this.handleRemoteStreamAdded;
+      // this.pc.onaddstream = null;
+      this.pc.onremovestream = this.handleRemoteStreamRemoved;
+      // this.pc.onremovestream = null;
+      // this.pc.addStream(this.localStream);
+      console.log('peer 생성');
+      this.doCall();
+    },
+    handleRemoteStreamAdded(event){
+      document.querySelector("video").srcObject = event.stream;
+    },
+    handleRemoteStreamRemoved(event) {
+      console.log('Remote stream removed. Event: ', event);
     },
   }
 }

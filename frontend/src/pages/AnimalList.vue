@@ -332,12 +332,10 @@ export default {
             .then((res) => {
               this.allDatas = res.data.animalList;
               this.loadingTrigger = false;
-              // console.log(res.data);
             })
             .catch((err) => {
               this.loadingTrigger = false;
             });
-          // console.log(data);
         }
       } else if (newValue == 1) {
         this.matchedDatas = [];
@@ -361,11 +359,9 @@ export default {
             })
             .catch((err) => {
               console.log("error message", err);
-              // SERVER.RefreshToken(err);
             });
         });
       } else {
-        // console.log("like animals");
         this.likedDatas = [];
         if (this.$cookies.get("accessToken") != null) {
           this.loadingTrigger = true;
@@ -384,7 +380,6 @@ export default {
               })
               .catch((err) => {
                 console.log(err);
-                // SERVER.RefreshToken(err);
                 this.loadingTrigger = false;
               });
           });
@@ -417,16 +412,13 @@ export default {
           .then((res) => {
             this.allDatas = res.data.animalList;
             this.loadingTrigger = false;
-            // console.log(res.data);
           })
           .catch((err) => {
-            // SERVER.RefreshToken(err);
             this.loadingTrigger = false;
           });
       });
 
       if (this.eventListener == 1) {
-        // console.log(this.dogMbti);
         this.trigger = 1;
       } else if (this.eventListener == 2) {
         this.tirgger = 0;
@@ -446,7 +438,6 @@ export default {
         .catch((err) => {
           this.loadingTrigger = false;
         });
-      // console.log(data);
     }
   },
 
@@ -504,9 +495,5 @@ export default {
   justify-content: center;
   font-size: 5px;
   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-  /* background-image: linear-gradient(
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.4)
-  ); */
 }
 </style>

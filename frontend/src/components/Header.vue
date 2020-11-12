@@ -28,7 +28,7 @@
       "
     >
       <img
-        src="../assets/image/logo4.png"
+        src="../assets/image/logofinal.png"
         alt="logo"
         style="height: 70%; padding-left: 20px"
       />
@@ -125,6 +125,9 @@ export default {
     moveTo(page) {
       if (page == "/animals") {
         this.setEventListener(2);
+      }
+      if (this.$router.history.current.path == page) {
+        location.reload(true);
       }
       this.$router.push(page);
     },

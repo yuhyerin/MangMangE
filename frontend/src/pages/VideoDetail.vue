@@ -5,12 +5,19 @@
         <v-layout col wrap>
           <v-col cols="8">
             <div class="video-play">
-              <vue-plyr>
+              <video
+                :src="require(`@/assets/videos/${video.filepath}`)"
+                type="video/mp4"
+                controls
+                autoplay
+                style="max-height:505px; width:100%; height:100%;"
+              ></video>
+              <!-- <vue-plyr>
                 <video>
                   <source :src="require(`@/assets/videos/${video.filepath}`)"/>
                   <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
                 </video>  
-              </vue-plyr>
+              </vue-plyr> -->
             </div>
             <v-row>
               <v-col style="padding-bottom: 0">
@@ -33,16 +40,21 @@
           
           <v-col cols="3" style="padding-left: 20px;">
             <div class="next-videolist">
-              <!--랜덤으로 5개-->
               <p style="font-size: 1.1rem">추천 동영상</p>
-              <v-row v-for="rec in recommendVideoList" :key="rec.uid">
+              <v-row v-for="rec in randomRecList" :key="rec.uid">
                 <v-col style="padding-right: 8px;">
-                  <vue-plyr>
+                  <video
+                    @click="moveToAnoterVideo(rec.uid)"
+                    :src="require(`@/assets/videos/${rec.filepath}`)"
+                    type="video/mp4"
+                    style="max-height: 89px; width: 100%; height: 100%; background-color: black; cursor: pointer"
+                  ></video>
+                  <!-- <vue-plyr>
                     <video>
                       <source :src="require(`@/assets/videos/${rec.filepath}`)" height="80px"/>
                       <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
                     </video>  
-                  </vue-plyr>
+                  </vue-plyr> -->
                 </v-col>
                 <v-col @click="moveToAnoterVideo(rec.uid)" style="cursor: pointer">
                   <h4>{{ rec.title }}</h4>
@@ -75,6 +87,7 @@ export default {
       video: [],
       nextVideoList: [],
       recommendVideoList: [],
+      randomRecList: [],
     }
   },
   created() {
@@ -148,10 +161,31 @@ export default {
               this.recommendVideoList.push(val)
             }
           })
+          this.randomRec(this.recommendVideoList)
+          // var randomRec = this.recommendVideoList
+          // randomRec.sort(function(a, b) {
+          //   return 0.5 - Math.random()
+          // })
         }) 
     },
+    randomRec(recList) {
+      var shuffle = recList.slice();
+      var len = shuffle.length;
+      var i = len;
+      while(i--) {
+        var p = parseInt(Math.random()*len);
+        var t = shuffle[i];
+        shuffle[i] = shuffle[p];
+        shuffle[p] = t;
+      }
+      if(shuffle.length > 4) {
+        this.randomRecList = shuffle.slice(0, 5);
+      }
+      else {
+        this.randomRecList = shuffle
+      }
+    },
     moveToAnoterVideo(idx) {
-      console.log('clickrecvideo', idx)
       location.href = "/video" + `/${idx}`
     }
   },

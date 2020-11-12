@@ -107,10 +107,13 @@ export default {
     login() {
       this.loadingTrigger = true;
       axios
-        .post(SERVER.URL + "/newuser/login/", {
+        .post(SERVER.URL + "/newuser/login/",
+        {
           user_id: this.id,
           user_password: this.password,
-        })
+        },
+        
+        )
         .then((res) => {
           console.log(res);
           this.$cookies.set("accessToken", res.data.accessToken);

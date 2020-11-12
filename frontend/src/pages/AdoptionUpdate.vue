@@ -146,7 +146,7 @@
                   @click="phoneAuthentication"
                   style="
                     border: 0.5px solid #bbb;
-                    background: gray;
+                    background: black;
                     color: white;
                   "
                   type="button"
@@ -172,14 +172,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="row adopter-information-number">
-            <div class="col-2">
-              <label>3. 휴대폰</label>
-            </div>
-            <div class="col-10">
-              <p style="border: 0.5px solid #bbb;">{{ personPhone }}</p>
-            </div> 
-            </div> -->
             <div class="row adopter-information-email">
               <div class="col-2">
                 <label>4. 이메일</label>

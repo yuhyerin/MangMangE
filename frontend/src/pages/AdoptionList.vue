@@ -10,7 +10,6 @@
               <strong>내글보기</strong>
             </v-btn>
           </div>
-          <!-- <p class="adoption-mylist" @click="showMyList">내글보기</p> -->
           <AdoptionListPagination :items="items" :userId="userId" />
         </div>
       </div>

@@ -81,19 +81,13 @@ export default {
 
 <style scoped>
 .s1 {
-  /* background: #4267B3; */
-  /* background: #00022e; */
-  /* background: rgb(255,183, 51); */
-  /* background-color: orange; */
-  /* background: linear-gradient(#FF9900, #FFBB74); */
   background: #ff9900;
-  padding-top: 75px;
+  padding-top: 90px;
 }
 
 .container.s2 {
   height: 85vh;
   border-radius: 20px;
-  /* background-color: rgb(244, 236, 225); */
   text-align: center;
   margin-top: 50px;
 }
