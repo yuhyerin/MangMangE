@@ -12,6 +12,7 @@
         </v-row>
         <v-row v-show="onair">
           <video
+            controls
             id="remoteVideo"
             autoplay playsinline
             style="width: 100%; max-width: 545px; height:295px;"
@@ -147,8 +148,8 @@ export default {
       this.onair = !this.onair;
     },
     connectSocket(){
-      // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      this.socket = io.connect('http://localhost:8002');
+      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       this.socket.emit('join', this.room);
       this.enteringRoom();
     },
