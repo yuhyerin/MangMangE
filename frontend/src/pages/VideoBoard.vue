@@ -5,8 +5,7 @@
       <div>
       <!-- <UploadVideo /> -->
         <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo"/>
-        <NoneStreamingVideo v-if="pageTrigger == 1" @changeVideo="changeVideo" />
-        <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo" style="margin-left: 70px"/>
+        <VideoSeeMore v-if="pageTrigger == 1" @changeVideo="changeVideo" style="margin-left: 70px"/>
       </div>
     </v-container>
   </div>
@@ -15,7 +14,6 @@
 <script>
 import Header from "../components/Header.vue";
 import StreamingVideo from "../components/videolist/StreamingVideo";
-import NoneStreamingVideo from "../components/videolist/NoneStreamingVideo";
 import VideoSeeMore from "../components/videolist/VideoSeeMore";
 // import UploadVideo from "../components/UploadVideo.vue"
 
@@ -25,7 +23,6 @@ export default {
   components: {
     Header,
     StreamingVideo,
-    NoneStreamingVideo,
     VideoSeeMore,
     // UploadVideo
   },

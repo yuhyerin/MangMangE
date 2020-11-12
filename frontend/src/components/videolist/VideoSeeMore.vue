@@ -11,20 +11,6 @@
           controls
           style="max-height: 288px; width:100%; height:100%;"
         ></video>
-          <!-- <vue-plyr>
-            <video>
-              <source
-                :src="require(`@/assets/videos/${video.filepath}`)"
-              />
-              <track
-                kind="captions"
-                label="English"
-                srclang="en"
-                src="captions-en.vtt"
-                default
-              />
-            </video>
-          </vue-plyr> -->
         </v-col>
         <v-col cols="5" style="margin-left: 15px">
           <h2 class="video-info" @click="moveToVideoDetail(video.uid)" style="margin-bottom: 10px;">{{ video.title }}</h2>
