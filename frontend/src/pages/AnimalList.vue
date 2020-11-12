@@ -265,6 +265,7 @@
         </div>
       </div>
     </v-main>
+    <ScrollToTop />
   </v-app>
 </template>
 
@@ -272,6 +273,7 @@
 import AnimalCard from "../components/AnimalCard.vue";
 import AnimalInfo from "../components/AnimalInfo.vue";
 import AnimalListHeader from "../components/AnimalListHeader.vue";
+import ScrollToTop from "../components/ScrollToTop.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 
 import SERVER from "@/api/url";
@@ -301,6 +303,7 @@ export default {
     AnimalCard,
     AnimalListHeader,
     AnimalInfo,
+    ScrollToTop,
   },
   watch: {
     trigger(newValue, oldValue) {

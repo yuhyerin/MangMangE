@@ -21,17 +21,7 @@
           <p class="video-info" @click="moveToVideoDetail(video.uid)" style="line-height: 150%;">{{ video.content }}</p>
         </v-col>
     </v-row>
-    <v-btn
-      class="mx-2"
-      fab
-      dark
-      small
-      color="rgb(1, 118, 72)"
-      @click="scrollToTop"
-      style="position: fixed; bottom: 70px; right: 55px"
-    >
-      <v-icon dark>mdi-chevron-up</v-icon>
-    </v-btn>
+    <ScrollToTop />
   </div>
 </template>
 
@@ -40,8 +30,12 @@ import { mapActions } from 'vuex'
 import axios from 'axios'
 import router from '@/router'
 import SERVER from '@/api/url'
+import ScrollToTop from "@/components/ScrollToTop.vue"
 
 export default {
+  components: {
+    ScrollToTop
+  },
   data() {
     return {
       videos: [],
