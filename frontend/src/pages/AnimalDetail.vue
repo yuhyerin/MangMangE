@@ -1,7 +1,11 @@
 <template>
   <div>
     <Header />
-    <div style="position: fixed; top: 90px; left: 5%">
+    <div
+      class="backBtn"
+      style="position: fixed; top: 90px; left: 5%"
+      @click="moveToBack"
+    >
       <div style="display: flex; justify-content: center; height: 50px">
         <div
           style="display: flex; justify-content: center; align-items: center"
@@ -28,228 +32,229 @@
           height: 87vh;
         "
       >
-        <div
-          class="border"
-          style="
-            width: 30%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-around;
-          "
-        >
-          <h1>내 성향은?</h1>
-          <div>활동성향</div>
-          <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
+        <div class="border" style="width: 30%; height: 100%">
           <div
             style="
-              height: 5%;
               width: 100%;
-              border: 1px solid rgba(0, 0, 0, 0.3);
-              border-radius: 20px;
+              height: 80%;
               display: flex;
-              justify-content: center;
+              flex-direction: column;
               align-items: center;
+              justify-content: space-around;
             "
           >
+            <h1>내 성향은?</h1>
+            <div>활동성향</div>
+            <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
             <div
               style="
+                height: 5%;
                 width: 100%;
-                height: 100%;
-                border-top-left-radius: inherit;
-                border-bottom-left-radius: inherit;
-                text-align: center;
-                vertical-align: center;
+                border: 1px solid rgba(0, 0, 0, 0.3);
+                border-radius: 20px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
               "
-              :style="
-                this.checkTag(animalTag[0]) == 'E'
-                  ? 'background-color: rgb(232, 99, 100);'
-                  : ''
-              "
             >
-              동적성향
+              <div
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border-top-left-radius: inherit;
+                  border-bottom-left-radius: inherit;
+                  text-align: center;
+                  vertical-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                :style="
+                  this.checkTag(animalTag[0]) == 'E'
+                    ? 'background-color: rgb(232, 99, 100);'
+                    : ''
+                "
+              >
+                동적성향
+              </div>
+              <div
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border-top-right-radius: inherit;
+                  border-bottom-right-radius: inherit;
+                  text-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                :style="
+                  this.checkTag(animalTag[0]) == 'Q'
+                    ? 'background-color: rgb(130, 157, 212);'
+                    : ''
+                "
+              >
+                정젹성향
+              </div>
             </div>
+            <div>관계성향</div>
+            <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
             <div
               style="
+                height: 5%;
                 width: 100%;
-                height: 100%;
-                border-top-right-radius: inherit;
-                border-bottom-right-radius: inherit;
-                text-align: center;
+                border: 1px solid rgba(0, 0, 0, 0.3);
+                border-radius: 20px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
               "
-              :style="
-                this.checkTag(animalTag[0]) == 'Q'
-                  ? 'background-color: rgb(130, 157, 212);'
-                  : ''
-              "
             >
-              정젹성향
+              <div
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border-top-left-radius: inherit;
+                  border-bottom-left-radius: inherit;
+                  text-align: center;
+                  vertical-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                :style="
+                  this.checkTag(animalTag[2]) == 'S'
+                    ? 'background-color: rgb(238,158,85);'
+                    : ''
+                "
+              >
+                관계지향
+              </div>
+              <div
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border-top-right-radius: inherit;
+                  border-bottom-right-radius: inherit;
+                  text-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                :style="
+                  this.checkTag(animalTag[2]) == 'I'
+                    ? 'background-color: rgb(177, 148, 196);'
+                    : ''
+                "
+              >
+                독립지향
+              </div>
             </div>
-          </div>
-          <div>관계성향</div>
-          <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
-          <div
-            style="
-              height: 5%;
-              width: 100%;
-              border: 1px solid rgba(0, 0, 0, 0.3);
-              border-radius: 20px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
+            <div>적응성향</div>
+            <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
             <div
               style="
+                height: 5%;
                 width: 100%;
-                height: 100%;
-                border-top-left-radius: inherit;
-                border-bottom-left-radius: inherit;
-                text-align: center;
-                vertical-align: center;
+                border: 1px solid rgba(0, 0, 0, 0.3);
+                border-radius: 20px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
               "
-              :style="
-                this.checkTag(animalTag[2]) == 'S'
-                  ? 'background-color: rgb(238,158,85);'
-                  : ''
-              "
             >
-              관계지향
+              <div
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border-top-left-radius: inherit;
+                  border-bottom-left-radius: inherit;
+                  text-align: center;
+                  vertical-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                :style="
+                  this.checkTag(animalTag[3]) == 'W'
+                    ? 'background-color: rgb(251, 202, 84);'
+                    : ''
+                "
+              >
+                신중형
+              </div>
+              <div
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border-top-right-radius: inherit;
+                  border-bottom-right-radius: inherit;
+                  text-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                :style="
+                  this.checkTag(animalTag[3]) == 'A'
+                    ? 'background-color: rgb(123, 181, 123);'
+                    : ''
+                "
+              >
+                능동형
+              </div>
             </div>
+            <div>순종성향</div>
+            <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
             <div
               style="
+                height: 5%;
                 width: 100%;
-                height: 100%;
-                border-top-right-radius: inherit;
-                border-bottom-right-radius: inherit;
-                text-align: center;
+                border: 1px solid rgba(0, 0, 0, 0.3);
+                border-radius: 20px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
               "
-              :style="
-                this.checkTag(animalTag[2]) == 'I'
-                  ? 'background-color: rgb(177, 148, 196);'
-                  : ''
-              "
             >
-              독립지향
-            </div>
-          </div>
-          <div>적응성향</div>
-          <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
-          <div
-            style="
-              height: 5%;
-              width: 100%;
-              border: 1px solid rgba(0, 0, 0, 0.3);
-              border-radius: 20px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            <div
-              style="
-                width: 100%;
-                height: 100%;
-                border-top-left-radius: inherit;
-                border-bottom-left-radius: inherit;
-                text-align: center;
-                vertical-align: center;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-              :style="
-                this.checkTag(animalTag[3]) == 'W'
-                  ? 'background-color: rgb(251, 202, 84);'
-                  : ''
-              "
-            >
-              신중형
-            </div>
-            <div
-              style="
-                width: 100%;
-                height: 100%;
-                border-top-right-radius: inherit;
-                border-bottom-right-radius: inherit;
-                text-align: center;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-              :style="
-                this.checkTag(animalTag[3]) == 'A'
-                  ? 'background-color: rgb(123, 181, 123);'
-                  : ''
-              "
-            >
-              능동형
-            </div>
-          </div>
-          <div>순종성향</div>
-          <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
-          <div
-            style="
-              height: 5%;
-              width: 100%;
-              border: 1px solid rgba(0, 0, 0, 0.3);
-              border-radius: 20px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            <div
-              style="
-                width: 100%;
-                height: 100%;
-                border-top-left-radius: inherit;
-                border-bottom-left-radius: inherit;
-                text-align: center;
-                vertical-align: center;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-              :style="
-                this.checkTag(animalTag[1]) == 'F'
-                  ? 'background-color: rgb(89, 197, 173);'
-                  : ''
-              "
-            >
-              충직함
-            </div>
-            <div
-              style="
-                width: 100%;
-                height: 100%;
-                border-top-right-radius: inherit;
-                border-bottom-right-radius: inherit;
-                text-align: center;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-              :style="
-                this.checkTag(animalTag[1]) == 'C'
-                  ? 'background-color: rgb(214, 120, 157);'
-                  : ''
-              "
-            >
-              영민함
+              <div
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border-top-left-radius: inherit;
+                  border-bottom-left-radius: inherit;
+                  text-align: center;
+                  vertical-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                :style="
+                  this.checkTag(animalTag[1]) == 'F'
+                    ? 'background-color: rgb(89, 197, 173);'
+                    : ''
+                "
+              >
+                충직함
+              </div>
+              <div
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border-top-right-radius: inherit;
+                  border-bottom-right-radius: inherit;
+                  text-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                :style="
+                  this.checkTag(animalTag[1]) == 'C'
+                    ? 'background-color: rgb(214, 120, 157);'
+                    : ''
+                "
+              >
+                영민함
+              </div>
             </div>
           </div>
         </div>
@@ -279,14 +284,37 @@
           <div
             style="
               width: 100%;
-              height: 35%;
+              height: 40%;
               display: flex;
               justify-content: space-around;
               align-items: flex-start;
               flex-direction: column;
             "
           >
-            <div style="font-size: 30px">특징</div>
+            <div style="display: flex; width: 100%">
+              <div style="font-size: 30px; width: 80%">특징</div>
+              <div style="width: 20%; height: 100%">
+                <div style="display: flex; width: 100%" @click="setLiked">
+                  <v-icon
+                    large
+                    v-if="likeTrigger == false"
+                    color="rgb(255,0,0)"
+                  >
+                    mdi-heart-outline
+                  </v-icon>
+                  <transition name="bounce">
+                    <v-icon
+                      large
+                      v-if="likeTrigger == true"
+                      color="rgb(255,0,0)"
+                      style="position: absolute"
+                    >
+                      mdi-heart
+                    </v-icon>
+                  </transition>
+                </div>
+              </div>
+            </div>
             <div
               style="
                 width: 100%;
@@ -366,12 +394,12 @@
             </diV>
           </div>
           <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
-          <div style="width: 100%; height: 45%">내용2</div>
+          <div style="width: 100%; height: 50%">내용2</div>
           <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
           <div
             style="
               width: 100%;
-              height: 20%;
+              height: 10%;
               display: flex;
               justify-content: center;
               align-items: center;
@@ -379,7 +407,7 @@
           >
             <v-btn
               width="95%"
-              height="40%"
+              height="70%"
               color="rgb(1,118,72)"
               @click="moveTo('/adoption')"
               :disabled="this.adoptionBtn || this.admin"
@@ -414,10 +442,12 @@
 import Header from "../components/Header.vue";
 import axios from "axios";
 import SERVER from "@/api/url";
+import Liked from "../components/Liked.vue";
 
 export default {
   components: {
     Header,
+    Liked,
   },
   data() {
     return {
@@ -481,7 +511,6 @@ export default {
             },
           })
           .then((res) => {
-            console.log("유저 정보 있음", res.data);
             this.animalInfo = res.data.animalList;
             this.adoptionBtn = res.data.adoptCheck;
             axios
@@ -492,7 +521,6 @@ export default {
               })
               .then((res) => {
                 this.admin = res.data.success;
-                console.log(this.admin);
               });
           })
           .catch((err) => {
@@ -523,7 +551,6 @@ export default {
       } else {
         if (this.likeTrigger == true) {
           // 좋아요 해제
-          console.log("false");
           SERVER.tokenCheck(() => {
             axios
               .post(
@@ -537,16 +564,13 @@ export default {
                   },
                 }
               )
-              .then((res) => {
-                console.log(res);
-              })
+              .then((res) => {})
               .catch((err) => {
                 console.log(err);
               });
           });
         } else {
           // 좋아요 등록
-          console.log("true");
           SERVER.tokenCheck(() => {
             axios
               .post(
@@ -560,9 +584,7 @@ export default {
                   },
                 }
               )
-              .then((res) => {
-                console.log(res);
-              })
+              .then((res) => {})
               .catch((err) => {
                 console.log(err);
               });
@@ -576,7 +598,6 @@ export default {
     },
 
     getVideos() {
-      console.log("dNo", this.animalInfo);
       axios
         .get(SERVER.URL + "/newuser/video/search", {
           params: {
@@ -584,7 +605,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data.videoList);
           if (res.data.videoList.length >= 4) {
             this.videos = res.data.videoList.slice(-4);
           } else {
@@ -594,7 +614,6 @@ export default {
     },
 
     checkTag(tag) {
-      console.log("tag", tag);
       if (
         tag == "활동적인" ||
         tag == "에너지뿜뿜" ||
@@ -646,11 +665,18 @@ export default {
         return "W";
       }
     },
+    moveToBack() {
+      this.$router.push("/animals");
+    },
   },
 };
 </script>
 
 <style>
+.backBtn:hover {
+  border-bottom: 2px solid rgb(0, 0, 0, 0.3);
+  cursor: pointer;
+}
 .border {
   border: 1px solid rgba(0, 0, 0, 0.12);
   padding: 10px;
