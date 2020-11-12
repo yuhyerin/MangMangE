@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-row>
-      <v-col style="padding: 15px; margin-left: 10px;">
+      <v-col cols="5" style="padding: 15px; margin-left: 10px;">
         <v-row class="offair" v-show="!onair">
           <div style="height: 25px; background-color: red; padding: 2px 7px 2px 7px; border-radius: 13px; margin: 5px;">
             <h4 style="color: white; text-align: center; vertical-align: center;">LIVE</h4>
           </div>
-          <div style="margin-top: auto; margin-bottom: auto; margin-left: 170px; cursor: pointer;" @click="StartBtn">
+          <div @click="StartBtn" class="start-btn blinking">
             <h2 style="color: white;">라이브 보기</h2>
           </div>
         </v-row>
@@ -14,7 +14,7 @@
           <video
             id="remoteVideo"
             autoplay playsinline
-            style="width: 100%; max-width: 545px; height:295px;"
+            style="width: 100%; max-width: 439px; height:295px;"
           ></video>
         </v-row>
       </v-col>
@@ -30,7 +30,7 @@
           </div>
         </v-row>
         <v-row>
-          <div style="padding-left: 5px; line-height: 150%">
+          <div style="line-height: 150%">
             실시간 라이브 중입니다 :) <br />
             새로온 댕수를 만나러 오세요 ~ <br />
             ^^ <br />
@@ -38,7 +38,7 @@
           </div>
         </v-row>
         <v-row style="margin-top: 115px">
-          <v-col style="display: flex; justify-content: flex-start; margin-left: 0;">
+          <v-col style="padding-left: 0;">
             <img @click="moveToSupport" src="@/assets/image/kakaoBtn.png" alt="" style="width: 150px; cursor: pointer">
           </v-col>
         </v-row>
@@ -55,8 +55,8 @@
         ></video>
         <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
-      <div class="more-videos">
-        <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x"></i>
+      <div style="margin-top: 50px;">
+        <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x more-videos"></i>
       </div>
     </v-row>
   </div>
@@ -260,8 +260,6 @@ export default {
 <style scoped>
 .more-videos {
   padding: 20px;
-  display: flex;
-  align-items: center;
 }
 .more-videos:hover {
   color: silver;
@@ -272,14 +270,41 @@ export default {
   color: rgb(1, 118, 72);
 }
 
-div.videoTitle:hover {
+.videoTitle:hover {
   cursor: pointer;
 }
 .offair {
-  max-width: 545px; 
+  max-width: 439px; 
   width: 100%; 
   height:295px; 
   border: 1px solid black; 
   background-color: black;
 }
+.start-btn {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 110px;
+  cursor: pointer;
+  border: 2px solid white;
+  padding: 7px;
+  border-radius: 8px;
+}
+.blinking{
+	-webkit-animation:blink 1.0s ease-in-out infinite alternate;
+    -moz-animation:blink 1.0s ease-in-out infinite alternate;
+    animation:blink 1.0s ease-in-out infinite alternate;
+}
+@-webkit-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-moz-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
 </style>
