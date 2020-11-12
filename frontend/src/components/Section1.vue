@@ -53,7 +53,6 @@ export default {
 
 <style scoped>
 .s0 {
-  /* background-image: url("../assets/image/mainpage/section1.jpg"); */
   background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
     url("../assets/image/mainpage/section1.jpg");
   background-size: cover;
@@ -106,12 +105,6 @@ a.moveToSection2 {
   border-bottom: 2px solid black;
   text-decoration: none;
   color: black;
-  /* color: black;
-  text-decoration: none;
-  background: black;
-  border: 5px solid black;
-  color: white;
-  border-radius: 5px; */
 }
 
 a.moveToSection2:link {
@@ -125,7 +118,6 @@ a.moveToSection2:visited {
 .mainWindow {
   width: 50%;
   height: 40%;
-  /* background: white; */
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 15px;
   display: flex;

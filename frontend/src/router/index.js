@@ -7,8 +7,6 @@ import AnimalDetail from '../pages/AnimalDetail.vue'
 import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
-// import VideoList from '../pages/VideoList.vue'
-// import UploadVideo from '../pages/UploadVideo.vue'
 import StreamingTest from '../pages/StreamingTest.vue'
 import StreamingViewer from '../pages/StreamingViewer.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
@@ -18,7 +16,6 @@ import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
-// import UploadTest from '../pages/UploadTest.vue'
 import Live from '../pages/Live.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
 
@@ -104,11 +101,6 @@ const routes = [
     name: 'PrivacyPolicy',
     component: PrivacyPolicy
   },
-  // {
-  //   path : '/video/upload',
-  //   name:'UploadVideo',
-  //   component: UploadTest
-  // },
   {
     path: '/live',
     name: 'Live',

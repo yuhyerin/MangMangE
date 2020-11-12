@@ -17,9 +17,6 @@
             align-items: center;
           "
         >
-          <!-- <div>
-            <v-icon color="black"> mdi-arrow-left </v-icon>
-          </div> -->
           <div
             style="
               display: flex;

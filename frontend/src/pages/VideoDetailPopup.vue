@@ -1,14 +1,14 @@
 <template>
   <div style="margin-left: 10px;">
-    <h1>
+    <h2>
       후원이 완료됐습니다
-    </h1>
-    <h1>
+    </h2>
+    <h2>
       잠시 후 창을 자동으로 닫습니다
-    </h1>
-    <h1>
+    </h2>
+    <h2>
       감사합니다
-    </h1>
+    </h2>
   </div>
 </template>
 

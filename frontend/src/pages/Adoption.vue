@@ -32,7 +32,6 @@
                   <label>1. 일련번호</label>
                 </div>
                 <div class="col-10">
-                  <!-- <p class="serial-p" style="border: 0.5px solid #bbb"> -->
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
                     {{ dogSerial }}
                   </p>
@@ -44,7 +43,6 @@
                 </div>
                 <div class="col-10">
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
-                  <!-- <p class="age-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogAge }}
                   </p>
                 </div>
@@ -55,7 +53,6 @@
                 </div>
                 <div class="col-10">
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
-                  <!-- <p class="breed-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogBreed }}
                   </p>
                 </div>
@@ -66,7 +63,6 @@
                 </div>
                 <div class="col-10">
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
-                  <!-- <p class="gender-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogGender }}
                   </p>
                 </div>
@@ -77,7 +73,6 @@
                 </div>
                 <div class="col-10">
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
-                  <!-- <p class="fur-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogFur }}
                   </p>
                 </div>
@@ -433,24 +428,25 @@ export default {
       }
     },
 
-    personNumberAuthenticationInput() {
-      if (
-        this.personNumberAuthenticationInput == this.personNumberAuthentication
-      ) {
-        this.personNumberAuthenticationFinish = 1;
-      }
+    // 현재 문자 인증 막아 놓은 상태라 콘솔 에러 막기 위해 주석
+    // personNumberAuthenticationInput() {
+    //   if (
+    //     this.personNumberAuthenticationInput == this.personNumberAuthentication
+    //   ) {
+    //     this.personNumberAuthenticationFinish = 1;
+    //   }
 
-      if (this.personNumberAuthenticationInput.length === 6) {
-        if (
-          this.personNumberAuthenticationInput !=
-          this.personNumberAuthentication
-        ) {
-          this.personNumberAuthenticationWrong = 1;
-        } else {
-          this.personNumberAuthenticationWrong = 0;
-        }
-      }
-    },
+    //   if (this.personNumberAuthenticationInput.length === 6) {
+    //     if (
+    //       this.personNumberAuthenticationInput !=
+    //       this.personNumberAuthentication
+    //     ) {
+    //       this.personNumberAuthenticationWrong = 1;
+    //     } else {
+    //       this.personNumberAuthenticationWrong = 0;
+    //     }
+    //   }
+    // },
 
     personEmail() {
       if (this.personEmail.length > 0) {
@@ -521,7 +517,6 @@ hr.dog-information-startline {
 
 div.selfcheck {
   background: orange;
-  /* background: rgb(244, 236, 225); */
   padding: 12px 12px 12px 12px;
 }
 
@@ -537,8 +532,6 @@ ul.selfchecklist {
 
 div.list {
   background: orange;
-  /* background: rgb(244, 236, 225); */
-  /* background: #d9edf7; */
   padding: 12px 12px 12px 12px;
 }
 
@@ -564,7 +557,6 @@ div.col-8 {
 }
 
 hr.dog-information-endline {
-  /* border-top: 0.5px solid gray; */
   border-top: 1px solid #eee;
   margin-top: 10px;
   margin-bottom: 10px;
