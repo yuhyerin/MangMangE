@@ -433,6 +433,7 @@ export default {
       }
     } else {
       this.loadingTrigger = true;
+      console.log("요청");
       axios
         .get(SERVER.URL + "/newuser/animal/allread", {
           headers: {
