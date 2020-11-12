@@ -42,10 +42,6 @@ public class VideoController {
 	// 특정 비디오
 	@GetMapping("/newuser/video/detailvideo")
 	public ResponseEntity<HashMap<String, Object>> detailvideo(@RequestParam Long uid) {
-<<<<<<< HEAD
-		System.out.println("DETAILVIDEO CONTROLLER START");
-=======
->>>>>>> a560bf96e2d7f382879b0bfda692448e144f17f3
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		try {
 			AnimalVideo av = videoService.detailvideo(uid);
