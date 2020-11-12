@@ -120,7 +120,7 @@ export default {
         })
         .then((res) => {
           console.log(res)
-          if(res.status==202) {
+          if (res.status==202) {
             console.log(res)
             this.desertionNoCheck = 2;  // 존재하지 않는 일련번호입니다.
           }
@@ -138,7 +138,7 @@ export default {
     },
 
     file() {
-      if(this.file[0].name.slice(-3) == 'mp4'){
+      if (this.file[0].name.slice(-3) == 'mp4'){
         SERVER.tokenCheck(() => {
         axios.get(SERVER.URL+'/admin/upload/checkFile',{
           params:{
@@ -150,7 +150,7 @@ export default {
         })
         .then((res)=>{
           console.log(res)
-          if(res.status == 202) {
+          if (res.status == 202) {
             this.selectedFileCheck = 1;
           }
           else {
@@ -205,7 +205,7 @@ export default {
           .then((res)=>{
             console.log(res.data)
             formData.append("mfile", this.file[0], res.data.uid+"_"+this.file[0].name);
-            if(res.data.success == true) {
+            if (res.data.success == true) {
               axios.post(SERVER.URL+'/admin/upload',formData,
             {
               headers: {
