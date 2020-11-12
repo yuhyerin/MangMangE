@@ -5,7 +5,7 @@
       <div>
       <!-- <UploadVideo /> -->
         <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo"/>
-        <VideoSeeMore v-if="pageTrigger == 1" @changeVideo="changeVideo" style="margin-left: 70px"/>
+        <VideoSeeMore v-if="pageTrigger == 1" @changeVideo="changeVideo"/>
       </div>
     </v-container>
   </div>
