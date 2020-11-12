@@ -15,17 +15,11 @@
           v-model="desertionNo"
           outlined
         ></v-text-field>
-        <!-- <v-btn 
-          small
-          elevation="0"
-          style="padding: 0; background: rgba(255, 255, 255, 0);"
-        > -->
         <v-icon style="color: green; padding: 0;"
           elevation="0"
           :disabled="desertionNoCheck!=0">
           mdi-checkbox-marked-circle
         </v-icon>
-        <!-- </v-btn> -->
       </div>
       <p v-if="desertionNoCheck==1" style="color: orange;">일련번호는 15자입니다.</p>
       <p v-else-if="desertionNoCheck==2" style="color: red;">존재하지 않는 일련번호입니다.</p>
@@ -37,28 +31,15 @@
           outlined
           style="padding: 0;"
         ></v-text-field>
-        <!-- <v-btn
-          class="mx-2"
-          small
-          elevation="0"
-          style="padding: 0; background: rgba(255, 255, 255, 0);"
-        > -->
           <v-icon style="color: green; padding: 0;" 
             elevation="0"
             :disabled="title.length < 1">
             mdi-checkbox-marked-circle
           </v-icon>
-        <!-- </v-btn> -->
       </div>
 
       <div style="display: flex; margin-top: 25px; padding-bottom: 12px;">
         <input type="file" ref="file" @change="selectFile" :disabled="desertionNoCheck !=0"/>
-        <!-- <v-btn
-          class="mx-2"
-          small
-          elevation="0"
-          style="padding: 0; background: rgba(255, 255, 255, 0);"
-        > -->
           <v-icon
             style="color: green;" 
             :disabled="selectedFileCheck!=3">

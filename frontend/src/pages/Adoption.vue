@@ -1,13 +1,13 @@
 <template>
   <div>
     <Header />
-    <div class="container" style="height: 710px; margin-top: 65px">
-      <div class="row">
-        <div class="application col-lg-10 col-md-10 col-sm-10">
-          <h3 class="application-title">입양신청서</h3>
-          <div class="selfcheck">
-            <h4 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h4>
-            <ul class="selfchecklist">
+    <div class="container">
+      <div>
+        <div>
+          <h3>입양신청서</h3>
+          <div>
+            <h4>입양할 준비가 되셨는지 확인해보세요</h4>
+            <ul>
               <li>입양에 필요한 비용을 감당하실 수 있나요?</li>
               <li>정기적인 검진에 따른 비용을 감당하실 수 있나요?</li>
               <li>사료, 간식, 장난감 등의 비용을 감당하실 수 있나요?</li>
@@ -23,59 +23,59 @@
               </li>
             </ul>
           </div>
-          <hr class="dog-information-startline" />
+          <hr/>
           <h3>유기동물 정보</h3>
-          <div class="flex">
-            <div class="dog-information">
-              <div class="row dog-information-serial">
-                <div class="col-2">
+          <div>
+            <div>
+              <div>
+                <div>
                   <label>1. 일련번호</label>
                 </div>
-                <div class="col-10">
+                <div>
                   <!-- <p class="serial-p" style="border: 0.5px solid #bbb"> -->
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
                     {{ dogSerial }}
                   </p>
                 </div>
               </div>
-              <div class="row dog-information-age">
-                <div class="col-2">
+              <div>
+                <div>
                   <label>2. 추정나이</label>
                 </div>
-                <div class="col-10">
+                <div>
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
                   <!-- <p class="age-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogAge }}
                   </p>
                 </div>
               </div>
-              <div class="row dog-information-breed">
-                <div class="col-2">
+              <div>
+                <div>
                   <label>3. 종류</label>
                 </div>
-                <div class="col-10">
+                <div>
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
                   <!-- <p class="breed-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogBreed }}
                   </p>
                 </div>
               </div>
-              <div class="row dog-information-gender">
-                <div class="col-2">
+              <div>
+                <div>
                   <label>4. 성별</label>
                 </div>
-                <div class="col-10">
+                <div>
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
                   <!-- <p class="gender-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogGender }}
                   </p>
                 </div>
               </div>
-              <div class="row dog-information-fur">
-                <div class="col-2">
+              <div>
+                <div>
                   <label>5. 털색</label>
                 </div>
-                <div class="col-10">
+                <div>
                   <p style="border-bottom : 0.5px solid #bbb; width: 30%;">
                   <!-- <p class="fur-p" style="border: 0.5px solid #bbb"> -->
                     {{ dogFur }}
@@ -84,41 +84,33 @@
               </div>
             </div>
           </div>
-          <hr class="dog-information-endline" />
+          <hr/>
 
           <h4>입양희망자 정보</h4>
-          <div class="adopter-information">
-            <div class="row adopter-information-name">
-              <div class="col-2">
-                <label>1. 제목</label>
-              </div>
-              <div class="col-10">
-                <input style="border: 0.5px solid #bbb" v-model="personTitle" />
-                <label
-                  class="personTitle"
-                  v-if="checkPersonTitle === 0"
-                  style="color: red; font-size: small"
-                  >제목을 입력해주세요</label
-                >
-              </div>
-              <div class="col-2">
-                <label>2. 성명</label>
-              </div>
-              <div class="col-10">
-                <input style="border: 0.5px solid #bbb" v-model="personName" />
-                <label
-                  class="personNameLabel"
-                  v-if="checkPersonName === 0"
-                  style="color: red; font-size: small"
-                  >성명을 입력해주세요</label
-                >
-              </div>
+          <div>
+            <div>
+              <v-col>
+                <v-text-field
+                  v-model="personTitle"
+                  label="제목"
+                  clearable
+                  :rules="rule[0]"
+                ></v-text-field>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  v-model="personName"
+                  label="이름"
+                  clearable
+                  :rules="rule[1]"
+                ></v-text-field>
+              </v-col>
             </div>
-            <div class="row adopter-information-number">
-              <div class="col-2">
+            <div>
+              <div>
                 <label>3. 휴대폰</label>
               </div>
-              <div class="col-2">
+              <div>
                 <input
                   style="border: 0.5px solid #bbb"
                   v-model="firstNum"
@@ -130,24 +122,23 @@
                   >인증을 완료해주세요</label
                 >
               </div>
-              <div class="col-2">
+              <div>
                 <input
                   style="border: 0.5px solid #bbb"
                   v-model="middleNum"
                   placeholder="1234"
                 />
               </div>
-              <div class="col-2">
+              <div>
                 <input
                   style="border: 0.5px solid #bbb"
                   v-model="lastNum"
                   placeholder="5678"
                 />
               </div>
-              <div class="col-4">
+              <div>
                 <input
                   v-if="pressedAuthenticationBtn === 0"
-                  class="check-number"
                   @click="phoneAuthentication"
                   style="
                     border: 0.5px solid #bbb;
@@ -157,7 +148,7 @@
                   type="button"
                   value="문자인증"
                 />
-                <div class="person-authentication-check">
+                <div>
                   <input
                     v-if="pressedAuthenticationBtn === 1"
                     placeholder="인증번호를 입력해주세요"
@@ -177,11 +168,11 @@
                 </div>
               </div>
             </div>
-            <div class="row adopter-information-email">
-              <div class="col-2">
+            <div>
+              <div>
                 <label>4. 이메일</label>
               </div>
-              <div class="col-10">
+              <div>
                 <input
                   style="border: 0.5px solid #bbb"
                   v-model="personEmail"
@@ -194,14 +185,14 @@
                 >
               </div>
             </div>
-            <div class="row adopter-information-personal">
-              <div class="col-12">
+            <div>
+              <div>
                 <label>5. 개인정보 이용에 대한 동의</label>
               </div>
             </div>
-            <div class="adopter-information-personal-list">
-              <div class="list">
-                <ul class="adopter-information-personal-ul">
+            <div>
+              <div>
+                <ul>
                   <li>
                     개인정보의 보유 및 이용기간: 3년(관계법령에서 정한 일정한
                     기간)
@@ -217,7 +208,7 @@
                 </ul>
               </div>
             </div>
-            <div class="adopter-information-personal-allow">
+            <div>
               <p style="margin-bottom: 3px">
                 법률에서 정하는 경우를 제외하고 귀하의 동의 없이 개인정보를 제
                 3자에게 제공하지 않습니다.
@@ -246,10 +237,9 @@
               </div>
             </div>
             <div
-              class="apply-finish"
               style="display: flex; justify-content: center"
             >
-              <button class="apply-button" @click="adoptionCheck()">
+              <button @click="adoptionCheck()">
                 신청
               </button>
             </div>
@@ -301,6 +291,11 @@ export default {
       checkPersonName: 1,
       checkPersonEmail: 1,
       checkPersonCheck: 1,
+
+      rule: [
+        [(value) => !!value || "제목을 입력해 주세요."],
+        [(value) => !!value || "이름을 입력해 주세요."]
+      ]
     };
   },
 
@@ -502,89 +497,3 @@ export default {
   },
 };
 </script>
-
-<style>
-div.application {
-  margin: 0 auto;
-}
-
-hr.dog-information-startline {
-  border-top: 1px solid #eee;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.application-title {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-div.selfcheck {
-  background: orange;
-  /* background: rgb(244, 236, 225); */
-  padding: 12px 12px 12px 12px;
-}
-
-.selfcheckstart {
-  text-align: center;
-}
-
-ul.selfchecklist {
-  list-style-position: inside;
-  padding-left: 15px;
-  list-style-type: square;
-}
-
-div.list {
-  background: orange;
-  /* background: rgb(244, 236, 225); */
-  /* background: #d9edf7; */
-  padding: 12px 12px 12px 12px;
-}
-
-button.check-number {
-  background: black;
-  color: white;
-}
-
-div.adopter-information-personal-allow {
-  margin-top: 10px;
-}
-
-ul.adopter-information-personal-ul {
-  list-style-position: inside;
-  padding-left: 15px;
-  list-style-type: square;
-}
-
-div.col-2,
-div.col-10,
-div.col-8 {
-  padding: 12px 12px 5px 12px;
-}
-
-hr.dog-information-endline {
-  /* border-top: 0.5px solid gray; */
-  border-top: 1px solid #eee;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-p.serial-p,
-p.name-p,
-p.breed-p,
-p.gender-p {
-  margin-bottom: 0;
-}
-
-input {
-  width: 100%;
-}
-
-button.apply-button {
-  background: green;
-  color: white;
-  width: 30%;
-  border: 10px solid green;
-}
-</style>
