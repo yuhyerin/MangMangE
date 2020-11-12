@@ -10,7 +10,7 @@
         :src="require(`@/assets/videos/${video.filepath}`)"
         type="video/mp4"
         controls
-        style="max-height: 200px; float:"
+        style="max-height: 200px; width: 100%"
       ></video>
       </div>
       <h2 class="video-info" @click="moveToVideoDetail(video.uid)" style="margin-bottom: 5px;">{{ video.title }}</h2>
