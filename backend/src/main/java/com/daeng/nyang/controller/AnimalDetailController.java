@@ -30,12 +30,10 @@ public class AnimalDetailController {
 	// 비회원
 	@GetMapping("/newuser/animal/detail")
 	public ResponseEntity<HashMap<String, Object>> animalDetail(@RequestParam Long desertion_no) {
-		System.out.println("CONTROLLER START");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		AnimalListFE animal = animalService.animalDetail(desertion_no); // animal 정보
 		if (animal != null)
 			map.put("animalList", animal);
-		System.out.println(map.toString());
 		if (map.size() == 0)
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		return new ResponseEntity<>(map, HttpStatus.OK);
@@ -45,7 +43,6 @@ public class AnimalDetailController {
 	@GetMapping("/user/animal/detail")
 	public ResponseEntity<HashMap<String, Object>> animalDetailUser(@RequestParam Long desertion_no,
 			HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
 		String user_id = user.getAccount().getUser_id();
@@ -59,7 +56,6 @@ public class AnimalDetailController {
 			map.put("adoptCheck", true);
 		else
 			map.put("adoptCheck", false);
-		System.out.println(map.toString());
 		if (map.size() == 0)
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		return new ResponseEntity<>(map, HttpStatus.OK);

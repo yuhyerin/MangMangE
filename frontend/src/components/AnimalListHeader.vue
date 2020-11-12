@@ -317,4 +317,7 @@ export default {
   padding: 2px 5px 2px 5px;
   background-color: rgb(180, 180, 180);
 }
+.logo {
+  cursor: pointer;
+}
 </style>

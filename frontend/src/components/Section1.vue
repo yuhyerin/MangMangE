@@ -11,7 +11,7 @@
         "
       >
         <div class="mainWindow">
-          <div style="height: 30%">
+          <div style="height: 30%; padding-top: 20px; line-height: 220%">
             <h2 style="text-align: center">지금 당신에게 맞는</h2>
             <h2 style="text-align: center">반려동물을 찾아보세요</h2>
           </div>
@@ -46,9 +46,12 @@ export default {
   name: "Section1",
   methods: {
     ...mapMutations(["setEventListener"]),
+    ...mapMutations(["resetSurvey"]),
     moveTo(page) {
       if (page == "/animals") {
         this.setEventListener = 2;
+      } else if (page == "/survey") {
+        this.resetSurvey(null);
       }
       this.$router.push(page);
     },
@@ -110,6 +113,7 @@ export default {
 a.moveToSection2 {
   border-bottom: 2px solid black;
   text-decoration: none;
+  color: black;
   /* color: black;
   text-decoration: none;
   background: black;
@@ -123,7 +127,7 @@ a.moveToSection2:link {
 }
 
 a.moveToSection2:visited {
-  color: white;
+  color: black;
 }
 
 .mainWindow {

@@ -2,10 +2,19 @@
   <v-app>
     <div style="display: flex; height: 100%; width: 100%">
       <div
+        class="homeBtn"
+        style="position: absolute; top: 20px; left: 20px; font-size: 20px"
+        @click="moveToHome"
+      >
+        <v-icon> mdi-arrow-left </v-icon>
+        홈으로
+      </div>
+      <div
         style="
           display: flex;
           align-items: center;
           justify-content: center;
+          flex-direction: column;
           width: 100%;
           background-color: rgb(244, 236, 225);
         "
@@ -72,9 +81,16 @@ export default {
     register(value) {
       this.pageTrigger = value;
     },
+    moveToHome() {
+      location.href = "/";
+    },
   },
 };
 </script>
 
 <style>
+.homeBtn:hover {
+  cursor: pointer;
+  border-bottom: 2px solid gray;
+}
 </style>

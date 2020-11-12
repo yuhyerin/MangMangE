@@ -16,7 +16,6 @@ public class SurveyService {
 	
 	// 설문저장
 	public Survey join(Survey survey) {
-		System.out.println("Survey Create Service");
         Survey newSurvey = new Survey();
         if(findSurveyByUserid(survey.getUser_id()) == null) {
         	return surveyRepo.save(survey);
@@ -31,10 +30,8 @@ public class SurveyService {
 	
 	// 유저 아이디를 통해 설문정보 가져오기.
 	public Survey findSurveyByUserid(String user_id) {
-		System.out.println("FINDSURVEY");
 		Optional<Survey> survey = surveyRepo.findSurveyByUserId(user_id);
 		if(survey.isPresent()) {
-			System.out.println(survey.get().toString());
 			return survey.get();
 		}
 		return null;

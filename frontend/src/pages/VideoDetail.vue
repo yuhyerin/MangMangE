@@ -1,25 +1,23 @@
 <template>
   <div class="video-detail">
     <Header />
-    <v-container fluid style="margin-top: 70px; padding-left: 100px">
+    <v-container fluid style="margin-top: 50px; padding-left: 100px">
       <v-layout col wrap>
         <v-col cols="8">
           <div class="video-play">
-            <vue-plyr>
-              <video>
-                <source
-                  :src="require(`@/assets/videos/${video.filepath}`)"
-                  type="video/mp4"
-                />
-                <track
-                  kind="captions"
-                  label="English"
-                  srclang="en"
-                  src="captions-en.vtt"
-                  default
-                />
-              </video>
-            </vue-plyr>
+            <video
+              :src="require(`@/assets/videos/${video.filepath}`)"
+              type="video/mp4"
+              controls
+              autoplay
+              style="max-height: 505px; width: 100%; height: 100%"
+            ></video>
+            <!-- <vue-plyr>
+                <video>
+                  <source :src="require(`@/assets/videos/${video.filepath}`)"/>
+                  <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
+                </video>  
+              </vue-plyr> -->
           </div>
           <v-row>
             <v-col style="padding-bottom: 0">
@@ -36,47 +34,53 @@
           </v-row>
           <div class="video-info" style="padding-left: 5px">
             <p style="color: darkgray; padding-bottom: 10px">
-              <img
-                src="@/assets/image/play.png"
-                alt=""
-                style="width: 10px; margin-right: 3px"
-              />203,202 | {{ video.regtime }}
+              <i class="far fa-user fa-xs" style="margin-right: 5px"></i
+              >{{ video.writer }} |
+              <i class="fas fa-calendar-day fa-xs" style="margin-left: 5px"></i>
+              {{ video.regtime }}
             </p>
             <p style="padding-bottom: 10px">{{ video.content }}</p>
             <hr />
             <p class="animal-info" @click="moveToAnimal(video.desertion_no)">
-              # {{ video.desertion_no }}
+              <v-icon> mdi-magnify-plus </v-icon>프로필 보기
             </p>
           </div>
         </v-col>
 
-        <v-col cols="3" style="padding-left: 30px">
+        <v-col cols="3" style="padding-left: 20px">
           <div class="next-videolist">
             <p style="font-size: 1.1rem">추천 동영상</p>
-            <v-row v-for="nextvideo in nextVideoList" :key="nextvideo.uid">
+            <v-row v-for="rec in randomRecList" :key="rec.uid">
               <v-col style="padding-right: 8px">
-                <vue-plyr>
-                  <video>
-                    <source
-                      :src="require(`@/assets/videos/${nextvideo.filepath}`)"
-                      type="video/mp4"
-                      height="80px"
-                    />
-                    <track
-                      kind="captions"
-                      label="English"
-                      srclang="en"
-                      src="captions-en.vtt"
-                      default
-                    />
-                  </video>
-                </vue-plyr>
-                <!-- <div style="background-color: black; height: 100px;">썸네일</div> -->
+                <video
+                  @click="moveToAnoterVideo(rec.uid)"
+                  :src="require(`@/assets/videos/${rec.filepath}`)"
+                  type="video/mp4"
+                  style="
+                    max-height: 89px;
+                    width: 100%;
+                    height: 100%;
+                    background-color: black;
+                    cursor: pointer;
+                  "
+                ></video>
+                <!-- <vue-plyr>
+                    <video>
+                      <source :src="require(`@/assets/videos/${rec.filepath}`)" height="80px"/>
+                      <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
+                    </video>  
+                  </vue-plyr> -->
               </v-col>
-              <v-col>
-                <h4>{{ nextvideo.title }}</h4>
+              <v-col
+                @click="moveToAnoterVideo(rec.uid)"
+                style="cursor: pointer"
+              >
+                <h4>{{ rec.title }}</h4>
                 <p style="color: darkgray; font-size: 0.8rem">
-                  {{ nextvideo.regtime }}
+                  {{ rec.writer }}
+                </p>
+                <p style="color: darkgray; font-size: 0.8rem">
+                  {{ rec.regtime }}
                 </p>
               </v-col>
             </v-row>
@@ -92,7 +96,6 @@ import Header from "../components/Header.vue";
 import SERVER from "@/api/url";
 import axios from "axios";
 import qs from "qs";
-import { mapActions } from "vuex";
 
 const ADMIN_KEY = process.env.kakaopay_admin_key;
 
@@ -105,6 +108,8 @@ export default {
       videoID: this.$route.params.videoId,
       video: [],
       nextVideoList: [],
+      recommendVideoList: [],
+      randomRecList: [],
     };
   },
   created() {
@@ -163,11 +168,6 @@ export default {
     },
     getVideoList() {
       axios.get(SERVER.URL + SERVER.ROUTES.getAllVideos).then((res) => {
-        // res.data.VideoList.forEach(item => {
-        // if(item.uid !== Number(this.videoID))
-        // {
-        //   this.nextVideoList = item
-        // }
         this.nextVideoList = res.data.VideoList;
         for (let i = 0; i < this.nextVideoList.length; i++) {
           var item = this.nextVideoList[i];
@@ -178,7 +178,36 @@ export default {
           var regTime = year + "-" + month + "-" + date;
           item.regtime = regTime;
         }
+        this.nextVideoList.forEach((val) => {
+          if (val.uid !== Number(this.videoID)) {
+            this.recommendVideoList.push(val);
+          }
+        });
+        this.randomRec(this.recommendVideoList);
+        // var randomRec = this.recommendVideoList
+        // randomRec.sort(function(a, b) {
+        //   return 0.5 - Math.random()
+        // })
       });
+    },
+    randomRec(recList) {
+      var shuffle = recList.slice();
+      var len = shuffle.length;
+      var i = len;
+      while (i--) {
+        var p = parseInt(Math.random() * len);
+        var t = shuffle[i];
+        shuffle[i] = shuffle[p];
+        shuffle[p] = t;
+      }
+      if (shuffle.length > 4) {
+        this.randomRecList = shuffle.slice(0, 5);
+      } else {
+        this.randomRecList = shuffle;
+      }
+    },
+    moveToAnoterVideo(idx) {
+      location.href = "/video" + `/${idx}`;
     },
   },
 };
@@ -194,7 +223,10 @@ export default {
 }
 .animal-info {
   cursor: pointer;
-  color: red;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  margin-top: 5px;
+}
+.animal-info:hover {
+  font-weight: bold;
 }
 </style>

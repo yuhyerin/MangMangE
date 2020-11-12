@@ -73,7 +73,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log('엑세스 토큰 재발급 성공', res);
           if (res.data.success) {
             $cookies.set("accessToken", res.data.accessToken);
             $cookies.set("expireTime", res.data.expireTime);

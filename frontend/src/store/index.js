@@ -59,6 +59,8 @@ export default new Vuex.Store({
 
     resetSurvey(state, payload) {
       state.survey = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+      state.userMbti = ""
+      state.page = 1
     },
 
     goPage(state, pageNum) {

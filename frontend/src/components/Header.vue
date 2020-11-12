@@ -33,7 +33,7 @@
       "
     >
       <img
-        src="../assets/image/logo4.png"
+        src="../assets/image/logofinal.png"
         alt="logo"
         style="height: 70%; padding-left: 20px"
       />
@@ -130,7 +130,7 @@ export default {
     },
     moveTo(page) {
       if (this.$router.history.current.path == page) {
-        location.reload(true);
+        // location.reload(true);
       }
       if (page == "/animals") {
         this.setEventListener(2);
@@ -234,7 +234,6 @@ export default {
   background-color: rgb(180, 180, 180);
 }
 .logo {
-  background-image: url("../assets/image/logo.png");
   cursor: pointer;
 }
 </style>

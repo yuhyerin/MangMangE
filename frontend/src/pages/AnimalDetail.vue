@@ -39,152 +39,54 @@
       </div>
       <div>돌아가기</div>
     </div>
-    <v-container style="padding-top: 90px">
+    <div
+      style="
+        padding-top: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
       <div
         style="
-          height: 40vh;
-          background-color: rgb(244, 236, 225);
-          border-radius: 15px;
+          width: 80%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 89vh;
         "
       >
+        <div class="border" style="width: 30%; height: 100%">1</div>
         <div
+          class="border"
           style="
-            display: flex;
+            width: 40%;
             height: 100%;
+            display: flex;
             justify-content: center;
             align-items: center;
+            margin: 0 1% 0 1%;
           "
         >
-          <!-- <div>
-            <v-icon color="black"> mdi-arrow-left </v-icon>
-          </div> -->
-          <div
-            style="
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              overflow: hidden;
-              width: 30vw;
-              height: 90%;
-              margin-right: 2%;
-              margin-left: 2%;
-            "
-          >
-            <img
-              :src="this.animalInfo.popfile"
-              alt="사진"
-              style="width: 100%"
-            />
-          </div>
-          <div style="width: 70vw; height: 35vh; margin: 10px">
-            <div
-              style="
-                width: 100%;
-                height: 20%;
-                padding-left: 2%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-            >
-              <div style="width: 90%">제목</div>
-              <div style="display: flex; width: 10%" @click="setLiked">
-                <v-icon large v-if="likeTrigger == false" color="rgb(255,0,0)">
-                  mdi-heart-outline
-                </v-icon>
-                <transition name="bounce">
-                  <v-icon large v-if="likeTrigger == true" color="rgb(255,0,0)">
-                    mdi-heart
-                  </v-icon>
-                </transition>
-              </div>
-            </div>
-            <div style="height: 60%; padding-left: 2%">
-              <table>
-                <tr>
-                  <td>종 / 품종</td>
-                  <td>{{ this.animalInfo.kind_c }}</td>
-                </tr>
-                <tr>
-                  <td>성별(중성화)</td>
-                  <td>
-                    {{ animalSex }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>나이</td>
-                  <td>{{ animalAge }}</td>
-                </tr>
-                <tr>
-                  <td>몸무게</td>
-                  <td>{{ this.animalInfo.weight }} kg</td>
-                </tr>
-                <tr>
-                  <td>털색</td>
-                  <td>{{ this.animalInfo.color_cd }}</td>
-                </tr>
-                <tr>
-                  <td>성격</td>
-                  <td>{{ animalTag }}</td>
-                </tr>
-              </table>
-            </div>
-            <div
-              style="
-                height: 20%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-            >
-              <v-btn
-                width="95%"
-                height="70%"
-                color="rgb(1,118,72)"
-                @click="moveTo('/adoption')"
-                :disabled="this.adoptionBtn || this.admin"
-              >
-                <div
-                  v-if="!this.adoptionBtn && !this.admin"
-                  style="color: white"
-                >
-                  입양하기
-                </div>
-                <div v-else-if="!this.admin" style="color: white">
-                  입양 심사가 진행 중입니다.
-                </div>
-                <div v-else style="color: white">
-                  입양 신청을 할 수 없습니다.
-                </div>
-              </v-btn>
-            </div>
-          </div>
+          <img :src="this.animalInfo.popfile" alt="사진" style="width: 100%" />
+        </div>
+        <div
+          class="border"
+          style="
+            width: 30%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+          "
+        >
+          <div style="width: 100%; height: 100%">내용1</div>
+          <div style="width: 100%; height: 100%">내용2</div>
+          <div style="width: 100%; height: 100%">내용3</div>
         </div>
       </div>
-      <div style="width: 100%; background-color: gray">
-        <div v-for="video in videos" :key="video.uid" style="width: 30%">
-          <vue-plyr>
-            <video>
-              <source :src="require(`@/assets/videos/${video.filepath}`)" />
-              <track
-                kind="captions"
-                label="English"
-                srclang="en"
-                src="captions-en.vtt"
-                default
-              />
-            </video>
-          </vue-plyr>
-          <h3
-            class="videoTitle"
-            style="text-align: center; cursor: pointer"
-            @click="moveToVideoDetail(video.uid)"
-          >
-            {{ video.title }}
-          </h3>
-        </div>
-      </div>
-    </v-container>
+    </div>
   </div>
 </template>
 
@@ -375,6 +277,9 @@ export default {
 </script>
 
 <style>
+.border {
+  background-color: gray;
+}
 .bounce-enter-active {
   animation: bounce-in 0.5s;
 }

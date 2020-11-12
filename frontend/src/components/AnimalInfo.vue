@@ -243,7 +243,6 @@ export default {
     },
 
     checkTag(tag) {
-      console.log(tag);
       if (
         tag == "활동적인" ||
         tag == "에너지뿜뿜" ||

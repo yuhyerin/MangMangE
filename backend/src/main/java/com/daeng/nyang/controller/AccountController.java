@@ -64,7 +64,6 @@ public class AccountController {
 	@PostMapping(path = "/newuser/signup")
 	@ApiOperation("회원가입")
 	public ResponseEntity<HashMap<String, Object>> signup(@RequestBody Account account) {
-		System.out.println("CONTROLLER START");
 		HashMap<String, Object> result;
 		result = accountService.signup(account);
 		if ((boolean) result.get("success"))
@@ -76,7 +75,6 @@ public class AccountController {
 	@GetMapping(path = "/newuser/signup/{user_id}")
 	@ApiOperation("아이디 중복 검사")
 	public ResponseEntity<HashMap<String, Object>> checkID(@PathVariable String user_id) {
-		System.out.println("CONTROLLER START");
 		if (accountService.checkID(user_id)) // 없으면 true
 			return new ResponseEntity<>(HttpStatus.OK);
 		HashMap<String, Object> map = new HashMap<>();
@@ -87,7 +85,6 @@ public class AccountController {
 	@GetMapping(path = "/newuser/signup")
 	@ApiOperation("이메일 유효성 검사")
 	public ResponseEntity<?> checkEmail(@RequestParam String email) {
-		System.out.println("CONTROLLER START");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		boolean isAvailabe = signupService.checkEmail(email); // 사용가능한 email
 		if (isAvailabe) { // 사용가능하면
@@ -105,7 +102,6 @@ public class AccountController {
 	@GetMapping(path = "/newuser/signup/hashcheck")
 	@ApiOperation("인증번호 유효성검사")
 	public ResponseEntity<?> checkAuthNumber(@RequestParam String auth_number, @RequestParam String hash_number) {
-		System.out.println("CONTROLLER START");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		boolean result = BCrypt.checkpw(auth_number, hash_number);
 		if (result) {
@@ -120,7 +116,6 @@ public class AccountController {
 	@PostMapping(path = "/newuser/login")
 	@ApiOperation("로그인")
 	public ResponseEntity<HashMap<String, Object>> login(@RequestBody Map<String, String> m) {
-		System.out.println("CONTROLLER START");
 		String user_id = m.get("user_id");
 		String user_password = m.get("user_password");
 		HashMap<String, Object> result = accountService.login(user_id, user_password);
@@ -133,7 +128,6 @@ public class AccountController {
 	@PostMapping(path = "/newuser/refresh")
 	@ApiOperation("accessTOKEN 갱신")
 	public ResponseEntity<HashMap<String, Object>> requestForNewAccessToken(HttpServletRequest request) {
-		System.out.println("CONTROLLER START ");
 		String accessToken = request.getHeader("accessToken");
 		String refreshToken = request.getHeader("refreshToken");
 		HashMap<String, Object> response;
@@ -155,7 +149,6 @@ public class AccountController {
 	@PostMapping(path = "/user/logout")
 	@ApiOperation("로그아웃")
 	public ResponseEntity<?> logout(HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String accessToken = request.getHeader("Authorization");
 		String user_id = null;
 		try {
@@ -169,10 +162,8 @@ public class AccountController {
 		try {
 			ValueOperations<String, Object> vo = redisTemplate.opsForValue();
 			if (vo.get(user_id) != null) {
-				System.out.println(vo.get(user_id).toString());
 				redisTemplate.expire(user_id, 1, TimeUnit.SECONDS);
 				if (vo.get(accessToken) != null) {
-					System.out.println(vo.get(accessToken).toString());
 					redisTemplate.expire(accessToken, 1, TimeUnit.SECONDS);
 				}
 			}
@@ -186,10 +177,8 @@ public class AccountController {
 	@GetMapping(path = "/user/adopt/create")
 	@ApiOperation("문자인증")
 	public ResponseEntity<HashMap<String, Object>> checkPhone(@RequestParam String phone) {
-		System.out.println("CONTROLLER START ");
 		int rand = (int) (Math.random() * 899999) + 100000; // 랜덤넘버 6자리
 		HashMap<String, Object> result = accountService.checkPhone(phone, rand);
-		System.out.println(result.toString());
 		if (result == null)
 			return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		else
@@ -199,7 +188,6 @@ public class AccountController {
 	@PostMapping(path = "/user/adopt/create")
 	@ApiOperation("입양신청서 저장")
 	public ResponseEntity<HashMap<String, Object>> createAdopt(@RequestBody Apply apply, HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String accessToken = request.getHeader("Authorization");
 		try {
 			TotToken user = (TotToken) redisTemplate.opsForValue().get(accessToken);
@@ -221,14 +209,11 @@ public class AccountController {
 		String user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
 		HashMap<String, Object> map = accountService.readAdopt();
 		map.put("user_id", user_id);
-		System.out.println(map.toString());
-		System.out.println("CONTROLLER END");
 		return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/user/adopt/read/{uid}")
 	public ResponseEntity<HashMap<String, Object>> readone(@PathVariable long uid, HttpServletRequest request) {
-		System.out.println("CONTROLLER START");
 		String accessToken = request.getHeader("Authorization");
 		String user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
 		HashMap<String, Object> result = accountService.readAdopt(uid, user_id);
