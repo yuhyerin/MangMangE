@@ -16,7 +16,7 @@
             <h2 style="text-align: center">반려동물을 찾아보세요</h2>
           </div>
           <div
-            style="display: flex; width: 100%; justify-content: space-around;"
+            style="display: flex; width: 100%; justify-content: space-around; padding-left: 35px; padding-right: 35px"
           >
             <v-btn
               style="width: 8vw;"

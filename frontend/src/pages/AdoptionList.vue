@@ -4,9 +4,9 @@
     <div class="container" style="margin-top: 75px">
       <div class="row">
         <div class="adoption-list-div col-lg-10 col-md-10 col-sm-10">
-          <h3 class="adoption-list"><strong>입양신청목록</strong></h3>
+          <h2 class="adoption-list"><strong>입양신청목록</strong></h2>
           <div style="display: flex; justify-content: flex-end" v-show="user">
-            <v-btn @click="showMyList" style="background: black; color: white">
+            <v-btn small @click="showMyList" style="margin-bottom: 7px; background: black; color: white">
               <strong>내글보기</strong>
             </v-btn>
           </div>

@@ -28,6 +28,7 @@
         class="mx-2"
         style="background: black; color: white"
         fab
+        small
         :disabled="pageNum === 0"
         @click="prevPage"
       >
@@ -40,6 +41,7 @@
         class="mx-2"
         style="background: black; color: white"
         fab
+        small
         :disabled="pageNum >= pageCount - 1"
         @click="nextPage"
       >

@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="5" style="padding: 15px; margin-left: 10px;">
         <v-row class="offair" v-show="!onair">
-          <div style="height: 25px; background-color: red; padding: 2px 7px 2px 7px; border-radius: 13px; margin: 5px;">
+          <div class="live-btn">
             <h4 style="color: white; text-align: center; vertical-align: center;">LIVE</h4>
           </div>
           <div @click="StartBtn" class="start-btn blinking">
@@ -283,6 +283,13 @@ export default {
   border: 1px solid black; 
   background-color: black;
 }
+.live-btn {
+  height: 25px; 
+  background-color: red; 
+  padding: 2px 7px 2px 7px; 
+  border-radius: 13px; 
+  margin: 5px;
+}
 .start-btn {
   margin-top: auto;
   margin-bottom: auto;
@@ -294,8 +301,8 @@ export default {
 }
 .blinking{
 	-webkit-animation:blink 1.0s ease-in-out infinite alternate;
-    -moz-animation:blink 1.0s ease-in-out infinite alternate;
-    animation:blink 1.0s ease-in-out infinite alternate;
+  -moz-animation:blink 1.0s ease-in-out infinite alternate;
+  animation:blink 1.0s ease-in-out infinite alternate;
 }
 @-webkit-keyframes blink{
     0% {opacity:0;}

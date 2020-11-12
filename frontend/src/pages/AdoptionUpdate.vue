@@ -4,7 +4,7 @@
     <div class="container" style="height: 710px; margin-top: 65px">
       <div class="row">
         <div class="application col-lg-10 col-md-10 col-sm-10">
-          <h4 class="application-title">입양신청서</h4>
+          <h2 class="application-title">입양신청서</h2>
           <div class="selfcheck">
             <h5 class="selfcheckstart">입양할 준비가 되셨는지 확인해보세요</h5>
             <ul class="selfchecklist">
@@ -32,7 +32,7 @@
                   <label>1. 일련번호</label>
                 </div>
                 <div class="col-10">
-                  <p class="serial-p" style="border: 0.5px solid #bbb">
+                  <p class="serial-p" style="padding-left: 3px; border: 0.5px solid #bbb">
                     {{ dogSerial }}
                   </p>
                 </div>
@@ -42,7 +42,7 @@
                   <label>2. 추정나이</label>
                 </div>
                 <div class="col-10">
-                  <p class="age-p" style="border: 0.5px solid #bbb">
+                  <p class="age-p" style="padding-left: 3px; border: 0.5px solid #bbb">
                     {{ dogAge }}
                   </p>
                 </div>
@@ -52,7 +52,7 @@
                   <label>3. 종류</label>
                 </div>
                 <div class="col-10">
-                  <p class="breed-p" style="border: 0.5px solid #bbb">
+                  <p class="breed-p" style="padding-left: 3px; border: 0.5px solid #bbb">
                     {{ dogBreed }}
                   </p>
                 </div>
@@ -62,7 +62,7 @@
                   <label>4. 성별</label>
                 </div>
                 <div class="col-10">
-                  <p class="gender-p" style="border: 0.5px solid #bbb">
+                  <p class="gender-p" style="padding-left: 3px; border: 0.5px solid #bbb">
                     {{ dogGender }}
                   </p>
                 </div>
@@ -72,7 +72,7 @@
                   <label>5. 털색</label>
                 </div>
                 <div class="col-10">
-                  <p class="fur-p" style="border: 0.5px solid #bbb">
+                  <p class="fur-p" style="padding-left: 3px; border: 0.5px solid #bbb">
                     {{ dogFur }}
                   </p>
                 </div>
@@ -88,7 +88,7 @@
                 <label>1. 제목</label>
               </div>
               <div class="col-10">
-                <input style="border: 0.5px solid #bbb" v-model="personTitle" />
+                <input style="padding-left: 3px; border: 0.5px solid #bbb" v-model="personTitle" />
                 <label
                   class="personTitle"
                   v-if="checkPersonTitle === 0"
@@ -100,7 +100,7 @@
                 <label>2. 성명</label>
               </div>
               <div class="col-10">
-                <input style="border: 0.5px solid #bbb" v-model="personName" />
+                <input style="padding-left: 3px; border: 0.5px solid #bbb" v-model="personName" />
                 <label
                   class="personNameLabel"
                   v-if="checkPersonName === 0"
@@ -115,7 +115,7 @@
               </div>
               <div class="col-2">
                 <input
-                  style="border: 0.5px solid #bbb"
+                  style="padding-left: 3px; border: 0.5px solid #bbb"
                   v-model="firstNum"
                   placeholder="ex> 010"
                 />
@@ -127,14 +127,14 @@
               </div>
               <div class="col-2">
                 <input
-                  style="border: 0.5px solid #bbb"
+                  style="padding-left: 3px; border: 0.5px solid #bbb"
                   v-model="middleNum"
                   placeholder="1234"
                 />
               </div>
               <div class="col-2">
                 <input
-                  style="border: 0.5px solid #bbb"
+                  style="padding-left: 3px; border: 0.5px solid #bbb"
                   v-model="lastNum"
                   placeholder="5678"
                 />
@@ -177,7 +177,7 @@
                 <label>4. 이메일</label>
               </div>
               <div class="col-10">
-                <input style="border: 0.5px solid #bbb" v-model="personEmail" />
+                <input style="padding-left: 3px; border: 0.5px solid #bbb" v-model="personEmail" />
               </div>
             </div>
           </div>
