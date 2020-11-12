@@ -1,13 +1,22 @@
 <template>
   <div>
     <v-row>
-      <v-col>
-        <video
-          id="remoteVideo"
-          autoplay playsinline
-          style="width: 100%"
-        ></video>
-        <button @click="StartBtn">라이브 보기</button>
+      <v-col style="padding: 15px; margin-left: 10px;">
+        <v-row class="offair" v-show="!onair">
+          <div style="height: 25px; background-color: red; padding: 2px 7px 2px 7px; border-radius: 13px; margin: 5px;">
+            <h4 style="color: white; text-align: center; vertical-align: center;">LIVE</h4>
+          </div>
+          <div style="margin-top: auto; margin-bottom: auto; margin-left: 170px; cursor: pointer;" @click="StartBtn">
+            <h2 style="color: white;">라이브 보기</h2>
+          </div>
+        </v-row>
+        <v-row v-show="onair">
+          <video
+            id="remoteVideo"
+            autoplay playsinline
+            style="width: 100%; max-width: 545px; height:295px;"
+          ></video>
+        </v-row>
       </v-col>
       <v-col style="padding: 15px">
         <v-row>
@@ -28,6 +37,11 @@
             <br/>
           </div>
         </v-row>
+        <v-row style="margin-top: 115px">
+          <v-col style="display: flex; justify-content: flex-start; margin-left: 0;">
+            <img @click="moveToSupport" src="@/assets/image/kakaoBtn.png" alt="" style="width: 150px; cursor: pointer">
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <hr />
@@ -39,18 +53,6 @@
           controls
           style="max-height: 150px; width: 100%; height: 100%;"
         ></video>
-        <!-- <vue-plyr>
-          <video style="max-height:150px; width:auto; height:100%;">
-            <source :src="require(`@/assets/videos/${video.filepath}`)" />
-            <track
-              kind="captions"
-              label="English"
-              srclang="en"
-              src="captions-en.vtt"
-              default
-            />
-          </video>
-        </vue-plyr> -->
         <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
       <div class="more-videos">
@@ -110,9 +112,8 @@ export default {
     
   },
   methods: {
-    
     videoSeeMore() {
-      this.$emit("changeVideo", 2);
+      this.$emit("changeVideo", 1);
     },
     uploadVideo() {
       this.$router.push("/videos/upload");
@@ -228,6 +229,30 @@ export default {
     handleRemoteStreamRemoved(event) {
       console.log('Remote stream removed. Event: ', event);
     },
+    moveToSupport() {
+      axios.post(SERVER.URL+'/newuser/kakaoPay',
+        {
+          videoid: 1
+        },  
+      )
+      .then((res) => {
+        console.log('요청성공', res.data)
+        async function openPopup() {
+          window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
+          await function() {
+            window.close("http://localhost:3000/video/0")
+          }
+        }
+        openPopup()
+      }
+      )
+      .catch((err) => {
+        console.log(1)
+        console.log(err)
+        console.log('요청실패')
+      }
+      )
+    },
   }
 }
 </script>
@@ -249,5 +274,12 @@ export default {
 
 div.videoTitle:hover {
   cursor: pointer;
+}
+.offair {
+  max-width: 545px; 
+  width: 100%; 
+  height:295px; 
+  border: 1px solid black; 
+  background-color: black;
 }
 </style>
