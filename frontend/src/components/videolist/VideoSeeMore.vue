@@ -69,7 +69,7 @@ export default {
       axios
         .get(SERVER.URL + SERVER.ROUTES.getAllVideos)
         .then((res) => {
-          this.videos = res.data.VideoList
+          this.videos = res.data.VideoList.reverse()
           this.videos_cnt = this.videos.length;
           for (let i = 0; i < this.videos.length; i++) {
             var item = this.videos[i]
