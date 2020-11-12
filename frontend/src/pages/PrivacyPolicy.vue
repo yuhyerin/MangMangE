@@ -1,18 +1,11 @@
 <template>
   <div class="container">
-    <v-btn
-      class="mx-2"
-      fab
-      dark
-      x-small
-      color="indigo"
-      style="margin-bottom: 20px;"
-      @click="moveToMainpage"
-    >
-      <v-icon dark>
+    <div class="back-btn" @click="moveToMainpage">
+      <v-icon dark style="margin-bottom: 20px; color:black">
         mdi-arrow-left
       </v-icon>
-    </v-btn>
+      <p style="margin-top: 3px; cursor: pointer">되돌아가기</p>
+    </div>
     <div>
       <h4>
         0. 서비스 안내
@@ -170,5 +163,12 @@ export default {
   p {
     margin-top: 7px;
     padding-left: 10px;
+  }
+  .back-btn {
+    display: flex;
+    cursor: pointer;
+  }
+  .back-btn:hover {
+    font-weight: bold;
   }
 </style>
