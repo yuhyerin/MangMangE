@@ -3,39 +3,38 @@
     <Header />
     <div class="container" style="padding-top: 80px; width: 70%">
       <h1>입양신청서</h1>
-      <br />
-      <div>
+      <br>
+      <div style="border-bottom: 2.5px solid #bbb;">
         <!-- 리스트 -->
         <h3>입양할 준비가 되었는지 확인해보세요</h3>
-        <br />
+        <br>
         <div>
           <p>1. 입양에 필요한 비용을 감당하실 수 있나요?</p>
-          <br />
+          <br>
           <p>2. 정기적인 검진에 따른 비용을 감당하실 수 있나요?</p>
-          <br />
+          <br>
           <p>3. 사료, 간식, 장난감 등의 비용을 감당하실 수 있나요?</p>
-          <br />
+          <br>
           <p>4. 매일 반려견과 30분 이상 산책하실 수 있나요?</p>
-          <br />
+          <br>
           <p>
             5. 가족과 함께 살고 있다면 가족 구성원 모두 반려견 입양에
             동의하셨나요?
           </p>
-          <br />
+          <br>
           <p>6. 입양을 희망하는 견종의 특성과 성향을 파악하고 계신가요?</p>
-          <br />
+          <br>
           <p>
             7. 휴가를 갈때 반려견이 함께 갈 수 없는 경우에 반려견을 어떻게 할지
             생각해보셨나요?
           </p>
-          <br />
+          <br>
         </div>
       </div>
       <!-- 리스트 끝 -->
-      <hr />
-      <br />
+      <br>
       <h3>유기동물 정보</h3>
-      <div style="display: flex">
+      <div style="display: flex; border-bottom: 2.5px solid #bbb; padding-bottom: 2%;">
         <!-- 동물정보 -->
         <div style="width: 50%">
           <v-row>
@@ -105,13 +104,11 @@
           />
         </div>
       </div>
+      <br>
       <!-- 동물 정보 끝 -->
-      <hr />
-      <br />
       <h3>입양희망자 정보</h3>
-      <br />
-      <div>
-        <!-- 신청 폼 -->
+      <br>
+      <div style="border-bottom: 2.5px solid #bbb; padding-bottom: 2%;"> <!-- 신청 폼 -->
         <v-col cols="6">
           <v-text-field
             v-model="title"
@@ -159,6 +156,22 @@
             :rules="rule[4]"
           ></v-text-field>
         </v-col>
+      </div> <!-- 신청 폼 끝 -->
+      <br>
+      <div> <!-- 개인정보 수집 내용 -->
+        <h3>개인정보 이용 및 수집 동의</h3>
+        <p>(주)카카오는 아래의 목적으로 개인정보를 수집 및 이용하며, 회원의 개인정보를 안전하게 취급하는데 최선을 다합니다.</p>
+        <br>
+        <v-card outlined>
+          <v-card-title>개인정보 수집 및 이용에 대한 안내</v-card-title>
+          <v-card-text>
+            1. 개인정보의 보유 및 이용기간: 3년(관계법령에서 정한 일정한 기간) <br>
+            2. 수집하는 개인정보의 항목: 성명, 연락처, 이메일, 성별, 생년월일, 주소 <br>
+            3. 개인정보의 수집,이용 목적: 추후 댕줍멍줍의 소식을 전달하기 위함 <br>
+          </v-card-text>
+        </v-card>
+        <p>법률에서 정하는 경우를 제외하고 귀하의 동의 없이 개인정보를 제 3자에게 제공하지 않습니다.</p>
+        개인정보 이용에 동의합니다.<input type="checkbox" id="cbtest" />
       </div>
     </div>
   </div>
