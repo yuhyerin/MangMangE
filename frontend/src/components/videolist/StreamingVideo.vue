@@ -148,8 +148,8 @@ export default {
       this.onair = !this.onair;
     },
     connectSocket(){
-      this.socket = io.connect('http://localhost:8002');
-      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      // this.socket = io.connect('http://localhost:8002');
+      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       this.socket.emit('join', this.room);
       this.enteringRoom();
     },
@@ -239,7 +239,6 @@ export default {
         },  
       )
       .then((res) => {
-        console.log('요청성공', res.data)
         async function openPopup() {
           window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
           await function() {
@@ -250,9 +249,7 @@ export default {
       }
       )
       .catch((err) => {
-        console.log(1)
         console.log(err)
-        console.log('요청실패')
       }
       )
     },

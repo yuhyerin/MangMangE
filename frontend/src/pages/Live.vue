@@ -58,8 +58,8 @@ export default {
       this.addListener();
     },
     connectSocket(){
-      this.socket = io.connect('http://localhost:8002');
-      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      // this.socket = io.connect('http://localhost:8002');
+      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       if(this.onair){
         alert('방송 시작합니다!')
         this.socket.emit('create', this.room);
@@ -105,7 +105,7 @@ export default {
             candidate: message.candidate
           }));
         }else if(message === 'viewer'){//참여자가 소켓 id 보냈을 때. 
-          alert('사용자 소켓 id : ',message);
+          // alert('사용자 소켓 id : ',message);
           this.viewer_number++;
           console.log("한명 ready / 현재 참여자 : ",this.viewer_number);
           this.doCall();

@@ -7,8 +7,6 @@ import AnimalDetail from '../pages/AnimalDetail.vue'
 import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
-import StreamingTest from '../pages/StreamingTest.vue'
-import StreamingViewer from '../pages/StreamingViewer.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
@@ -67,16 +65,6 @@ const routes = [
     path: '/adoptionreview',
     name: 'AdoptionReview',
     component: AdoptionReview,
-  },
-  {
-    path: '/streamingTest',
-    name: 'StreamingTest',
-    component: StreamingTest
-  },
-  {
-    path: '/viewer',
-    name: 'StreamingViewer',
-    component: StreamingViewer
   },
   {
     path: '/adoptionupdate/:uid',
