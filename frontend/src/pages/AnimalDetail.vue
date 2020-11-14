@@ -1,126 +1,93 @@
 <template>
   <div>
     <Header />
-    <v-container style="padding-top: 90px">
-      <div
-        style="
-          height: 40vh;
-          background-color: rgb(244, 236, 225);
-          border-radius: 15px;
-        "
-      >
+    <div style="position: fixed; top: 90px; left: 1%">
+      <div style="display: flex; justify-content: center; height: 50px">
+        <div
+          style="display: flex; justify-content: center; align-items: center"
+        >
+          <v-icon x-large>mdi-arrow-left </v-icon>
+        </div>
         <div
           style="
             display: flex;
-            height: 100%;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
           "
         >
-          <!-- <div>
-            <v-icon color="black"> mdi-arrow-left </v-icon>
-          </div> -->
-          <div
-            style="
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              overflow: hidden;
-              width: 30vw;
-              height: 90%;
-              margin-right: 2%;
-              margin-left: 2%;
-            "
-          >
-            <img
-              :src="this.animalInfo.popfile"
-              alt="사진"
-              style="width: 100%"
-            />
-          </div>
-          <div style="width: 70vw; height: 35vh; margin: 10px">
-            <div
-              style="
-                width: 100%;
-                height: 20%;
-                padding-left: 2%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-            >
-              <div style="width: 90%">제목</div>
-              <div style="display: flex; width: 10%" @click="setLiked">
-                <v-icon large v-if="likeTrigger == false" color="rgb(255,0,0)">
-                  mdi-heart-outline
-                </v-icon>
-                <transition name="bounce">
-                  <v-icon large v-if="likeTrigger == true" color="rgb(255,0,0)">
-                    mdi-heart
-                  </v-icon>
-                </transition>
-              </div>
-            </div>
-            <div style="height: 60%; padding-left: 2%">
-              <table>
-                <tr>
-                  <td>종 / 품종</td>
-                  <td>{{ this.animalInfo.kind_c }}</td>
-                </tr>
-                <tr>
-                  <td>성별(중성화)</td>
-                  <td>
-                    {{ animalSex }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>나이</td>
-                  <td>{{ animalAge }}</td>
-                </tr>
-                <tr>
-                  <td>몸무게</td>
-                  <td>{{ this.animalInfo.weight }} kg</td>
-                </tr>
-                <tr>
-                  <td>털색</td>
-                  <td>{{ this.animalInfo.color_cd }}</td>
-                </tr>
-                <tr>
-                  <td>성격</td>
-                  <td>{{ animalTag }}</td>
-                </tr>
-              </table>
-            </div>
-            <div
-              style="
-                height: 20%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-            >
-              <v-btn
-                width="95%"
-                height="70%"
-                color="rgb(1,118,72)"
-                @click="moveTo('/adoption')"
-                :disabled="this.adoptionBtn || this.admin"
-              >
-                <div v-if="!this.adoptionBtn && !this.admin" style="color: white">
-                  입양하기
-                </div>
-                <div v-else-if="!this.admin" style="color: white">
-                  입양 심사가 진행 중입니다.
-                </div>
-                <div v-else style="color: white">
-                  입양 신청을 할 수 없습니다.
-                </div>
-              </v-btn>
-            </div>
-          </div>
+          <v-icon style="transform: rotate(-90deg)"> mdi-paw </v-icon>
+        </div>
+        <div
+          style="display: flex; justify-content: center; align-items: flex-end"
+        >
+          <v-icon style="transform: rotate(-90deg)"> mdi-paw </v-icon>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+          "
+        >
+          <v-icon style="transform: rotate(-90deg)"> mdi-paw </v-icon>
+        </div>
+        <div
+          style="display: flex; justify-content: center; align-items: flex-end"
+        >
+          <v-icon style="transform: rotate(-90deg)"> mdi-paw </v-icon>
         </div>
       </div>
-    </v-container>
+      <div>돌아가기</div>
+    </div>
+    <div
+      style="
+        padding-top: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          width: 80%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 89vh;
+        "
+      >
+        <div class="border" style="width: 30%; height: 100%">1</div>
+        <div
+          class="border"
+          style="
+            width: 40%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 1% 0 1%;
+          "
+        >
+          <img :src="this.animalInfo.popfile" alt="사진" style="width: 100%" />
+        </div>
+        <div
+          class="border"
+          style="
+            width: 30%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+          "
+        >
+          <div style="width: 100%; height: 100%">내용1</div>
+          <div style="width: 100%; height: 100%">내용2</div>
+          <div style="width: 100%; height: 100%">내용3</div>
+          <v-btn @click="moveTo('/adoption')">버어튼</v-btn>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -138,7 +105,8 @@ export default {
       likeTrigger: false,
       animalInfo: "",
       adoptionBtn: "",
-      admin:false
+      videos: [],
+      admin: false,
     };
   },
   computed: {
@@ -172,7 +140,7 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     this.animalInfo = "";
     this.likeTrigger = false;
 
@@ -183,7 +151,7 @@ export default {
     }
 
     if (this.$cookies.get("accessToken") != null) {
-      SERVER.tokenCheck(() => {
+      await SERVER.tokenCheck(() => {
         axios
           .get(SERVER.URL + "/user/animal/detail", {
             params: {
@@ -197,22 +165,23 @@ export default {
             console.log("유저 정보 있음", res.data);
             this.animalInfo = res.data.animalList;
             this.adoptionBtn = res.data.adoptCheck;
-            axios.get(SERVER.URL+'/user/userId',{
-              headers:{
-                "Authorization" : this.$cookies.get("accessToken")
-              }
-            })
-            .then((res)=>{
-              this.admin = res.data.success
-              console.log(this.admin)
-            })
+            axios
+              .get(SERVER.URL + "/user/userId", {
+                headers: {
+                  Authorization: this.$cookies.get("accessToken"),
+                },
+              })
+              .then((res) => {
+                this.admin = res.data.success;
+                console.log(this.admin);
+              });
           })
           .catch((err) => {
             console.log(err);
           });
       });
     } else {
-      axios
+      await axios
         .get(SERVER.URL + "/newuser/animal/detail", {
           params: {
             desertion_no: this.$route.params.animalID,
@@ -226,6 +195,7 @@ export default {
           console.log(err);
         });
     }
+    await this.getVideos();
   },
   methods: {
     setLiked() {
@@ -285,11 +255,32 @@ export default {
     moveTo(page) {
       this.$router.push(page + `/${this.$route.params.animalID}`);
     },
+
+    getVideos() {
+      console.log("dNo", this.animalInfo);
+      axios
+        .get(SERVER.URL + "/newuser/video/search", {
+          params: {
+            desertion_no: this.$route.params.animalID,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.videoList);
+          if (res.data.videoList.length >= 4) {
+            this.videos = res.data.videoList.slice(-4);
+          } else {
+            this.videos = res.data.videoList;
+          }
+        });
+    },
   },
 };
 </script>
 
 <style>
+.border {
+  background-color: gray;
+}
 .bounce-enter-active {
   animation: bounce-in 0.5s;
 }

@@ -16,10 +16,10 @@
             <h2 style="text-align: center">반려동물을 찾아보세요</h2>
           </div>
           <div
-            style="display: flex; width: 100%; justify-content: space-around;"
+            style="display: flex; width: 100%; justify-content: space-around"
           >
             <v-btn
-              style="width: 8vw;"
+              style="width: 8vw"
               color="rgb(1,118,72)"
               @click="moveTo('/survey')"
               ><div style="color: white">동물 매칭하기</div></v-btn
@@ -41,10 +41,18 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "Section1",
   methods: {
+    ...mapMutations(["setEventListener"]),
+    ...mapMutations(["resetSurvey"]),
     moveTo(page) {
+      if (page == "/animals") {
+        this.setEventListener = 2;
+      } else if (page == "/survey") {
+        this.resetSurvey(null);
+      }
       this.$router.push(page);
     },
   },

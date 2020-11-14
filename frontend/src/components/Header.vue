@@ -15,6 +15,11 @@
       right: 0;
       z-index: 5;
     "
+    :style="
+      this.eventListener == -1
+        ? 'background-color: rgba(255, 255, 255, 0.5);'
+        : 'background-color: white'
+    "
   >
     <div
       @click="moveToMain"
@@ -108,6 +113,7 @@ export default {
     ...mapMutations(["setEventListener"]),
     ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
+      this.setEventListener(-1);
       location.href = "/";
     },
     register() {
@@ -123,11 +129,13 @@ export default {
       }
     },
     moveTo(page) {
+      if (this.$router.history.current.path == page) {
+        // location.reload(true);
+      }
       if (page == "/animals") {
         this.setEventListener(2);
-      }
-      if (this.$router.history.current.path == page) {
-        location.reload(true);
+      } else {
+        this.setEventListener(11);
       }
       this.$router.push(page);
     },
@@ -206,6 +214,7 @@ export default {
           this.$cookies.remove("refreshToken");
           this.$cookies.remove("expireTime");
           this.setUserSurveyCheck(false);
+          alert("로그아웃 되셨습니다.");
           location.href = "/";
         })
         .catch((err) => {
@@ -225,7 +234,6 @@ export default {
   background-color: rgb(180, 180, 180);
 }
 .logo {
-  background-image: url("../assets/image/logo.png");
   cursor: pointer;
 }
 </style>

@@ -8,17 +8,31 @@
     <v-main>
       <div style="padding-top: 75px; display: flex; justify-content: center">
         <div
-          style="padding-top: 10px; width: 10vw; position: fixed; top: 13vh"
+          style="
+            padding-top: 10px;
+            width: 10vw;
+            position: fixed;
+            top: 13vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+          "
           :style="
             viewStyle == false && trigger == 1 ? 'left: 0.5vw;' : 'left: 1vw;'
           "
         >
-          <v-btn @click="changeViewStyle(false)">
-            <v-icon>mdi-view-grid</v-icon>
-          </v-btn>
-          <v-btn @click="changeViewStyle(true)">
-            <v-icon>mdi-format-align-justify</v-icon>
-          </v-btn>
+          <div>
+            <v-btn @click="changeViewStyle(false)">
+              <v-icon>mdi-view-grid</v-icon>
+            </v-btn>
+            <v-btn @click="changeViewStyle(true)">
+              <v-icon>mdi-format-align-justify</v-icon>
+            </v-btn>
+          </div>
+          <div class="reSurvey" style="margin-top: 20px" @click="moveToSurvey">
+            설문 다시하기
+          </div>
         </div>
         <div style="display: flex; min-height: 87vh; width: 80vw">
           <div
@@ -306,7 +320,6 @@ export default {
     trigger(newValue, oldValue) {
       if (newValue == 0) {
         this.allDatas = "";
-        console.log("All Animals");
         if (this.$cookies.get("accessToken") != null) {
           this.loadingTrigger = true;
           SERVER.tokenCheck(() => {
@@ -332,7 +345,6 @@ export default {
             .then((res) => {
               this.allDatas = res.data.animalList;
               this.loadingTrigger = false;
-              // console.log(res.data);
             })
             .catch((err) => {
               this.loadingTrigger = false;
@@ -350,7 +362,6 @@ export default {
               },
             })
             .then((res) => {
-              console.log(res.data.perfect.length, res.data.good.length);
               this.perfectDatas = [];
               this.goodDatas = [];
               this.perfectDatas = [...res.data.perfect];
@@ -377,7 +388,6 @@ export default {
                 },
               })
               .then((res) => {
-                console.log(res.data.animalList);
                 this.likedDatas = [];
                 this.likedDatas = [...res.data.animalList];
                 this.loadingTrigger = false;
@@ -433,13 +443,8 @@ export default {
       }
     } else {
       this.loadingTrigger = true;
-      console.log("요청");
       axios
-        .get(SERVER.URL + "/newuser/animal/allread", {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
+        .get(SERVER.URL + "/newuser/animal/allread")
         .then((res) => {
           this.allDatas = res.data.animalList;
           this.loadingTrigger = false;
@@ -454,6 +459,7 @@ export default {
   methods: {
     ...mapGetters(["getPageCheck"]),
     ...mapMutations(["checkThisPage"]),
+    ...mapMutations(["resetSurvey"]),
 
     setTrigger(num) {
       this.trigger = num;
@@ -477,6 +483,16 @@ export default {
       setTimeout(() => {
         this.testTrigger = false;
       }, 3300);
+    },
+
+    moveToSurvey() {
+      var surveyCheck = confirm("설문을 다시 작성하시겠습니까?");
+      if (surveyCheck) {
+        this.$router.push("/survey");
+        this.resetSurvey();
+      } else {
+        return;
+      }
     },
 
     componentChange(value) {
@@ -509,5 +525,10 @@ export default {
     rgba(255, 255, 255, 0.4),
     rgba(255, 255, 255, 0.4)
   ); */
+}
+.reSurvey:hover {
+  color: blue;
+  cursor: pointer;
+  border-bottom: 2px solid blue;
 }
 </style>

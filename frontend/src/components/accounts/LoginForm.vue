@@ -107,22 +107,18 @@ export default {
     login() {
       this.loadingTrigger = true;
       axios
-        .post(SERVER.URL + "/newuser/login/",
-        {
+        .post(SERVER.URL + "/newuser/login/", {
           user_id: this.id,
           user_password: this.password,
-        },
-        
-        )
+        })
         .then((res) => {
-          console.log(res);
           this.$cookies.set("accessToken", res.data.accessToken);
           this.$cookies.set("refreshToken", res.data.refreshToken);
           this.$cookies.set("expireTime", res.data.expireTime);
           axios
             .get(SERVER.URL + "/user/animal/surveyread", {
               headers: {
-                Authorization: $cookies.get("accessToken"),
+                Authorization: this.$cookies.get("accessToken"),
               },
             })
             .then((res) => {

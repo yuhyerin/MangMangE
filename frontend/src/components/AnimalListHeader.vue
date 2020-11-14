@@ -214,6 +214,7 @@ export default {
     ...mapMutations(["setEventListener"]),
     ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
+      this.setEventListener(-1);
       location.href = "/";
     },
     register() {
@@ -315,5 +316,8 @@ export default {
 .navBtn:hover {
   padding: 2px 5px 2px 5px;
   background-color: rgb(180, 180, 180);
+}
+.logo {
+  cursor: pointer;
 }
 </style>
