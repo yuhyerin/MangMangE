@@ -83,7 +83,7 @@ const routes = [
   {
     path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
-    component: AdoptionUpdate,
+    component: Adoption,
   },
   {
     path: '/test',
