@@ -22,6 +22,15 @@ import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 import Live from '../pages/Live.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
 
+const requireAuth = (to, from, next) => {
+  if ($cookies.get('accessToken') != null) {
+    next();
+  } else {
+    alert("로그인이 필요합니다.");
+    next("/");
+  }
+};
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -46,30 +55,40 @@ const routes = [
     component: Mainpage
   },
   {
+    path: '/adoptionlist',
+    name: 'AdoptionList',
+    beforeEnter: requireAuth,
+    component: AdoptionList,
+  },
+  {
     path: '/adoption/:animalID',
     name: 'Adoption',
+    beforeEnter: requireAuth,
     component: Adoption
+  },
+  {
+    path: '/adoptionupdate/:uid',
+    name: 'AdoptionUpdate',
+    component: AdoptionUpdate,
+  },
+  {
+    path: '/adoptionreview',
+    name: 'AdoptionReview',
+    beforeEnter: requireAuth,
+    component: AdoptionReview,
   },
   {
     path: '/survey',
     name: 'Survey',
+    beforeEnter: requireAuth,
     component: Survey
-  },
-  {
-    path: '/adoptionlist',
-    name: 'AdoptionList',
-    component: AdoptionList,
   },
   {
     path: '/videos',
     name: 'VideoBoard',
     component: VideoBoard,
   },
-  {
-    path: '/adoptionreview',
-    name: 'AdoptionReview',
-    component: AdoptionReview,
-  },
+
   {
     path: '/streamingTest',
     name: 'StreamingTest',
@@ -80,24 +99,21 @@ const routes = [
     name: 'StreamingViewer',
     component: StreamingViewer
   },
-  {
-    path: '/adoptionupdate/:uid',
-    name: 'AdoptionUpdate',
-    component: AdoptionUpdate,
-  },
+
   {
     path: '/test',
     component: Test,
-  },  
+  },
   {
     path: '/video/:videoId',
     name: 'VideoDetail',
     component: VideoDetail,
   },
   {
-   path: '/videos/upload',
-   name:'UploadVideo',
-   component:UploadVideo 
+    path: '/videos/upload',
+    name: 'UploadVideo',
+    beforeEnter: requireAuth,
+    component: UploadVideo
   },
   {
     path: '/privacypolicy',
