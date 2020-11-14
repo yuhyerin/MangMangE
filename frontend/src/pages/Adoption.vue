@@ -346,6 +346,7 @@ export default {
 
   },
   created() {
+    
     SERVER.tokenCheck(() => {
       axios
         .get(SERVER.URL + "/user/animal/detail", {

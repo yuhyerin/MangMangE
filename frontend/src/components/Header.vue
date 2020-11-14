@@ -70,7 +70,7 @@
             <h3>동영상 게시판</h3>
           </div>
         </v-btn>
-        <v-btn text @click="moveTo('/adoptionlist')">
+        <v-btn text @click="moveToList">
           <div>
             <h3>입양 신청 목록</h3>
           </div>
@@ -138,6 +138,14 @@ export default {
         this.setEventListener(11);
       }
       this.$router.push(page);
+    },
+    moveToList() {
+      if (this.$cookies.get("accessToken") == null) {
+        alert("회원만 이용 가능합니다.");
+        return;
+      } else {
+        this.$router.push("/adoptionlist");
+      }
     },
     // test() {
     //   axios
