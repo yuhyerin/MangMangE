@@ -12,7 +12,6 @@ import AdoptionList from '../pages/AdoptionList.vue'
 import StreamingTest from '../pages/StreamingTest.vue'
 import StreamingViewer from '../pages/StreamingViewer.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
-import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
@@ -21,6 +20,8 @@ import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 // import UploadTest from '../pages/UploadTest.vue'
 import Live from '../pages/Live.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
+import axios from 'axios'
+import SERVER from '@/api/url'
 
 const requireAuth = (to, from, next) => {
   if ($cookies.get('accessToken') != null) {
@@ -31,12 +32,47 @@ const requireAuth = (to, from, next) => {
   }
 };
 
+const noRequireAuth = (to, from, next) => {
+  if ($cookies.get('accessToken') == null) {
+    next();
+  } else {
+    alert("회원으로는 접근할 수 없습니다.");
+    next("/");
+  }
+};
+
+const adminAuth = (to, from, next) => {
+  if ($cookies.get('refreshToken') != null) {
+    SERVER.tokenCheck(() => {
+      axios.get(SERVER.URL + "/user/userId", {
+        headers: {
+          Authorization: $cookies.get('accessToken')
+        }
+      }).then((res) => {
+        if (res.data.success) {
+          next();
+        } else {
+          alert("접근 권한이 없습니다.");
+          next('/')
+        }
+      }).catch((err) => {
+        alert("잘못된 접근입니다.");
+        next('/')
+      })
+    })
+  } else {
+    alert("접근 권한이 없습니다.");
+    next('/')
+  }
+}
+
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/login',
     name: 'Login',
+    beforeEnter: noRequireAuth,
     component: Login
   },
   {
@@ -67,17 +103,6 @@ const routes = [
     component: Adoption
   },
   {
-    path: '/adoptionupdate/:uid',
-    name: 'AdoptionUpdate',
-    component: AdoptionUpdate,
-  },
-  {
-    path: '/adoptionreview',
-    name: 'AdoptionReview',
-    beforeEnter: requireAuth,
-    component: AdoptionReview,
-  },
-  {
     path: '/survey',
     name: 'Survey',
     beforeEnter: requireAuth,
@@ -92,16 +117,24 @@ const routes = [
   {
     path: '/streamingTest',
     name: 'StreamingTest',
+    beforeEnter: adminAuth,
     component: StreamingTest
   },
   {
     path: '/viewer',
     name: 'StreamingViewer',
+    beforeEnter: adminAuth,
     component: StreamingViewer
   },
-
+  {
+    path: '/adoptionupdate/:uid',
+    name: 'AdoptionUpdate',
+    beforeEnter: requireAuth,
+    component: Adoption,
+  },
   {
     path: '/test',
+    beforeEnter: adminAuth,
     component: Test,
   },
   {
@@ -112,7 +145,7 @@ const routes = [
   {
     path: '/videos/upload',
     name: 'UploadVideo',
-    beforeEnter: requireAuth,
+    beforeEnter: adminAuth,
     component: UploadVideo
   },
   {
@@ -128,11 +161,13 @@ const routes = [
   {
     path: '/live',
     name: 'Live',
+    beforeEnter: adminAuth,
     component: Live
   },
   {
     path: '/videos/0',
     name: 'VideoDetailPopup',
+    beforeEnter: adminAuth,
     component: VideoDetailPopup,
     props: (route) => ({ query: route.query.q })
   }

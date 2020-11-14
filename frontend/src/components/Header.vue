@@ -47,7 +47,12 @@
           font-size: 10px;
         "
       >
-        <v-btn x-small text @click="register">
+        <v-btn
+          v-if="this.$cookies.get('refreshToken') == null"
+          x-small
+          text
+          @click="register"
+        >
           <div><h4>회원가입</h4></div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
@@ -137,14 +142,23 @@ export default {
       } else {
         this.setEventListener(11);
       }
-      this.$router.push(page);
+      this.$router.push(page).catch((error) => {
+        if (error.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
     moveToList() {
       if (this.$cookies.get("accessToken") == null) {
         alert("회원만 이용 가능합니다.");
         return;
       } else {
-        this.$router.push("/adoptionlist");
+        console.log(this.$router.history.path);
+        this.$router.push("/adoptionlist").catch((error) => {
+          if (error.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
       }
     },
     // test() {
@@ -206,28 +220,29 @@ export default {
     },
 
     logout() {
-      axios
-        .post(
-          SERVER.URL + "/user/logout/",
-          {},
-          {
-            headers: {
-              Authorization: this.$cookies.get("accessToken"),
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          this.$cookies.remove("accessToken");
-          this.$cookies.remove("refreshToken");
-          this.$cookies.remove("expireTime");
-          this.setUserSurveyCheck(false);
-          alert("로그아웃 되셨습니다.");
-          location.href = "/";
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .post(
+            SERVER.URL + "/user/logout/",
+            {},
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res) => {
+            this.$cookies.remove("accessToken");
+            this.$cookies.remove("refreshToken");
+            this.$cookies.remove("expireTime");
+            this.setUserSurveyCheck(false);
+            alert("로그아웃 되셨습니다.");
+            location.href = "/";
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
     },
   },
 };

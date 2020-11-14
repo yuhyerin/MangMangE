@@ -6,7 +6,11 @@
         <div class="adoption-list-div col-lg-10 col-md-10 col-sm-10">
           <h2 class="adoption-list"><strong>입양신청목록</strong></h2>
           <div style="display: flex; justify-content: flex-end" v-show="user">
-            <v-btn small @click="showMyList" style="margin-bottom: 7px; background: black; color: white">
+            <v-btn
+              small
+              @click="showMyList"
+              style="margin-bottom: 7px; background: black; color: white"
+            >
               <strong>내글보기</strong>
             </v-btn>
           </div>
@@ -65,7 +69,7 @@ export default {
         if (adminList.includes(this.userId)) {
           arr = this.items;
         } else {
-          for (let i = 0; i < this.items.length - 1; i++) {
+          for (let i = 0; i < this.items.length; i++) {
             if (this.items[i].user_id === this.userId) {
               arr.push(this.items[i]);
             }
@@ -87,7 +91,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data);
           this.items = res.data.list.reverse();
           for (let i = 0; i < this.items.length; i++) {
             var item = this.items[i];
@@ -103,7 +106,6 @@ export default {
           if (this.userId.includes("admin")) this.user = false;
         })
         .catch((err) => {
-          console.log("cat");
           console.log(err);
         });
     });

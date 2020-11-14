@@ -82,8 +82,7 @@ export default {
       this.pageNum -= 1;
     },
     showMyApply(item) {
-      const adminList = ["admin", "admin_hee", "admin_so", "admin_rin", "admin_hwan", "admin_kyu"]
-      if (item.user_id === this.userId || adminList.includes(this.userId)) {
+      if (item.user_id === this.userId || this.userId.includes("admin")) {
         this.$router.push({
           name: "AdoptionUpdate",
           params: {

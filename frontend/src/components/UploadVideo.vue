@@ -27,9 +27,7 @@ export default {
     };
   },
   methods: {
-    afterComplete(file) {
-      console.log(file);
-    },
+    afterComplete(file) {},
   },
 };
 </script>

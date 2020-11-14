@@ -129,7 +129,6 @@ export default {
           videoid: 1,
         })
         .then((res) => {
-          console.log("요청성공", res.data);
           async function openPopup() {
             window.open(
               res.data,
@@ -143,9 +142,7 @@ export default {
           openPopup();
         })
         .catch((err) => {
-          console.log(1);
           console.log(err);
-          console.log("요청실패");
         });
     },
     moveToAnimal(animalID) {

@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.daeng.nyang.dto.Account;
+import com.daeng.nyang.dto.AnimalListFE;
 import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
+import com.daeng.nyang.service.animal.AnimalService;
 import com.daeng.nyang.service.email.EmailService;
 import com.daeng.nyang.service.signup.SignupService;
 import com.daeng.nyang.service.user.AccountService;
-import com.daeng.nyang.service.user.AdminService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -55,6 +55,9 @@ public class AccountController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private AnimalService animalService;
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -178,14 +181,11 @@ public class AccountController {
 	@ApiOperation("문자인증")
 	public ResponseEntity<HashMap<String, Object>> checkPhone(@RequestParam String phone) {
 		int rand = (int) (Math.random() * 899999) + 100000; // 랜덤넘버 6자리
-//		HashMap<String, Object> result = accountService.checkPhone(phone, rand);
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("number", rand);
-		return new ResponseEntity<>(map, HttpStatus.OK);
-//		if (result == null)
-//			return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-//		else
-//			return new ResponseEntity<>(result, HttpStatus.OK);
+		HashMap<String, Object> result = accountService.checkPhone(phone, rand);
+		if (result == null)
+			return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		else
+			return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/user/adopt/create")
@@ -217,13 +217,18 @@ public class AccountController {
 
 	@GetMapping(path = "/user/adopt/read/{uid}")
 	public ResponseEntity<HashMap<String, Object>> readone(@PathVariable long uid, HttpServletRequest request) {
-		String accessToken = request.getHeader("Authorization");
-		String user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
-		HashMap<String, Object> result = accountService.readAdopt(uid, user_id);
-		if (result == null)
-			return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
-		else
-			return new ResponseEntity<>(result, HttpStatus.OK);
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		Apply apply = accountService.readAdopt(uid);
+		AnimalListFE animal = animalService.animalDetail(apply.getAni_num());
+		
+		if(apply==null || animal==null)
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+		else {
+			result.put("apply", apply);
+			result.put("animal", animal);
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+		
 	}
 
 	@GetMapping(path = "/user/userId")

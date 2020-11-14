@@ -112,10 +112,8 @@ export default {
             },
           })
           .then((res) => {
-            console.log(res.data);
             if (res.data.success) this.upload = true;
             else this.upload = false;
-            console.log(this.upload);
           })
           .catch((err) => {
             console.log(err);
@@ -188,26 +186,20 @@ export default {
       this.socket.emit("message", message);
     },
     async setLocalAndSendMessage(sessionDescription) {
-      console.log("Create offer Start");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer End");
     },
-    handleCreateOfferError(event) {
-      console.log("[Error]\n", event);
-    },
+    handleCreateOfferError(event) {},
     onCreateSessionDescriptionError(error) {
       trace("Failed to create session description: " + error.toString());
     },
     doCall() {
-      console.log("createOffer 호출");
       this.pc.createOffer(
         this.setLocalAndSendMessage,
         this.handleCreateOfferError
       );
     },
     doAnswer() {
-      console.log("createAnswer 호출");
       this.pc
         .createAnswer()
         .then(
@@ -237,7 +229,6 @@ export default {
       this.pc.onremovestream = this.handleRemoteStreamRemoved;
       // this.pc.onremovestream = null;
       // this.pc.addStream(this.localStream);
-      console.log("peer 생성");
       this.doCall();
     },
     handleRemoteStreamAdded(event) {
@@ -252,7 +243,6 @@ export default {
           videoid: 1,
         })
         .then((res) => {
-          console.log("요청성공", res.data);
           async function openPopup() {
             window.open(
               res.data,
@@ -266,9 +256,7 @@ export default {
           openPopup();
         })
         .catch((err) => {
-          console.log(1);
           console.log(err);
-          console.log("요청실패");
         });
     },
   },

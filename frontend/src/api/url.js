@@ -58,8 +58,6 @@ export default {
       userTime -= 86400;
     }
 
-    console.log("expireTime", expireTime);
-    console.log("userTime", userTime);
     if (expireTime <= userTime) {
       axios
         .post(

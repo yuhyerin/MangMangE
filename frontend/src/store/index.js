@@ -19,7 +19,6 @@ export default new Vuex.Store({
     dogMbtiArr: ["", "", "", ""],
     dogMbti: "",
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    address: '',
     findUserId: '',
     userSurveyCheck: false,
     videoID: 0,
@@ -29,6 +28,8 @@ export default new Vuex.Store({
     // 1: survey to animalList, 2: main to animalList
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
     // 5: videoDetail to videoSeeMore
+    // 6: adoption Create 
+    // 7: adoption etc.
     eventListener: 0,
   },
 
@@ -68,11 +69,6 @@ export default new Vuex.Store({
       if (state.survey[pageNum - 1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
       }
-    },
-
-    findPersonAddress(state, address) {
-      state.address = address
-      console.log(state.address)
     },
 
     setEventListener(state, payload) {
@@ -131,7 +127,6 @@ export default new Vuex.Store({
     },
     moveToVideoDetail(state, idx) {
       state.videoID = idx
-      console.log('videoID=', idx)
       router.push("/video" + `/${idx}`)
     },
   },

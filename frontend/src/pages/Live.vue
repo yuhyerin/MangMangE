@@ -3,23 +3,44 @@
     <Header />
     <v-row style="padding: 90px 0 10px 50px">
       <h1 style="padding-right: 10px">마이리틀댕댕 TV</h1>
-      <img v-if="onair" src="@/assets/image/on-air.png" alt="" width="50px">
-      <img v-else src="@/assets/image/off-air.png" alt="" width="50px">
+      <img v-if="onair" src="@/assets/image/on-air.png" alt="" width="50px" />
+      <img v-else src="@/assets/image/off-air.png" alt="" width="50px" />
     </v-row>
-    <v-row style="display: flex; justify-content: center; align-items: center; background-color: rgb(193, 218, 204); height: 480px">
-      
-      
-      <video v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video>
-      <div v-show="!onair" style="width: 545px; height:295px; background-color: black;">
-        <h3 style="color: white; text-align: center; margin-top:130px;">현재 방송중이 아닙니다.</h3>
+    <v-row
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(193, 218, 204);
+        height: 480px;
+      "
+    >
+      <video
+        v-show="onair"
+        id="localVideo"
+        style="width: 545px; height: 295px"
+        autoplay
+        playsinline
+      ></video>
+      <div
+        v-show="!onair"
+        style="width: 545px; height: 295px; background-color: black"
+      >
+        <h3 style="color: white; text-align: center; margin-top: 130px">
+          현재 방송중이 아닙니다.
+        </h3>
       </div>
-      
     </v-row>
-    <v-row style="display: flex; justify-content: center; margin-top: 20px;">
+    <v-row style="display: flex; justify-content: center; margin-top: 20px">
       <div @click="LDJ" class="onair-btn">
-        <v-row style="display: flex; align-items: center; margin: 0 0 0 3px;">
+        <v-row style="display: flex; align-items: center; margin: 0 0 0 3px">
           <v-col style="padding: 0" cols="5">
-            <img src="@/assets/image/merong.png" alt="" width="40px" style="margin-top:1px">
+            <img
+              src="@/assets/image/merong.png"
+              alt=""
+              width="40px"
+              style="margin-top: 1px"
+            />
           </v-col>
           <v-col style="padding: 0">
             <h4 v-if="onair" style="display: inline">방송 종료</h4>
@@ -33,111 +54,110 @@
 
 <script>
 import Header from "../components/Header.vue";
-import Axios from 'axios'
-import io from 'socket.io-client'
+import Axios from "axios";
+import io from "socket.io-client";
 
 export default {
   components: {
-    Header
+    Header,
   },
   data() {
     return {
-      room: 'hyerin',
+      room: "hyerin",
       socket: null,
       pc: null,
       localStream: null,
       onair: false,
-    }
+    };
   },
   methods: {
-    LDJ(){
+    LDJ() {
       this.connectSocket();
       this.addListener();
       this.onair = !this.onair;
     },
-    connectSocket(){
+    connectSocket() {
       // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
-      alert('방송 시작합니다!')
-      this.socket.emit('create', this.room);
-      navigator.mediaDevices.getUserMedia({audio: true, video: true})
-      .then(mediaStream => {
-        let localVideo = document.querySelector('video');
-        this.localStream = mediaStream;
-        localVideo.srcObject = mediaStream;
-        this.enteringRoom();
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      this.socket = io.connect("https://k3b306.p.ssafy.io:8002");
+      alert("방송 시작합니다!");
+      this.socket.emit("create", this.room);
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: true })
+        .then((mediaStream) => {
+          let localVideo = document.querySelector("video");
+          this.localStream = mediaStream;
+          localVideo.srcObject = mediaStream;
+          this.enteringRoom();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    addListener(){
-      this.socket.on('created', ((room)=>{
-        console.log('On Air[' + room + ']');
-      }));
+    addListener() {
+      this.socket.on("created", (room) => {
+        console.log("On Air[" + room + "]");
+      });
       // After
-      this.socket.on('message',((message) => {
-        if (message.type === 'offer') {
+      this.socket.on("message", (message) => {
+        if (message.type === "offer") {
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
           this.doAnswer();
-        } 
-        else if (message.type === 'answer' && this.pc) {
+        } else if (message.type === "answer" && this.pc) {
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
-        } 
-        else if (message.type === 'candidate' && this.pc){
-          this.pc.addIceCandidate(new RTCIceCandidate({
-            sdpMLineIndex: message.label,
-            candidate: message.candidate
-          }));
+        } else if (message.type === "candidate" && this.pc) {
+          this.pc.addIceCandidate(
+            new RTCIceCandidate({
+              sdpMLineIndex: message.label,
+              candidate: message.candidate,
+            })
+          );
         }
-      }));
-      this.socket.on('ready', (() => {
-        console.log("한명 들어옴ㅋㅋ");
-      }));
+      });
+      this.socket.on("ready", () => {});
     },
     // ******************************** Call me maybe ******************************** //
     sendMessage(message) {
-      this.socket.emit('message', message);
+      this.socket.emit("message", message);
     },
-    async setLocalAndSendMessage(sessionDescription){
-      console.log("Create offer Start");
+    async setLocalAndSendMessage(sessionDescription) {
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer End");
     },
-    handleCreateOfferError(event){
-      console.log('[Error]\n', event);
+    handleCreateOfferError(event) {
+      console.log("[Error]\n", event);
     },
-    onCreateSessionDescriptionError(error){
-      trace('Failed to create session description: ' + error.toString());
+    onCreateSessionDescriptionError(error) {
+      trace("Failed to create session description: " + error.toString());
     },
-    doCall(){
-      console.log('히히오퍼발싸!!!');
-      this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
-    },
-    doAnswer() {
-      console.log('답장하는중...');
-      this.pc.createAnswer()
-      .then(
+    doCall() {
+      this.pc.createOffer(
         this.setLocalAndSendMessage,
-        this.onCreateSessionDescriptionError
+        this.handleCreateOfferError
       );
     },
+    doAnswer() {
+      this.pc
+        .createAnswer()
+        .then(
+          this.setLocalAndSendMessage,
+          this.onCreateSessionDescriptionError
+        );
+    },
     // ******************************** Ice ******************************** //
-    handleIceCandidate(event){
+    handleIceCandidate(event) {
       if (event.candidate) {
         this.sendMessage({
-          type: 'candidate',
+          type: "candidate",
           label: event.candidate.sdpMLineIndex,
           id: event.candidate.sdpMid,
-          candidate: event.candidate.candidate
+          candidate: event.candidate.candidate,
         });
       } else {
-        console.log('End of candidates');
+        console.log("End of candidates");
       }
     },
     // ******************************** LDJ ******************************** //
-    enteringRoom(){
+    enteringRoom() {
       this.pc = new RTCPeerConnection(null);
       this.pc.onicecandidate = this.handleIceCandidate;
       // this.pc.onaddstream = this.handleRemoteStreamAdded;
@@ -145,12 +165,11 @@ export default {
       // this.pc.onremovestream = this.handleRemoteStreamRemoved;
       this.pc.onremovestream = null;
       this.pc.addStream(this.localStream);
-      console.log('피어 만들었다냥~!');
       this.doCall();
     },
     // ******************************** LDJ END ******************************** //
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

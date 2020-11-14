@@ -631,7 +631,6 @@ export default {
           } else {
             this.video = null;
           }
-          console.log(this.video);
         });
     },
 

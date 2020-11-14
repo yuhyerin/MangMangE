@@ -71,10 +71,8 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data);
           if (res.data.success) this.upload = true;
           else this.upload = false;
-          console.log(this.upload);
         })
         .catch((err) => {
           console.log(err);
