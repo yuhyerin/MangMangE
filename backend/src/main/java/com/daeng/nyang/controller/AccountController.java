@@ -178,14 +178,13 @@ public class AccountController {
 	@ApiOperation("문자인증")
 	public ResponseEntity<HashMap<String, Object>> checkPhone(@RequestParam String phone) {
 		int rand = (int) (Math.random() * 899999) + 100000; // 랜덤넘버 6자리
-//		HashMap<String, Object> result = accountService.checkPhone(phone, rand);
+		HashMap<String, Object> result = accountService.checkPhone(phone, rand);
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("number", rand);
-		return new ResponseEntity<>(map, HttpStatus.OK);
-//		if (result == null)
-//			return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-//		else
-//			return new ResponseEntity<>(result, HttpStatus.OK);
+		if (result == null)
+			return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		else
+			return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/user/adopt/create")

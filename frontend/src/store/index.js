@@ -19,7 +19,6 @@ export default new Vuex.Store({
     dogMbtiArr: ["", "", "", ""],
     dogMbti: "",
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    address: '',
     findUserId: '',
     userSurveyCheck: false,
     videoID: 0,
@@ -67,11 +66,6 @@ export default new Vuex.Store({
       if (state.survey[pageNum - 1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
       }
-    },
-
-    findPersonAddress(state, address) {
-      state.address = address
-      console.log(state.address)
     },
 
     setEventListener(state, payload) {
