@@ -128,7 +128,7 @@
             :rules="rule[1]"
           ></v-text-field>
         </v-col>
-        <v-row style="padding-left:10px;">
+        <v-row style="padding-left: 10px">
           <v-col cols="6">
             <v-text-field
               v-model="phoneNumber"
@@ -182,17 +182,22 @@ export default {
       name: "",
       email: "",
       phoneNumber: "",
-      authNum:'',
-      message:'',
-      send:false,
-      auth:false,
+      authNum: "",
+      message: "",
+      send: false,
+      auth: false,
 
       rule: [
         [(value) => !!value || "제목을 입력해 주세요."],
         [(value) => !!value || "이름을 입력해 주세요."],
-        [(value) => !!value || value.length==13 || "연락처를 입력해 주세요."],
+        [(value) => !!value || value.length == 13 || "연락처를 입력해 주세요."],
         [(value) => !!value || "인증번호를 입력해 주세요."],
-        [(value) => !value || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) || "유효하지 않은 이메일입니다."]
+        [
+          (value) =>
+            !value ||
+            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+            "유효하지 않은 이메일입니다.",
+        ],
       ],
     };
   },
@@ -206,7 +211,7 @@ export default {
       } else {
         return age + "살";
       }
-    }
+    },
   },
 
   methods: {
@@ -226,7 +231,7 @@ export default {
           .then((res) => {
             this.pressedAuthenticationBtn = 1;
             this.authNum = res.data.number;
-            console.log(this.authNum)
+            console.log(this.authNum);
             this.send = true;
           })
           .catch((err) => {
@@ -243,8 +248,7 @@ export default {
             {
               ani_num: this.dogInfo.desertion_no,
               user_name: this.name,
-              user_phone:
-                this.phoneNumber,
+              user_phone: this.phoneNumber,
               user_email: this.email,
               title: this.title,
             },
@@ -265,18 +269,16 @@ export default {
   },
   watch: {
     phoneNumber() {
-      this.auth=false;
-      if(this.phoneNumber==null)
-        return;
+      this.auth = false;
+      if (this.phoneNumber == null) return;
       if (this.phoneNumber.length == 3 || this.phoneNumber.length == 8)
         this.phoneNumber += "-";
     },
-    message(){
-      if(this.message==this.authNum){
-        this.auth=true;
+    message() {
+      if (this.message == this.authNum) {
+        this.auth = true;
       }
     },
-
   },
   created() {
     SERVER.tokenCheck(() => {

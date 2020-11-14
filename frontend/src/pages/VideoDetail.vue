@@ -12,12 +12,6 @@
               autoplay
               style="max-height: 505px; width: 100%; height: 100%"
             ></video>
-            <!-- <vue-plyr>
-                <video>
-                  <source :src="require(`@/assets/videos/${video.filepath}`)"/>
-                  <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
-                </video>  
-              </vue-plyr> -->
           </div>
           <v-row>
             <v-col style="padding-bottom: 0">
@@ -64,12 +58,6 @@
                     cursor: pointer;
                   "
                 ></video>
-                <!-- <vue-plyr>
-                    <video>
-                      <source :src="require(`@/assets/videos/${rec.filepath}`)" height="80px"/>
-                      <track kind="captions" label="English" srclang="en" src="captions-en.vtt" default>
-                    </video>  
-                  </vue-plyr> -->
               </v-col>
               <v-col
                 @click="moveToAnoterVideo(rec.uid)"

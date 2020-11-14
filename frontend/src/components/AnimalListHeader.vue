@@ -24,6 +24,7 @@
       @click="moveToMain"
       class="logo"
       style="
+        cursor: pointer;
         height: 75px;
         width: 15vw;
         display: flex;
