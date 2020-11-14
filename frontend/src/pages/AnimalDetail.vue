@@ -394,7 +394,27 @@
             </diV>
           </div>
           <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
-          <div style="width: 100%; height: 50%">내용2</div>
+          <div
+            style="
+              width: 100%;
+              height: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+            "
+          >
+            <div v-if="this.video != null">
+              <div>대표 동영상</div>
+              <video controls style="max-height: 505px; width: 100%">
+                <source
+                  :src="require(`@/assets/videos/${this.video.filepath}`)"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+            <div v-else>동영상이 없습니다.</div>
+          </div>
           <hr style="width: 90%; border: 1px solid rgba(0, 0, 0, 0.12)" />
           <div
             style="
@@ -454,7 +474,7 @@ export default {
       likeTrigger: false,
       animalInfo: "",
       adoptionBtn: "",
-      videos: [],
+      video: "",
       admin: false,
     };
   },
@@ -544,6 +564,7 @@ export default {
     }
     await this.getVideos();
   },
+
   methods: {
     setLiked() {
       if (this.$cookies.get("accessToken") == null) {
@@ -605,11 +626,12 @@ export default {
           },
         })
         .then((res) => {
-          if (res.data.videoList.length >= 4) {
-            this.videos = res.data.videoList.slice(-4);
+          if (res.data.videoList != null) {
+            this.video = res.data.videoList[0];
           } else {
-            this.videos = res.data.videoList;
+            this.video = null;
           }
+          console.log(this.video);
         });
     },
 

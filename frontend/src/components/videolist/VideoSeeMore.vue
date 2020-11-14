@@ -1,5 +1,19 @@
 <template>
   <div>
+    <div
+      class="backBtn"
+      style="position: fixed; top: 90px; left: 5%"
+      @click="moveToBack"
+    >
+      <div style="display: flex; justify-content: center; height: 50px">
+        <div
+          style="display: flex; justify-content: center; align-items: center"
+        >
+          <v-icon x-large>mdi-arrow-left </v-icon>
+        </div>
+      </div>
+      <div>돌아가기</div>
+    </div>
     <v-row style="margin: 10px 0 5px 10px">
       <h2 style="margin-bottom: 10px">총 동영상 {{ videos_cnt }}개</h2>
     </v-row>
@@ -89,6 +103,9 @@ export default {
     },
     scrollToTop() {
       scroll(0, 0);
+    },
+    moveToBack() {
+      this.$emit("changeVideo", 0);
     },
   },
   created() {

@@ -28,6 +28,7 @@ export default new Vuex.Store({
 
     // 1: survey to animalList, 2: main to animalList
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
+    // 5: videoDetail to videoSeeMore
     eventListener: 0,
   },
 

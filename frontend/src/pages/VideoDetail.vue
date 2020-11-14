@@ -1,6 +1,20 @@
 <template>
   <div class="video-detail">
     <Header />
+    <div
+      class="backBtn"
+      style="position: fixed; top: 90px; left: 3 %"
+      @click="moveToBack"
+    >
+      <div style="display: flex; justify-content: center; height: 50px">
+        <div
+          style="display: flex; justify-content: center; align-items: center"
+        >
+          <v-icon x-large>mdi-arrow-left </v-icon>
+        </div>
+      </div>
+      <div>돌아가기</div>
+    </div>
     <v-container fluid style="margin-top: 50px; padding-left: 100px">
       <v-layout col wrap>
         <v-col cols="8">
@@ -83,7 +97,7 @@
 import Header from "../components/Header.vue";
 import SERVER from "@/api/url";
 import axios from "axios";
-import qs from "qs";
+import { mapMutations } from "vuex";
 
 const ADMIN_KEY = process.env.kakaopay_admin_key;
 
@@ -105,6 +119,7 @@ export default {
     this.getVideoList();
   },
   methods: {
+    ...mapMutations(["setEventListener"]),
     moveToMainpage() {
       this.$router.push("/videos");
     },
@@ -196,6 +211,10 @@ export default {
     },
     moveToAnoterVideo(idx) {
       location.href = "/video" + `/${idx}`;
+    },
+    moveToBack() {
+      this.setEventListener(5);
+      this.$router.push("/videos");
     },
   },
 };

@@ -104,21 +104,23 @@ export default {
   },
   created() {
     if (this.$cookies.get("accessToken") != null) {
-      axios
-        .get(SERVER.URL + "/user/userId", {
-          headers: {
-            Authorization: this.$cookies.get("accessToken"), //the token is a variable which holds the token
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          if (res.data.success) this.upload = true;
-          else this.upload = false;
-          console.log(this.upload);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .get(SERVER.URL + "/user/userId", {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"), //the token is a variable which holds the token
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.success) this.upload = true;
+            else this.upload = false;
+            console.log(this.upload);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
     } else {
       this.upload = false;
     }
