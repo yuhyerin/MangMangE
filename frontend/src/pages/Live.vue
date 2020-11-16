@@ -10,6 +10,7 @@
       
       
       <video v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video>
+      <!-- <video src="@/assets/videos/앞에여분있는먹방자른거.mp4" v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video> -->
       <div v-show="!onair" style="width: 545px; height:295px; background-color: black;">
         <h3 style="color: white; text-align: center; margin-top:130px;">현재 방송중이 아닙니다.</h3>
       </div>
@@ -58,8 +59,8 @@ export default {
       this.addListener();
     },
     connectSocket(){
-      // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      this.socket = io.connect('http://localhost:8002');
+      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       if(this.onair){
         alert('방송 시작합니다!')
         this.socket.emit('create', this.room);
