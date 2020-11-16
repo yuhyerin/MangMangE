@@ -13,11 +13,13 @@ npm i
 3. 실행
 
 ```shell
-node index.js
+node test.js
 ```
 
 
 
-프론트
+프론트 라이브 방송 켜는 곳 
+localhost:3000/live 으로 접속해서 확인하기
 
-localhost:8080/streaming 으로 접속해서 확인하기
+프론트 방송 보는 곳
+localhost:3000/videos 으로 접속해서 확인하기
