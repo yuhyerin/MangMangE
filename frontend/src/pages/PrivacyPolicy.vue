@@ -1,18 +1,11 @@
 <template>
   <div class="container">
-    <v-btn
-      class="mx-2"
-      fab
-      dark
-      x-small
-      color="indigo"
-      style="margin-bottom: 20px;"
-      @click="moveToMainpage"
-    >
-      <v-icon dark>
+    <div class="back-btn" @click="moveToMainpage">
+      <v-icon dark style="margin-bottom: 20px; color:black">
         mdi-arrow-left
       </v-icon>
-    </v-btn>
+      <p style="margin-top: 3px; cursor: pointer">되돌아가기</p>
+    </div>
     <div>
       <h4>
         0. 서비스 안내
@@ -146,12 +139,17 @@
         </div>
       </div>
     </div>
-    <div style="text-align: center; margin-top: 20px">
-      <v-btn outlined @click="moveToMainpage">
-        <p style="margin: 0; padding: 0; font-weight: bold">확인</p>
-      </v-btn>
-    </div>
-      
+    <v-btn
+      class="mx-2"
+      fab
+      small
+      dark
+      color="rgb(1, 118, 72)"
+      @click="moveToTop"
+      style="position: fixed; bottom: 70px; right: 55px"
+    >
+      <v-icon dark>mdi-arrow-up</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -161,6 +159,10 @@ export default {
   methods: {
     moveToMainpage() {
       this.$router.push('/#page4')
+    },
+
+    moveToTop() {
+      scroll(0, 0)
     }
   }
 }
@@ -170,5 +172,12 @@ export default {
   p {
     margin-top: 7px;
     padding-left: 10px;
+  }
+  .back-btn {
+    display: flex;
+    cursor: pointer;
+  }
+  .back-btn:hover {
+    font-weight: bold;
   }
 </style>

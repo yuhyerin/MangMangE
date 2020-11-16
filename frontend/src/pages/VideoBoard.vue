@@ -1,12 +1,11 @@
 <template>
   <div>
-    <Header/>
+    <Header />
     <v-container style="padding-top: 90px">
       <div>
-      <!-- <UploadVideo /> -->
-        <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo"/>
-        <NoneStreamingVideo v-if="pageTrigger == 1" @changeVideo="changeVideo" />
-        <VideoSeeMore v-if="pageTrigger == 2" @changeVideo="changeVideo" style="margin-left: 70px"/>
+        <!-- <UploadVideo /> -->
+        <StreamingVideo v-if="pageTrigger == 0" @changeVideo="changeVideo" />
+        <VideoSeeMore v-if="pageTrigger == 1" @changeVideo="changeVideo" />
       </div>
     </v-container>
   </div>
@@ -15,31 +14,40 @@
 <script>
 import Header from "../components/Header.vue";
 import StreamingVideo from "../components/videolist/StreamingVideo";
-import NoneStreamingVideo from "../components/videolist/NoneStreamingVideo";
 import VideoSeeMore from "../components/videolist/VideoSeeMore";
+import { mapMutations, mapState } from "vuex";
 // import UploadVideo from "../components/UploadVideo.vue"
-
-
 
 export default {
   components: {
     Header,
     StreamingVideo,
-    NoneStreamingVideo,
     VideoSeeMore,
     // UploadVideo
   },
   data() {
     return {
-     pageTrigger: 0,
+      pageTrigger: 0,
+    };
+  },
+  computed: {
+    ...mapState(["eventListener"]),
+  },
+  created() {
+    if (this.eventListener == 5) {
+      this.changeVideo(1);
+    } else {
+      this.changeVideo(0);
     }
+    this.setEventListener(0);
   },
   methods: {
+    ...mapMutations(["setEventListener"]),
     changeVideo(value) {
       this.pageTrigger = value;
     },
-  }
-}
+  },
+};
 </script>
 
 <style>

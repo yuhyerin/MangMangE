@@ -45,7 +45,6 @@ export default {
       } else {
         if (this.likeTrigger == true) {
           // 좋아요 해제
-          console.log("false");
           SERVER.tokenCheck(() => {
             axios
               .post(
@@ -59,16 +58,13 @@ export default {
                   },
                 }
               )
-              .then((res) => {
-                console.log(res);
-              })
+              .then((res) => {})
               .catch((err) => {
                 console.log(err);
               });
           });
         } else {
           // 좋아요 등록
-          console.log("true");
           SERVER.tokenCheck(() => {
             axios
               .post(
@@ -82,9 +78,7 @@ export default {
                   },
                 }
               )
-              .then((res) => {
-                console.log(res);
-              })
+              .then((res) => {})
               .catch((err) => {
                 console.log(err);
               });

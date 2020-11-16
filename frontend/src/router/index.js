@@ -7,20 +7,60 @@ import AnimalDetail from '../pages/AnimalDetail.vue'
 import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
-// import VideoList from '../pages/VideoList.vue'
-// import UploadVideo from '../pages/UploadVideo.vue'
-import StreamingTest from '../pages/StreamingTest.vue'
-import StreamingViewer from '../pages/StreamingViewer.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
-import AdoptionReview from '../pages/AdoptionReview.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
-// import UploadTest from '../pages/UploadTest.vue'
 import Live from '../pages/Live.vue'
+import Live2 from '../pages/Live2.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
+import axios from 'axios'
+import SERVER from '@/api/url'
+
+const requireAuth = (to, from, next) => {
+  if ($cookies.get('accessToken') != null) {
+    next();
+  } else {
+    alert("로그인이 필요합니다.");
+    next("/");
+  }
+};
+
+const noRequireAuth = (to, from, next) => {
+  if ($cookies.get('accessToken') == null) {
+    next();
+  } else {
+    alert("회원으로는 접근할 수 없습니다.");
+    next("/");
+  }
+};
+
+const adminAuth = (to, from, next) => {
+  if ($cookies.get('refreshToken') != null) {
+    SERVER.tokenCheck(() => {
+      axios.get(SERVER.URL + "/user/userId", {
+        headers: {
+          Authorization: $cookies.get('accessToken')
+        }
+      }).then((res) => {
+        if (res.data.success) {
+          next();
+        } else {
+          alert("접근 권한이 없습니다.");
+          next('/')
+        }
+      }).catch((err) => {
+        alert("잘못된 접근입니다.");
+        next('/')
+      })
+    })
+  } else {
+    alert("접근 권한이 없습니다.");
+    next('/')
+  }
+}
 
 Vue.use(VueRouter)
 
@@ -28,6 +68,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    beforeEnter: noRequireAuth,
     component: Login
   },
   {
@@ -46,73 +87,66 @@ const routes = [
     component: Mainpage
   },
   {
+    path: '/adoptionlist',
+    name: 'AdoptionList',
+    beforeEnter: requireAuth,
+    component: AdoptionList,
+  },
+  {
     path: '/adoption/:animalID',
     name: 'Adoption',
+    beforeEnter: requireAuth,
     component: Adoption
   },
   {
     path: '/survey',
     name: 'Survey',
+    beforeEnter: requireAuth,
     component: Survey
-  },
-  {
-    path: '/adoptionlist',
-    name: 'AdoptionList',
-    component: AdoptionList,
   },
   {
     path: '/videos',
     name: 'VideoBoard',
     component: VideoBoard,
   },
-  {
-    path: '/adoptionreview',
-    name: 'AdoptionReview',
-    component: AdoptionReview,
-  },
-  {
-    path: '/streamingTest',
-    name: 'StreamingTest',
-    component: StreamingTest
-  },
-  {
-    path: '/viewer',
-    name: 'StreamingViewer',
-    component: StreamingViewer
-  },
+
   {
     path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
+    beforeEnter: requireAuth,
     component: AdoptionUpdate,
   },
   {
     path: '/test',
+    beforeEnter: adminAuth,
     component: Test,
-  },  
+  },
   {
     path: '/video/:videoId',
     name: 'VideoDetail',
     component: VideoDetail,
   },
   {
-   path: '/videos/upload',
-   name:'UploadVideo',
-   component:UploadVideo 
+    path: '/videos/upload',
+    name: 'UploadVideo',
+    beforeEnter: adminAuth,
+    component: UploadVideo
   },
   {
     path: '/privacypolicy',
     name: 'PrivacyPolicy',
     component: PrivacyPolicy
   },
-  // {
-  //   path : '/video/upload',
-  //   name:'UploadVideo',
-  //   component: UploadTest
-  // },
   {
     path: '/live',
     name: 'Live',
+    beforeEnter: adminAuth,
     component: Live
+  },
+  {
+    path: '/live2',
+    name: 'Live2',
+    component: Live2
   },
   {
     path: '/videos/0',

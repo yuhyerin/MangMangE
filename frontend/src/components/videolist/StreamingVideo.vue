@@ -1,13 +1,23 @@
 <template>
   <div>
     <v-row>
-      <v-col>
-        <video
-          id="remoteVideo"
-          autoplay playsinline
-          style="width: 100%"
-        ></video>
-        <button @click="StartBtn">라이브 보기</button>
+      <v-col cols="5" style="padding: 15px; margin-left: 10px;">
+        <v-row class="offair" v-show="!onair">
+          <div class="live-btn">
+            <h4 style="color: white; text-align: center; vertical-align: center;">LIVE</h4>
+          </div>
+          <div @click="StartBtn" class="start-btn blinking">
+            <h2 style="color: white;">라이브 보기</h2>
+          </div>
+        </v-row>
+        <v-row v-show="onair">
+          <video
+            controls
+            id="remoteVideo"
+            autoplay playsinline
+            style="width: 100%; max-width: 439px; height:295px;"
+          ></video>
+        </v-row>
       </v-col>
       <v-col style="padding: 15px">
         <v-row>
@@ -21,12 +31,17 @@
           </div>
         </v-row>
         <v-row>
-          <div style="padding-left: 5px; line-height: 150%">
+          <div style="line-height: 150%">
             실시간 라이브 중입니다 :) <br />
             새로온 댕수를 만나러 오세요 ~ <br />
             ^^ <br />
             <br/>
           </div>
+        </v-row>
+        <v-row style="margin-top: 115px">
+          <v-col style="padding-left: 0;">
+            <img @click="moveToSupport" src="@/assets/image/kakaoBtn.png" alt="" style="width: 150px; cursor: pointer">
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -39,22 +54,10 @@
           controls
           style="max-height: 150px; width: 100%; height: 100%;"
         ></video>
-        <!-- <vue-plyr>
-          <video style="max-height:150px; width:auto; height:100%;">
-            <source :src="require(`@/assets/videos/${video.filepath}`)" />
-            <track
-              kind="captions"
-              label="English"
-              srclang="en"
-              src="captions-en.vtt"
-              default
-            />
-          </video>
-        </vue-plyr> -->
         <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
-      <div class="more-videos">
-        <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x"></i>
+      <div style="margin-top: 50px;">
+        <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x more-videos"></i>
       </div>
     </v-row>
   </div>
@@ -88,12 +91,10 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data)
           if(res.data.success)
             this.upload = true;
           else
             this.upload=false;
-          console.log(this.upload)
         })
         .catch((err) => {
           console.log(err)
@@ -103,16 +104,11 @@ export default {
       this.upload= false;
     }
     this.getVideos()
-    // setTimeout(function() {
-    //   // alert('5초끝!')
-    //   // this.StartBtn();
-    // }, 5000);
     
   },
   methods: {
-    
     videoSeeMore() {
-      this.$emit("changeVideo", 2);
+      this.$emit("changeVideo", 1);
     },
     uploadVideo() {
       this.$router.push("/videos/upload");
@@ -146,8 +142,8 @@ export default {
       this.onair = !this.onair;
     },
     connectSocket(){
-      // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      this.socket = io.connect('http://localhost:8002');
+      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       this.socket.emit('join', this.room);
       this.enteringRoom();
     },
@@ -174,23 +170,19 @@ export default {
       this.socket.emit('message', message);
     },
     async setLocalAndSendMessage(sessionDescription){
-      console.log("Create offer Start");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer End");
     },
     handleCreateOfferError(event){
       console.log('[Error]\n', event);
     },
     onCreateSessionDescriptionError(error){
-      trace('Failed to create session description: ' + error.toString());
+      console.log('Failed to create session description: ' + error.toString());
     },
     doCall(){
-      console.log('createOffer 호출');
       this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
     },
     doAnswer() {
-      console.log('createAnswer 호출');
       this.pc.createAnswer()
       .then(
         this.setLocalAndSendMessage,
@@ -207,7 +199,6 @@ export default {
           candidate: event.candidate.candidate
         });
       } else {
-        console.log('End of candidates');
       }
     },
     // ******************************** Custom ******************************** //
@@ -215,18 +206,36 @@ export default {
       this.pc = new RTCPeerConnection(null);
       this.pc.onicecandidate = this.handleIceCandidate;
       this.pc.onaddstream = this.handleRemoteStreamAdded;
-      // this.pc.onaddstream = null;
       this.pc.onremovestream = this.handleRemoteStreamRemoved;
-      // this.pc.onremovestream = null;
-      // this.pc.addStream(this.localStream);
-      console.log('peer 생성');
       this.doCall();
     },
     handleRemoteStreamAdded(event){
       document.querySelector("video").srcObject = event.stream;
     },
     handleRemoteStreamRemoved(event) {
-      console.log('Remote stream removed. Event: ', event);
+      this.onair = !this.onair;
+
+    },
+    moveToSupport() {
+      axios.post(SERVER.URL+'/newuser/kakaoPay',
+        {
+          videoid: 1
+        },  
+      )
+      .then((res) => {
+        async function openPopup() {
+          window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
+          await function() {
+            window.close("http://localhost:3000/video/0")
+          }
+        }
+        openPopup()
+      }
+      )
+      .catch((err) => {
+        console.log(err)
+      }
+      )
     },
   }
 }
@@ -235,8 +244,6 @@ export default {
 <style scoped>
 .more-videos {
   padding: 20px;
-  display: flex;
-  align-items: center;
 }
 .more-videos:hover {
   color: silver;
@@ -247,7 +254,48 @@ export default {
   color: rgb(1, 118, 72);
 }
 
-div.videoTitle:hover {
+.videoTitle:hover {
   cursor: pointer;
 }
+.offair {
+  max-width: 439px; 
+  width: 100%; 
+  height:295px; 
+  border: 1px solid black; 
+  background-color: black;
+}
+.live-btn {
+  height: 25px; 
+  background-color: red; 
+  padding: 2px 7px 2px 7px; 
+  border-radius: 13px; 
+  margin: 5px;
+}
+.start-btn {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 110px;
+  cursor: pointer;
+  border: 2px solid white;
+  padding: 7px;
+  border-radius: 8px;
+}
+.blinking{
+	-webkit-animation:blink 1.0s ease-in-out infinite alternate;
+  -moz-animation:blink 1.0s ease-in-out infinite alternate;
+  animation:blink 1.0s ease-in-out infinite alternate;
+}
+@-webkit-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-moz-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
 </style>

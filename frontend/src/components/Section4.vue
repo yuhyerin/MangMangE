@@ -27,8 +27,8 @@
       <div class="footer-first" style="margin-top: 20px">
         <h2 style="margin-bottom: 5px">CONTACT</h2>
         <br />
-        <p>MYLITTLE@DANG.COM</p>
-        <p>010-1234-5678</p>
+        <p><i class="fas fa-envelope fa-sm" style="margin-right: 5px"></i>MYLITTLE@DANG.COM</p>
+        <p><i class="fas fa-phone-alt fa-sm" style="margin-right: 5px"></i>010-1234-5678</p>
       </div>
       <div class="footer-second" style="margin-top: 20px">
         <h2 style="margin-bottom: 5px">오시는길</h2>
@@ -40,9 +40,9 @@
       <div class="footer-third" style="margin-top: 20px">
         <h2 style="margin-bottom: 5px">영업시간</h2>
         <br />
-        <p>09시 00분</p>
-        <p>~</p>
-        <p>18시 00분</p>
+        <p>평일 09:00 ~ 18:00</p>
+        <br />
+        <br />
       </div>
       <div class="footer-fourth" style="margin-top: 20px">
         <h2 style="margin-bottom: 5px">개발자</h2>
@@ -76,10 +76,7 @@ export default {
 
 <style scoped>
 .section.s3 {
-  /* background: black; */
-  /* background: rgb(58, 58, 58); */
   background: #ff9900;
-  /* background-color: #ccc; */
   padding-top: 75px;
 }
 
@@ -143,7 +140,6 @@ div.footer {
   width: 100%;
   height: 30vh;
   background: white;
-  /* background: rgb(58, 57, 57); */
   margin: 0;
 }
 

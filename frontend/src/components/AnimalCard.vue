@@ -80,7 +80,7 @@
       </div>
     </div>
     <div
-      style="display: flex; justify-content: center; align-items: flex-start; flex; flex-direction: column; width: 100%"
+      style="display: flex; justify-content: center; align-items: flex-start; flex; flex-direction: column; width: 90%"
     >
       <div
         style="
@@ -96,7 +96,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%; font-weight: bold;"
+          style="width: 100%; font-weight: bold"
         >
           # {{ this.animalInfo.personality[0] }}
         </div>
@@ -106,7 +106,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%; font-weight: bold;"
+          style="width: 100%; font-weight: bold"
         >
           # {{ this.animalInfo.personality[1] }}
         </div>
@@ -125,7 +125,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%; font-weight: bold;"
+          style="width: 100%; font-weight: bold"
         >
           # {{ this.animalInfo.personality[2] }}
         </div>
@@ -135,7 +135,7 @@
               ? 'font-size: 15px'
               : 'font-size: 15px'
           "
-          style="width: 100%; font-weight: bold;"
+          style="width: 100%; font-weight: bold"
         >
           # {{ this.animalInfo.personality[3] }}
         </div>
@@ -214,7 +214,6 @@ export default {
         if (this.moveTrigger == false) {
           if (this.likeTrigger == true) {
             // 좋아요 해제
-            console.log("false");
             SERVER.tokenCheck(() => {
               axios
                 .post(
@@ -228,16 +227,13 @@ export default {
                     },
                   }
                 )
-                .then((res) => {
-                  console.log(res);
-                })
+                .then((res) => {})
                 .catch((err) => {
                   console.log(err);
                 });
             });
           } else {
             // 좋아요 등록
-            console.log("true");
             SERVER.tokenCheck(() => {
               axios
                 .post(
@@ -251,9 +247,7 @@ export default {
                     },
                   }
                 )
-                .then((res) => {
-                  console.log(res);
-                })
+                .then((res) => {})
                 .catch((err) => {
                   console.log(err);
                 });

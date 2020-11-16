@@ -25,7 +25,7 @@
           />
           <h1 class="left" style="color: white"><strong>나의 MBTI</strong></h1>
           <br />
-          <div style="color: white">
+          <div style="color: white; line-height: 180%">
             <strong>
               <p>원하는 동물을 찾아보기 이전에 먼저</p>
               <p>MBTI를 통해 자신의 성격을 이해해요</p>
@@ -42,7 +42,7 @@
           />
           <h1 class="left"><strong>설문</strong></h1>
           <br />
-          <div style="color: white">
+          <div style="color: white; line-height: 180%">
             <strong>
               <p>설문을 통해 자신에게 어떤 성격의</p>
               <p>강아지가 맞는지 파악해봐요</p>
@@ -59,7 +59,7 @@
           />
           <h1 class="right"><strong>추천리스트</strong></h1>
           <br />
-          <div style="color: white">
+          <div style="color: white; line-height: 180%">
             <strong>
               <p>MBTI와 설문을 거쳐서 자신의 성향에</p>
               <p>맞는 강아지를 추천 받아보세요</p>
@@ -81,19 +81,13 @@ export default {
 
 <style scoped>
 .s1 {
-  /* background: #4267B3; */
-  /* background: #00022e; */
-  /* background: rgb(255,183, 51); */
-  /* background-color: orange; */
-  /* background: linear-gradient(#FF9900, #FFBB74); */
   background: #ff9900;
-  padding-top: 75px;
+  padding-top: 90px;
 }
 
 .container.s2 {
   height: 85vh;
   border-radius: 20px;
-  /* background-color: rgb(244, 236, 225); */
   text-align: center;
   margin-top: 50px;
 }

@@ -16,10 +16,10 @@
             <h2 style="text-align: center">반려동물을 찾아보세요</h2>
           </div>
           <div
-            style="display: flex; width: 100%; justify-content: space-around;"
+            style="display: flex; width: 100%; justify-content: space-around"
           >
             <v-btn
-              style="width: 8vw;"
+              style="width: 8vw"
               color="rgb(1,118,72)"
               @click="moveTo('/survey')"
               ><div style="color: white">동물 매칭하기</div></v-btn
@@ -41,10 +41,18 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "Section1",
   methods: {
+    ...mapMutations(["setEventListener"]),
+    ...mapMutations(["resetSurvey"]),
     moveTo(page) {
+      if (page == "/animals") {
+        this.setEventListener = 2;
+      } else if (page == "/survey") {
+        this.resetSurvey(null);
+      }
       this.$router.push(page);
     },
   },
@@ -53,7 +61,6 @@ export default {
 
 <style scoped>
 .s0 {
-  /* background-image: url("../assets/image/mainpage/section1.jpg"); */
   background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
     url("../assets/image/mainpage/section1.jpg");
   background-size: cover;
@@ -106,12 +113,6 @@ a.moveToSection2 {
   border-bottom: 2px solid black;
   text-decoration: none;
   color: black;
-  /* color: black;
-  text-decoration: none;
-  background: black;
-  border: 5px solid black;
-  color: white;
-  border-radius: 5px; */
 }
 
 a.moveToSection2:link {
@@ -125,7 +126,6 @@ a.moveToSection2:visited {
 .mainWindow {
   width: 50%;
   height: 40%;
-  /* background: white; */
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 15px;
   display: flex;

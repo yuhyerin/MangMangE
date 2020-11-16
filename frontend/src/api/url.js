@@ -1,14 +1,15 @@
 import axios from 'axios'
 
 export default {
-  // URL: 'https://localhost:8080',
-  URL: 'https://k3b306.p.ssafy.io:8080',
+  URL: 'https://localhost:8080',
+  // URL: 'https://k3b306.p.ssafy.io:8080',
   KakaopayURL: 'https://kapi.kakao.com/v1/payment/ready',
   ROUTES: {
     submitSurvey: '/user/survey/create',
     getAllVideos: '/newuser/video/allvideo',
     getVideo: '/newuser/video/detailvideo',
   },
+
 
   EXPIRETIME: 600,
 
@@ -57,8 +58,6 @@ export default {
       userTime -= 86400;
     }
 
-    console.log("expireTime", expireTime);
-    console.log("userTime", userTime);
     if (expireTime <= userTime) {
       axios
         .post(
@@ -72,7 +71,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log('엑세스 토큰 재발급 성공', res);
           if (res.data.success) {
             $cookies.set("accessToken", res.data.accessToken);
             $cookies.set("expireTime", res.data.expireTime);

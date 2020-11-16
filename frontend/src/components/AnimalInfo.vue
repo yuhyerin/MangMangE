@@ -97,32 +97,56 @@
         "
       >
         <div
-          stlye="width:25%;"
+          stlye="width:100%;"
           v-for="(tag, index) in this.animalTag"
           :key="index"
         >
-          <div v-if="checkTag(tag) == 'E'" style="color: rgb(232, 99, 100);">
+          <div
+            v-if="checkTag(tag) == 'E'"
+            style="color: rgb(232, 99, 100); margin-right: 10px"
+          >
             #{{ tag }}
           </div>
-          <div v-if="checkTag(tag) == 'Q'" style="color: rgb(130, 157, 212);">
+          <div
+            v-if="checkTag(tag) == 'Q'"
+            style="color: rgb(130, 157, 212); margin-right: 10px"
+          >
             #{{ tag }}
           </div>
-          <div v-if="checkTag(tag) == 'F'" style="color: rgb(89, 197, 173);">
+          <div
+            v-if="checkTag(tag) == 'F'"
+            style="color: rgb(89, 197, 173); margin-right: 10px"
+          >
             #{{ tag }}
           </div>
-          <div v-if="checkTag(tag) == 'C'" style="color: rgb(214, 120, 157);">
+          <div
+            v-if="checkTag(tag) == 'C'"
+            style="color: rgb(214, 120, 157); margin-right: 10px"
+          >
             #{{ tag }}
           </div>
-          <div v-if="checkTag(tag) == 'S'" style="color: rgb(238, 158, 85);">
+          <div
+            v-if="checkTag(tag) == 'S'"
+            style="color: rgb(238, 158, 85); margin-right: 10px"
+          >
             #{{ tag }}
           </div>
-          <div v-if="checkTag(tag) == 'I'" style="color: rgb(177, 148, 196);">
+          <div
+            v-if="checkTag(tag) == 'I'"
+            style="color: rgb(177, 148, 196); margin-right: 10px"
+          >
             #{{ tag }}
           </div>
-          <div v-if="checkTag(tag) == 'A'" style="color: rgb(123, 181, 123);">
+          <div
+            v-if="checkTag(tag) == 'A'"
+            style="color: rgb(123, 181, 123); margin-right: 10px"
+          >
             #{{ tag }}
           </div>
-          <div v-if="checkTag(tag) == 'W'" style="color: rgb(251, 202, 84);">
+          <div
+            v-if="checkTag(tag) == 'W'"
+            style="color: rgb(251, 202, 84); margin-right: 10px"
+          >
             #{{ tag }}
           </div>
         </div>
@@ -157,7 +181,7 @@
           v-if="this.animalInfo.special_mark != ','"
           style="width: 70%; height: 100%"
         >
-          {{ this.animalInfo.special_mark }}
+          특징 : {{ this.animalInfo.special_mark }}
         </div>
       </div>
     </div>
@@ -219,7 +243,6 @@ export default {
     },
 
     checkTag(tag) {
-      console.log(tag);
       if (
         tag == "활동적인" ||
         tag == "에너지뿜뿜" ||

@@ -10,16 +10,17 @@
       
       
       <video v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video>
+      <!-- <video src="@/assets/videos/앞에여분있는먹방자른거.mp4" v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video> -->
       <div v-show="!onair" style="width: 545px; height:295px; background-color: black;">
         <h3 style="color: white; text-align: center; margin-top:130px;">현재 방송중이 아닙니다.</h3>
       </div>
       
     </v-row>
     <v-row style="display: flex; justify-content: center; margin-top: 20px;">
-      <div @click="LDJ" class="onair-btn">
+      <div @click="StartBtn" class="onair-btn">
         <v-row style="display: flex; align-items: center; margin: 0 0 0 3px;">
           <v-col style="padding: 0" cols="5">
-            <img src="@/assets/image/merong.png" alt="" width="40px" style="margin-top:1px">
+            <img src="@/assets/image/startbutton.png" alt="" width="40px" style="margin-top:1px">
           </v-col>
           <v-col style="padding: 0">
             <h4 v-if="onair" style="display: inline">방송 종료</h4>
@@ -43,44 +44,58 @@ export default {
   data() {
     return {
       room: 'hyerin',
+      viewer_number: 0,
       socket: null,
       pc: null,
       localStream: null,
       onair: false,
+      viewers: [],
     }
   },
   methods: {
-    LDJ(){
+    StartBtn(){
+      this.onair = !this.onair;
       this.connectSocket();
       this.addListener();
-      this.onair = !this.onair;
     },
     connectSocket(){
-      // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
-      alert('방송 시작합니다!')
-      this.socket.emit('create', this.room);
-      navigator.mediaDevices.getUserMedia({audio: true, video: true})
-      .then(mediaStream => {
-        let localVideo = document.querySelector('video');
-        this.localStream = mediaStream;
-        localVideo.srcObject = mediaStream;
-        this.enteringRoom();
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      this.socket = io.connect('http://localhost:8002');
+      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      if(this.onair){
+        alert('방송 시작합니다!')
+        this.socket.emit('create', this.room);
+        navigator.mediaDevices.getUserMedia({audio: true, video: true})
+        .then(mediaStream => {
+          let localVideo = document.querySelector('video');
+          this.localStream = mediaStream;
+          localVideo.srcObject = mediaStream;
+          this.enteringRoom();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      }else{
+        const stream  = document.querySelector('video').srcObject;
+        const tracks = stream.getTracks();
+        tracks.forEach(function(track){
+          track.stop();
+        });
+        this.pc.close();
+      }
+      
     },
     addListener(){
       this.socket.on('created', ((room)=>{
-        console.log('On Air[' + room + ']');
       }));
       // After
       this.socket.on('message',((message) => {
-        if (message.type === 'offer') {
+        if (message.type === 'offer' && !this.onair) {
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
           this.doAnswer();
-        } 
+        }
+        // else if(message.type === 'offer' && this.onair){
+        //   this.doAnswer();
+        // }
         else if (message.type === 'answer' && this.pc) {
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
         } 
@@ -89,10 +104,26 @@ export default {
             sdpMLineIndex: message.label,
             candidate: message.candidate
           }));
+        }else if(message === 'viewer'){//참여자가 소켓 id 보냈을 때. 
+          // alert('사용자 소켓 id : ',message);
+          this.viewer_number++;
+          this.doCall();
         }
       }));
       this.socket.on('ready', (() => {
-        console.log("한명 들어옴ㅋㅋ");
+        this.viewer_number++;
+        this.doCall();
+      }));
+
+      this.socket.on('viewer', ((sk) => {
+        this.viewer_number++;
+        // viewers 배열에 있는지 검사. 
+        if(this.viewers.includes(sk)){
+          this.doCall();
+        }else{
+          this.viewers.push(sk);
+          this.doCall();
+        }
       }));
     },
     // ******************************** Call me maybe ******************************** //
@@ -100,23 +131,19 @@ export default {
       this.socket.emit('message', message);
     },
     async setLocalAndSendMessage(sessionDescription){
-      console.log("Create offer Start");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer End");
     },
     handleCreateOfferError(event){
       console.log('[Error]\n', event);
     },
     onCreateSessionDescriptionError(error){
-      trace('Failed to create session description: ' + error.toString());
+      console.log('Failed to create session description: ' + error.toString());
     },
     doCall(){
-      console.log('히히오퍼발싸!!!');
       this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
     },
     doAnswer() {
-      console.log('답장하는중...');
       this.pc.createAnswer()
       .then(
         this.setLocalAndSendMessage,
@@ -133,10 +160,9 @@ export default {
           candidate: event.candidate.candidate
         });
       } else {
-        console.log('End of candidates');
       }
     },
-    // ******************************** LDJ ******************************** //
+    // ******************************** Custom ******************************** //
     enteringRoom(){
       this.pc = new RTCPeerConnection(null);
       this.pc.onicecandidate = this.handleIceCandidate;
@@ -145,10 +171,9 @@ export default {
       // this.pc.onremovestream = this.handleRemoteStreamRemoved;
       this.pc.onremovestream = null;
       this.pc.addStream(this.localStream);
-      console.log('피어 만들었다냥~!');
       this.doCall();
     },
-    // ******************************** LDJ END ******************************** //
+    // ******************************** Custom END ******************************** //
   }
 }
 </script>
