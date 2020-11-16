@@ -76,10 +76,7 @@ export default {
 
 <style scoped>
 .section.s3 {
-  /* background: black; */
-  /* background: rgb(58, 58, 58); */
   background: #ff9900;
-  /* background-color: #ccc; */
   padding-top: 75px;
 }
 
@@ -143,7 +140,6 @@ div.footer {
   width: 100%;
   height: 30vh;
   background: white;
-  /* background: rgb(58, 57, 57); */
   margin: 0;
 }
 

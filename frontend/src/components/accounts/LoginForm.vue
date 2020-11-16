@@ -11,9 +11,6 @@
       justify-content: center;
     "
   >
-    <div class="loading" v-if="loadingTrigger">
-      <i class="fas fa-spinner fa-10x fa-spin"></i>
-    </div>
     <v-col lg="10">
       <v-col align="align">
         <div style="display: flex; justify-content: center; align-item: center">
@@ -104,8 +101,12 @@ export default {
       this.$emit("changeComponents", 3);
     },
 
+    isLoading(value) {
+      this.$emit("isLoading", value);
+    },
+
     login() {
-      this.loadingTrigger = true;
+      this.isLoading(true);
       axios
         .post(SERVER.URL + "/newuser/login/", {
           user_id: this.id,
@@ -122,7 +123,7 @@ export default {
               },
             })
             .then((res) => {
-              this.loadingTrigger = false;
+              this.isLoading(false);
               if (res.data.survey != null) {
                 this.setUserSurveyCheck(true);
               } else if (res.data.survey == null) {
@@ -130,7 +131,7 @@ export default {
               }
             })
             .catch((err) => {
-              this.loadingTrigger = false;
+              this.isLoading(false);
               console.log(err);
               if (err.response != undefined) {
                 SERVER.RefreshToken(err);
@@ -140,7 +141,7 @@ export default {
         })
         .catch((err) => {
           alert("아이디 또는 비밀번호를 확인해 주세요.");
-          this.loadingTrigger = false;
+          this.isLoading(false);
           return;
         });
     },

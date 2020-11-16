@@ -228,7 +228,6 @@ public class AccountController {
 			result.put("animal", animal);
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
-		
 	}
 
 	@GetMapping(path = "/user/userId")

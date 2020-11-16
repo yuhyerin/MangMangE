@@ -28,7 +28,8 @@ io.sockets.on('connection', function (socket) {
     let clientsInRoom = io.sockets.adapter.rooms[room];
     let numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
     socket.emit('joined', room, socket.id);
-    io.sockets.in(room).emit('ready');
+    // io.sockets.in(room).emit('ready');
+    io.sockets.in(room).emit('viewer',socket.id);
   });
   socket.on('ipaddr', function () {
     var ifaces = os.networkInterfaces();

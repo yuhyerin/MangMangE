@@ -16,6 +16,7 @@
         </v-row>
         <v-row v-show="onair">
           <video
+            controls
             id="remoteVideo"
             autoplay
             playsinline
@@ -186,8 +187,16 @@ export default {
       this.socket.emit("message", message);
     },
     async setLocalAndSendMessage(sessionDescription) {
+      console.log("Create offer/answer Start");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
+      console.log("Create offer/answer End");
+    },
+    handleCreateOfferError(event) {
+      console.log("[Error]\n", event);
+    },
+    onCreateSessionDescriptionError(error) {
+      console.log("Failed to create session description: " + error.toString());
     },
     handleCreateOfferError(event) {},
     onCreateSessionDescriptionError(error) {
@@ -225,10 +234,11 @@ export default {
       this.pc = new RTCPeerConnection(null);
       this.pc.onicecandidate = this.handleIceCandidate;
       this.pc.onaddstream = this.handleRemoteStreamAdded;
-      // this.pc.onaddstream = null;
       this.pc.onremovestream = this.handleRemoteStreamRemoved;
+      // this.pc.onaddstream = null;
       // this.pc.onremovestream = null;
       // this.pc.addStream(this.localStream);
+      console.log("enteringRoom : peerConnection 생성");
       this.doCall();
     },
     handleRemoteStreamAdded(event) {
@@ -236,6 +246,7 @@ export default {
     },
     handleRemoteStreamRemoved(event) {
       console.log("Remote stream removed. Event: ", event);
+      this.onair = !this.onair;
     },
     moveToSupport() {
       axios
@@ -250,7 +261,7 @@ export default {
               "width=430, height=500, location=no, status=no, scrollbars=yes"
             );
             await function () {
-              window.close("http://localhost:3000/video/0");
+              window.close(SERVER.URL + "/video/0");
             };
           }
           openPopup();

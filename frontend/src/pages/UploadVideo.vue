@@ -130,7 +130,7 @@ export default {
       file: undefined,
       content: "",
       selectedFiles: false,
-      desertionNoCheck: 1,
+      desertionNoCheck: 3,
       selectedFileCheck: 0,
       image: require(`@/assets/image/merong1.png`),
       error: {

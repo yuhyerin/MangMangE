@@ -32,11 +32,11 @@
       </div>
     </v-row>
     <v-row style="display: flex; justify-content: center; margin-top: 20px">
-      <div @click="LDJ" class="onair-btn">
+      <div @click="StartBtn" class="onair-btn">
         <v-row style="display: flex; align-items: center; margin: 0 0 0 3px">
           <v-col style="padding: 0" cols="5">
             <img
-              src="@/assets/image/merong.png"
+              src="@/assets/image/startbutton.png"
               alt=""
               width="40px"
               style="margin-top: 1px"
@@ -64,34 +64,45 @@ export default {
   data() {
     return {
       room: "hyerin",
+      viewer_number: 0,
       socket: null,
       pc: null,
       localStream: null,
       onair: false,
+      viewers: [],
     };
   },
   methods: {
-    LDJ() {
+    StartBtn() {
+      this.onair = !this.onair;
       this.connectSocket();
       this.addListener();
-      this.onair = !this.onair;
     },
     connectSocket() {
       // this.socket = io.connect('http://localhost:8002');
       this.socket = io.connect("https://k3b306.p.ssafy.io:8002");
-      alert("방송 시작합니다!");
-      this.socket.emit("create", this.room);
-      navigator.mediaDevices
-        .getUserMedia({ audio: true, video: true })
-        .then((mediaStream) => {
-          let localVideo = document.querySelector("video");
-          this.localStream = mediaStream;
-          localVideo.srcObject = mediaStream;
-          this.enteringRoom();
-        })
-        .catch((err) => {
-          console.log(err);
+      if (this.onair) {
+        alert("방송 시작합니다!");
+        this.socket.emit("create", this.room);
+        navigator.mediaDevices
+          .getUserMedia({ audio: true, video: true })
+          .then((mediaStream) => {
+            let localVideo = document.querySelector("video");
+            this.localStream = mediaStream;
+            localVideo.srcObject = mediaStream;
+            this.enteringRoom();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        const stream = document.querySelector("video").srcObject;
+        const tracks = stream.getTracks();
+        tracks.forEach(function (track) {
+          track.stop();
         });
+        this.pc.close();
+      }
     },
     addListener() {
       this.socket.on("created", (room) => {
@@ -99,10 +110,14 @@ export default {
       });
       // After
       this.socket.on("message", (message) => {
-        if (message.type === "offer") {
+        if (message.type === "offer" && !this.onair) {
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
           this.doAnswer();
-        } else if (message.type === "answer" && this.pc) {
+        }
+        // else if(message.type === 'offer' && this.onair){
+        //   this.doAnswer();
+        // }
+        else if (message.type === "answer" && this.pc) {
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
         } else if (message.type === "candidate" && this.pc) {
           this.pc.addIceCandidate(
@@ -111,9 +126,34 @@ export default {
               candidate: message.candidate,
             })
           );
+        } else if (message === "viewer") {
+          //참여자가 소켓 id 보냈을 때.
+          // alert('사용자 소켓 id : ',message);
+          this.viewer_number++;
+          console.log("한명 ready / 현재 참여자 : ", this.viewer_number);
+          this.doCall();
         }
       });
-      this.socket.on("ready", () => {});
+      this.socket.on("ready", () => {
+        this.viewer_number++;
+        console.log("한명 ready / 현재 참여자 : ", this.viewer_number);
+        this.doCall();
+      });
+
+      this.socket.on("viewer", (sk) => {
+        console.log("참여자 소켓id : ", sk);
+        this.viewer_number++;
+        console.log("한명 ready / 현재 참여자 수: ", this.viewer_number);
+        // viewers 배열에 있는지 검사.
+        if (this.viewers.includes(sk)) {
+          this.doCall();
+        } else {
+          this.viewers.push(sk);
+
+          console.log(this.viewers);
+          this.doCall();
+        }
+      });
     },
     // ******************************** Call me maybe ******************************** //
     sendMessage(message) {
@@ -123,17 +163,21 @@ export default {
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
     },
-    handleCreateOfferError(event) {
-      console.log("[Error]\n", event);
-    },
     onCreateSessionDescriptionError(error) {
-      trace("Failed to create session description: " + error.toString());
+      console.log("Failed to create session description: " + error.toString());
     },
     doCall() {
+      console.log("createOffer");
       this.pc.createOffer(
         this.setLocalAndSendMessage,
         this.handleCreateOfferError
       );
+    },
+    doAnswer() {
+      console.log("createAnswer");
+      this.pc
+        .createAnswer()
+        .then(this.setLocalAndSendMessage, this.handleCreateOfferError);
     },
     doAnswer() {
       this.pc
@@ -156,7 +200,7 @@ export default {
         console.log("End of candidates");
       }
     },
-    // ******************************** LDJ ******************************** //
+    // ******************************** Custom ******************************** //
     enteringRoom() {
       this.pc = new RTCPeerConnection(null);
       this.pc.onicecandidate = this.handleIceCandidate;
@@ -167,7 +211,7 @@ export default {
       this.pc.addStream(this.localStream);
       this.doCall();
     },
-    // ******************************** LDJ END ******************************** //
+    // ******************************** Custom END ******************************** //
   },
 };
 </script>

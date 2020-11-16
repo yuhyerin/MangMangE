@@ -139,12 +139,17 @@
         </div>
       </div>
     </div>
-    <div style="text-align: center; margin-top: 20px">
-      <v-btn outlined @click="moveToMainpage">
-        <p style="margin: 0; padding: 0; font-weight: bold">확인</p>
-      </v-btn>
-    </div>
-      
+    <v-btn
+      class="mx-2"
+      fab
+      small
+      dark
+      color="rgb(1, 118, 72)"
+      @click="moveToTop"
+      style="position: fixed; bottom: 70px; right: 55px"
+    >
+      <v-icon dark>mdi-arrow-up</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -154,6 +159,10 @@ export default {
   methods: {
     moveToMainpage() {
       this.$router.push('/#page4')
+    },
+
+    moveToTop() {
+      scroll(0, 0)
     }
   }
 }

@@ -7,18 +7,14 @@ import AnimalDetail from '../pages/AnimalDetail.vue'
 import Mainpage from '../pages/Mainpage.vue'
 import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
-// import VideoList from '../pages/VideoList.vue'
-// import UploadVideo from '../pages/UploadVideo.vue'
-import StreamingTest from '../pages/StreamingTest.vue'
-import StreamingViewer from '../pages/StreamingViewer.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
 import AdoptionUpdate from '../pages/AdoptionUpdate.vue'
 import Test from "../pages/Test.vue"
 import VideoDetail from '../pages/VideoDetail.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
-// import UploadTest from '../pages/UploadTest.vue'
 import Live from '../pages/Live.vue'
+import Live2 from '../pages/Live2.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
 import axios from 'axios'
 import SERVER from '@/api/url'
@@ -115,22 +111,10 @@ const routes = [
   },
 
   {
-    path: '/streamingTest',
-    name: 'StreamingTest',
-    beforeEnter: adminAuth,
-    component: StreamingTest
-  },
-  {
-    path: '/viewer',
-    name: 'StreamingViewer',
-    beforeEnter: adminAuth,
-    component: StreamingViewer
-  },
-  {
     path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
     beforeEnter: requireAuth,
-    component: Adoption,
+    component: AdoptionUpdate,
   },
   {
     path: '/test',
@@ -153,11 +137,6 @@ const routes = [
     name: 'PrivacyPolicy',
     component: PrivacyPolicy
   },
-  // {
-  //   path : '/video/upload',
-  //   name:'UploadVideo',
-  //   component: UploadTest
-  // },
   {
     path: '/live',
     name: 'Live',
@@ -165,9 +144,13 @@ const routes = [
     component: Live
   },
   {
+    path: '/live2',
+    name: 'Live2',
+    component: Live2
+  },
+  {
     path: '/videos/0',
     name: 'VideoDetailPopup',
-    beforeEnter: adminAuth,
     component: VideoDetailPopup,
     props: (route) => ({ query: route.query.q })
   }

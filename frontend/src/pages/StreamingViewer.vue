@@ -33,8 +33,8 @@ export default {
       this.onair = !this.onair;
     },
     connectSocket() {
-      this.socket = io.connect("http://localhost:8002");
-      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      // this.socket = io.connect("http://localhost:8002");
+      this.socket = io.connect("https://k3b306.p.ssafy.io:8002");
 
       alert("방송 봅니다!");
       this.socket.emit("join", this.room);

@@ -268,6 +268,7 @@ export default {
           }
         )
         .then((res) => {
+          console.log(res.data);
           this.dogInfo = res.data.animal;
           this.formInfo = res.data.apply;
           this.name = res.data.apply.user_name;

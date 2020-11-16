@@ -3,7 +3,6 @@
     <table class="pagination-table">
       <thead>
         <tr style="background: orange;">
-        <!-- <tr style="background: rgb(244, 236, 225)"> -->
           <th style="width: 20%">NO</th>
           <th style="width: 55%">제목</th>
           <th style="width: 15%">아이디</th>
@@ -125,15 +124,10 @@ export default {
   border-collapse: collapse;
 }
 
-/* table th {
-    font-size: 1.2rem;
-  } */
-
 table tr {
   height: 2rem;
   text-align: center;
   border-bottom: 0.5px solid darkgray;
-  /* border-bottom: 0.5px solid #505050; */
 }
 
 table tr:first-of-type {
@@ -142,7 +136,6 @@ table tr:first-of-type {
 
 table tr td {
   padding: 1rem 0;
-  /* font-size: 1.1rem; */
 }
 
 .tr-apply:hover {

@@ -136,7 +136,7 @@ export default {
               "width=430, height=500, location=no, status=no, scrollbars=yes"
             );
             await function () {
-              window.close("http://localhost:3000/video/0");
+              window.close(SERVER.URL + "/video/0");
             };
           }
           openPopup();

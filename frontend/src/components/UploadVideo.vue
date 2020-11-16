@@ -11,6 +11,7 @@
 <script>
 import Header from "../components/Header.vue";
 import vueDropzone from "vue2-dropzone";
+import SERVER from "@/api/url";
 
 export default {
   components: {
@@ -20,7 +21,7 @@ export default {
   data() {
     return {
       config: {
-        url: "http://localhost:3000/assets/videos",
+        url: SERVER.URL + `/assets/videos`,
       },
       title: "",
       dogID: "",
