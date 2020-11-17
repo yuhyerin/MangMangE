@@ -128,7 +128,6 @@ export default {
       if (this.moveTrigger == false) {
         if (this.likeTrigger == true) {
           // 좋아요 해제
-          console.log("false");
           axios
             .post(
               SERVER.URL + "/user/animal/animalLike",
@@ -141,15 +140,12 @@ export default {
                 },
               }
             )
-            .then((res) => {
-              console.log(res);
-            })
+            .then((res) => {})
             .catch((err) => {
               console.log(err);
             });
         } else {
           // 좋아요 등록
-          console.log("true");
           axios
             .post(
               SERVER.URL + "/user/animal/animalLike",
@@ -162,17 +158,16 @@ export default {
                 },
               }
             )
-            .then((res) => {
-              console.log(res);
-            })
+            .then((res) => {})
             .catch((err) => {
               console.log(err);
             });
         }
         this.likeTrigger = !this.likeTrigger;
       }
-      console.log("this.animalInfo.desertion_no : " + this.animalInfo.desertion_no);
-     
+      console.log(
+        "this.animalInfo.desertion_no : " + this.animalInfo.desertion_no
+      );
     },
     setMoveTrigger() {
       this.moveTrigger = !this.moveTrigger;

@@ -10,6 +10,7 @@ export default {
     getVideo: '/newuser/video/detailvideo',
   },
 
+
   EXPIRETIME: 600,
 
   RefreshToken: function (err) {
@@ -57,8 +58,6 @@ export default {
       userTime -= 86400;
     }
 
-    console.log("expireTime", expireTime);
-    console.log("userTime", userTime);
     if (expireTime <= userTime) {
       axios
         .post(
@@ -72,7 +71,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log('엑세스 토큰 재발급 성공', res);
           if (res.data.success) {
             $cookies.set("accessToken", res.data.accessToken);
             $cookies.set("expireTime", res.data.expireTime);

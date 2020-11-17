@@ -14,6 +14,7 @@ var onair = false;
 
 var io = socketIO.listen(app);
 io.sockets.on('connection', function(socket) {
+  console.log('start node!!')
   socket.on('message', function(message) {
     socket.broadcast.emit('message', message);
   });

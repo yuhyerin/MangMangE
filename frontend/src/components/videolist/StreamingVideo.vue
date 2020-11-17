@@ -91,12 +91,10 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data)
           if(res.data.success)
             this.upload = true;
           else
             this.upload=false;
-          console.log(this.upload)
         })
         .catch((err) => {
           console.log(err)
@@ -106,10 +104,6 @@ export default {
       this.upload= false;
     }
     this.getVideos()
-    // setTimeout(function() {
-    //   // alert('5초끝!')
-    //   // this.StartBtn();
-    // }, 5000);
     
   },
   methods: {
@@ -176,10 +170,8 @@ export default {
       this.socket.emit('message', message);
     },
     async setLocalAndSendMessage(sessionDescription){
-      console.log("Create offer/answer Start");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer/answer End");
     },
     handleCreateOfferError(event){
       console.log('[Error]\n', event);
@@ -188,11 +180,9 @@ export default {
       console.log('Failed to create session description: ' + error.toString());
     },
     doCall(){
-      console.log('createOffer 호출');
       this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
     },
     doAnswer() {
-      console.log('createAnswer 호출');
       this.pc.createAnswer()
       .then(
         this.setLocalAndSendMessage,
@@ -209,7 +199,6 @@ export default {
           candidate: event.candidate.candidate
         });
       } else {
-        console.log('End of candidates');
       }
     },
     // ******************************** Custom ******************************** //
@@ -218,17 +207,12 @@ export default {
       this.pc.onicecandidate = this.handleIceCandidate;
       this.pc.onaddstream = this.handleRemoteStreamAdded;
       this.pc.onremovestream = this.handleRemoteStreamRemoved;
-      // this.pc.onaddstream = null;
-      // this.pc.onremovestream = null;
-      // this.pc.addStream(this.localStream);
-      console.log('enteringRoom : peerConnection 생성');
       this.doCall();
     },
     handleRemoteStreamAdded(event){
       document.querySelector("video").srcObject = event.stream;
     },
     handleRemoteStreamRemoved(event) {
-      console.log('Remote stream removed. Event: ', event);
       this.onair = !this.onair;
 
     },

@@ -86,7 +86,6 @@ export default {
     },
     addListener(){
       this.socket.on('created', ((room)=>{
-        console.log('On Air[' + room + ']');
       }));
       // After
       this.socket.on('message',((message) => {
@@ -108,27 +107,21 @@ export default {
         }else if(message === 'viewer'){//참여자가 소켓 id 보냈을 때. 
           // alert('사용자 소켓 id : ',message);
           this.viewer_number++;
-          console.log("한명 ready / 현재 참여자 : ",this.viewer_number);
           this.doCall();
         }
       }));
       this.socket.on('ready', (() => {
         this.viewer_number++;
-        console.log("한명 ready / 현재 참여자 : ",this.viewer_number);
         this.doCall();
       }));
 
       this.socket.on('viewer', ((sk) => {
-        console.log('참여자 소켓id : ', sk)
         this.viewer_number++;
-        console.log("한명 ready / 현재 참여자 수: ",this.viewer_number);
         // viewers 배열에 있는지 검사. 
         if(this.viewers.includes(sk)){
           this.doCall();
         }else{
           this.viewers.push(sk);
-          
-          console.log(this.viewers)
           this.doCall();
         }
       }));
@@ -138,10 +131,8 @@ export default {
       this.socket.emit('message', message);
     },
     async setLocalAndSendMessage(sessionDescription){
-      console.log("Create offer Start");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer End");
     },
     handleCreateOfferError(event){
       console.log('[Error]\n', event);
@@ -150,11 +141,9 @@ export default {
       console.log('Failed to create session description: ' + error.toString());
     },
     doCall(){
-      console.log('createOffer');
       this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
     },
     doAnswer() {
-      console.log('createAnswer');
       this.pc.createAnswer()
       .then(
         this.setLocalAndSendMessage,
@@ -171,7 +160,6 @@ export default {
           candidate: event.candidate.candidate
         });
       } else {
-        console.log('End of candidates');
       }
     },
     // ******************************** Custom ******************************** //

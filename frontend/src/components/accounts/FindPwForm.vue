@@ -87,7 +87,6 @@ export default {
             user_email: this.email,
           })
           .then((res) => {
-            console.log(res.data);
             if (res.data.result == "fail") {
               alert("가입된 내역이 없습니다.");
             } else {

@@ -32,6 +32,10 @@
   <component name="ChangeListManager">
     <list default="true" id="bbda9ae7-cf17-42a7-bf87-c95502fa7b9a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/url.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/url.js" afterDir="false" />
+>>>>>>> b568a7aee254d904d49019e2fb42ae357b9d2df1
       <change beforePath="$PROJECT_DIR$/frontend/src/components/videolist/StreamingVideo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/videolist/StreamingVideo.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/Live.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Live.vue" afterDir="false" />
     </list>

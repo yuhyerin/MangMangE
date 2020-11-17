@@ -19,15 +19,18 @@ export default new Vuex.Store({
     dogMbtiArr: ["", "", "", ""],
     dogMbti: "",
     survey: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    address: '',
     findUserId: '',
     userSurveyCheck: false,
     videoID: 0,
     videos: [],
     videos_cnt: 0,
+    liveOnAir: false,
 
     // 1: survey to animalList, 2: main to animalList
     // 3: 로그인페이지 회원가입, 4: 로그인페이지 로그인
+    // 5: videoDetail to videoSeeMore
+    // 6: adoption Create 
+    // 7: adoption etc.
     eventListener: 0,
   },
 
@@ -59,17 +62,14 @@ export default new Vuex.Store({
 
     resetSurvey(state, payload) {
       state.survey = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+      state.userMbti = ""
+      state.page = 1
     },
 
     goPage(state, pageNum) {
       if (state.survey[pageNum - 1] !== 0 || (pageNum - 1) == state.survey.findIndex((idx) => idx === 0)) {
         state.page = pageNum
       }
-    },
-
-    findPersonAddress(state, address) {
-      state.address = address
-      console.log(state.address)
     },
 
     setEventListener(state, payload) {
@@ -83,6 +83,11 @@ export default new Vuex.Store({
     setUserSurveyCheck(state, payload) {
       state.userSurveyCheck = payload
     },
+
+    setLiveOnAir(state, payload) {
+      console.log("onAir!!", payload)
+      state.liveOnAir = payload
+    }
   },
 
   // mutations에서 정의한 함수를 actions에서 실행 가능, 비동기 로직, dispatch
@@ -128,7 +133,6 @@ export default new Vuex.Store({
     },
     moveToVideoDetail(state, idx) {
       state.videoID = idx
-      console.log('videoID=', idx)
       router.push("/video" + `/${idx}`)
     },
   },

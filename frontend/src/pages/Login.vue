@@ -1,11 +1,23 @@
 <template>
   <v-app>
+    <div class="loading" v-if="loadingTrigger">
+      <i class="fas fa-spinner fa-10x fa-spin"></i>
+    </div>
     <div style="display: flex; height: 100%; width: 100%">
+      <div
+        class="homeBtn"
+        style="position: absolute; top: 20px; left: 20px; font-size: 20px"
+        @click="moveToHome"
+      >
+        <v-icon> mdi-arrow-left </v-icon>
+        홈으로
+      </div>
       <div
         style="
           display: flex;
           align-items: center;
           justify-content: center;
+          flex-direction: column;
           width: 100%;
           background-color: rgb(244, 236, 225);
         "
@@ -16,7 +28,11 @@
             alt="LoginBackImage"
             style="width: 100px"
           />
-          <LoginForm v-if="pageTrigger == 0" @changeComponents="register" />
+          <LoginForm
+            v-if="pageTrigger == 0"
+            @changeComponents="register"
+            @isLoading="setLoadingTrigger"
+          />
           <RegisterForm v-if="pageTrigger == 1" @changeComponents="register" />
           <FindIdForm v-if="pageTrigger == 2" @changeComponents="register" />
           <FindPwForm v-if="pageTrigger == 3" @changeComponents="register" />
@@ -56,6 +72,7 @@ export default {
   data() {
     return {
       pageTrigger: 0,
+      loadingTrigger: false,
     };
   },
   computed: {
@@ -72,9 +89,35 @@ export default {
     register(value) {
       this.pageTrigger = value;
     },
+    moveToHome() {
+      location.href = "/";
+    },
+    setLoadingTrigger(value) {
+      console.log(value);
+      this.loadingTrigger = value;
+    },
   },
 };
 </script>
 
 <style>
+.homeBtn:hover {
+  cursor: pointer;
+  border-bottom: 2px solid gray;
+}
+.loading {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  /* background-image: linear-gradient(
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.4)
+  ); */
+}
 </style>
