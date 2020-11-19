@@ -15,6 +15,11 @@
       right: 0;
       z-index: 5;
     "
+    :style="
+      this.eventListener == -1
+        ? 'background-color: rgba(255, 255, 255, 0.5);'
+        : 'background-color: white'
+    "
   >
     <div
       @click="moveToMain"
@@ -42,7 +47,12 @@
           font-size: 10px;
         "
       >
-        <v-btn x-small text @click="register">
+        <v-btn
+          v-if="this.$cookies.get('refreshToken') == null"
+          x-small
+          text
+          @click="register"
+        >
           <div><h4>회원가입</h4></div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
@@ -65,7 +75,7 @@
             <h3>동영상 게시판</h3>
           </div>
         </v-btn>
-        <v-btn text @click="moveTo('/adoptionlist')">
+        <v-btn text @click="moveToList">
           <div>
             <h3>입양 신청 목록</h3>
           </div>
@@ -108,6 +118,7 @@ export default {
     ...mapMutations(["setEventListener"]),
     ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
+      this.setEventListener(-1);
       location.href = "/";
     },
     register() {
@@ -123,13 +134,32 @@ export default {
       }
     },
     moveTo(page) {
+      if (this.$router.history.current.path == page) {
+        // location.reload(true);
+      }
       if (page == "/animals") {
         this.setEventListener(2);
+      } else {
+        this.setEventListener(11);
       }
-      if (this.$router.history.current.path == page) {
-        location.reload(true);
+      this.$router.push(page).catch((error) => {
+        if (error.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
+    },
+    moveToList() {
+      if (this.$cookies.get("accessToken") == null) {
+        alert("회원만 이용 가능합니다.");
+        return;
+      } else {
+        console.log(this.$router.history.path);
+        this.$router.push("/adoptionlist").catch((error) => {
+          if (error.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
       }
-      this.$router.push(page);
     },
     // test() {
     //   axios
@@ -190,27 +220,29 @@ export default {
     },
 
     logout() {
-      axios
-        .post(
-          SERVER.URL + "/user/logout/",
-          {},
-          {
-            headers: {
-              Authorization: this.$cookies.get("accessToken"),
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          this.$cookies.remove("accessToken");
-          this.$cookies.remove("refreshToken");
-          this.$cookies.remove("expireTime");
-          this.setUserSurveyCheck(false);
-          location.href = "/";
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .post(
+            SERVER.URL + "/user/logout/",
+            {},
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res) => {
+            this.$cookies.remove("accessToken");
+            this.$cookies.remove("refreshToken");
+            this.$cookies.remove("expireTime");
+            this.setUserSurveyCheck(false);
+            alert("로그아웃 되셨습니다.");
+            location.href = "/";
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
     },
   },
 };
@@ -225,7 +257,6 @@ export default {
   background-color: rgb(180, 180, 180);
 }
 .logo {
-  background-image: url("../assets/image/logo.png");
   cursor: pointer;
 }
 </style>

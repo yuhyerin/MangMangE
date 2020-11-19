@@ -40,7 +40,7 @@ public class KakaoApiController {
 		
 		// 서버로 요청할 Header
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "KakaoAK " + "edbe89645b8d959181873871c2018383");
+		headers.add("Authorization", "KakaoAK " + "0d4df76238b82210be6a080dd8bb9c43");
 		headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
 
@@ -53,9 +53,9 @@ public class KakaoApiController {
 		params.add("quantity", "1");
 		params.add("total_amount", "1000");
 		params.add("tax_free_amount", "0");
-		params.add("approval_url", "http://localhost:3000/videos/0");
-		params.add("cancel_url", "http://localhost:3000/video/"+videoid);
-		params.add("fail_url", "http://localhost:3000/video/"+videoid);
+		params.add("approval_url", "https://k3b306.p.ssafy.io/videos/0");
+		params.add("cancel_url", "http://k3b306.p.ssafy.io/video/"+videoid);
+		params.add("fail_url", "http://k3b306.p.ssafy.io/video/"+videoid);
 
 		HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
 

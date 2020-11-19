@@ -139,7 +139,13 @@
           font-size: 10px;
         "
       >
-        <v-btn x-small text color="black" @click="register">
+        <v-btn
+          v-if="this.$cookies.get('refreshToken') == null"
+          x-small
+          text
+          color="black"
+          @click="register"
+        >
           <div><h4>회원가입</h4></div>
         </v-btn>
         <!-- <div style="margin: 2px 5px 2px 5px">회원가입</div> -->
@@ -187,7 +193,7 @@ export default {
   },
   watch: {
     isUser(newVal, oldVal) {
-      console.log(newVal, oldVal);
+      // console.log(newVal, oldVal);
     },
   },
   computed: {
@@ -215,6 +221,7 @@ export default {
     ...mapMutations(["setEventListener"]),
     ...mapMutations(["setUserSurveyCheck"]),
     moveToMain() {
+      this.setEventListener(-1);
       location.href = "/";
     },
     register() {
@@ -271,7 +278,11 @@ export default {
       if (page == "/animals") {
         this.setEventListener(2);
       }
-      this.$router.push(page);
+      this.$router.push(page).catch((error) => {
+        if (error.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
 
     countDownTimer() {
@@ -283,27 +294,28 @@ export default {
       }
     },
     logout() {
-      axios
-        .post(
-          SERVER.URL + "/user/logout/",
-          {},
-          {
-            headers: {
-              Authorization: this.$cookies.get("accessToken"),
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          this.$cookies.remove("accessToken");
-          this.$cookies.remove("refreshToken");
-          this.$cookies.remove("expireTime");
-          this.setUserSurveyCheck(false);
-          location.href = "/";
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      SERVER.tokenCheck(() => {
+        axios
+          .post(
+            SERVER.URL + "/user/logout/",
+            {},
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res) => {
+            this.$cookies.remove("accessToken");
+            this.$cookies.remove("refreshToken");
+            this.$cookies.remove("expireTime");
+            this.setUserSurveyCheck(false);
+            location.href = "/";
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
     },
   },
 };
@@ -316,5 +328,8 @@ export default {
 .navBtn:hover {
   padding: 2px 5px 2px 5px;
   background-color: rgb(180, 180, 180);
+}
+.logo {
+  cursor: pointer;
 }
 </style>

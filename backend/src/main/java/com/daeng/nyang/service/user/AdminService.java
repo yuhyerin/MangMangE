@@ -26,7 +26,7 @@ public class AdminService {
 	@Autowired
 	private AnimalRepo animalRepo;
 	
-	@Value("${filePath}")
+	@Value("${ubuntu.profile.upload.directory}")
 	private String filePath;
 	
 	public HashMap<String, Object> findNO(Long desertion_no){

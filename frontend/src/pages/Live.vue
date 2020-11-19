@@ -20,7 +20,7 @@
       <div @click="StartBtn" class="onair-btn">
         <v-row style="display: flex; align-items: center; margin: 0 0 0 3px;">
           <v-col style="padding: 0" cols="5">
-            <img src="@/assets/image/merong1.png" alt="" width="40px" style="margin-top:1px">
+            <img src="@/assets/image/startbutton.png" alt="" width="40px" style="margin-top:1px">
           </v-col>
           <v-col style="padding: 0">
             <h4 v-if="onair" style="display: inline">방송 종료</h4>

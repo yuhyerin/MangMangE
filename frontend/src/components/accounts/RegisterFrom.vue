@@ -179,7 +179,6 @@ export default {
           if (res.data.origin_hash == null) {
             alert("이미 가입된 이메일 입니다.");
           } else {
-            console.log("이메일 전송 성공");
             this.authenticationBtnTrigger = false;
             this.origin_hash = res.data.origin_hash;
           }
@@ -221,7 +220,6 @@ export default {
             user_name: this.name,
           })
           .then((res) => {
-            console.log(res.data);
             this.$emit("changeComponents", 0);
           })
           .catch((err) => {

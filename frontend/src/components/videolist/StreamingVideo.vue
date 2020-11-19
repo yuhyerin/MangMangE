@@ -15,12 +15,7 @@
             <h4 style="color: white; text-align: center; vertical-align: center;">LIVE</h4>
           </div>
           <video
-          :src="require(`@/assets/videos/mukbang.mp4`)"
-          type="video/mp4"
-          autoplay
-          style=" max-width: 480px; width: 100%; height: 100% height:395px;"
-        ></video>
-          <!-- <video
+            controls
             id="remoteVideo"
             autoplay playsinline
             style="width: 100%; max-width: 439px; height:295px;"
@@ -99,12 +94,10 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data)
           if(res.data.success)
             this.upload = true;
           else
             this.upload=false;
-          console.log(this.upload)
         })
         .catch((err) => {
           console.log(err)
@@ -114,10 +107,6 @@ export default {
       this.upload= false;
     }
     this.getVideos()
-    // setTimeout(function() {
-    //   // alert('5초끝!')
-    //   // this.StartBtn();
-    // }, 5000);
     
   },
   methods: {
@@ -156,8 +145,9 @@ export default {
       this.onair = !this.onair;
     },
     connectSocket(){
-      // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      console.log('connectSocket');
+      this.socket = io.connect('http://localhost:8002');
+      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       this.socket.emit('join', this.room);
       this.enteringRoom();
     },
@@ -165,13 +155,16 @@ export default {
       // After
       this.socket.on('message',((message) => {
         if (message.type === 'offer') {
+          console.log('if message.type = offer');
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
           this.doAnswer();
         } 
         else if (message.type === 'answer' && this.pc) {
+          console.log('else if message.type = answer');
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
         } 
         else if (message.type === 'candidate' && this.pc){
+          console.log('else if message.type = candidate');
           this.pc.addIceCandidate(new RTCIceCandidate({
             sdpMLineIndex: message.label,
             candidate: message.candidate
@@ -181,27 +174,29 @@ export default {
     },
     // ******************************** Call me maybe ******************************** //
     sendMessage(message) {
+      console.log("into sendMessage - ",message.type);
       this.socket.emit('message', message);
     },
     async setLocalAndSendMessage(sessionDescription){
-      console.log("Create offer Start");
+      console.log("into setLocalAndSendMessage");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer End");
     },
     handleCreateOfferError(event){
       console.log('[Error]\n', event);
     },
     onCreateSessionDescriptionError(error){
-      trace('Failed to create session description: ' + error.toString());
+      console.log('Failed to create session description: ' + error.toString());
     },
     doCall(){
-      console.log('createOffer 호출');
+      console.log('into doCall');
+      console.log('call createOffer');
       this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
     },
     doAnswer() {
-      console.log('createAnswer 호출');
-      this.pc.createAnswer()
+      console.log('into doAnswer');
+      console.log('call createAnswer');
+      this.pc.createAnswer ()
       .then(
         this.setLocalAndSendMessage,
         this.onCreateSessionDescriptionError
@@ -209,6 +204,8 @@ export default {
     },
     // ******************************** Ice ******************************** //
     handleIceCandidate(event){
+      console.log('into handleIceCandidate');
+      console.log('sendMessage : candidate ');
       if (event.candidate) {
         this.sendMessage({
           type: 'candidate',
@@ -217,26 +214,25 @@ export default {
           candidate: event.candidate.candidate
         });
       } else {
-        console.log('End of candidates');
       }
     },
     // ******************************** Custom ******************************** //
     enteringRoom(){
+      console.log('into enteringRoom');
+      console.log('create RTCPeerConnection Object');
       this.pc = new RTCPeerConnection(null);
       this.pc.onicecandidate = this.handleIceCandidate;
       this.pc.onaddstream = this.handleRemoteStreamAdded;
-      // this.pc.onaddstream = null;
       this.pc.onremovestream = this.handleRemoteStreamRemoved;
-      // this.pc.onremovestream = null;
-      // this.pc.addStream(this.localStream);
-      console.log('peer 생성');
+      // doCall이 먼저 호출됨. (handleIceCandidate보다)
       this.doCall();
     },
     handleRemoteStreamAdded(event){
       document.querySelector("video").srcObject = event.stream;
     },
     handleRemoteStreamRemoved(event) {
-      console.log('Remote stream removed. Event: ', event);
+      this.onair = !this.onair;
+
     },
     moveToSupport() {
       axios.post(SERVER.URL+'/newuser/kakaoPay',
@@ -245,7 +241,6 @@ export default {
         },  
       )
       .then((res) => {
-        console.log('요청성공', res.data)
         async function openPopup() {
           window.open(res.data, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes')
           await function() {
@@ -256,9 +251,7 @@ export default {
       }
       )
       .catch((err) => {
-        console.log(1)
         console.log(err)
-        console.log('요청실패')
       }
       )
     },

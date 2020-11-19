@@ -25,6 +25,7 @@ import com.daeng.nyang.dto.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
+import com.daeng.nyang.repo.AnimalRepo;
 import com.daeng.nyang.repo.ApplyRepo;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -116,6 +117,7 @@ public class AccountService {
 		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		Account ac = Account.builder().user_id(id).role(user.getRole()).build();
 		retok = TotToken.builder().account(ac).build();
+		System.out.println("JWT_ACCESS_TOKEN_VALIDITY : " + JWT_ACCESS_TOKEN_VALIDITY);
 		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		map.put("success", true);
 		map.put("accessToken", accessToken);
@@ -253,16 +255,9 @@ public class AccountService {
 		return map;
 	}
 
-	public HashMap<String, Object> readAdopt(long uid, String user_id) {
+	public Apply readAdopt(long uid) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		Apply apply = applyRepo.selectByuid(uid);
-		if (apply == null)
-			return null;
-		else {
-			map.put("apply", apply);
-			map.put("user_id", user_id);
-			return map;
-		}
+		return applyRepo.selectByuid(uid);
 	}
 
 }

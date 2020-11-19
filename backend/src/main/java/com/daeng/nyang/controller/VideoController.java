@@ -47,7 +47,7 @@ public class VideoController {
 			AnimalVideo av = videoService.detailvideo(uid);
 			map.put("VideoDetail", av);
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (Exception e) {	
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 		}
