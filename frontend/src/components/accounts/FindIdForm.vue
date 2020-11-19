@@ -79,7 +79,7 @@ export default {
   methods: {
     ...mapMutations(["setFindUserId"]),
     back() {
-      this.$emit("changeComponents", 0);
+      this.$emit("changeComponents", "LoginForm");
     },
     submit() {
       if (this.email == "") {
@@ -99,7 +99,7 @@ export default {
           .then((res) => {
             //user_id == null의 경우 없는 회원
             this.setFindUserId(res.data.user_id);
-            this.$emit("changeComponents", 4);
+            this.$emit("changeComponents", "FindIdSubmit");
           })
           .catch((err) => {
             console.log(err);

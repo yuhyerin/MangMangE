@@ -92,13 +92,13 @@ export default {
     ...mapMutations(["setUserSurveyCheck"]),
     ...mapMutations(["setTimer"]),
     moveToRegister() {
-      this.$emit("changeComponents", 1);
+      this.$emit("changeComponents", "RegisterForm");
     },
     moveToFindId() {
-      this.$emit("changeComponents", 2);
+      this.$emit("changeComponents", "FindIdForm");
     },
     moveToFindPw() {
-      this.$emit("changeComponents", 3);
+      this.$emit("changeComponents", "FindPwForm");
     },
 
     isLoading(value) {
