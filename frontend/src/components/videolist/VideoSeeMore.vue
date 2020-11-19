@@ -13,10 +13,13 @@
         style="max-height: 200px; width: 100%"
       ></video>
       </div>
-      <h2 class="video-info" @click="moveToVideoDetail(video.uid)" style="margin-bottom: 5px;">{{ video.title }}</h2>
-      <p style="color: gray; font-size: 0.9rem; margin-bottom: 10px;">
-          <i class="far fa-user fa-xs" style="margin-right: 5px;"></i>{{ video.writer }} |
-          <i class="fas fa-calendar-day fa-xs" style="margin-left: 5px"></i> {{ video.regtime }}
+      <h2 class="video-info" @click="moveToVideoDetail(video.uid)" 
+          style="margin: 3px 0 5px 2px;">
+          {{ video.title }}
+      </h2>
+      <p style="color: gray; font-size: 0.9rem; margin-bottom: 10px; ">
+        <i class="far fa-user fa-xs" style="margin-right: 5px; margin-left: 2px;"></i>{{ video.writer }} |
+        <i class="fas fa-calendar-day fa-xs" style="margin-left: 5px"></i> {{ video.regtime }}
         </p>
       </v-col>
       <!-- <v-col cols="5" style="margin-left: 15px;">

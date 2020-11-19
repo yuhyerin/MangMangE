@@ -10,16 +10,17 @@
       
       
       <video v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video>
+      <!-- <video src="@/assets/videos/앞에여분있는먹방자른거.mp4" v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video> -->
       <div v-show="!onair" style="width: 545px; height:295px; background-color: black;">
         <h3 style="color: white; text-align: center; margin-top:130px;">현재 방송중이 아닙니다.</h3>
       </div>
       
     </v-row>
     <v-row style="display: flex; justify-content: center; margin-top: 20px;">
-      <div @click="LDJ" class="onair-btn">
+      <div @click="StartBtn" class="onair-btn">
         <v-row style="display: flex; align-items: center; margin: 0 0 0 3px;">
           <v-col style="padding: 0" cols="5">
-            <img src="@/assets/image/merong.png" alt="" width="40px" style="margin-top:1px">
+            <img src="@/assets/image/merong1.png" alt="" width="40px" style="margin-top:1px">
           </v-col>
           <v-col style="padding: 0">
             <h4 v-if="onair" style="display: inline">방송 종료</h4>
@@ -43,87 +44,120 @@ export default {
   data() {
     return {
       room: 'hyerin',
+      viewer_number: 0,
       socket: null,
-      pc: null,
+      cur : null,
       localStream: null,
       onair: false,
+      viewers: [],
+      viewers_pc: {},
     }
   },
   methods: {
-    LDJ(){
+    StartBtn(){
+      this.onair = !this.onair;
       this.connectSocket();
       this.addListener();
-      this.onair = !this.onair;
     },
     connectSocket(){
-      // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
-      alert('방송 시작합니다!')
-      this.socket.emit('create', this.room);
-      navigator.mediaDevices.getUserMedia({audio: true, video: true})
-      .then(mediaStream => {
-        let localVideo = document.querySelector('video');
-        this.localStream = mediaStream;
-        localVideo.srcObject = mediaStream;
-        this.enteringRoom();
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      this.socket = io.connect('http://localhost:8002');
+    // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      if(this.onair){//방송시작 
+
+        this.socket.emit('create', this.room);
+        navigator.mediaDevices.getUserMedia({audio: true, video: true})
+        .then(mediaStream => {
+          let localVideo = document.querySelector('video');
+          this.localStream = mediaStream;
+          localVideo.srcObject = mediaStream;
+        
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      }else{//방송종료 
+        const stream  = document.querySelector('video').srcObject;
+        const tracks = stream.getTracks();
+        tracks.forEach(function(track){
+          track.stop();
+        });
+        this.viewers_pc[this.cur].close();
+      }
+      
     },
     addListener(){
       this.socket.on('created', ((room)=>{
-        console.log('On Air[' + room + ']');
       }));
       // After
       this.socket.on('message',((message) => {
-        if (message.type === 'offer') {
-          this.pc.setRemoteDescription(new RTCSessionDescription(message));
+        if (message.type === 'offer' && !this.onair) {
+          console.log('if message.type = offer');
+          this.viewers_pc[this.cur].setRemoteDescription(new RTCSessionDescription(message));
           this.doAnswer();
+        }
+        else if (message.type === 'answer' && this.viewers_pc[this.cur]) {
+          console.log('else if message.type = answer');
+          this.viewers_pc[this.cur].setRemoteDescription(new RTCSessionDescription(message));
         } 
-        else if (message.type === 'answer' && this.pc) {
-          this.pc.setRemoteDescription(new RTCSessionDescription(message));
-        } 
-        else if (message.type === 'candidate' && this.pc){
-          this.pc.addIceCandidate(new RTCIceCandidate({
+        else if (message.type === 'candidate' && this.viewers_pc[this.cur]){
+          console.log('else if message.type = candidate');
+          this.viewers_pc[this.cur].addIceCandidate(new RTCIceCandidate({
             sdpMLineIndex: message.label,
             candidate: message.candidate
           }));
+        }else if(message === 'viewer'){//참여자가 소켓 id 보냈을 때. 
+          // alert('사용자 소켓 id : ',message);
+          console.log('else if message = viewer');
+          this.viewer_number++;
+          this.doCall();
         }
       }));
-      this.socket.on('ready', (() => {
-        console.log("한명 들어옴ㅋㅋ");
+
+      this.socket.on('viewer', ((socket_number) => {
+        console.log('into socket.on(viewer)')
+        this.viewer_number++;
+        
+        var tmp_pc = new RTCPeerConnection(null);
+        tmp_pc.onicecandidate = this.handleIceCandidate;
+        tmp_pc.onaddstream = null;
+        tmp_pc.onremovestream = null;
+        tmp_pc.addStream(this.localStream);
+        
+        this.cur = socket_number;
+        this.viewers_pc[socket_number] = tmp_pc;
+        this.doCall();
+        
       }));
     },
-    // ******************************** Call me maybe ******************************** //
+    
     sendMessage(message) {
       this.socket.emit('message', message);
     },
     async setLocalAndSendMessage(sessionDescription){
-      console.log("Create offer Start");
-      await this.pc.setLocalDescription(sessionDescription);
+      console.log('into setLocalAndSendMessage - ', sessionDescription.type)
+      await this.viewers_pc[this.cur].setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
-      console.log("Create offer End");
     },
     handleCreateOfferError(event){
       console.log('[Error]\n', event);
     },
     onCreateSessionDescriptionError(error){
-      trace('Failed to create session description: ' + error.toString());
+      console.log('Failed to create session description: ' + error.toString());
     },
     doCall(){
-      console.log('히히오퍼발싸!!!');
-      this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
+      console.log('into doCall - createOffer ');
+      this.viewers_pc[this.cur].createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
     },
     doAnswer() {
-      console.log('답장하는중...');
-      this.pc.createAnswer()
+      console.log('into doAnswer - createAnswer ');
+      this.viewers_pc[this.cur].createAnswer()
       .then(
         this.setLocalAndSendMessage,
         this.onCreateSessionDescriptionError
       );
     },
-    // ******************************** Ice ******************************** //
+    
     handleIceCandidate(event){
       if (event.candidate) {
         this.sendMessage({
@@ -133,22 +167,8 @@ export default {
           candidate: event.candidate.candidate
         });
       } else {
-        console.log('End of candidates');
       }
     },
-    // ******************************** LDJ ******************************** //
-    enteringRoom(){
-      this.pc = new RTCPeerConnection(null);
-      this.pc.onicecandidate = this.handleIceCandidate;
-      // this.pc.onaddstream = this.handleRemoteStreamAdded;
-      this.pc.onaddstream = null;
-      // this.pc.onremovestream = this.handleRemoteStreamRemoved;
-      this.pc.onremovestream = null;
-      this.pc.addStream(this.localStream);
-      console.log('피어 만들었다냥~!');
-      this.doCall();
-    },
-    // ******************************** LDJ END ******************************** //
   }
 }
 </script>

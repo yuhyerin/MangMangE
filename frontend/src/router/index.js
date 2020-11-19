@@ -9,7 +9,6 @@ import Survey from '../pages/Survey.vue'
 import AdoptionList from '../pages/AdoptionList.vue'
 // import VideoList from '../pages/VideoList.vue'
 // import UploadVideo from '../pages/UploadVideo.vue'
-import StreamingTest from '../pages/StreamingTest.vue'
 import StreamingViewer from '../pages/StreamingViewer.vue'
 import VideoBoard from '../pages/VideoBoard.vue'
 import AdoptionReview from '../pages/AdoptionReview.vue'
@@ -69,11 +68,6 @@ const routes = [
     path: '/adoptionreview',
     name: 'AdoptionReview',
     component: AdoptionReview,
-  },
-  {
-    path: '/streamingTest',
-    name: 'StreamingTest',
-    component: StreamingTest
   },
   {
     path: '/viewer',
