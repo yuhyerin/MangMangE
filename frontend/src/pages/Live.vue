@@ -59,8 +59,8 @@ export default {
       this.addListener();
     },
     connectSocket(){
-      // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      this.socket = io.connect('http://localhost:8002');
+      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       if(this.onair){
         alert('방송 시작합니다!')
         this.socket.emit('create', this.room);
