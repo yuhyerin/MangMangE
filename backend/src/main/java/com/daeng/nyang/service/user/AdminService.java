@@ -71,9 +71,12 @@ public class AdminService {
 	}
 
 	public HashMap<String, Object> uploadVideo(String accessToken, MultipartFile mfile) {
+		System.out.println("origin file name : " + mfile.getOriginalFilename());
 		StringTokenizer originName = new StringTokenizer(mfile.getOriginalFilename(),"_");
 		Long uid = Long.parseLong(originName.nextToken());
-		String filename = originName.nextToken();
+		System.out.println("length? : " + uid.toString().length());
+		System.out.println("file name is " + mfile.getOriginalFilename().substring(uid.toString().length()));
+		String filename = mfile.getOriginalFilename().substring(uid.toString().length() + 1);
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		AnimalVideo av = animalVideoRepo.findByUid(uid);
 		try {

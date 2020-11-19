@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     back() {
-      this.$emit("changeComponents", 0);
+      this.$emit("changeComponents", "LoginForm");
     },
     submit() {
       if (this.id == "") {

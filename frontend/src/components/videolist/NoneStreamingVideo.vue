@@ -24,7 +24,7 @@
     <v-row>
       <v-col v-for="video in videos" :key="video.uid">
         <video
-          :src="require(`@/assets/videos/${video.filepath}`)"
+          :src="`https://k3b306.p.ssafy.io/allVideos/${video.filepath}`"
           type="video/mp4"
           controls
           style="max-height: 150px; width: 100%; height: 100%"
