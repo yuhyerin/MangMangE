@@ -142,8 +142,9 @@ export default {
       this.onair = !this.onair;
     },
     connectSocket(){
-      // this.socket = io.connect('http://localhost:8002');
-      this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
+      console.log('connectSocket');
+      this.socket = io.connect('http://localhost:8002');
+      // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       this.socket.emit('join', this.room);
       this.enteringRoom();
     },
@@ -151,13 +152,16 @@ export default {
       // After
       this.socket.on('message',((message) => {
         if (message.type === 'offer') {
+          console.log('if message.type = offer');
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
           this.doAnswer();
         } 
         else if (message.type === 'answer' && this.pc) {
+          console.log('else if message.type = answer');
           this.pc.setRemoteDescription(new RTCSessionDescription(message));
         } 
         else if (message.type === 'candidate' && this.pc){
+          console.log('else if message.type = candidate');
           this.pc.addIceCandidate(new RTCIceCandidate({
             sdpMLineIndex: message.label,
             candidate: message.candidate
@@ -167,9 +171,11 @@ export default {
     },
     // ******************************** Call me maybe ******************************** //
     sendMessage(message) {
+      console.log("into sendMessage - ",message.type);
       this.socket.emit('message', message);
     },
     async setLocalAndSendMessage(sessionDescription){
+      console.log("into setLocalAndSendMessage");
       await this.pc.setLocalDescription(sessionDescription);
       this.sendMessage(sessionDescription);
     },
@@ -180,10 +186,14 @@ export default {
       console.log('Failed to create session description: ' + error.toString());
     },
     doCall(){
+      console.log('into doCall');
+      console.log('call createOffer');
       this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
     },
     doAnswer() {
-      this.pc.createAnswer()
+      console.log('into doAnswer');
+      console.log('call createAnswer');
+      this.pc.createAnswer ()
       .then(
         this.setLocalAndSendMessage,
         this.onCreateSessionDescriptionError
@@ -191,6 +201,8 @@ export default {
     },
     // ******************************** Ice ******************************** //
     handleIceCandidate(event){
+      console.log('into handleIceCandidate');
+      console.log('sendMessage : candidate ');
       if (event.candidate) {
         this.sendMessage({
           type: 'candidate',
@@ -203,10 +215,13 @@ export default {
     },
     // ******************************** Custom ******************************** //
     enteringRoom(){
+      console.log('into enteringRoom');
+      console.log('create RTCPeerConnection Object');
       this.pc = new RTCPeerConnection(null);
       this.pc.onicecandidate = this.handleIceCandidate;
       this.pc.onaddstream = this.handleRemoteStreamAdded;
       this.pc.onremovestream = this.handleRemoteStreamRemoved;
+      // doCall이 먼저 호출됨. (handleIceCandidate보다)
       this.doCall();
     },
     handleRemoteStreamAdded(event){

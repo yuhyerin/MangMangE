@@ -14,7 +14,6 @@ import VideoDetail from '../pages/VideoDetail.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 import Live from '../pages/Live.vue'
-import Live2 from '../pages/Live2.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
 import axios from 'axios'
 import SERVER from '@/api/url'
@@ -140,13 +139,8 @@ const routes = [
   {
     path: '/live',
     name: 'Live',
-    beforeEnter: adminAuth,
+    // beforeEnter: adminAuth,
     component: Live
-  },
-  {
-    path: '/live2',
-    name: 'Live2',
-    component: Live2
   },
   {
     path: '/videos/0',
