@@ -62,7 +62,12 @@
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
-        <!-- <v-btn text color="white" @click="countDownTimer">
+        <!-- <v-btn
+          text
+          color="white"
+          @click="toggleButton"
+          :disabled="this.btnTrigger[1] == true ? true : false"
+        >
           <div><h3>버어튼</h3></div>
         </v-btn> -->
         <v-btn text @click="moveTo('/animals')">
@@ -96,6 +101,7 @@ export default {
       isUser: this.$cookies.get("accessToken") == null ? false : true,
       countDown: 10,
       timerTrigger: false,
+      btnTrigger: [false, false, false, false],
     };
   },
   watch: {
@@ -160,6 +166,10 @@ export default {
           }
         });
       }
+    },
+    toggleButton() {
+      console.log(this.btnTrigger);
+      this.btnTrigger[1] = true;
     },
     // test() {
     //   axios

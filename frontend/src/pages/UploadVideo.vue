@@ -231,95 +231,56 @@ export default {
           this.file[0],
           this.desertionNo + "_" + this.file[0].name
         );
-        axios
-          .post(SERVER.URL + "/admin/upload", formData, {
+        this.registerFile(formData);
+      });
+    },
+    async registerFile(formData) {
+      await axios
+        .post(SERVER.URL + "/admin/upload", formData, {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+            "content-Type":
+              "multipart/form-data; charset=utf-8; boundary='calculated when request is sent';",
+          },
+        })
+        .then((res) => {
+          console.log("video upload result is : ", res);
+          if (res.data.success == true) {
+            this.registerDB();
+          }
+        })
+        .catch((err) => {
+          this.loadingTrigger = false;
+          console.log("video upload result is : ", err);
+        });
+    },
+
+    async registerDB() {
+      await axios
+        .post(
+          SERVER.URL + "/admin/uploadVideo",
+          {
+            desertion_no: this.desertionNo,
+            title: this.title,
+            content: this.content,
+            filepath: this.desertionNo + "_" + this.file[0].name,
+          },
+          {
             headers: {
               Authorization: this.$cookies.get("accessToken"),
-              "content-Type":
-                "multipart/form-data; charset=utf-8; boundary='calculated when request is sent';",
+              contentType: "application/json",
             },
-          })
-          .then((res) => {
-            console.log("video upload result is : ", res);
-            if (res.data.success == true) {
-              axios
-                .post(
-                  SERVER.URL + "/admin/uploadVideo",
-                  {
-                    desertion_no: this.desertionNo,
-                    title: this.title,
-                    content: this.content,
-                    filepath: this.desertionNo + "_" + this.file[0].name,
-                  },
-                  {
-                    headers: {
-                      Authorization: this.$cookies.get("accessToken"),
-                      contentType: "application/json",
-                    },
-                  }
-                )
-                .then((res) => {
-                  console.log("DataBase upload result is", res.data);
-                  this.loadingTrigger = false;
-                  this.$router.push("/videos");
-                })
-                .catch((err) => {
-                  console.log("DataBase upload result is ", err);
-                  this.loadingTrigger = false;
-                });
-            }
-          })
-          .catch((err) => {
-            this.loadingTrigger = false;
-            console.log("video upload result is : ", err);
-          });
-
-        // axios
-        //   .post(
-        //     SERVER.URL + "/admin/uploadVideo",
-        //     {
-        //       desertion_no: this.desertionNo,
-        //       title: this.title,
-        //       content: this.content,
-        //       filepath: this.desertionNo + "_" + this.file[0].name,
-        //     },
-        //     {
-        //       headers: {
-        //         Authorization: this.$cookies.get("accessToken"),
-        //         contentType: "application/json",
-        //       },
-        //     }
-        //   )
-        //   .then((res) => {
-        //     console.log(res.data);
-        //     // formData.append(
-        //     //   "mfile",
-        //     //   this.file[0],
-        //     //   this.desertionNo + "_" + this.file[0].name
-        //     // );
-        //     // if (res.data.success == true) {
-        //     //   axios
-        //     //     .post(SERVER.URL + "/admin/upload", formData, {
-        //     //       headers: {
-        //     //         Authorization: this.$cookies.get("accessToken"),
-        //     //         "content-Type":
-        //     //           "multipart/form-data; charset=utf-8; boundary='calculated when request is sent';",
-        //     //       },
-        //     //     })
-        //     //     .then((res) => {
-        //     //       console.log("RES : ", res);
-        //     //       alert("등록되었습니다");
-        //     //       this.$router.push("/videos");
-        //     //     })
-        //     //     .catch((err) => {
-        //     //       console.log("ERROR : ", err);
-        //     //     });
-        //     // }
-        //   })
-        //   .catch((err) => {
-        //     console.log("ERRORERROR : ", err);
-        //   });
-      });
+          }
+        )
+        .then((res) => {
+          console.log("DataBase upload result is", res.data);
+          this.loadingTrigger = false;
+          this.$router.push("/videos");
+        })
+        .catch((err) => {
+          console.log("DataBase upload result is ", err);
+          this.loadingTrigger = false;
+        });
     },
   },
 };
