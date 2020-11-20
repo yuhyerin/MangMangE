@@ -17,6 +17,8 @@ import Live from '../pages/Live.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
 import axios from 'axios'
 import SERVER from '@/api/url'
+import LiveChat from '../pages/LiveChat.vue'
+import ViewerChat from '../pages/ViewerChat.vue'
 
 const requireAuth = (to, from, next) => {
   if ($cookies.get('accessToken') != null) {
@@ -147,7 +149,17 @@ const routes = [
     name: 'VideoDetailPopup',
     component: VideoDetailPopup,
     props: (route) => ({ query: route.query.q })
-  }
+  },
+  {
+    path:'/livechat',
+    name: 'LiveChat',
+    component: LiveChat
+  },
+  {
+    path:'/viewerchat',
+    name:'ViewerChat',
+    component:ViewerChat
+  },
 ]
 
 const router = new VueRouter({
