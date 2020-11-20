@@ -18,8 +18,8 @@ import VideoDetailPopup from '../pages/VideoDetailPopup'
 import axios from 'axios'
 import SERVER from '@/api/url'
 import LiveChat from '../pages/LiveChat.vue'
+import StreamingDetail from '../pages/StreamingDetail.vue'
 
-import modal from '../pages/modal.vue'
 
 const requireAuth = (to, from, next) => {
   if ($cookies.get('accessToken') != null) {
@@ -155,12 +155,11 @@ const routes = [
     name: 'LiveChat',
     component: LiveChat
   },
-
   {
-    path: '/modal',
-    name: 'modal',
-    component: modal
-  }
+    path: '/streaming',
+    name: 'StreamingDetail',
+    component: StreamingDetail
+  },
 ]
 
 const router = new VueRouter({

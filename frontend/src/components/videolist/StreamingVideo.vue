@@ -140,9 +140,10 @@ export default {
         })
     },
     StartBtn(){
-      this.connectSocket();
-      this.addListener();
-      this.onair = !this.onair;
+      this.$router.push("/streaming");
+      // this.connectSocket();
+      // this.addListener();
+      // this.onair = !this.onair;
     },
     connectSocket(){
       console.log('connectSocket');

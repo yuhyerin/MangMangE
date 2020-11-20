@@ -3,13 +3,7 @@
     <v-app>
       <Header/>
         <v-container fluid style="padding-left: 150px; padding-right: 150px;"> 
-          <v-row style="padding: 60px 0 10px 20px">
-            <h1 style="padding-right: 10px">마이리틀댕댕 TV</h1>
-            <img v-if="onair" src="@/assets/image/on-air.png" alt="" width="40px">
-            <img v-else src="@/assets/image/off-air.png" alt="" width="40px">
-          </v-row>
-
-          <v-row>
+          <v-row style="margin-top: 90px;">
             <v-col cols="8" style="padding-top: 0; padding-right: 20px">
               <div class="video-play" style="width: 100%; height: 90%; background-color: black">
                 <h2 v-show="!onair" style="color: white; text-align: center; padding-top: 230px;">현재 방송중이 아닙니다.</h2>
@@ -21,67 +15,13 @@
                   <i class="far fa-user fa-s" style="padding-right: 5px"></i>
                   {{ viewer_number }}명 시청중
                 </v-col>
-
-                <v-col style="display: flex; justify-content: flex-end;">
-                  <v-dialog v-model="dialog" @click="StartBtn" persistent max-width="600px">
-                    <template v-slot:activator="{ on, attrs }">
-                      <div v-bind="attrs" v-on="on" class="onair-btn">
-                        <v-row style="display: flex; align-items: center; margin: 0;">
-                          <v-col style="padding: 0" cols="5">
-                            <img src="@/assets/image/startbutton.png" alt="" width="40px" style="margin-top: 3px">
-                          </v-col>
-                          <v-col style="padding: 0">
-                            <h4 v-if="onair" style="display: inline">방송 종료</h4>
-                            <h4 v-else style="">방송 시작</h4>
-                          </v-col>
-                        </v-row>
-                      </div>
-                    </template>
-                    <v-card>
-                      <v-card-title>
-                        <h2>Live Streaming</h2>
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="12">
-                              <v-text-field
-                                v-model="title"
-                                label="제목"
-                                required
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                              <v-text-field
-                                v-model="content"
-                                :rules="rules"
-                                counter="100"
-                                label="내용"
-                                required
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="dialog = false"
-                        >
-                          Close
-                        </v-btn>
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="dialog = false; submitStreamingInfo"
-                        >
-                          Submit
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
+                <v-col style="display: flex; justify-content: flex-end">
+                  <img
+                    @click="moveToSupport"
+                    src="@/assets/image/kakaoBtn.png"
+                    alt=""
+                    style="width: 150px; cursor: pointer"
+                  />
                 </v-col>
               </v-row>
               </div>
@@ -105,8 +45,9 @@
 
 <script>
 import Header from "../components/Header.vue";
-import axios from 'axios'
-import io from 'socket.io-client'
+import SERVER from "@/api/url";
+import axios from 'axios';
+import io from 'socket.io-client';
 
 export default {
   components: {
@@ -126,8 +67,6 @@ export default {
       viewers: [],
       viewers_pc: {},
       chatMsg: '',
-      title: '',
-      content: '',
     }
   },
   methods: {
@@ -253,6 +192,29 @@ export default {
         });
       } else {
       }
+    },
+
+    moveToSupport() {
+      axios
+        .post(SERVER.URL + "/newuser/kakaoPay", {
+          videoid: 1,
+        })
+        .then((res) => {
+          async function openPopup() {
+            window.open(
+              res.data,
+              "window_name",
+              "width=430, height=500, location=no, status=no, scrollbars=yes"
+            );
+            await function () {
+              window.close(SERVER.URL + "/video/0");
+            };
+          }
+          openPopup();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   }
 }
