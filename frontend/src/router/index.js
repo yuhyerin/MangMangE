@@ -118,7 +118,7 @@ const routes = [
   },
   {
     path: '/test',
-    beforeEnter: adminAuth,
+    // beforeEnter: adminAuth,
     component: Test,
   },
   {

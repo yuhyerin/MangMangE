@@ -1,37 +1,23 @@
 <template>
   <v-app>
     <Header />
-    <!-- <transition name="component-fade" mode="out-in">
-      <div
-        v-if="num"
-        style="height: 100vh; width: 50%"
-        :style="
-          'background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),url(' +
-          require(`../assets/image/mainpage/section1.jpg`) +
-          '); background-repeat: no-repeat; background-size: cover;'
-        "
-      >
-        <div style="padding-top: 80px">
-          <v-btn @click="num = !num">{{ num }}</v-btn>
+    <div v-for="(n, index) in 4" :key="index">
+      <transition name="component-fade" mode="out-in">
+        <div
+          v-if="num == n"
+          style="height: 100vh; width: 100%; position: absolute"
+          :style="
+            'background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),url(' +
+            require(`../assets/image/mainpage/section${num}.jpg`) +
+            '); background-repeat: no-repeat; background-size: cover;'
+          "
+        >
+          <div style="padding-top: 80px">
+            <v-btn @click="numIncrease">{{ num }}</v-btn>
+          </div>
         </div>
-      </div>
-    </transition>
-    <transition name="component-fade" mode="out-in">
-      <div
-        v-if="!num"
-        style="height: 100vh; width: 50%; margin-left: 50%"
-        :style="
-          'background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),url(' +
-          require(`../assets/image/mainpage/section2.jpg`) +
-          '); background-repeat: no-repeat; background-size: cover;'
-        "
-      >
-        <div style="padding-top: 80px">
-          <v-btn @click="num = !num">{{ num }}</v-btn>
-        </div>
-      </div>
-    </transition> -->
-    <component v-bind:is="view"></component>
+      </transition>
+    </div>
   </v-app>
 </template>
 
@@ -43,17 +29,14 @@ export default {
   },
   data() {
     return {
-      num: true,
-      view: "v-a",
+      num: 1,
     };
   },
-  components: {
-    "v-a": {
-      template: "<div>Component A</div>",
-    },
-    "v-b": {
-      template: "<div>Component B</div>",
-    },
+  components: {},
+  created() {
+    setInterval(() => {
+      this.numIncrease();
+    }, 5000);
   },
   methods: {
     numIncrease() {
@@ -66,9 +49,12 @@ export default {
 };
 </script>
 <style>
-.component-fade-enter-active,
+.component-fade-enter-active {
+  transition: opacity 4s ease;
+}
+
 .component-fade-leave-active {
-  transition: opacity 3s ease;
+  transition: opacity 4s ease;
 }
 .component-fade-enter, .component-fade-leave-to
 /* .component-fade-leave-active below version 2.1.8 */ {
