@@ -13,11 +13,21 @@
         <h3 style="color: white; text-align: center; margin-top:130px;">현재 방송중이 아닙니다.</h3>
       </div>
     </v-row>
-    <v-row style="display: flex; justify-content: center; margin-top: 20px;">
+    <!-- <v-row style="display: flex; justify-content: center; margin-top: 20px;">
         <div id = "chatarea" style="width: 545px; height:295px; background-color: pink;"></div>
+    </v-row> -->
+    <v-row style="display: flex; justify-content: center; margin-top: 20px;">
+      <div class="p-5 mb-5" id = "chatarea" style="width: 545px; height:295px; background-color: pink;">
+          <ul id="msglist" class="chat-list list-group">
+              <li class="list-group-item"> &nbsp;</li>
+          </ul>
+          <ul class="chat-list list-group">
+              <li class="list-group-item"> &nbsp;</li>
+          </ul>
+      </div>
     </v-row>
     <v-row style="display: flex; justify-content: center; margin-top: 20px;">
-        <input v-model="inputText" id = "msgInput" type = "text" placeholder = "message" /> 
+        <input v-model="inputText" id = "chat-text" type = "text" placeholder = "message" /> 
         <button id ="sendMsgBtn" class = "btn-success btn" @click="clickSendMsgBtn">메세지 전송</button>
     </v-row>
     <v-row style="display: flex; justify-content: center; margin-top: 20px;">
@@ -57,11 +67,21 @@ export default {
       viewers_pc: {},
       viewers_channel: {},
 
+      chatList:null,
       chatArea :null,
       dataChannel:null,
       sendMsgBtn:null,
       inputText: null,
+
+
+      newUser:true,
+      firstNameIdx: Math.floor(Math.random()*57),
+      nickName : '관리자',
+      tmpColor : (Math.round((Math.random() * 0x44) + 0xaa)).toString(16) + (Math.round((Math.random() * 0x44) + 0xaa)).toString(16) + (Math.round((Math.random() * 0x44) + 0xaa)).toString(16),
+
     }
+  },
+  created(){
   },
   methods: {
     StartBtn(){
@@ -97,9 +117,57 @@ export default {
       
     },
     addListener(){
+       // chat
+      this.socket.on('chat message', msg => {
+        // this.sendMsgBtn = document.querySelector('#sendMsgBtn');
+        // this.chatArea = document.querySelector('#chatarea');
+        // // alert(this.inputText) 
+        // var name = "관리자"
+        // this.chatArea.innerHTML += name + ": " + this.inputText + "<br />"; 
+        
+        // //sending a message to a connected peer 
+        // this.dataChannel.send(val);
+        // this.inputText = "";
+        /////////////////////////////////////////
+        this.chatList = document.querySelector("#msglist");
+        const newLine = document.createElement("li");
+        newLine.innerHTML = msg.split("|USER_COLOR")[0]
+        newLine.classList.add("list-group-item");
+        newLine.style.backgroundColor = "#" + msg.split("|USER_COLOR")[1];
+        this.chatList.append(newLine);
+        // document.getElementById('msg').scrollTop = document.getElementById('msg').scrollHeight;
+        setTimeout(function() {window.scrollTo(0, this.chatList.scrollHeight);},1)
+        })
+        this.socket.on("chat history", msg => {
+            if(this.newUser){
+                this.newUser = false;
+                msg.forEach(el => {
+                    const newLine = document.createElement("li");
+                    newLine.innerHTML = el.split("|USER_COLOR")[0]
+                    newLine.classList.add("list-group-item");
+                    newLine.style.backgroundColor = "#" + el.split("|USER_COLOR")[1];
+                    this.chatList.append(newLine);
+                    setTimeout(function() {window.scrollTo(0, this.chatList.scrollHeight);},1)
+                });
+            }
+        })
+        this.socket.on("join chat", name => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = `${name}님이 채팅방에 입장하셨습니다.`;
+            newLine.classList.add("list-group-item");
+            this.chatList.append(newLine);
+        })
+        this.socket.on("exit chat", name => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = `${name}님이 채팅방에서 퇴장하셨습니다.`;
+            newLine.classList.add("list-group-item");
+            this.chatList.append(newLine);
+        })
+
+
+      // Streaming
       this.socket.on('created', ((room)=>{
       }));
-      // After
       this.socket.on('message',((message) => {
         if (message.type === 'offer' && !this.onair) {
           console.log('if message.type = offer');
@@ -162,15 +230,20 @@ export default {
     },
     clickSendMsgBtn(){
         
-        this.sendMsgBtn = document.querySelector('#sendMsgBtn');
-        this.chatArea = document.querySelector('#chatarea');
-        // alert(this.inputText) 
-        var name = "관리자"
-        this.chatArea.innerHTML += name + ": " + this.inputText + "<br />"; 
+        // this.sendMsgBtn = document.querySelector('#sendMsgBtn');
+        // this.chatArea = document.querySelector('#chatarea');
+        // // alert(this.inputText) 
+        // var name = "관리자"
+        // this.chatArea.innerHTML += name + ": " + this.inputText + "<br />"; 
         
-        //sending a message to a connected peer 
-        this.dataChannel.send(val);
+        // //sending a message to a connected peer 
+        // // this.dataChannel.send(val);
+        // this.inputText = "";
+
+        let msg = `${this.firstNameIdx}|FIRST_NAME_IDX${this.nickName}|USER_NAME${this.inputText}|USER_COLOR${this.tmpColor}`;
+        this.socket.emit('chat message', msg);
         this.inputText = "";
+
     },
     sendMessage(message) {
       this.socket.emit('message', message);

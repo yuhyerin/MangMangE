@@ -30,13 +30,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bbda9ae7-cf17-42a7-bf87-c95502fa7b9a" name="Default Changelist" comment="">
+    <list default="true" id="95260b7d-c5ba-42c7-a5d8-d83658320fe7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/videolist/StreamingVideo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/videolist/StreamingVideo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Live.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Live.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Live2.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Live2.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/StreamingViewer.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/StreamingViewer.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Section3.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Section3.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/LiveChat.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/LiveChat.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/ViewerChat.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/ViewerChat.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming_node_server/test3.js" beforeDir="false" afterPath="$PROJECT_DIR$/streaming_node_server/test3.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

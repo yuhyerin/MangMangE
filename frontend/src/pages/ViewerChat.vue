@@ -142,7 +142,44 @@ export default {
       this.enteringRoom();
     },
     addListener(){
-      // After
+
+      // chat
+      this.socket.on("chat message", msg => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = msg.split("|USER_COLOR")[0]
+            newLine.classList.add("list-group-item");
+            newLine.style.backgroundColor = "#" + msg.split("|USER_COLOR")[1];
+            chatList.append(newLine);
+            // document.getElementById('msg').scrollTop = document.getElementById('msg').scrollHeight;
+            setTimeout(function() {window.scrollTo(0, chatList.scrollHeight);},1)
+        })
+        socket.on("chat history", msg => {
+            if(newUser){
+                newUser = false;
+                msg.forEach(el => {
+                    const newLine = document.createElement("li");
+                    newLine.innerHTML = el.split("|USER_COLOR")[0]
+                    newLine.classList.add("list-group-item");
+                    newLine.style.backgroundColor = "#" + el.split("|USER_COLOR")[1];
+                    chatList.append(newLine);
+                    setTimeout(function() {window.scrollTo(0, chatList.scrollHeight);},1)
+                });
+            }
+        })
+        socket.on("join chat", name => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = `${name}님이 채팅방에 입장하셨습니다.`;
+            newLine.classList.add("list-group-item");
+            chatList.append(newLine);
+        })
+        socket.on("exit chat", name => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = `${name}님이 채팅방에서 퇴장하셨습니다.`;
+            newLine.classList.add("list-group-item");
+            chatList.append(newLine);
+        })
+
+      // streaming
       this.socket.on('message',((message) => {
         if (message.type === 'offer') {
           console.log('if message.type = offer');
