@@ -33,7 +33,7 @@
           "
         >
           <video
-            :src="require(`@/assets/videos/${video.filepath}`)"
+            :src="`https://k3b306.p.ssafy.io/allVideos/${video.filepath}`"
             type="video/mp4"
             controls
             style="max-height: 200px; width: 100%"

@@ -62,7 +62,12 @@
         </v-btn>
       </div>
       <div style="display: flex; justify-content: center; align-items: center">
-        <!-- <v-btn text color="white" @click="countDownTimer">
+        <!-- <v-btn
+          text
+          color="white"
+          @click="toggleButton"
+          :disabled="this.btnTrigger[1] == true ? true : false"
+        >
           <div><h3>버어튼</h3></div>
         </v-btn> -->
         <v-btn text @click="moveTo('/animals')">
@@ -78,6 +83,11 @@
         <v-btn text @click="moveToList">
           <div>
             <h3>입양 신청 목록</h3>
+          </div>
+        </v-btn>
+        <v-btn v-show="isAdmin" text @click="moveTo('/livechat')">
+          <div>
+            <h3>라이브 방송하기</h3>
           </div>
         </v-btn>
       </div>
@@ -96,6 +106,8 @@ export default {
       isUser: this.$cookies.get("accessToken") == null ? false : true,
       countDown: 10,
       timerTrigger: false,
+      btnTrigger: [false, false, false, false],
+      isAdmin: false,
     };
   },
   watch: {
@@ -112,6 +124,21 @@ export default {
       this.isUser = false;
     } else {
       this.isUser = true;
+      axios
+        .get(SERVER.URL + "/user/userId", {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"), //the token is a variable which holds the token
+          },
+        })
+        .then((res) => {
+          if(res.data.success)
+            this.isAdmin = true;
+          else
+            this.isAdmin=false;
+        })
+        .catch((err) => {
+          console.log(err)
+        });
     }
   },
   methods: {
@@ -160,6 +187,10 @@ export default {
           }
         });
       }
+    },
+    toggleButton() {
+      console.log(this.btnTrigger);
+      this.btnTrigger[1] = true;
     },
     // test() {
     //   axios

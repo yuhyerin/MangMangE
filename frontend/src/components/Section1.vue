@@ -1,5 +1,18 @@
 <template>
-  <div class="section s0">
+  <div class="section">
+    <div v-for="(n, index) in 8" :key="index">
+      <transition name="component-fade" mode="out-in">
+        <div
+          v-if="num == n"
+          style="height: 100vh; width: 100%; position: absolute"
+          :style="
+            'background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),url(' +
+            require(`../assets/image/mainpage/section${num}.jpg`) +
+            '); background-repeat: no-repeat; background-size: cover;'
+          "
+        ></div>
+      </transition>
+    </div>
     <div style="display: flex">
       <div style="width: 50vw; height: 100vh"></div>
       <div
@@ -10,7 +23,7 @@
           align-items: center;
         "
       >
-        <div class="mainWindow">
+        <div class="mainWindow" style="z-index: 1">
           <div style="height: 30%; padding-top: 20px; line-height: 220%">
             <h2 style="text-align: center">지금 당신에게 맞는</h2>
             <h2 style="text-align: center">반려동물을 찾아보세요</h2>
@@ -44,9 +57,21 @@
 import { mapMutations } from "vuex";
 export default {
   name: "Section1",
+  data() {
+    return {
+      num: 1,
+    };
+  },
+  created() {
+    setInterval(() => {
+      this.numIncrease();
+    }, 5000);
+  },
+
   methods: {
     ...mapMutations(["setEventListener"]),
     ...mapMutations(["resetSurvey"]),
+
     moveTo(page) {
       if (page == "/animals") {
         this.setEventListener = 2;
@@ -54,6 +79,12 @@ export default {
         this.resetSurvey(null);
       }
       this.$router.push(page);
+    },
+    numIncrease() {
+      this.num++;
+      if (this.num > 8) {
+        this.num = 1;
+      }
     },
   },
 };

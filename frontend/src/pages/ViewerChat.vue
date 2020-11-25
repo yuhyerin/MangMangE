@@ -11,15 +11,12 @@
           </div>
         </v-row>
         <v-row v-show="onair">
-           <div class="live-btn">
-            <h4 style="color: white; text-align: center; vertical-align: center;">LIVE</h4>
-          </div>
           <video
             controls
             id="remoteVideo"
             autoplay playsinline
             style="width: 100%; max-width: 439px; height:295px;"
-          ></video> -->
+          ></video>
         </v-row>
       </v-col>
       <v-col style="padding: 15px">
@@ -46,23 +43,17 @@
             <img @click="moveToSupport" src="@/assets/image/kakaoBtn.png" alt="" style="width: 150px; cursor: pointer">
           </v-col>
         </v-row>
+        <v-row style="display: flex; justify-content: center; margin-top: 20px;">
+            <div id = "chatarea" style="width: 545px; height:295px; background-color: pink;"></div>
+        </v-row>
+        <v-row style="display: flex; justify-content: center; margin-top: 20px;">
+            <input v-model="inputText" id = "msgInput" type = "text" placeholder = "message" /> 
+            <button id ="sendMsgBtn" class = "btn-success btn" @click="clickSendMsgBtn">메세지 전송</button>
+        </v-row>
       </v-col>
     </v-row>
     <hr />
-    <v-row style="margin-top: 10px">
-      <v-col v-for="video in videos" :key="video.uid">
-        <video
-          :src="`https://k3b306.p.ssafy.io/allVideos/${video.filepath}`"
-          type="video/mp4"
-          controls
-          style="background-color: black; max-height: 150px; width: 100%; height: 100%"
-        ></video>
-        <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
-      </v-col>
-      <div style="margin-top: 50px;">
-        <i @click="videoSeeMore" class="fas fa-angle-double-right fa-2x more-videos"></i>
-      </div>
-    </v-row>
+    
   </div>
 </template>
 
@@ -106,7 +97,6 @@ export default {
     else{
       this.upload= false;
     }
-    this.getVideos()
     
   },
   methods: {
@@ -140,19 +130,56 @@ export default {
         })
     },
     StartBtn(){
-      // this.$router.push("/streaming");
       this.connectSocket();
       this.addListener();
       this.onair = !this.onair;
     },
     connectSocket(){
+      console.log('connectSocket');
       this.socket = io.connect('http://localhost:8002');
       // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       this.socket.emit('join', this.room);
       this.enteringRoom();
     },
     addListener(){
-      // After
+
+      // chat
+      this.socket.on("chat message", msg => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = msg.split("|USER_COLOR")[0]
+            newLine.classList.add("list-group-item");
+            newLine.style.backgroundColor = "#" + msg.split("|USER_COLOR")[1];
+            chatList.append(newLine);
+            // document.getElementById('msg').scrollTop = document.getElementById('msg').scrollHeight;
+            setTimeout(function() {window.scrollTo(0, chatList.scrollHeight);},1)
+        })
+        socket.on("chat history", msg => {
+            if(newUser){
+                newUser = false;
+                msg.forEach(el => {
+                    const newLine = document.createElement("li");
+                    newLine.innerHTML = el.split("|USER_COLOR")[0]
+                    newLine.classList.add("list-group-item");
+                    newLine.style.backgroundColor = "#" + el.split("|USER_COLOR")[1];
+                    chatList.append(newLine);
+                    setTimeout(function() {window.scrollTo(0, chatList.scrollHeight);},1)
+                });
+            }
+        })
+        socket.on("join chat", name => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = `${name}님이 채팅방에 입장하셨습니다.`;
+            newLine.classList.add("list-group-item");
+            chatList.append(newLine);
+        })
+        socket.on("exit chat", name => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = `${name}님이 채팅방에서 퇴장하셨습니다.`;
+            newLine.classList.add("list-group-item");
+            chatList.append(newLine);
+        })
+
+      // streaming
       this.socket.on('message',((message) => {
         if (message.type === 'offer') {
           console.log('if message.type = offer');

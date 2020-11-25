@@ -229,7 +229,8 @@ public class AccountController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	
+	/** 관리자인지 아닌지 판별. 이거 ROLE을 비교하는걸로 수정해야 할 것 같습니다! */
 	@GetMapping(path = "/user/userId")
 	public ResponseEntity<HashMap<String, Object>> userID(HttpServletRequest request) {
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
