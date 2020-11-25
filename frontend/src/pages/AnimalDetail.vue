@@ -408,7 +408,7 @@
               <div>대표 동영상</div>
               <video controls style="max-height: 505px; width: 100%">
                 <source
-                  :src="require(`@/assets/videos/${this.video.filepath}`)"
+                  :src="`https://k3b306.p.ssafy.io/allVideos/${video.filepath}`"
                   type="video/mp4"
                 />
               </video>

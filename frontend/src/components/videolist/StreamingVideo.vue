@@ -52,7 +52,7 @@
     <v-row style="margin-top: 10px">
       <v-col v-for="video in videos" :key="video.uid">
         <video
-          :src="require(`@/assets/videos/${video.filepath}`)"
+          :src="`https://k3b306.p.ssafy.io/allVideos/${video.filepath}`"
           type="video/mp4"
           controls
           style="background-color: black; max-height: 150px; width: 100%; height: 100%"
@@ -146,7 +146,6 @@ export default {
       this.onair = !this.onair;
     },
     connectSocket(){
-      console.log('connectSocket');
       this.socket = io.connect('http://localhost:8002');
       // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       this.socket.emit('join', this.room);

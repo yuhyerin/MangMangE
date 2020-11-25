@@ -1,5 +1,8 @@
 <template>
   <div style="padding-top: 75px">
+    <div class="loading" v-if="loadingTrigger">
+      <i class="fas fa-spinner fa-10x fa-spin"></i>
+    </div>
     <Header />
     <v-container style="padding-top: 30px; width: 50%">
       <h2 style="text-align: center; padding-bottom: 12px">동영상 업로드</h2>
@@ -137,6 +140,7 @@ export default {
         message: "일련번호를 확인해주세요",
       },
       contentCheck: 0,
+      loadingTrigger: false,
     };
   },
   watch: {
@@ -219,58 +223,83 @@ export default {
 
     upload() {
       var formData = new FormData();
+      this.loadingTrigger = true;
       console.log(this.desertionNo + "_" + this.file[0].name);
       SERVER.tokenCheck(() => {
-        axios
-          .post(
-            SERVER.URL + "/admin/uploadVideo",
-            {
-              desertion_no: this.desertionNo,
-              title: this.title,
-              content: this.content,
-              filepath: this.desertionNo + "_" + this.file[0].name,
-            },
-            {
-              headers: {
-                Authorization: this.$cookies.get("accessToken"),
-                contentType: "application/json",
-              },
-            }
-          )
-          .then((res) => {
-            console.log(res.data);
-            formData.append(
-              "mfile",
-              this.file[0],
-              res.data.uid + "_" + this.file[0].name
-            );
-            if (res.data.success == true) {
-              axios
-                .post(SERVER.URL + "/admin/upload", formData, {
-                  headers: {
-                    Authorization: this.$cookies.get("accessToken"),
-                    "content-Type":
-                      "multipart/form-data; charset=utf-8; boundary='calculated when request is sent';",
-                  },
-                })
-                .then((res) => {
-                  console.log("RES : ", res);
-                  alert("등록되었습니다");
-                  this.$router.push("/videos");
-                })
-                .catch((err) => {
-                  console.log("ERROR : ", err);
-                });
-            }
-          })
-          .catch((err) => {
-            console.log("ERRORERROR : ", err);
-          });
+        formData.append(
+          "mfile",
+          this.file[0],
+          this.desertionNo + "_" + this.file[0].name
+        );
+        this.registerFile(formData);
       });
+    },
+    async registerFile(formData) {
+      await axios
+        .post(SERVER.URL + "/admin/upload", formData, {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"),
+            "content-Type":
+              "multipart/form-data; charset=utf-8; boundary='calculated when request is sent';",
+          },
+        })
+        .then((res) => {
+          console.log("video upload result is : ", res);
+          if (res.data.success == true) {
+            this.registerDB();
+          }
+        })
+        .catch((err) => {
+          this.loadingTrigger = false;
+          console.log("video upload result is : ", err);
+        });
+    },
+
+    async registerDB() {
+      await axios
+        .post(
+          SERVER.URL + "/admin/uploadVideo",
+          {
+            desertion_no: this.desertionNo,
+            title: this.title,
+            content: this.content,
+            filepath: this.desertionNo + "_" + this.file[0].name,
+          },
+          {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+              contentType: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log("DataBase upload result is", res.data);
+          this.loadingTrigger = false;
+          this.$router.push("/videos");
+        })
+        .catch((err) => {
+          console.log("DataBase upload result is ", err);
+          this.loadingTrigger = false;
+        });
     },
   },
 };
 </script>
 
 <style scoped>
+.loading {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  /* background-image: linear-gradient(
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.4)
+  ); */
+}
 </style>
