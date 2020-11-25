@@ -34,7 +34,8 @@
             @changeComponents="register"
             @isLoading="setLoadingTrigger"
           ></component>
-          <!-- <LoginForm
+          <!--           
+          <LoginForm
             v-if="pageTrigger == 0"
             @changeComponents="register"
             @isLoading="setLoadingTrigger"

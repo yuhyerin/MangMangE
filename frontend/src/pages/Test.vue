@@ -40,10 +40,11 @@ export default {
   },
   methods: {
     numIncrease() {
-      this.num++;
-      if (this.num > 4) {
-        this.num = 1;
-      }
+      this.num = (this.num + 1) % 4;
+    },
+
+    test() {
+      console.log("hihi");
     },
   },
 };

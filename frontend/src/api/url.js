@@ -53,10 +53,10 @@ export default {
       today.getMinutes() * 60 +
       today.getSeconds() * 1;
 
-    if (expireTime > 85800) {
-      expireTime -= 86400;
-      userTime -= 86400;
-    }
+    // if (expireTime > 85800) {
+    //   expireTime -= 86400;
+    //   userTime -= 86400;
+    // }
 
     if (expireTime <= userTime) {
       axios
