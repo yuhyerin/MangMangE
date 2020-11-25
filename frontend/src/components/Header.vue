@@ -85,6 +85,11 @@
             <h3>입양 신청 목록</h3>
           </div>
         </v-btn>
+        <v-btn v-show="isAdmin" text @click="moveTo('/livechat')">
+          <div>
+            <h3>라이브 방송하기</h3>
+          </div>
+        </v-btn>
       </div>
     </div>
   </div>
@@ -102,6 +107,7 @@ export default {
       countDown: 10,
       timerTrigger: false,
       btnTrigger: [false, false, false, false],
+      isAdmin: false,
     };
   },
   watch: {
@@ -118,6 +124,21 @@ export default {
       this.isUser = false;
     } else {
       this.isUser = true;
+      axios
+        .get(SERVER.URL + "/user/userId", {
+          headers: {
+            Authorization: this.$cookies.get("accessToken"), //the token is a variable which holds the token
+          },
+        })
+        .then((res) => {
+          if(res.data.success)
+            this.isAdmin = true;
+          else
+            this.isAdmin=false;
+        })
+        .catch((err) => {
+          console.log(err)
+        });
     }
   },
   methods: {

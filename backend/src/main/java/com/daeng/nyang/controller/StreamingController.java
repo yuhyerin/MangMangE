@@ -2,9 +2,9 @@ package com.daeng.nyang.controller;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
 
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.HttpHeaders;
@@ -16,15 +16,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.daeng.nyang.dto.Account;
 
 
 @RestController
 @CrossOrigin("*")
 public class StreamingController {
 	
-	///////
+	/** 스트리밍 방송 시작 */
+	@PostMapping("/newuser/streaming/")
+	public ResponseEntity<?> startStreaming(@RequestBody Map<String, String> Live) {
+
+		Map<String, String> resultMap = new HashMap<String, String>();
+		String user_id = Live.get("user_id");
+		String title = Live.get("title");
+		String contents = Live.get("contents");
+		
+		
+		return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
+
+	}
 	
 	@GetMapping("/newuser/videos/{name}/full")
     public ResponseEntity<UrlResource> getFullVideo(@PathVariable String name) throws MalformedURLException {
