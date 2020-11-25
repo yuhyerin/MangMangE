@@ -1,62 +1,122 @@
 <template>
-  <div>
-    <Header />
-    <v-row style="padding: 90px 0 10px 50px">
-      <h1 style="padding-right: 10px">마이리틀댕댕 TV - 채팅 테스트 페이지</h1>
-      <img v-if="onair" src="@/assets/image/on-air.png" alt="" width="50px">
-      <img v-else src="@/assets/image/off-air.png" alt="" width="50px">
-    </v-row>
-    <v-row style="display: flex; justify-content: center; align-items: center; background-color: rgb(193, 218, 204); height: 480px">
-      <video v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video>
-      <!-- <video src="@/assets/videos/앞에여분있는먹방자른거.mp4" v-show="onair" id="localVideo" style="width: 545px; height:295px;" autoplay playsinline></video> -->
-      <div v-show="!onair" style="width: 545px; height:295px; background-color: black;">
-        <h3 style="color: white; text-align: center; margin-top:130px;">현재 방송중이 아닙니다.</h3>
-      </div>
-    </v-row>
-    <!-- <v-row style="display: flex; justify-content: center; margin-top: 20px;">
-        <div id = "chatarea" style="width: 545px; height:295px; background-color: pink;"></div>
-    </v-row> -->
-    <v-row style="display: flex; justify-content: center; margin-top: 20px;">
-      <div class="p-5 mb-5" id = "chatarea" style="width: 545px; height:295px; background-color: pink;">
-          <ul id="msglist" class="chat-list list-group">
-              <li class="list-group-item"> &nbsp;</li>
-          </ul>
-          <ul class="chat-list list-group">
-              <li class="list-group-item"> &nbsp;</li>
-          </ul>
-      </div>
-    </v-row>
-    <v-row style="display: flex; justify-content: center; margin-top: 20px;">
-        <input v-model="inputText" id = "chat-text" type = "text" placeholder = "message" /> 
-        <button id ="sendMsgBtn" class = "btn-success btn" @click="clickSendMsgBtn">메세지 전송</button>
-    </v-row>
-    <v-row style="display: flex; justify-content: center; margin-top: 20px;">
-      <div @click="StartBtn" class="onair-btn">
-        <v-row style="display: flex; align-items: center; margin: 0 0 0 3px;">
-          <v-col style="padding: 0" cols="5">
-            <img src="@/assets/image/startbutton.png" alt="" width="40px" style="margin-top:1px">
-          </v-col>
-          <v-col style="padding: 0">
-            <h4 v-if="onair" style="display: inline">방송 종료</h4>
-            <h4 v-else style="">방송 시작</h4>
-          </v-col>
-        </v-row>
-      </div>
-    </v-row>
+  <div class="chat">
+    <v-app>
+      <Header/>
+        <v-container fluid style="padding-left: 150px; padding-right: 150px;"> 
+          <v-row style="padding: 60px 0 10px 20px">
+            <h1 style="padding-right: 10px">마이리틀댕댕 TV</h1>
+            <img v-if="onair" src="@/assets/image/on-air.png" alt="" width="40px">
+            <img v-else src="@/assets/image/off-air.png" alt="" width="40px">
+          </v-row>
+
+          <v-row>
+            <v-col cols="8" style="padding-top: 0; padding-right: 20px">
+              <div class="video-play" style="width: 100%; height: 90%; background-color: black">
+                <h2 v-show="!onair" style="color: white; text-align: center; padding-top: 230px;">현재 방송중이 아닙니다.</h2>
+                <video v-show="onair" id="localVideo" autoplay playsinline style=""></video>
+              </div>
+              <div>
+              <v-row>
+                <v-col>
+                  <i class="far fa-user fa-s" style="padding-right: 5px"></i>
+                  {{ viewer_number }}명 시청중
+                </v-col>
+
+                <v-col style="display: flex; justify-content: flex-end;">
+                  <v-dialog v-model="dialog" @click="StartBtn" persistent max-width="600px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <div v-bind="attrs" v-on="on" class="onair-btn">
+                        <v-row style="display: flex; align-items: center; margin: 0;">
+                          <v-col style="padding: 0" cols="5">
+                            <img src="@/assets/image/startbutton.png" alt="" width="40px" style="margin-top: 3px">
+                          </v-col>
+                          <v-col style="padding: 0">
+                            <h4 v-if="onair" style="display: inline">방송 종료</h4>
+                            <h4 v-else style="">방송 시작</h4>
+                          </v-col>
+                        </v-row>
+                      </div>
+                    </template>
+                    <v-card>
+                      <v-card-title>
+                        <h2>Live Streaming</h2>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                v-model="title"
+                                label="제목"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                              <v-text-field
+                                v-model="content"
+                                :rules="rules"
+                                counter="100"
+                                label="내용"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="dialog = false"
+                        >
+                          Close
+                        </v-btn>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="dialog = false; submitStreamingInfo"
+                        >
+                          Submit
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-col>
+              </v-row>
+              </div>
+            </v-col>
+            <!-- 채팅 -->
+            <v-col cols="4" style="height: 550px; border: 1px solid black;">
+              <div><h3>실시간 채팅</h3></div>
+              <div style="height: 82%; margin-top: 7px; border-radius: 10px; background-color: rgba(0, 0, 0, 0.06);">
+              </div>
+              <div class="chat" style="margin-top: 10px;">
+                <textarea class="chat-input" @keyup.enter="sendChat" label="Filled" filled rounded dense append-icon="mdi-map-marker" placeholder="메시지 보내기"></textarea>
+                <!-- <span><i class="fas fa-paper-plane submit"></i></span> -->
+              </div>
+            </v-col>
+          </v-row>
+          
+        </v-container>
+    </v-app>
   </div>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
-import Axios from 'axios'
+import axios from 'axios'
 import io from 'socket.io-client'
 
 export default {
   components: {
-    Header
+    Header,
   },
   data() {
     return {
+      onair: false,
+      dialog: false,
+      rules: [v => v.length <= 100 || '최대 100글자'],
       room: 'hyerin',
       viewer_number: 0,
       socket: null,
@@ -93,7 +153,6 @@ export default {
       this.socket = io.connect('http://localhost:8002');
     // this.socket = io.connect('https://k3b306.p.ssafy.io:8002');
       if(this.onair){//방송시작 
-
         this.socket.emit('create', this.room);
         navigator.mediaDevices.getUserMedia({audio: true, video: true})
         .then(mediaStream => {
@@ -292,10 +351,25 @@ export default {
   cursor: pointer;
   border: solid black;
   border-radius: 7px;
-  width: 9%;
+  width: 30%;
   padding: 1px 3px 1px 3px;
 }
 .onair-btn:hover {
   background-color: #eeeeee;
+}
+.chat {
+  width: 100%;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+}
+.chat-input {
+  width: 70%;
+  height: 50px;
+  padding: 11px 9px 9px 12px;
+  resize: none;
+}
+textarea:focus {
+  outline: none;
 }
 </style>

@@ -11,12 +11,15 @@
           </div>
         </v-row>
         <v-row v-show="onair">
+           <div class="live-btn">
+            <h4 style="color: white; text-align: center; vertical-align: center;">LIVE</h4>
+          </div>
           <video
             controls
             id="remoteVideo"
             autoplay playsinline
             style="width: 100%; max-width: 439px; height:295px;"
-          ></video>
+          ></video> -->
         </v-row>
       </v-col>
       <v-col style="padding: 15px">
@@ -52,7 +55,7 @@
           :src="require(`@/assets/videos/${video.filepath}`)"
           type="video/mp4"
           controls
-          style="max-height: 150px; width: 100%; height: 100%;"
+          style="background-color: black; max-height: 150px; width: 100%; height: 100%"
         ></video>
         <h3 class="videoTitle" style="text-align: center; cursor: pointer" @click="moveToVideoDetail(video.uid)">{{ video.title }}</h3>
       </v-col>
@@ -137,6 +140,7 @@ export default {
         })
     },
     StartBtn(){
+      // this.$router.push("/streaming");
       this.connectSocket();
       this.addListener();
       this.onair = !this.onair;

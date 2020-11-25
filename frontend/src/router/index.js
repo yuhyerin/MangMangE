@@ -19,6 +19,8 @@ import axios from 'axios'
 import SERVER from '@/api/url'
 import LiveChat from '../pages/LiveChat.vue'
 import ViewerChat from '../pages/ViewerChat.vue'
+import StreamingDetail from '../pages/StreamingDetail.vue'
+
 
 const requireAuth = (to, from, next) => {
   if ($cookies.get('accessToken') != null) {
@@ -110,7 +112,6 @@ const routes = [
     name: 'VideoBoard',
     component: VideoBoard,
   },
-
   {
     path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
@@ -151,7 +152,7 @@ const routes = [
     props: (route) => ({ query: route.query.q })
   },
   {
-    path:'/livechat',
+    path: '/livechat',
     name: 'LiveChat',
     component: LiveChat
   },
@@ -159,6 +160,11 @@ const routes = [
     path:'/viewerchat',
     name:'ViewerChat',
     component:ViewerChat
+  },
+  {
+    path: '/streaming',
+    name: 'StreamingDetail',
+    component: StreamingDetail
   },
 ]
 
