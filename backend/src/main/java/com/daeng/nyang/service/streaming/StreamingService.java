@@ -2,6 +2,6 @@ package com.daeng.nyang.service.streaming;
 
 public interface StreamingService {
 	
-	void startStreaming();
+	void startStreaming(String user_id, String title, String contents);
 
 }
