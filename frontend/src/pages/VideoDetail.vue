@@ -24,7 +24,7 @@
               type="video/mp4"
               controls
               autoplay
-              style="max-height: 505px; width: 100%; height: 100%"
+              style="max-height: 505px; width: 100%; height: 100%; background-color: black;"
             ></video>
           </div>
           <v-row>

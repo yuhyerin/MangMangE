@@ -144,10 +144,37 @@ export default {
   created(){
   },
   methods: {
-    StartBtn(){
+    StartBtn() {
+      this.submitStreamingInfo();
+      // this.connectSocket();
+      // this.addListener();
+    },
+    submitStreamingInfo() {
       this.onair = !this.onair;
-      this.connectSocket();
-      this.addListener();
+      axios
+        .post(
+          SERVER.URL + "/newuser/streaming",
+          {
+            title: this.title, 
+            contents: this.content
+          },
+          {
+            headers: {
+              Authorization: this.$cookies.get("accessToken"),
+            },
+          }
+        )
+        .then((res)=>
+        {
+          this.connectSocket();
+          this.addListener();
+        })
+        .catch((err) =>
+        console.log('제출 에러', err)
+        )
+    },
+    sendChat() {
+      alert()
     },
     connectSocket(){
       this.socket = io.connect('http://localhost:8002');
