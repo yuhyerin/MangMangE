@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 export default {
-  // URL: 'https://localhost:8080',
-  URL: 'https://k3b306.p.ssafy.io:8080',
+  URL: 'https://localhost:8080',
+  // URL: 'https://k3b306.p.ssafy.io:8080',
   KakaopayURL: 'https://kapi.kakao.com/v1/payment/ready',
   ROUTES: {
     submitSurvey: '/user/survey/create',
@@ -53,10 +53,10 @@ export default {
       today.getMinutes() * 60 +
       today.getSeconds() * 1;
 
-    if (expireTime > 85800) {
-      expireTime -= 86400;
-      userTime -= 86400;
-    }
+    // if (expireTime > 85800) {
+    //   expireTime -= 86400;
+    //   userTime -= 86400;
+    // }
 
     if (expireTime <= userTime) {
       axios

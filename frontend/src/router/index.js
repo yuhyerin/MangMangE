@@ -14,10 +14,13 @@ import VideoDetail from '../pages/VideoDetail.vue'
 import UploadVideo from '../pages/UploadVideo.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy.vue'
 import Live from '../pages/Live.vue'
-import Live2 from '../pages/Live2.vue'
 import VideoDetailPopup from '../pages/VideoDetailPopup'
 import axios from 'axios'
 import SERVER from '@/api/url'
+import LiveChat from '../pages/LiveChat.vue'
+import ViewerChat from '../pages/ViewerChat.vue'
+import StreamingDetail from '../pages/StreamingDetail.vue'
+
 
 const requireAuth = (to, from, next) => {
   if ($cookies.get('accessToken') != null) {
@@ -109,7 +112,6 @@ const routes = [
     name: 'VideoBoard',
     component: VideoBoard,
   },
-
   {
     path: '/adoptionupdate/:uid',
     name: 'AdoptionUpdate',
@@ -118,7 +120,7 @@ const routes = [
   },
   {
     path: '/test',
-    beforeEnter: adminAuth,
+    // beforeEnter: adminAuth,
     component: Test,
   },
   {
@@ -140,20 +142,30 @@ const routes = [
   {
     path: '/live',
     name: 'Live',
-    beforeEnter: adminAuth,
+    // beforeEnter: adminAuth,
     component: Live
-  },
-  {
-    path: '/live2',
-    name: 'Live2',
-    component: Live2
   },
   {
     path: '/videos/0',
     name: 'VideoDetailPopup',
     component: VideoDetailPopup,
     props: (route) => ({ query: route.query.q })
-  }
+  },
+  {
+    path: '/livechat',
+    name: 'LiveChat',
+    component: LiveChat
+  },
+  {
+    path:'/viewerchat',
+    name:'ViewerChat',
+    component:ViewerChat
+  },
+  {
+    path: '/streaming',
+    name: 'StreamingDetail',
+    component: StreamingDetail
+  },
 ]
 
 const router = new VueRouter({

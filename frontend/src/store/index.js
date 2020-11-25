@@ -36,6 +36,7 @@ export default new Vuex.Store({
 
   // state를 (가공해서) 가져올 함수들 === computed
   getters: {
+
   },
 
   // state 변경하는 함수들, 동기적으로 동작, commit을 통해 실행

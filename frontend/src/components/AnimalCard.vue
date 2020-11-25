@@ -74,7 +74,7 @@
         <h2>{{ animalInfo.kind_cd }}</h2>
         <p>일련번호 : {{ animalInfo.desertion_no }}</p>
         <br />
-        <p>{{ this.animalAge }} (추정)</p>
+        <p>{{ animalAge }} (추정)</p>
         <p>{{ animalSex }}</p>
         <p>{{ animalInfo.weight }} kg (추정)</p>
       </div>
