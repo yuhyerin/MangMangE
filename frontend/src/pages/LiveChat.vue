@@ -75,7 +75,7 @@
                         <v-btn
                           color="blue darken-1"
                           text
-                          @click="dialog = false; submitStreamingInfo"
+                          @click="submitStreamingInfo"
                         >
                           Submit
                         </v-btn>
@@ -107,6 +107,7 @@
 import Header from "../components/Header.vue";
 import axios from 'axios'
 import io from 'socket.io-client'
+import SERVER from '@/api/url'
 
 export default {
   components: {
@@ -133,6 +134,8 @@ export default {
       sendMsgBtn:null,
       inputText: null,
 
+      title:"",
+      content:"",
 
       newUser:true,
       firstNameIdx: Math.floor(Math.random()*57),
@@ -150,28 +153,54 @@ export default {
       // this.addListener();
     },
     submitStreamingInfo() {
+      this.dialog = false;
       this.onair = !this.onair;
-      axios
-        .post(
-          SERVER.URL + "/newuser/streaming",
-          {
-            title: this.title, 
-            contents: this.content
-          },
-          {
-            headers: {
-              Authorization: this.$cookies.get("accessToken"),
+      if(this.onair){
+          SERVER.tokenCheck(()=>{
+          axios
+          .post(
+            SERVER.URL + "/user/streaming",
+            {
+              title: this.title, 
+              contents: this.content
             },
-          }
-        )
-        .then((res)=>
-        {
-          this.connectSocket();
-          this.addListener();
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res)=>
+          {
+            this.connectSocket();
+            this.addListener();
+          })
+          .catch((err) =>
+          console.log('제출 에러', err)
+          )
         })
-        .catch((err) =>
-        console.log('제출 에러', err)
-        )
+      }else{
+        SERVER.tokenCheck(()=>{
+          axios
+          .get(
+            SERVER.URL + "/user/streaming",
+            {
+              headers: {
+                Authorization: this.$cookies.get("accessToken"),
+              },
+            }
+          )
+          .then((res)=>
+          {
+            this.connectSocket();
+          })
+          .catch((err) =>
+          console.log('제출 에러', err)
+          )
+        })
+      }
+      
+      
     },
     sendChat() {
       alert()

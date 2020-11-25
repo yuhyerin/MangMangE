@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRange;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daeng.nyang.dto.Account;
 import com.daeng.nyang.dto.Streaming;
-import com.daeng.nyang.dto.Survey;
+import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.streaming.StreamingService;
 
@@ -39,12 +40,15 @@ public class StreamingController {
 
 	@Autowired
 	private StreamingService streamingService;
+	
+	@Autowired
+	RedisTemplate<String, Object> redisTemplate;
 
 	/** 스트리밍 방송 시작 */
-	@PostMapping("/newuser/streaming/")
+	@PostMapping("/user/streaming")
 	public ResponseEntity<?> startStreaming(@RequestBody Streaming streaming,
 			HttpServletRequest request) {
-		
+		System.out.println("스트리밍 방송을 시작하겠습니다.");
 		String token = request.getHeader("Authorization"); // 토큰받기
 		Map<String, String> resultMap = new HashMap<String, String>();
 		if (token == null) {
@@ -53,11 +57,37 @@ public class StreamingController {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		} else {
 			try {
-				String user_id = jwtTokenUtil.getUsernameFromToken(token);
-				System.out.println(user_id);
+				TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+				Account account = user.getAccount();
+				String user_id = account.getUser_id();
+				System.out.println("관리자 아이디 : "+user_id);
 				String title = streaming.getTitle();
 				String contents = streaming.getContents();
+				System.out.println("관리자 아이디 : "+user_id+", 제목: "+title+", 내용: "+contents);
 				streamingService.startStreaming(user_id, title, contents);
+				return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			}
+		}
+	}
+	
+	/** 스트리밍 방송 종료 */
+	@GetMapping("/user/streaming")
+	public ResponseEntity<?> stopStreaming(HttpServletRequest request) {
+		System.out.println("스트리밍 방송을 종료 하겠습니다.");
+		String token = request.getHeader("Authorization"); // 토큰받기
+		Map<String, String> resultMap = new HashMap<String, String>();
+		if (token == null) {
+			return null;
+		} else if (jwtTokenUtil.isTokenExpired(token)) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		} else {
+			try {
+				TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
+				Account account = user.getAccount();
+				String user_id = account.getUser_id();
+				streamingService.stopStreaming(user_id);
 				return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
 			} catch (Exception e) {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

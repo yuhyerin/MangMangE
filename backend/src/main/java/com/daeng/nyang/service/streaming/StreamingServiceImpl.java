@@ -15,6 +15,12 @@ public class StreamingServiceImpl implements StreamingService{
 	public void startStreaming(String user_id, String title, String contents) {
 		streamingRepo.startStreaming(user_id, title, contents);
 	}
+
+	@Override
+	public void stopStreaming(String user_id) {
+		streamingRepo.stopStreaming(user_id);
+		
+	}
 	
 
 }
