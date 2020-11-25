@@ -32,7 +32,7 @@
 export default {
   methods: {
     submit() {
-      this.$emit("changeComponents", 0);
+      this.$emit("changeComponents", "LoginForm");
     },
   },
 };

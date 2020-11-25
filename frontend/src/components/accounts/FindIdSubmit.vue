@@ -58,13 +58,13 @@ export default {
 
   methods: {
     submit() {
-      this.$emit("changeComponents", 0);
+      this.$emit("changeComponents", "LoginForm");
     },
     moveToFindPw() {
-      this.$emit("changeComponents", 3);
+      this.$emit("changeComponents", "FindPwForm");
     },
     moveToRegister() {
-      this.$emit("changeComponents", 1);
+      this.$emit("changeComponents", "RegisterForm");
     },
   },
 };

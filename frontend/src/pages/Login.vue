@@ -28,6 +28,13 @@
             alt="LoginBackImage"
             style="width: 100px"
           />
+
+          <component
+            :is="selectedComponent"
+            @changeComponents="register"
+            @isLoading="setLoadingTrigger"
+          ></component>
+          <!--           
           <LoginForm
             v-if="pageTrigger == 0"
             @changeComponents="register"
@@ -38,7 +45,7 @@
           <FindPwForm v-if="pageTrigger == 3" @changeComponents="register" />
           <FindIdSubmit v-if="pageTrigger == 4" @changeComponents="register" />
           <FindPwSubmit v-if="pageTrigger == 5" @changeComponents="register" />
-        </div>
+        --></div>
       </div>
       <div style="width: 100%; height: 100vh">
         <img
@@ -73,6 +80,7 @@ export default {
     return {
       pageTrigger: 0,
       loadingTrigger: false,
+      selectedComponent: "LoginForm",
     };
   },
   computed: {
@@ -87,7 +95,7 @@ export default {
   },
   methods: {
     register(value) {
-      this.pageTrigger = value;
+      this.selectedComponent = value;
     },
     moveToHome() {
       location.href = "/";

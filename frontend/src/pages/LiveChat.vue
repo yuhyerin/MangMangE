@@ -125,10 +125,23 @@ export default {
       onair: false,
       viewers: [],
       viewers_pc: {},
-      chatMsg: '',
-      title: '',
-      content: '',
+      viewers_channel: {},
+
+      chatList:null,
+      chatArea :null,
+      dataChannel:null,
+      sendMsgBtn:null,
+      inputText: null,
+
+
+      newUser:true,
+      firstNameIdx: Math.floor(Math.random()*57),
+      nickName : '관리자',
+      tmpColor : (Math.round((Math.random() * 0x44) + 0xaa)).toString(16) + (Math.round((Math.random() * 0x44) + 0xaa)).toString(16) + (Math.round((Math.random() * 0x44) + 0xaa)).toString(16),
+
     }
+  },
+  created(){
   },
   methods: {
     StartBtn() {
@@ -190,9 +203,57 @@ export default {
       
     },
     addListener(){
+       // chat
+      this.socket.on('chat message', msg => {
+        // this.sendMsgBtn = document.querySelector('#sendMsgBtn');
+        // this.chatArea = document.querySelector('#chatarea');
+        // // alert(this.inputText) 
+        // var name = "관리자"
+        // this.chatArea.innerHTML += name + ": " + this.inputText + "<br />"; 
+        
+        // //sending a message to a connected peer 
+        // this.dataChannel.send(val);
+        // this.inputText = "";
+        /////////////////////////////////////////
+        this.chatList = document.querySelector("#msglist");
+        const newLine = document.createElement("li");
+        newLine.innerHTML = msg.split("|USER_COLOR")[0]
+        newLine.classList.add("list-group-item");
+        newLine.style.backgroundColor = "#" + msg.split("|USER_COLOR")[1];
+        this.chatList.append(newLine);
+        // document.getElementById('msg').scrollTop = document.getElementById('msg').scrollHeight;
+        setTimeout(function() {window.scrollTo(0, this.chatList.scrollHeight);},1)
+        })
+        this.socket.on("chat history", msg => {
+            if(this.newUser){
+                this.newUser = false;
+                msg.forEach(el => {
+                    const newLine = document.createElement("li");
+                    newLine.innerHTML = el.split("|USER_COLOR")[0]
+                    newLine.classList.add("list-group-item");
+                    newLine.style.backgroundColor = "#" + el.split("|USER_COLOR")[1];
+                    this.chatList.append(newLine);
+                    setTimeout(function() {window.scrollTo(0, this.chatList.scrollHeight);},1)
+                });
+            }
+        })
+        this.socket.on("join chat", name => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = `${name}님이 채팅방에 입장하셨습니다.`;
+            newLine.classList.add("list-group-item");
+            this.chatList.append(newLine);
+        })
+        this.socket.on("exit chat", name => {
+            const newLine = document.createElement("li");
+            newLine.innerHTML = `${name}님이 채팅방에서 퇴장하셨습니다.`;
+            newLine.classList.add("list-group-item");
+            this.chatList.append(newLine);
+        })
+
+
+      // Streaming
       this.socket.on('created', ((room)=>{
       }));
-      // After
       this.socket.on('message',((message) => {
         if (message.type === 'offer' && !this.onair) {
           console.log('if message.type = offer');
@@ -229,11 +290,47 @@ export default {
         
         this.cur = socket_number;
         this.viewers_pc[socket_number] = tmp_pc;
+
+        // 채팅을 위한 channel 
+        var tmp_channel = tmp_pc.createDataChannel(this.cur, {reliable:true});
+        this.viewers_channel[this.cur] = tmp_channel;
+        this.viewers_channel[this.cur].onerror = function(error){
+            console.log("Ooops.... chat... error :", error);
+        };
+
+        //when we receive a message from the other peer, display it on the screen 
+        this.viewers_channel[this.cur].onmessage = function (event) { 
+            this.chatArea.innerHTML += connectedUser + ": " + event.data + "<br />"; 
+        };
+		
+        this.viewers_channel[this.cur].onclose = function () { 
+            console.log("data channel is closed"); 
+        };  
+
+
+
         this.doCall();
         
       }));
+
     },
-    
+    clickSendMsgBtn(){
+        
+        // this.sendMsgBtn = document.querySelector('#sendMsgBtn');
+        // this.chatArea = document.querySelector('#chatarea');
+        // // alert(this.inputText) 
+        // var name = "관리자"
+        // this.chatArea.innerHTML += name + ": " + this.inputText + "<br />"; 
+        
+        // //sending a message to a connected peer 
+        // // this.dataChannel.send(val);
+        // this.inputText = "";
+
+        let msg = `${this.firstNameIdx}|FIRST_NAME_IDX${this.nickName}|USER_NAME${this.inputText}|USER_COLOR${this.tmpColor}`;
+        this.socket.emit('chat message', msg);
+        this.inputText = "";
+
+    },
     sendMessage(message) {
       this.socket.emit('message', message);
     },

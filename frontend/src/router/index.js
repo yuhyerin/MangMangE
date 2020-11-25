@@ -18,6 +18,7 @@ import VideoDetailPopup from '../pages/VideoDetailPopup'
 import axios from 'axios'
 import SERVER from '@/api/url'
 import LiveChat from '../pages/LiveChat.vue'
+import ViewerChat from '../pages/ViewerChat.vue'
 import StreamingDetail from '../pages/StreamingDetail.vue'
 
 
@@ -119,7 +120,7 @@ const routes = [
   },
   {
     path: '/test',
-    beforeEnter: adminAuth,
+    // beforeEnter: adminAuth,
     component: Test,
   },
   {
@@ -154,6 +155,11 @@ const routes = [
     path: '/livechat',
     name: 'LiveChat',
     component: LiveChat
+  },
+  {
+    path:'/viewerchat',
+    name:'ViewerChat',
+    component:ViewerChat
   },
   {
     path: '/streaming',
