@@ -1,5 +1,7 @@
 ## Project
 
+#### [👉🏻서비스 바로가기](https://eight-collarbone-e41.notion.site/9d15446176874987b3dfd82ea3e21846)
+
 #### :heart: 팀명 - 댕청냥청 :dog: :cat:
 
 #### :yellow_heart: 주제 - 유기동물과 입양자의 성격유형을 고려한 매칭 시스템
