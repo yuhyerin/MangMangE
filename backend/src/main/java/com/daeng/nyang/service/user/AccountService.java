@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.daeng.nyang.common.ResponseCode;
 import com.daeng.nyang.controller.dto.AccountRequestDto;
 import com.daeng.nyang.controller.dto.AccountResponseDto;
+import com.daeng.nyang.controller.dto.IdCheckResponseDto;
 import com.daeng.nyang.exception.UserAlreadyExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -96,11 +97,13 @@ public class AccountService {
 	}
 	
 	//아이디 중복 검사
-	public boolean checkID(String user_id) {
-		Account acc = accountRepo.findAccountByUserId(user_id);
-		if(acc==null)
-			return true;
-		return false;
+	public IdCheckResponseDto checkID(String userId) {
+		Optional<Account> findAccount = accountRepo.findByUserId(userId);
+		boolean available = true;
+		if(findAccount.isPresent()) available = false;
+		return IdCheckResponseDto.builder()
+				.available(available)
+				.build();
 	}
 
 	// 로그인
@@ -121,11 +124,11 @@ public class AccountService {
 		String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
 		String refreshToken = jwtTokenUtil.generateRefreshToken();
 		// generate Token and save in redis
-		Account user = accountRepo.findAccountByUserId(id);
+		Optional<Account> user = accountRepo.findByUserId(id);
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
 		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
-		Account ac = Account.builder().userId(id).role(user.getRole()).build();
+		Account ac = Account.builder().userId(id).role(user.get().getRole()).build();
 		retok = TotToken.builder().account(ac).build();
 		log.debug("JWT_ACCESS_TOKEN_VALIDITY : " + JWT_ACCESS_TOKEN_VALIDITY);
 		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
@@ -144,8 +147,8 @@ public class AccountService {
 		account.setUserPassword(e_password);
 		accountRepo.updateUserPasswordWithUserid(account.getUserId(), account.getUserPassword());
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		Account temp=accountRepo.findAccountByUserId(account.getUserId());
-		if(temp.getUserPassword().equals(e_password)) {
+		Optional<Account> temp=accountRepo.findByUserId(account.getUserId());
+		if(temp.get().getUserPassword().equals(e_password)) {
 			result.put("success", true);
 		} else {
 			result.put("success", false);
@@ -223,9 +226,9 @@ public class AccountService {
 			if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
 				final UserDetails userDetails = userDetailService.loadUserByUsername(user_id);
 				String new_accessToken = jwtTokenUtil.generateAccessToken(userDetails);
-				Account user = accountRepo.findAccountByUserId(user_id);
+				Optional<Account> user = accountRepo.findByUserId(user_id);
 				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-				Account ac = Account.builder().userId(user_id).role(user.getRole()).build();
+				Account ac = Account.builder().userId(user_id).role(user.get().getRole()).build();
 				TotToken token = TotToken.builder().account(ac).build();
 				vop.set(new_accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
 				response.put("success", true);

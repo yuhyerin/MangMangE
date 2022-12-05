@@ -23,8 +23,5 @@ public interface AccountRepo extends JpaRepository<Account, Long> {
 	
 	@Query(value="update account set user_password = :temp_password where user_id=:user_id",nativeQuery=true)
 	void updateUserPasswordWithUserid(String user_id, String temp_password);
-	
-	@Query(value="select * from account where user_id=:user_id", nativeQuery=true)
-	Account findAccountByUserId(String user_id);
 
 }

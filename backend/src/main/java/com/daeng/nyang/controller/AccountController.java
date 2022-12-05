@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.daeng.nyang.common.DaengNyangResponse;
 import com.daeng.nyang.controller.dto.AccountRequestDto;
 import com.daeng.nyang.controller.dto.AccountResponseDto;
+import com.daeng.nyang.controller.dto.IdCheckResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,14 +77,10 @@ public class AccountController {
 			return DaengNyangResponse.createSuccess(result);
 	}
 
-	@GetMapping(path = "/newuser/signup/{user_id}")
+	@GetMapping(path = "/newuser/signup/{userId}")
 	@ApiOperation("아이디 중복 검사")
-	public ResponseEntity<HashMap<String, Object>> checkID(@PathVariable String user_id) {
-		if (accountService.checkID(user_id)) // 없으면 true
-			return new ResponseEntity<>(HttpStatus.OK);
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("msg", "duplicated");
-		return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
+	public DaengNyangResponse<IdCheckResponseDto> checkID(@PathVariable String userId) {
+		return DaengNyangResponse.createSuccess(accountService.checkID(userId));
 	}
 
 	@GetMapping(path = "/newuser/signup")
