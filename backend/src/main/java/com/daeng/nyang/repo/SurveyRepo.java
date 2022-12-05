@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.daeng.nyang.dto.Survey;
+import com.daeng.nyang.entity.Survey;
 
 @Repository
 public interface SurveyRepo extends JpaRepository<Survey, Integer> {

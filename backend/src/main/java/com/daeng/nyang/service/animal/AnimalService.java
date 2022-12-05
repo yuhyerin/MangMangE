@@ -7,17 +7,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.daeng.nyang.dto.Animal;
-import com.daeng.nyang.dto.AnimalLike;
+import com.daeng.nyang.entity.Animal;
+import com.daeng.nyang.entity.AnimalLike;
 import com.daeng.nyang.dto.AnimalListFE;
-import com.daeng.nyang.dto.Apply;
-import com.daeng.nyang.dto.Ptag;
+import com.daeng.nyang.entity.Apply;
+import com.daeng.nyang.entity.Ptag;
 import com.daeng.nyang.repo.AnimalLikeRepo;
 import com.daeng.nyang.repo.AnimalRepo;
 import com.daeng.nyang.repo.ApplyRepo;
 import com.daeng.nyang.repo.PtagRepo;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 @Service
 public class AnimalService {

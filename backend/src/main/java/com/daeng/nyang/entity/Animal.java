@@ -1,4 +1,4 @@
-package com.daeng.nyang.dto;
+package com.daeng.nyang.entity;
 
 import java.util.Date;
 

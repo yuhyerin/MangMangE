@@ -1,13 +1,13 @@
 package com.daeng.nyang.service.user;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import com.daeng.nyang.common.ResponseCode;
+import com.daeng.nyang.controller.dto.AccountRequestDto;
+import com.daeng.nyang.controller.dto.AccountResponseDto;
+import com.daeng.nyang.exception.UserAlreadyExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.daeng.nyang.dto.Account;
-import com.daeng.nyang.dto.Apply;
+import com.daeng.nyang.entity.Account;
+import com.daeng.nyang.entity.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.repo.AccountRepo;
-import com.daeng.nyang.repo.AnimalRepo;
 import com.daeng.nyang.repo.ApplyRepo;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -66,24 +65,34 @@ public class AccountService {
 	private String apiSecret;
 
 	// 회원가입
-	public HashMap<String, Object> signup(Account account) {
-		HashMap<String, Object> map = new HashMap<>();
+	public AccountResponseDto signup(AccountRequestDto account) {
 		String user_id = account.getUser_id();
-		if (accountRepo.findByUserid(user_id) == null) {
-			map = new HashMap<>();
+		Optional<Account> findAccount = accountRepo.findByUserId(user_id);
+		if (findAccount.isPresent()) {
+			throw new UserAlreadyExistException(ResponseCode.USER_ALREADY_EXIST);
+		} else {
 			if (user_id.contains("admin")) {
 				account.setRole("ROLE_ADMIN");
 			} else {
 				account.setRole("ROLE_USER");
 			}
 			account.setUser_password(bcryptEncoder.encode(account.getUser_password()));
-			accountRepo.save(account);
-			map.put("success", true);
-		} else {
-			map.put("success", false);
-			map.put("message", "duplicated user_id");
+			Account result = accountRepo.save(Account.builder()
+					.id(account.getId())
+					.userId(account.getUser_id())
+					.userPassword(account.getUser_password())
+					.userEmail(account.getUser_email())
+					.userName(account.getUser_name())
+					.role(account.getRole())
+					.build());
+			return AccountResponseDto.builder()
+					.id(result.getId())
+					.user_id(result.getUserId())
+					.user_email(result.getUserEmail())
+					.user_name(result.getUserName())
+					.role(result.getRole())
+					.build();
 		}
-		return map;
 	}
 	
 	//아이디 중복 검사
@@ -116,7 +125,7 @@ public class AccountService {
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		TotToken retok = TotToken.builder().refreshToken(refreshToken).build();
 		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
-		Account ac = Account.builder().user_id(id).role(user.getRole()).build();
+		Account ac = Account.builder().userId(id).role(user.getRole()).build();
 		retok = TotToken.builder().account(ac).build();
 		log.debug("JWT_ACCESS_TOKEN_VALIDITY : " + JWT_ACCESS_TOKEN_VALIDITY);
 		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
@@ -131,12 +140,12 @@ public class AccountService {
 	}
 	
 	public HashMap<String, Object> changPW(Account account){
-		String e_password = bcryptEncoder.encode(account.getUser_password());
-		account.setUser_password(e_password);
-		accountRepo.updateUserPasswordWithUserid(account.getUser_id(), account.getUser_password());
+		String e_password = bcryptEncoder.encode(account.getUserPassword());
+		account.setUserPassword(e_password);
+		accountRepo.updateUserPasswordWithUserid(account.getUserId(), account.getUserPassword());
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		Account temp=accountRepo.findAccountByUserId(account.getUser_id());
-		if(temp.getUser_password().equals(e_password)) {
+		Account temp=accountRepo.findAccountByUserId(account.getUserId());
+		if(temp.getUserPassword().equals(e_password)) {
 			result.put("success", true);
 		} else {
 			result.put("success", false);
@@ -187,7 +196,6 @@ public class AccountService {
 			}
 		} catch (CoolsmsException e) {
 			log.debug(e.getMessage());
-			log.debug(e.getCode());
 			map = null;
 		}
 		return map;
@@ -217,7 +225,7 @@ public class AccountService {
 				String new_accessToken = jwtTokenUtil.generateAccessToken(userDetails);
 				Account user = accountRepo.findAccountByUserId(user_id);
 				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-				Account ac = Account.builder().user_id(user_id).role(user.getRole()).build();
+				Account ac = Account.builder().userId(user_id).role(user.getRole()).build();
 				TotToken token = TotToken.builder().account(ac).build();
 				vop.set(new_accessToken, token, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY), TimeUnit.SECONDS);
 				response.put("success", true);

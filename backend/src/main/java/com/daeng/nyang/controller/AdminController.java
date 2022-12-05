@@ -53,7 +53,7 @@ public class AdminController {
 			@RequestBody Map<String, Object> video,
 			HttpServletRequest request) {
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
-		HashMap<String, Object> map = adminService.uploadVideo(video, user.getAccount().getUser_id());
+		HashMap<String, Object> map = adminService.uploadVideo(video, user.getAccount().getUserId());
 		if((boolean)map.get("success"))	// success 가 true이면 db에 저장 완료 false 이면 db에 저장 안됨
 			return new ResponseEntity<>(map, HttpStatus.OK);
 		return new ResponseEntity<>(map, HttpStatus.ACCEPTED);

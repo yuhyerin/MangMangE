@@ -1,6 +1,6 @@
 package com.daeng.nyang.service.findid;
 
-import com.daeng.nyang.dto.Account;
+import com.daeng.nyang.entity.Account;
 
 public interface FindUserIdService {
 	

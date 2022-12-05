@@ -1,4 +1,4 @@
-package com.daeng.nyang.dto;
+package com.daeng.nyang.entity;
 
 import java.sql.Date;
 
@@ -28,16 +28,16 @@ public class Account {
     private Long id;
 	
 	@Column(nullable=false, unique=true, length=100)
-	private String user_id;
+	private String userId;
 	
 	@Column(nullable=false)
-	private String user_email;
+	private String userEmail;
 	
 	@Column(nullable=false)
-	private String user_password;
+	private String userPassword;
 	
 	@Column(nullable=false, length=50)
-	private String user_name;
+	private String userName;
 	
 	@CreationTimestamp
     private Date regdate;

@@ -1,6 +1,7 @@
 package com.daeng.nyang.service.user;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.daeng.nyang.dto.Account;
+import com.daeng.nyang.entity.Account;
 import com.daeng.nyang.dto.Role;
 import com.daeng.nyang.repo.AccountRepo;
 
@@ -30,7 +31,7 @@ public class JwtUserDetailService implements UserDetailsService {
 	/** JwtUserDetailService의 첫번째 역할 - user_id로 Account를 찾아서 결과로 User객체를 반환해주는 역할 */
 	@Override
     public UserDetails loadUserByUsername(String user_id) throws UsernameNotFoundException {
-        Account user = accountRepo.findByUserid(user_id);
+        Optional<Account> user = accountRepo.findByUserId(user_id);
         if(user==null) {
         	throw new UsernameNotFoundException("User not found with userid: " + user_id);
         }
@@ -40,18 +41,18 @@ public class JwtUserDetailService implements UserDetailsService {
             grantedAuthorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
         }
 
-        return new User(user.getUser_id(), user.getUser_password(), grantedAuthorities);
+        return new User(user.get().getUserId(), user.get().getUserPassword(), grantedAuthorities);
     }
 
 	/** JwtUserDetailService의 두번째 역할 - 컨트롤러에서 넘어온 user_id와 user_password 값이 DB에 저장된 비밀번호와
 	 * 일치하는지 검사한다. */
-    public Account authenticateByEmailAndPassword(String user_id, String user_password) {
-    	Account user = accountRepo.findByUserid(user_id);
+    public Optional<Account> authenticateByEmailAndPassword(String user_id, String user_password) {
+    	Optional<Account> user = accountRepo.findByUserId(user_id);
         if(user==null) {
         	throw new UsernameNotFoundException("User not found with userid: " + user_id);
         }
 
-        if(!passwordEncoder.matches(user_password, user.getUser_password())) {
+        if(!passwordEncoder.matches(user_password, user.get().getUserPassword())) {
             throw new BadCredentialsException("Password not matched");
         }
 

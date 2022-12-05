@@ -6,8 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.daeng.nyang.dto.Animal;
-import com.daeng.nyang.dto.AnimalVideo;
+import com.daeng.nyang.entity.AnimalVideo;
 
 public interface AnimalVideoRepo extends JpaRepository<AnimalVideo, String>{
 	

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daeng.nyang.dto.AnimalLike;
+import com.daeng.nyang.entity.AnimalLike;
 import com.daeng.nyang.dto.AnimalListFE;
-import com.daeng.nyang.dto.Survey;
+import com.daeng.nyang.entity.Survey;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.service.animal.AnimalService;
 import com.daeng.nyang.service.survey.SurveyService;
@@ -55,7 +55,7 @@ public class AnimalController {
 		String token = request.getHeader("Authorization");
 		try {
 			TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
-			String user_id = user.getAccount().getUser_id();
+			String user_id = user.getAccount().getUserId();
 			HashMap<String, Object> map = new HashMap<>();
 			List<AnimalListFE> animalList = animalService.allAnimalRead(user_id);
 			map.put("animalList", animalList);
@@ -71,7 +71,7 @@ public class AnimalController {
 	public ResponseEntity<HashMap<String, Object>> animalLikeList(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
-		String user_id = user.getAccount().getUser_id();
+		String user_id = user.getAccount().getUserId();
 		HashMap<String, Object> map = new HashMap<>();
 		List<AnimalListFE> animalList = animalService.animalLikeList(user_id);
 		map.put("animalList", animalList);
@@ -84,7 +84,7 @@ public class AnimalController {
 		// 프론트에서 토큰을 받아오면 설문기록여부 반환
 		String token = request.getHeader("Authorization");
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
-		String user_id = user.getAccount().getUser_id();
+		String user_id = user.getAccount().getUserId();
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			if (user_id == null) {
@@ -108,7 +108,7 @@ public class AnimalController {
 	public ResponseEntity<HashMap<String, Object>> matchlist(HttpServletRequest request) {
 		String token = request.getHeader("Authorization"); // 토큰받기
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
-		String user_id = user.getAccount().getUser_id();
+		String user_id = user.getAccount().getUserId();
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			if (user_id == null) {
@@ -194,7 +194,7 @@ public class AnimalController {
 			HttpServletRequest request) {
 		String token = request.getHeader("Authorization"); // 토큰받기
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(token);
-		String user_id = user.getAccount().getUser_id();
+		String user_id = user.getAccount().getUserId();
 		HashMap<String, Object> map = new HashMap<>();
 		try {
 			animalLike.setUser_id(user_id); // 여기에 토큰으로 받아온 유저 아이디를 대신 넣는다.

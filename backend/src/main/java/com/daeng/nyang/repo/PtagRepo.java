@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.daeng.nyang.dto.Ptag;
+import com.daeng.nyang.entity.Ptag;
 
 public interface PtagRepo extends JpaRepository<Ptag, String> {
 

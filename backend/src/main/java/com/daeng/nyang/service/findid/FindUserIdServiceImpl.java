@@ -3,7 +3,7 @@ package com.daeng.nyang.service.findid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.daeng.nyang.dto.Account;
+import com.daeng.nyang.entity.Account;
 import com.daeng.nyang.repo.AccountRepo;
 
 @Service

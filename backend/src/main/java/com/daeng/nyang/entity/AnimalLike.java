@@ -1,4 +1,4 @@
-package com.daeng.nyang.dto;
+package com.daeng.nyang.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,16 +16,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ptag {
-	
+public class AnimalLike {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long uid;
-	
-	@Column(name = "desertion_no")
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 얘가 auto_increment
+	private int no;
+
+	@Column
+	private String user_id;
+
+	@Column
 	private Long desertion_no;
-	
-	@Column(name = "tagname")
-	private String tagname;
-	
 }

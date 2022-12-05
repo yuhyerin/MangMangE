@@ -6,6 +6,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.daeng.nyang.common.DaengNyangResponse;
+import com.daeng.nyang.controller.dto.AccountRequestDto;
+import com.daeng.nyang.controller.dto.AccountResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,9 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daeng.nyang.dto.Account;
+import com.daeng.nyang.entity.Account;
 import com.daeng.nyang.dto.AnimalListFE;
-import com.daeng.nyang.dto.Apply;
+import com.daeng.nyang.entity.Apply;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.animal.AnimalService;
@@ -68,13 +71,9 @@ public class AccountController {
 
 	@PostMapping(path = "/newuser/signup")
 	@ApiOperation("회원가입")
-	public ResponseEntity<HashMap<String, Object>> signup(@RequestBody Account account) {
-		HashMap<String, Object> result;
-		result = accountService.signup(account);
-		if ((boolean) result.get("success"))
-			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.OK);
-		else
-			return new ResponseEntity<HashMap<String, Object>>(result, HttpStatus.ACCEPTED);
+	public DaengNyangResponse<AccountResponseDto> signup(@RequestBody AccountRequestDto account) {
+		AccountResponseDto result = accountService.signup(account);
+			return DaengNyangResponse.createSuccess(result);
 	}
 
 	@GetMapping(path = "/newuser/signup/{user_id}")
@@ -158,7 +157,7 @@ public class AccountController {
 		String user_id = null;
 		try {
 			TotToken user = (TotToken) redisTemplate.opsForValue().get(accessToken);
-			user_id = user.getAccount().getUser_id();
+			user_id = user.getAccount().getUserId();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -196,7 +195,7 @@ public class AccountController {
 		String accessToken = request.getHeader("Authorization");
 		try {
 			TotToken user = (TotToken) redisTemplate.opsForValue().get(accessToken);
-			String user_id = user.getAccount().getUser_id();
+			String user_id = user.getAccount().getUserId();
 			HashMap<String, Object> result = accountService.createApply(user_id, apply);
 			if ((boolean) result.get("success"))
 				return new ResponseEntity<>(result, HttpStatus.OK);
@@ -237,7 +236,7 @@ public class AccountController {
 	public ResponseEntity<HashMap<String, Object>> userID(HttpServletRequest request) {
 		TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
 		HashMap<String, Object> map = new HashMap<>();
-		if (user.getAccount().getUser_id().contains("admin")) {
+		if (user.getAccount().getUserId().contains("admin")) {
 			map.put("success", true);
 			return new ResponseEntity<>(map, HttpStatus.OK);
 		}

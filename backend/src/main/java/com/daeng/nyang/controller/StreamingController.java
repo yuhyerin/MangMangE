@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daeng.nyang.dto.Account;
-import com.daeng.nyang.dto.Streaming;
+import com.daeng.nyang.entity.Account;
+import com.daeng.nyang.entity.Streaming;
 import com.daeng.nyang.dto.TotToken;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.streaming.StreamingService;
@@ -61,7 +61,7 @@ public class StreamingController {
 			try {
 				TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
 				Account account = user.getAccount();
-				String user_id = account.getUser_id();
+				String user_id = account.getUserId();
 				log.debug("관리자 아이디 : "+user_id);
 				String title = streaming.getTitle();
 				String contents = streaming.getContents();
@@ -88,7 +88,7 @@ public class StreamingController {
 			try {
 				TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
 				Account account = user.getAccount();
-				String user_id = account.getUser_id();
+				String user_id = account.getUserId();
 				streamingService.stopStreaming(user_id);
 				return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
 			} catch (Exception e) {

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.daeng.nyang.dto.AnimalVideo;
+import com.daeng.nyang.entity.AnimalVideo;
 import com.daeng.nyang.repo.AnimalVideoRepo;
 
 @Service

@@ -2,6 +2,7 @@ package com.daeng.nyang.dto;
 
 import java.io.Serializable;
 
+import com.daeng.nyang.entity.Account;
 import org.springframework.data.redis.core.RedisHash;
 
 import lombok.AllArgsConstructor;

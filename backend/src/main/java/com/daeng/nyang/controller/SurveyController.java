@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daeng.nyang.dto.Survey;
+import com.daeng.nyang.entity.Survey;
 import com.daeng.nyang.jwt.JwtTokenUtil;
 import com.daeng.nyang.service.survey.SurveyService;
 

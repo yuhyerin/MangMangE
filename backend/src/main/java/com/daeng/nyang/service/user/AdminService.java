@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.daeng.nyang.dto.Animal;
-import com.daeng.nyang.dto.AnimalVideo;
+import com.daeng.nyang.entity.Animal;
+import com.daeng.nyang.entity.AnimalVideo;
 import com.daeng.nyang.repo.AnimalRepo;
 import com.daeng.nyang.repo.AnimalVideoRepo;
 @Slf4j

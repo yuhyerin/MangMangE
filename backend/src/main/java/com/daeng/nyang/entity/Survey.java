@@ -1,5 +1,4 @@
-package com.daeng.nyang.dto;
-
+package com.daeng.nyang.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,24 +11,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class Streaming {
+@NoArgsConstructor
+public class Survey {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 얘가 auto_increment
+    private Long no;
 	
-	@Column(nullable=false, unique=true, length=100)
+	
+	@Column
 	private String user_id;
 	
-	@Column(nullable=false)
-	private String title;
-	
-	@Column(nullable=false)
-	private String contents;
-	
+	@Column
+	private String mbti; // user mbti
+
+	@Column
+	private String answer; // dog mbti
+
 }

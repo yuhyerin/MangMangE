@@ -3,7 +3,7 @@ package com.daeng.nyang.repo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.daeng.nyang.dto.Streaming;
+import com.daeng.nyang.entity.Streaming;
 
 public interface StreamingRepo extends JpaRepository<Streaming, Long>{
 	
