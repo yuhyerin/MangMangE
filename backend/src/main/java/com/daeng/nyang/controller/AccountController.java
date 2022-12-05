@@ -7,9 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 
 import com.daeng.nyang.common.DaengNyangResponse;
-import com.daeng.nyang.controller.dto.AccountRequestDto;
-import com.daeng.nyang.controller.dto.AccountResponseDto;
-import com.daeng.nyang.controller.dto.IdCheckResponseDto;
+import com.daeng.nyang.controller.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,34 +82,15 @@ public class AccountController {
 	}
 
 	@GetMapping(path = "/newuser/signup")
-	@ApiOperation("이메일 유효성 검사")
-	public ResponseEntity<?> checkEmail(@RequestParam String email) {
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		boolean isAvailabe = signupService.checkEmail(email); // 사용가능한 email
-		if (isAvailabe) { // 사용가능하면
-			String auth_number = emailService.sendAuthEmail(email);// 인증번호
-			log.debug(auth_number);
-			String hash_number = BCrypt.hashpw(auth_number, salt);
-			resultMap.put("origin_hash", hash_number);
-			return ResponseEntity.status(HttpStatus.OK).body(resultMap);
-		} else {
-			resultMap.put("origin_hash", null);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultMap);
-		}
+	@ApiOperation("이메일 인증번호 전송 요청")
+	public DaengNyangResponse<EmailCheckResponseDto> checkEmail(@RequestParam String email) {
+		return DaengNyangResponse.createSuccess(signupService.checkEmail(email));
 	}
 
 	@GetMapping(path = "/newuser/signup/hashcheck")
-	@ApiOperation("인증번호 유효성검사")
-	public ResponseEntity<?> checkAuthNumber(@RequestParam String auth_number, @RequestParam String hash_number) {
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		boolean result = BCrypt.checkpw(auth_number, hash_number);
-		if (result) {
-			resultMap.put("result", result);
-			return ResponseEntity.status(HttpStatus.OK).body(resultMap);
-		} else {
-			resultMap.put("result", result);
-		}
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(resultMap);
+	@ApiOperation("인증번호 유효성 검사")
+	public DaengNyangResponse<AuthNumberCheckResponseDto> checkAuthNumber(@RequestParam String authNumber, @RequestParam String hashNumber) {
+		return DaengNyangResponse.createSuccess(signupService.checkAuthNumber(authNumber, hashNumber));
 	}
 
 	@PostMapping(path = "/newuser/login")
