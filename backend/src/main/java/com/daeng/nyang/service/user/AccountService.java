@@ -65,47 +65,6 @@ public class AccountService {
 	@Value("${apiSecret}")
 	private String apiSecret;
 
-	// 회원가입
-	public AccountResponseDto signup(AccountRequestDto account) {
-		String user_id = account.getUser_id();
-		Optional<Account> findAccount = accountRepo.findByUserId(user_id);
-		if (findAccount.isPresent()) {
-			throw new UserAlreadyExistException(ResponseCode.USER_ALREADY_EXIST);
-		} else {
-			if (user_id.contains("admin")) {
-				account.setRole("ROLE_ADMIN");
-			} else {
-				account.setRole("ROLE_USER");
-			}
-			account.setUser_password(bcryptEncoder.encode(account.getUser_password()));
-			Account result = accountRepo.save(Account.builder()
-					.id(account.getId())
-					.userId(account.getUser_id())
-					.userPassword(account.getUser_password())
-					.userEmail(account.getUser_email())
-					.userName(account.getUser_name())
-					.role(account.getRole())
-					.build());
-			return AccountResponseDto.builder()
-					.id(result.getId())
-					.user_id(result.getUserId())
-					.user_email(result.getUserEmail())
-					.user_name(result.getUserName())
-					.role(result.getRole())
-					.build();
-		}
-	}
-	
-	//아이디 중복 검사
-	public IdCheckResponseDto checkID(String userId) {
-		Optional<Account> findAccount = accountRepo.findByUserId(userId);
-		boolean available = true;
-		if(findAccount.isPresent()) available = false;
-		return IdCheckResponseDto.builder()
-				.available(available)
-				.build();
-	}
-
 	// 로그인
 	public HashMap<String, Object> login(String id, String pwd) {
 		HashMap<String, Object> map = new HashMap<String, Object>();

@@ -1,11 +1,14 @@
 package com.daeng.nyang.service.signup;
 
 
-import com.daeng.nyang.controller.dto.AuthNumberCheckResponseDto;
-import com.daeng.nyang.controller.dto.EmailCheckResponseDto;
+import com.daeng.nyang.controller.dto.*;
 
 public interface SignupService {
-	public EmailCheckResponseDto checkEmail(String email);
 
+	public AccountResponseDto signup(AccountRequestDto account);
+	public IdCheckResponseDto checkID(String userId);
+	public EmailCheckResponseDto checkEmail(String email);
 	public AuthNumberCheckResponseDto checkAuthNumber(String authNumber, String hashNumber);
+
+
 }

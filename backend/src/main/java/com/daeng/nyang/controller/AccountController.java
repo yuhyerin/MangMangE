@@ -36,9 +36,9 @@ import com.daeng.nyang.service.user.AccountService;
 
 import io.swagger.annotations.ApiOperation;
 
+@Slf4j
 @RestController
 @CrossOrigin("*")
-@Slf4j
 public class AccountController {
 
 	@Value("${JWT_ACCESS_TOKEN_VALIDITY}")
@@ -68,30 +68,7 @@ public class AccountController {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 
-	@PostMapping(path = "/newuser/signup")
-	@ApiOperation("회원가입")
-	public DaengNyangResponse<AccountResponseDto> signup(@RequestBody AccountRequestDto account) {
-		AccountResponseDto result = accountService.signup(account);
-			return DaengNyangResponse.createSuccess(result);
-	}
 
-	@GetMapping(path = "/newuser/signup/{userId}")
-	@ApiOperation("아이디 중복 검사")
-	public DaengNyangResponse<IdCheckResponseDto> checkID(@PathVariable String userId) {
-		return DaengNyangResponse.createSuccess(accountService.checkID(userId));
-	}
-
-	@GetMapping(path = "/newuser/signup")
-	@ApiOperation("이메일 인증번호 전송 요청")
-	public DaengNyangResponse<EmailCheckResponseDto> checkEmail(@RequestParam String email) {
-		return DaengNyangResponse.createSuccess(signupService.checkEmail(email));
-	}
-
-	@GetMapping(path = "/newuser/signup/hashcheck")
-	@ApiOperation("인증번호 유효성 검사")
-	public DaengNyangResponse<AuthNumberCheckResponseDto> checkAuthNumber(@RequestParam String authNumber, @RequestParam String hashNumber) {
-		return DaengNyangResponse.createSuccess(signupService.checkAuthNumber(authNumber, hashNumber));
-	}
 
 	@PostMapping(path = "/newuser/login")
 	@ApiOperation("로그인")
