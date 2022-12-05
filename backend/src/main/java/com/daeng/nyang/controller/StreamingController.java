@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
@@ -33,6 +34,7 @@ import com.daeng.nyang.service.streaming.StreamingService;
 
 @RestController
 @CrossOrigin("*")
+@Slf4j
 public class StreamingController {
 
 	@Autowired
@@ -48,7 +50,7 @@ public class StreamingController {
 	@PostMapping("/user/streaming")
 	public ResponseEntity<?> startStreaming(@RequestBody Streaming streaming,
 			HttpServletRequest request) {
-		System.out.println("스트리밍 방송을 시작하겠습니다.");
+		log.info("스트리밍 방송을 시작하겠습니다.");
 		String token = request.getHeader("Authorization"); // 토큰받기
 		Map<String, String> resultMap = new HashMap<String, String>();
 		if (token == null) {
@@ -60,10 +62,10 @@ public class StreamingController {
 				TotToken user = (TotToken) redisTemplate.opsForValue().get(request.getHeader("Authorization"));
 				Account account = user.getAccount();
 				String user_id = account.getUser_id();
-				System.out.println("관리자 아이디 : "+user_id);
+				log.debug("관리자 아이디 : "+user_id);
 				String title = streaming.getTitle();
 				String contents = streaming.getContents();
-				System.out.println("관리자 아이디 : "+user_id+", 제목: "+title+", 내용: "+contents);
+				log.debug("관리자 아이디 : "+user_id+", 제목: "+title+", 내용: "+contents);
 				streamingService.startStreaming(user_id, title, contents);
 				return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
 			} catch (Exception e) {
@@ -75,7 +77,7 @@ public class StreamingController {
 	/** 스트리밍 방송 종료 */
 	@GetMapping("/user/streaming")
 	public ResponseEntity<?> stopStreaming(HttpServletRequest request) {
-		System.out.println("스트리밍 방송을 종료 하겠습니다.");
+		log.debug("스트리밍 방송을 종료 하겠습니다.");
 		String token = request.getHeader("Authorization"); // 토큰받기
 		Map<String, String> resultMap = new HashMap<String, String>();
 		if (token == null) {
@@ -112,7 +114,7 @@ public class StreamingController {
 	public ResponseEntity<ResourceRegion> getVideo(@PathVariable String name, @RequestHeader HttpHeaders headers)
 			throws IOException {
 
-		System.out.println("getvideo");
+		log.debug("getvideo");
 		UrlResource video = new UrlResource("classpath:" + "videodir" + "/" + name);
 		ResourceRegion region = resourceRegion(video, headers);
 		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)

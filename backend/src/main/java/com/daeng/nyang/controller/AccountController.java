@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,6 +36,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @CrossOrigin("*")
+@Slf4j
 public class AccountController {
 
 	@Value("${JWT_ACCESS_TOKEN_VALIDITY}")
@@ -92,7 +94,7 @@ public class AccountController {
 		boolean isAvailabe = signupService.checkEmail(email); // 사용가능한 email
 		if (isAvailabe) { // 사용가능하면
 			String auth_number = emailService.sendAuthEmail(email);// 인증번호
-			System.out.println(auth_number);
+			log.debug(auth_number);
 			String hash_number = BCrypt.hashpw(auth_number, salt);
 			resultMap.put("origin_hash", hash_number);
 			return ResponseEntity.status(HttpStatus.OK).body(resultMap);

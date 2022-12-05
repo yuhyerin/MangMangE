@@ -1,5 +1,7 @@
 package com.daeng.nyang.controller;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -9,11 +11,12 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+@Slf4j
 @ServerEndpoint(value="/wsServer")
 public class WebSocketController {
 	@OnOpen
 	public void OnOpen(Session session) {
-		System.out.println(session.toString()); 
+		log.debug(session.toString());
 	}
 	
 	@OnMessage

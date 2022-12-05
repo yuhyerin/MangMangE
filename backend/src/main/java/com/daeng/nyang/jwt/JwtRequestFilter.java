@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.daeng.nyang.service.user.JwtUserDetailService;
 
+@Slf4j
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
    @Autowired
@@ -39,7 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //   private JwtUserDetailService jwtUserDetailService;
 
    public Authentication getAuthentication(String token) {
-      System.out.println("getAuthentication : " + token);
+      log.debug("getAuthentication : " + token);
       Map<String, Object> parseInfo = jwtTokenUtil.getUserParseInfo(token);
       List<String> rs = (List) parseInfo.get("role");
       Collection<GrantedAuthority> tmp = new ArrayList<>();
@@ -50,14 +52,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             .password(String.valueOf(parseInfo.get("user_password"))).build();
       UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userDetails, null, userDetails.getAuthorities());
-      System.out.println(userDetails.toString());
+      log.debug(userDetails.toString());
       return usernamePasswordAuthenticationToken;
    }
 
    @Bean
    public FilterRegistrationBean JwtRequestFilterRegistration(JwtRequestFilter filter) {
-      System.out.println("JwtRequestFilterRegistration : " + filter.toString());
-
+      log.debug("JwtRequestFilterRegistration : \" + filter.toString()");
       FilterRegistrationBean registration = new FilterRegistrationBean(filter);
       registration.setEnabled(false);
       return registration;
@@ -66,8 +67,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
    @Override
    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
          throws ServletException, IOException {
-      System.out.println("doFilterInternal");
-      System.out.println("REQUEST : " + request.getHeader("Authorization"));
+      log.debug("doFilterInternal");
+      log.debug("REQUEST : " + request.getHeader("Authorization"));
       String requestTokenHeader = request.getHeader("Authorization");
       String userid = null;
 
@@ -75,17 +76,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
          try {
             userid = jwtTokenUtil.getUsernameFromToken(requestTokenHeader);
          } catch (IllegalArgumentException e) {
-            System.out.println("IllegalArgumentException in doFilterInternal");
+            log.debug("IllegalArgumentException in doFilterInternal");
          }
       }
       if (userid == null) {
-         System.out.println("userid null");
+         log.debug("userid null");
       } else if (redisTemplate.opsForValue().get(requestTokenHeader) == null) {
-         System.out.println("redis ACCESS TOKEN timeout");
+         log.debug("redis ACCESS TOKEN timeout");
       } else {
          // DB access 대신에 파싱한 정보로 유저 만들기!
          Authentication authen = getAuthentication(requestTokenHeader);
-         System.out.println(authen.toString());
+         log.debug(authen.toString());
          // 만든 authentication 객체로 매번 인증받기
          SecurityContextHolder.getContext().setAuthentication(authen);
          response.setHeader("Access-Control-Allow-Origin", "*");

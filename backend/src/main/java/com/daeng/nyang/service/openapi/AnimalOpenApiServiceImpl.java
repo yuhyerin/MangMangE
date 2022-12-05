@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ import org.xml.sax.SAXException;
 
 import com.daeng.nyang.repo.AnimalApiRepo;
 import com.daeng.nyang.repo.PtagRepo;
-
+@Slf4j
 @Service
 public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 
@@ -50,7 +51,7 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 
 //			SERVICE_KEY = URLEncoder.encode(SERVICE_KEY, "UTF-8");
 //			SERVICE_KEY = URLDecoder.decode(SERVICE_KEY, "UTF-8");
-		System.out.println("최종보내는 키 : " + SERVICE_KEY);
+		log.debug("최종보내는 키 : " + SERVICE_KEY);
 
 		urlBuilder.append(SERVICE_KEY);
 		URL url;
@@ -61,7 +62,7 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Content-type", "application/xml");
-				System.out.println("Response code: " + conn.getResponseCode());
+				log.debug("Response code: " + conn.getResponseCode());
 				BufferedReader rd;
 				if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 					rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -83,9 +84,8 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("ServiceImpl에서 데이터 출력합니다.");
-
-		System.out.println(sb.toString());
+		log.debug("ServiceImpl에서 데이터 출력합니다.");
+		log.debug(sb.toString());
 
 	}// end insertAnimalData
 
@@ -138,7 +138,7 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 
 				// parsing tag
 				NodeList nodeList = doc.getElementsByTagName("item");
-				System.out.println("파싱할 리스트 수 : " + nodeList.getLength());
+				log.debug("파싱할 리스트 수 : " + nodeList.getLength());
 				totalcount+= nodeList.getLength();
 				for (int tmp = 0; tmp < nodeList.getLength(); tmp++) {
 					Node nNode = nodeList.item(tmp);
@@ -151,19 +151,19 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 						mbti+=personality[personal_idx];
 						String[] tags = map.get(personality[personal_idx]);
 						int random_t = rand.nextInt(tags.length); // 0 or 1
-						String picktag = tags[random_t]; 
-						System.out.println("선택된 태그 : "+picktag);
+						String picktag = tags[random_t];
+						log.debug("선택된 태그 : "+picktag);
 						Long desertion_no = Long.parseLong(getTagValue("desertionNo", (Element)nNode));
 						/** 성격태그 테이블에도 추가 */
 						ptagRepo.insertPtag(desertion_no,picktag);
 						
 					}//end for
-					System.out.println("mbti : "+mbti);
+					log.debug("mbti : "+mbti);
 					
 					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 						Element element = (Element) nNode;
 						SimpleDateFormat simpledate = new SimpleDateFormat("yyyy-MM-dd");
-						System.out.println("##########################");
+						log.debug("##########################");
 						
 //						Long.parseLong(getTagValue("desertionNo", element)),
 //						simpledate.format(new Date(getTagValue("happenDt", element))), 
@@ -180,7 +180,7 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 						String weightstr = getTagValue("weight", element);
 						int widx = weightstr.indexOf("(");
 						float weight = Float.parseFloat(weightstr.substring(0,widx).trim());
-						System.out.println(kind_p+" "+kind_c+" "+age+" "+weight);
+						log.debug(kind_p+" "+kind_c+" "+age+" "+weight);
 						animalApiRepo.insertAnimalFromApi(
 								Long.parseLong(getTagValue("desertionNo", element)),
 								getTagValue("filename", element), 
@@ -210,11 +210,11 @@ public class AnimalOpenApiServiceImpl implements AnimalOpenApiService {
 				} // end for
 				page++;
 				if(nodeList.getLength()==0) {
-					System.out.println("더이상 가져올 데이터가 없습니다.");
+					log.debug("더이상 가져올 데이터가 없습니다.");
 					break;
 				}
 			}// end while
-			System.out.println("총 가져온 데이터 수 : " + totalcount);
+			log.debug("총 가져온 데이터 수 : " + totalcount);
 			
 		} catch (ParserConfigurationException e1) {
 			e1.printStackTrace();

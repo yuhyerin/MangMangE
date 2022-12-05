@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +32,7 @@ import com.daeng.nyang.repo.ApplyRepo;
 import io.jsonwebtoken.ExpiredJwtException;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
-
+@Slf4j
 @Service
 public class AccountService {
 
@@ -117,7 +118,7 @@ public class AccountService {
 		vop.set(id, retok, Long.parseLong(JWT_REFRESH_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		Account ac = Account.builder().user_id(id).role(user.getRole()).build();
 		retok = TotToken.builder().account(ac).build();
-		System.out.println("JWT_ACCESS_TOKEN_VALIDITY : " + JWT_ACCESS_TOKEN_VALIDITY);
+		log.debug("JWT_ACCESS_TOKEN_VALIDITY : " + JWT_ACCESS_TOKEN_VALIDITY);
 		vop.set(accessToken, retok, Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY) * 1000, TimeUnit.MILLISECONDS);
 		map.put("success", true);
 		map.put("accessToken", accessToken);
@@ -185,8 +186,8 @@ public class AccountService {
 				map = null;
 			}
 		} catch (CoolsmsException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getCode());
+			log.debug(e.getMessage());
+			log.debug(e.getCode());
 			map = null;
 		}
 		return map;
@@ -198,7 +199,7 @@ public class AccountService {
 		try {
 			user_id = jwtTokenUtil.getUsernameFromToken(accessToken);
 		} catch (IllegalArgumentException e) {
-			System.out.println("IllegalArgumentException");
+			log.debug("IllegalArgumentException");
 		} catch (ExpiredJwtException e) { // expire됐을 때
 			user_id = e.getClaims().getSubject();
 		}

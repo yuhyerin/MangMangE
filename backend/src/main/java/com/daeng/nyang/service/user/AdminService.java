@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import com.daeng.nyang.dto.Animal;
 import com.daeng.nyang.dto.AnimalVideo;
 import com.daeng.nyang.repo.AnimalRepo;
 import com.daeng.nyang.repo.AnimalVideoRepo;
-
+@Slf4j
 @Service
 public class AdminService {
 
@@ -75,7 +76,7 @@ public class AdminService {
 	}
 
 	public HashMap<String, Object> uploadVideo(String accessToken, MultipartFile mfile) {
-		System.out.println("origin file name : " + mfile.getOriginalFilename());
+		log.debug("origin file name : " + mfile.getOriginalFilename());
 		StringTokenizer originName = new StringTokenizer(mfile.getOriginalFilename(), "_");
 //		Long uid = Long.parseLong(originName.nextToken());
 //		System.out.println("length? : " + uid.toString().length());
